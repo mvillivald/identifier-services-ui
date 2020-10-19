@@ -32,6 +32,7 @@ import {Field, getFormValues} from 'redux-form';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
+import {FormattedMessage} from 'react-intl';
 
 import renderTextField from './renderTextField';
 import renderSelect from './renderSelect';
@@ -39,8 +40,8 @@ import useStyles from '../../../styles/form';
 
 export default connect(state => ({
 	values: getFormValues('publisherRegistrationForm')(state) ||
-	getFormValues('issnRegForm')(state) ||
-	getFormValues('isbnIsmnRegForm')(state)
+		getFormValues('issnRegForm')(state) ||
+		getFormValues('isbnIsmnRegForm')(state)
 
 }))(props => {
 	const [errors, setErrors] = React.useState();
@@ -168,11 +169,10 @@ export default connect(state => ({
 							variant="outlined"
 							color="primary"
 							disabled={publication && values && values.primaryContact && values.primaryContact.length >= 1}
-							title="click to add"
 							startIcon={<AddIcon/>}
 							onClick={handleContactClick}
 						>
-							Add
+							<FormattedMessage id="form.button.add"/>
 						</Button>
 						{values && values.primaryContact && values.primaryContact.map((item, index) => {
 							return (
@@ -192,11 +192,10 @@ export default connect(state => ({
 								aria-label="Add"
 								variant="outlined"
 								color="primary"
-								title="click to add"
 								startIcon={<AddIcon/>}
 								onClick={handleAffiliatesClick}
 							>
-								Add
+								<FormattedMessage id="form.button.add"/>
 							</Button>
 							{values && values.affiliates && values.affiliates.map((item, index) => {
 								return (
@@ -215,11 +214,10 @@ export default connect(state => ({
 								aria-label="Add"
 								variant="outlined"
 								color="primary"
-								title="click to add"
 								startIcon={<AddIcon/>}
 								onClick={handleAuthorClick}
 							>
-								Add
+								<FormattedMessage id="form.button.add"/>
 							</Button>
 							{values && values.authors && values.authors.map((item, index) => {
 								return (
@@ -248,4 +246,3 @@ export default connect(state => ({
 		}
 	};
 });
-
