@@ -27,8 +27,9 @@
  */
 import React, {useState} from 'react';
 import {Button, Typography} from '@material-ui/core';
-import useStyles from '../../styles/form';
+import {FormattedMessage} from 'react-intl';
 
+import useStyles from '../../styles/form';
 import IsbnIsmnRegForm from './IsbnIsmnRegForm';
 import IssnRegForm from './IssnRegForm';
 
@@ -52,9 +53,16 @@ export default function (props) {
 			{value === '' ?
 				<>
 					<div className={classes.pubFormSelect}>
-						<Typography variant="h6">Select Type of Publication Form:</Typography>
-						<Button variant="contained" color="primary" onClick={handleIsbnIsmnClick}>ISBN-ISMN</Button>
-						<Button variant="contained" color="primary" onClick={handleIssnClick}>ISSN</Button>
+						<Typography variant="h6">
+							<FormattedMessage id="app.modal.publicationRegistration.selectType"/>
+						</Typography>
+						<Button variant="contained" color="primary" onClick={handleIsbnIsmnClick}>
+							<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISBN-ISMN"/>
+						</Button>
+						<Button variant="contained" color="primary" onClick={handleIssnClick}>
+							<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISSN"/>
+
+						</Button>
 					</div>
 				</> :
 				value === 'isbn-ismn' ? <IsbnIsmnRegForm {...props}/> : <IssnRegForm {...props}/>}
