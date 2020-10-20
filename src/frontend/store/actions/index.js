@@ -28,7 +28,9 @@
 
 export {
 	findPublisherIdByEmail,
+	findPublisherIdByUserId,
 	fetchPublisher,
+	fetchPublisherOption,
 	updatePublisher,
 	searchPublisher,
 	publisherCreationRequest,

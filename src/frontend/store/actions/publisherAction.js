@@ -29,7 +29,7 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
-import {PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
+import {PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 import HttpStatus from 'http-status';
 
@@ -62,6 +62,44 @@ export const findPublisherIdByEmail = ({email, token, offset}) => async dispatch
 		dispatch(fail(ERROR, err));
 	}
 };
+
+export const findPublisherIdByUserId = ({userId, token}) => async dispatch => {
+	dispatch(setLoader());
+	try{
+		const properties = {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+		}
+		const crowdResult = await fetch(`${API_URL}/users/${userId}`, properties);
+		const result = await crowdResult.json();
+		if(result.email) {
+			console.log(result.email)
+			properties.method= 'POST';
+			properties.headers = {...properties.headers, 'Content-Type': 'application/json'};
+			properties.body = JSON.stringify({
+				queries: [{
+					query: {publisherEmail: result.email}
+				}]
+			});
+	
+			const response = await fetch(`${API_URL}/publishers/query`, properties);
+			const publisherResult = await response.json();
+			console.log('------------->', publisherResult)
+			if (publisherResult.results.length > 0) {
+				return publisherResult.results[0].id;
+			}
+		}
+
+		if(crowdResult.status === HttpStatus.NOT_FOUND) {
+
+		}
+	} catch (err) {
+		console.log('**************', err)
+		dispatch(fail(ERROR, err));
+	}
+}
 
 export const fetchPublisher = (id, token) => async dispatch => {
 	dispatch(setLoader());
@@ -100,6 +138,22 @@ export const updatePublisher = (id, values, token) => async dispatch => {
 		dispatch(fail(ERROR, err));
 	}
 };
+
+export const fetchPublisherOption = (token) => async dispatch => {
+	try {
+		const properties = {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+		}
+		const response = await fetch(`${API_URL}/publishers/query/all`, properties);
+		const result = await response.json();
+		dispatch(success(PUBLISHER_OPTIONS, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err))
+	}
+}
 
 export const searchPublisher = ({searchText, token, offset, activeCheck}) => async dispatch => {
 	dispatch(setListLoader());

@@ -33,12 +33,14 @@ import {
 	SEARCH_PUBLISHER,
 	PUBLISHERS_REQUESTS_LIST,
 	PUBLISHER_REQUEST,
-	UNIVERSITY_PUBLISHER
+	UNIVERSITY_PUBLISHER,
+	PUBLISHER_OPTIONS
 } from '../actions/types';
 
 const initialState = {
 	publishersList: [],
 	publisher: {},
+	publisherOptions: [],
 	searchedPublisher: [],
 
 	publishersRequestsList: [],
@@ -116,6 +118,12 @@ export default function (state = initialState, action) {
 				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
+		case PUBLISHER_OPTIONS:
+			return {
+				...state,
+				publisherOptions: action.payload,
+				listLoading: false
+			}
 
 		default:
 			return state;
