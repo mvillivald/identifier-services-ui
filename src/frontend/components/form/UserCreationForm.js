@@ -136,12 +136,15 @@ export default connect(
 				let newUser = {
 					...values,
 					role: values.role,
-					publisher: values.publisher.value,
 					preferences: {
 						defaultLanguage: 'fin'
 					}
 				};
 				if (values.role !== 'admin') {
+					newUser = {
+						...newUser,
+						publisher: values.publisher.value
+					};
 					if (!values.userId) {
 						newUser = {
 							...newUser,
