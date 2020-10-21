@@ -29,39 +29,9 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
-import {PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
+import {PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 import HttpStatus from 'http-status';
-
-export const findPublisherIdByEmail = ({email, token, offset}) => async dispatch => {
-	dispatch(setLoader());
-	try {
-		const properties = {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				queries: [{
-					query: {publisherEmail: email}
-				}],
-				offset: offset
-			})
-		};
-
-		const response = await fetch(`${API_URL}/publishers/query`, properties);
-		const result = await response.json();
-		if (result.results.length > 0) {
-			return result.results[0].id;
-		}
-
-		dispatch(setMessage({color: 'error', msg: 'Publisher Admin with this email doesnot exist'}));
-		return HttpStatus.NOT_FOUND;
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
 
 export const fetchPublisher = (id, token) => async dispatch => {
 	dispatch(setLoader());
@@ -96,6 +66,22 @@ export const updatePublisher = (id, values, token) => async dispatch => {
 		const result = await response.json();
 		dispatch(success(PUBLISHER, result.value));
 		dispatch(setMessage({color: 'success', msg: 'Range updated'}));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchPublisherOption = token => async dispatch => {
+	try {
+		const properties = {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		};
+		const response = await fetch(`${API_URL}/publishers/query/all`, properties);
+		const result = await response.json();
+		dispatch(success(PUBLISHER_OPTIONS, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

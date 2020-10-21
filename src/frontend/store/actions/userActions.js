@@ -69,6 +69,9 @@ export const createUser = (values, token) => async dispatch => {
 		case HttpStatus.OK:
 			dispatch(setMessage({color: 'success', msg: 'User created successfully'}));
 			return response.status;
+		case HttpStatus.CREATED:
+			dispatch(setMessage({color: 'success', msg: 'User created successfully'}));
+			return response.status;
 		case HttpStatus.NOT_FOUND:
 			dispatch(setMessage({color: 'error', msg: 'SSO-ID doesnot exists in crowd'}));
 			return response.status;
@@ -117,6 +120,28 @@ export const fetchUser = (id, token) => async dispatch => {
 		});
 		const result = await response.json();
 		dispatch(success(FETCH_USER, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const findUserByUserId = ({userId, token}) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const properties = {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		};
+		const crowdResult = await fetch(`${API_URL}/users/${userId}`, properties);
+		const result = await crowdResult.json();
+		if (crowdResult.status === HttpStatus.NOT_FOUND) {
+			dispatch(fail(ERROR, 'Invalid SSO-Id'));
+			return crowdResult.status;
+		}
+
+		return result;
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
