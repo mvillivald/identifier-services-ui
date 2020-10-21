@@ -123,7 +123,7 @@ export default function (state = initialState, action) {
 				...state,
 				publisherOptions: action.payload,
 				listLoading: false
-			}
+			};
 
 		default:
 			return state;

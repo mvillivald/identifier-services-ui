@@ -25,12 +25,12 @@
  * for the JavaScript code in this file.
  *
  */
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm, getFormValues } from 'redux-form';
-import { Button, Grid, Radio } from '@material-ui/core';
-import { validate } from '@natlibfi/identifier-services-commons';
-import { useCookies } from 'react-cookie';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import {Field, reduxForm, getFormValues} from 'redux-form';
+import {Button, Grid, Radio} from '@material-ui/core';
+import {validate} from '@natlibfi/identifier-services-commons';
+import {useCookies} from 'react-cookie';
 import HttpStatus from 'http-status';
 
 import renderTextField from './render/renderTextField';
@@ -63,6 +63,12 @@ const withoutSso = [
 		type: 'radio',
 		label: 'Select Role',
 		width: 'half'
+	},
+	{
+		name: 'publisher',
+		type: 'select',
+		label: 'Select Publisher',
+		width: 'full'
 	}
 ];
 
@@ -87,11 +93,14 @@ const withSsoFields = [
 	}
 ];
 
-export default connect(mapStateToProps, actions)(reduxForm({
-	form: 'userCreation',
-	validate
-})(
-	props => {
+export default connect(
+	mapStateToProps,
+	actions
+)(
+	reduxForm({
+		form: 'userCreation',
+		validate
+	})(props => {
 		const {
 			handleSubmit,
 			valid,
@@ -102,10 +111,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			userInfo,
 			userValues,
 			setIsCreating,
-			findPublisherIdByEmail,
-			findPublisherIdByUserId,
-			listloading,
-			publishersList,
 			fetchPublisherOption,
 			publisherOptions
 		} = props;
@@ -116,9 +121,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const [showForm, setShowForm] = useState(false);
 		const [haveSSOId, setHaveSSOId] = useState(true);
 
-		useEffect(()=> {
+		useEffect(() => {
 			fetchPublisherOption(token);
-		})
+		});
 
 		function handleCreateUser(values) {
 			if (userInfo.role === 'admin') {
@@ -131,46 +136,32 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				let newUser = {
 					...values,
 					role: values.role,
+					publisher: values.publisher.value,
 					preferences: {
 						defaultLanguage: 'fin'
 					}
 				};
-				let publisher;
-
 				if (values.role !== 'admin') {
-					if (values.userId) {
-						// TO DO check crowd for duplicate user.
-
-						console.log(values)
-						publisher = await findPublisherIdByUserId({ userId: values.userId, token: token });
+					if (!values.userId) {
 						newUser = {
 							...newUser,
-							publisher: publisher
-						};
-					} else {
-						publisher = await findPublisherIdByEmail({ email: values.email, token: token });
-						newUser = {
-							...newUser,
-							publisher: publisher,
 							givenName: values.givenName.toLowerCase(),
 							familyName: values.familyName.toLowerCase()
 						};
 					}
 				}
 
-				if (publisher !== HttpStatus.NOT_FOUND) {
-					const result = await createUser(newUser, token);
-					if (result !== HttpStatus.NOT_FOUND && result !== HttpStatus.CONFLICT) {
-						handleClose();
-						setIsCreating(true);
-					}
+				const response = await createUser(newUser, token);
+				if (response !== HttpStatus.CONFLICT) {
+					handleClose();
+					setIsCreating(true);
 				}
 			}
 
 			async function createPublisherUserRequest() {
 				let newUser;
 				if (values.userId) {
-					newUser = { ...values };
+					newUser = {...values};
 				} else {
 					newUser = {
 						...values,
@@ -202,19 +193,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				return render(list);
 			});
 		}
-		console.log(publisherOptions)
 
 		function render(list) {
 			switch (list.type) {
 				case 'text':
 					return (
 						<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
-							<Field
-								className={`${classes.textField} ${list.width}`}
-								component={renderTextField}
-								label={list.label}
-								name={list.name}
-							/>
+							<Field className={`${classes.textField} ${list.width}`} component={renderTextField} label={list.label} name={list.name}/>
 						</Grid>
 					);
 
@@ -223,8 +208,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field name={list.name} component={renderSimpleRadio} label={list.label}>
-									<Radio value="admin" label="Admin" />
-									<Radio value="publisher-admin" label="Publisher-Admin" />
+									<Radio value="admin" label="Admin"/>
+									<Radio value="publisher-admin" label="Publisher-Admin"/>
 								</Field>
 							</Grid>
 						);
@@ -237,17 +222,18 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field
+									createable
 									className={`${classes.textField} ${list.width}`}
 									component={renderMultiSelect}
 									label={list.label}
 									name={list.name}
 									options={publisherOptions}
-									createable={true}
 									props={{isMulti: false}}
 								/>
 							</Grid>
 						);
 					}
+
 					break;
 				default:
 					return null;
@@ -269,11 +255,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</div>
 						</div>
 					) : (
-							<div className={classes.usercreationSelect}>
-								<Button variant="outlined" color="primary" onClick={handleClickYes}>With SSO-ID</Button> &nbsp;
-								<Button variant="outlined" color="primary" onClick={handleClickNo}>Without SSO-ID</Button>
-							</div>
-						)}
+						<div className={classes.usercreationSelect}>
+							<Button variant="outlined" color="primary" onClick={handleClickYes}>
+								With SSO-ID
+							</Button>{' '}
+              &nbsp;
+							<Button variant="outlined" color="primary" onClick={handleClickNo}>
+								Without SSO-ID
+							</Button>
+						</div>
+					)}
 				</form>
 			</>
 		);
@@ -284,13 +275,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				formSyncErrors: null
 			}
 		};
-	}));
+	})
+);
 
 function mapStateToProps(state) {
-	return ({
+	return {
 		userValues: getFormValues('userCreation')(state),
 		listloading: state.publisher.listLoading,
 		publishersList: state.publisher.publishersList,
 		publisherOptions: state.publisher.publisherOptions
-	})
+	};
 }

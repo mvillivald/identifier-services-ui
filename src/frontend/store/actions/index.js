@@ -27,8 +27,6 @@
  */
 
 export {
-	findPublisherIdByEmail,
-	findPublisherIdByUserId,
 	fetchPublisher,
 	fetchPublisherOption,
 	updatePublisher,
@@ -74,6 +72,7 @@ export {
 	createUserRequest,
 	fetchUser,
 	fetchUserRequest,
+	findUserByUserId,
 	fetchUsersList,
 	fetchUsersRequestsList,
 	updateUserRequest,
