@@ -56,7 +56,6 @@ export default function (props) {
 					{notes.map(item => (
 						<ListItem key={item} className={classes.notesList}>
 							<StopIcon fontSize="small"/>
-							<Typography className={classes.notes}>{item}</Typography>
 							<Typography className={classes.notes}>
 								<FormattedMessage id={`publisherRegistration.renderInformation.${item}`}/>
 							</Typography>

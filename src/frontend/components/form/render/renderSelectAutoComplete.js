@@ -30,6 +30,7 @@ export default function (props) {
 				value={input.value}
 				onBlur={() => input.onBlur(input.value)}
 				onChange={(event, value) => {
+					console.log(value)
 					input.onChange(value);
 				}}
 			/>
