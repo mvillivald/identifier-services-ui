@@ -33,6 +33,7 @@ import {Button, Grid, Stepper, Step, StepLabel, Typography, List} from '@materia
 import {connect} from 'react-redux';
 import HttpStatus from 'http-status';
 import {useCookies} from 'react-cookie';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import ResetCaptchaButton from './ResetCaptchaButton';
 import * as actions from '../../store/actions';
@@ -72,7 +73,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			handleSubmit,
 			reset
 		} = props;
-		const fieldArray = getFieldArray(user);
+		const intl = useIntl();
+		const fieldArray = getFieldArray(intl);
 		const classes = useStyles();
 		const [activeStep, setActiveStep] = useState(0);
 		const [captchaInput, setCaptchaInput] = useState('');
@@ -218,7 +220,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					{steps.map(label => (
 						<Step key={label}>
 							<StepLabel className={classes.stepLabel}>
-								{label}
+								{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
 							</StepLabel>
 						</Step>
 					))}
@@ -246,17 +248,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<div className={classes.btnContainer}>
 						<Button disabled={activeStep === 0} onClick={handleBack}>
-							Back
+							<FormattedMessage id="form.button.label.back"/>
 						</Button>
 						{activeStep === steps.length - 1 ?
 							null :
 							<Button type="button" disabled={(pristine || !valid) || activeStep === steps.length - 1} variant="contained" color="primary" onClick={handleNext}>
-								Next
+								<FormattedMessage id="form.button.label.next"/>
 							</Button>}
 						{
 							activeStep === steps.length - 1 &&
 								<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-									Submit
+									<FormattedMessage id="form.button.label.submit"/>
 								</Button>
 						}
 					</div>
@@ -323,50 +325,50 @@ function mapStateToProps(state) {
 	});
 }
 
-function getFieldArray() {
+function getFieldArray(intl) {
 	const fields = [
 		{
 			publisherBasicInfo: [
 				{
 					name: 'name',
 					type: 'text',
-					label: 'Name*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.name'}),
 					width: 'half'
 				},
 				{
 					name: 'postalAddress[address]',
 					type: 'text',
-					label: 'Address*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.address'}),
 					width: 'half'
 				},
 				{
 					name: 'postalAddress[city]',
 					type: 'text',
-					label: 'City*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.city'}),
 					width: 'half'
 				},
 				{
 					name: 'postalAddress[zip]',
 					type: 'text',
-					label: 'Zip*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.zip'}),
 					width: 'half'
 				},
 				{
 					name: 'phone',
 					type: 'text',
-					label: 'Phone',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.phone'}),
 					width: 'half'
 				},
 				{
 					name: 'publisherEmail',
 					type: 'text',
-					label: 'Publisher Email*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherEmail'}),
 					width: 'half'
 				},
 				{
 					name: 'publisherLanguage',
 					type: 'select',
-					label: 'Select Language',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.selectLanguage.label'}),
 					width: 'half',
 					defaultValue: 'eng',
 					options: [
@@ -382,22 +384,21 @@ function getFieldArray() {
 				{
 					name: 'givenName',
 					type: 'text',
-					label: 'Given Name',
+					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.givenName'}),
 					width: 'full'
 				},
 				{
 					name: 'familyName',
 					type: 'text',
-					label: 'Family Name',
+					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.familyName'}),
 					width: 'full'
 				},
 				{
 					name: 'email',
 					type: 'email',
-					label: 'Email*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.email'}),
 					width: 'full'
 				}
-
 			]
 		},
 		{
@@ -405,19 +406,19 @@ function getFieldArray() {
 				{
 					name: 'title',
 					type: 'text',
-					label: 'Title*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.title'}),
 					width: 'half'
 				},
 				{
 					name: 'subtitle',
 					type: 'text',
-					label: 'Sub-Title',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.subtitle'}),
 					width: 'half'
 				},
 				{
 					name: 'language',
 					type: 'select',
-					label: 'Select Language*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.language.title'}),
 					width: 'half',
 					defaultValue: 'eng',
 					options: [
@@ -429,19 +430,19 @@ function getFieldArray() {
 				{
 					name: 'additionalDetails',
 					type: 'text',
-					label: 'Additional Details',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.additionalDetails'}),
 					width: 'half'
 				},
 				{
 					name: 'manufacturer',
 					type: 'text',
-					label: 'Manufacturer',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.manufacturer'}),
 					width: 'half'
 				},
 				{
 					name: 'city',
 					type: 'text',
-					label: 'City*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.city'}),
 					width: 'half'
 				}
 			]
@@ -454,31 +455,31 @@ function getFieldArray() {
 						{
 							name: 'firstYear',
 							type: 'number',
-							label: 'FirstYear*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.Time.firstYear'}),
 							width: 'half'
 						},
 						{
 							name: 'firstNumber',
 							type: 'text',
-							label: 'FirstNumber*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.Time.firstNumber'}),
 							width: 'half'
 						},
 						{
 							name: 'frequency',
 							type: 'multiSelect',
 							width: 'half',
-							label: 'Frequency*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency'}),
 							options: [
 								{label: '', value: ''},
-								{label: 'Yearly', value: 'yearly'},
-								{label: 'Monthly', value: 'monthly'},
-								{label: 'Weekly', value: 'weekly'},
-								{label: 'Daily', value: 'daily'},
-								{label: 'Bi-Yearly', value: 'bi-yearly'},
-								{label: 'Quarterly', value: 'quarterly'},
-								{label: 'Bi-Monthly', value: 'bi-monthly'},
-								{label: 'Continuously', value: 'continuously'},
-								{label: 'Irregular', value: 'irregular'}
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.yearly'}), value: 'yearly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.monthly'}), value: 'monthly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.weekly'}), value: 'weekly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.daily'}), value: 'daily'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.biyearly'}), value: 'bi-yearly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.quarterly'}), value: 'quarterly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.bimonthly'}), value: 'bi-monthly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.continuously'}), value: 'continuously'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.irregular'}), value: 'irregular'}
 
 							]
 						},
@@ -486,31 +487,31 @@ function getFieldArray() {
 							name: 'type',
 							type: 'multiSelect',
 							width: 'half',
-							label: 'Type*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.Time.type'}),
 							options: [
 								{label: '', value: ''},
-								{label: 'Journal', value: 'journal'},
-								{label: 'Newsletter', value: 'newsletter'},
-								{label: 'Staff-magazine', value: 'staff-magazine'},
-								{label: 'Membership-magazine', value: 'membership-magazine'},
-								{label: 'Cartoon', value: 'cartoon'},
-								{label: 'Newspaper', value: 'newspaper'},
-								{label: 'Free-paper', value: 'free-paper'},
-								{label: 'Monography', value: 'monography'}
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.journal'}), value: 'journal'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.newsletter'}), value: 'newsletter'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.staffmagazine'}), value: 'staff-magazine'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.membershipmagazine'}), value: 'membership-magazine'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.cartoon'}), value: 'cartoon'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.newspaper'}), value: 'newspaper'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.freepaper'}), value: 'free-paper'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.type.monography'}), value: 'monography'}
 
 							]
 						},
 						{
 							name: 'formatDetails[format]',
 							type: 'select',
-							label: 'Format*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.Time.format'}),
 							width: 'half',
 							options: [
 								{label: '', value: ''},
-								{label: 'Printed', value: 'printed'},
-								{label: 'CD', value: 'cd'},
-								{label: 'Electronic', value: 'electronic'},
-								{label: 'Printed and Electronic', value: 'printed-and-electronic'}
+								{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cd'}), value: 'cd'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.electronic'}), value: 'electronic'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.both'}), value: 'printed-and-electronic'}
 							]
 						}
 					]
@@ -525,25 +526,25 @@ function getFieldArray() {
 						{
 							name: 'previousPublication[lastYear]',
 							type: 'number',
-							label: 'Last Year',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.lastYear'}),
 							width: 'full'
 						},
 						{
 							name: 'previousPublication[lastNumber]',
 							type: 'text',
-							label: 'Last Number',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.lastNumber'}),
 							width: 'full'
 						},
 						{
 							name: 'previousPublication[title]',
 							type: 'text',
-							label: 'Title',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.title'}),
 							width: 'half'
 						},
 						{
 							name: 'previousPublication[identifier]',
 							type: 'text',
-							label: 'Identifier',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.identifier'}),
 							width: 'half'
 						}
 					]
@@ -554,13 +555,13 @@ function getFieldArray() {
 						{
 							name: 'otherMedium[title]',
 							type: 'text',
-							label: 'Title',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.title'}),
 							width: 'half'
 						},
 						{
 							name: 'otherMedium[identifier]',
 							type: 'text',
-							label: 'Identifier',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.identifier'}),
 							width: 'half'
 						}
 					]
@@ -575,13 +576,13 @@ function getFieldArray() {
 						{
 							name: 'seriesDetails[mainSeries[title]]',
 							type: 'text',
-							label: 'Title',
+							label: intl.formatMessage({id: 'publicationRegistration.form.seriesDetails.title'}),
 							width: 'half'
 						},
 						{
 							name: 'seriesDetails[mainSeries[identifier]]',
 							type: 'text',
-							label: 'Identifier',
+							label: intl.formatMessage({id: 'publicationRegistration.form.seriesDetails.identifier'}),
 							width: 'half'
 						}
 					]
@@ -592,13 +593,13 @@ function getFieldArray() {
 						{
 							name: 'seriesDetails[subSeries[title]]',
 							type: 'text',
-							label: 'Title',
+							label: intl.formatMessage({id: 'publicationRegistration.form.seriesDetails.title'}),
 							width: 'half'
 						},
 						{
 							name: 'seriesDetails[subSeries[identifier]]',
 							type: 'text',
-							label: 'Identifier',
+							label: intl.formatMessage({id: 'publicationRegistration.form.seriesDetails.identifier'}),
 							width: 'half'
 						}
 					]

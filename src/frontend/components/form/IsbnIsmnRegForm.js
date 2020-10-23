@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -32,12 +33,14 @@ import {validate} from '@natlibfi/identifier-services-commons';
 import {Button, Grid, Stepper, Step, StepLabel, Typography, List} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 import HttpStatus from 'http-status';
+
 import * as actions from '../../store/actions';
 import useStyles from '../../styles/form';
 import ResetCaptchaButton from './ResetCaptchaButton';
 import Captcha from '../Captcha';
-import {element, fieldArrayElement, formatLabel} from './publisherRegistrationForm/commons';
+import {element, fieldArrayElement} from './publisherRegistrationForm/commons';
 import ListComponent from '../ListComponent';
 import renderSelectAutoComplete from './render/renderSelectAutoComplete';
 
@@ -71,8 +74,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			handleSubmit,
 			reset
 		} = props;
-		const fieldArray = getFieldArray(user);
-		const dissFieldArray = getDissertationFieldArray();
+		const intl = useIntl();
+		const fieldArray = getFieldArray(intl);
+		const dissFieldArray = getDissertationFieldArray(intl);
 		const classes = useStyles();
 		const [activeStep, setActiveStep] = useState(0);
 		const [captchaInput, setCaptchaInput] = useState('');
@@ -82,7 +86,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		if (publicationValues && publicationValues.type && publicationValues.type.value === 'map') {
 			fieldArray[4].basicInformation.push({
-				label: 'Scale',
+				label: intl.formatMessage({id: 'publicationRegistration.form.map.scale'}),
 				name: 'mapDetails[scale]',
 				type: 'text',
 				width: 'half'
@@ -94,14 +98,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				name: 'isbnClassification',
 				type: 'multiSelect',
 				width: 'half',
-				label: 'Classification',
+				label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.label'}),
 				isMulti: true,
 				isCreatable: false,
 				options: [
-					{label: 'Non-Fiction', value: 1},
-					{label: 'Fiction', value: 2},
-					{label: 'Cartoon', value: 3},
-					{label: 'Children Book', value: 4}
+					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.nonFiction'}), value: 1},
+					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.fiction'}), value: 2},
+					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.cartoon'}), value: 3},
+					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.childrenBook'}), value: 4}
 				]
 			});
 		}
@@ -113,7 +117,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				loadSvgCaptcha();
 				getUniversityPublisher();
 			}
-		}, [isAuthenticated, loadSvgCaptcha]);
+		}, [getUniversityPublisher, isAuthenticated, loadSvgCaptcha]);
 
 		function getStepContent(step) {
 			if (isAuthenticated) {
@@ -125,7 +129,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 2:
 						return withFormTitle({arr: fieldArray[6].Series, publicationValues, clearFields});
 					case 3:
-						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields});
+						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 4:
 						return renderPreview(publicationValues);
 					default:
@@ -148,7 +152,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 5:
 						return withFormTitle({arr: fieldArray[6].Series, publicationValues, clearFields});
 					case 6:
-						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields});
+						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 7:
 						return renderPreview(publicationValues);
 					default:
@@ -159,7 +163,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (!isAuthenticated && publicationValues.type.value === 'dissertation') {
 				switch (step) {
 					case 0:
-						return publicationValues.insertUniversity ?
+						return (universityPublisher.length === 0 || publicationValues.insertUniversity) ?
 							<>{element({array: dissertCheckBox(), classes})}{element({array: dissFieldArray[0].UniversityInfo, classes})}</> :
 							<>{element({array: searchPublisherComponent(), classes})}{element({array: dissertCheckBox(), classes})}</>;
 					case 1:
@@ -171,7 +175,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 4:
 						return withFormTitle({arr: fieldArray[6].Series, publicationValues, clearFields});
 					case 5:
-						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields});
+						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 6:
 						return renderPreview(publicationValues);
 					default:
@@ -424,21 +428,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			}
 		}
 
-		function getDissertationFieldArray() {
+		function getDissertationFieldArray(intl) {
 			const dissertationFields = [
 				{
 					UniversityInfo: [
 						{
 							name: 'university[name]',
 							type: 'text',
-							label: 'University Name *',
+							label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.universityName'}),
 							width: 'full',
 							disable: publicationValues && typeof publicationValues.selectUniversity === 'object' && true
 						},
 						{
 							name: 'university[city]',
 							type: 'text',
-							label: 'City *',
+							label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.city'}),
 							width: 'full',
 							disable: publicationValues && typeof publicationValues.selectUniversity === 'object' && true
 						}
@@ -463,9 +467,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{
 					name: 'selectUniversity',
 					type: 'selectAutoComplete',
-					label: 'Select University/Publisher',
+					label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.selectUniversity.label'}),
 					width: 'full',
-					placeholder: 'Select University/Publisher',
+					placeholder: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.selectUniversity.placeholder'}),
 					disable: checkDisable,
 					options: publisher
 				}
@@ -477,9 +481,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{
 					name: 'insertUniversity',
 					type: 'checkbox',
-					label: 'Check if you do not find the university',
+					label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.insertUniversity.checkbox.label'}),
 					width: 'half',
-					info: 'You can enter university name and city which you did not find'
+					info: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.insertUniversity.checkbox.info'})
 				}
 			];
 		}
@@ -493,14 +497,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								disableClearable
 								freeSolo
 								name="isPublic"
-								placeholder="Select..."
+								placeholder={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.placeholder'})}
 								className={classes.selectField}
 								component={renderSelectAutoComplete}
-								label="Is your publication intended for public use (e.g., for library use or sale in bookshops) or will it be made otherwise available to the public? If your publication is a web-version or an ebook, will it be free to download or to buy?"
-								options={[{title: 'Yes', value: true}, {title: 'No', value: false}]}
+								label={<FormattedMessage id="publicationRegistrationIsbnIsmn.form.isPubic.label"/>}
+								options={[
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.option.yes'}), value: true},
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.option.no'}), value: false}
+								]}
 							/>
 							<Typography variant="h6" className="note-txt">
-								<strong>NOTE: If your publication is intended for private use only(e.g., for friends, relatives or the internal use of an association or organisation), publication will not be assigned an ISBN.</strong>
+								<strong><FormattedMessage id="publicationRegistrationIsbnIsmn.form.note"/></strong>
 							</Typography>
 						</Grid>
 						<Grid item xs={12} className="select-useType">
@@ -508,16 +515,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								disableClearable
 								freeSolo
 								name="type"
-								placeholder="Type of publication"
+								placeholder={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.placeholder'})}
 								className={classes.selectField}
 								component={renderSelectAutoComplete}
-								label="The publication type is:"
+								label={<FormattedMessage id="publicationRegistrationIsbnIsmn.form.type.label"/>}
 								options={[
-									{title: 'Book', value: 'book'},
-									{title: 'Dissertation', value: 'dissertation'},
-									{title: 'Music', value: 'music'},
-									{title: 'Map', value: 'map'},
-									{title: 'Other', value: 'other'}
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.book'}), value: 'book'},
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.dissertation'}), value: 'dissertation'},
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.music'}), value: 'music'},
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.map'}), value: 'map'},
+									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.other'}), value: 'other'}
 								]}
 							/>
 						</Grid>
@@ -535,7 +542,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{steps.map(label => (
 								<Step key={label}>
 									<StepLabel className={classes.stepLabel}>
-										{formatLabel(label)}
+										{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
 									</StepLabel>
 								</Step>
 							))}
@@ -563,17 +570,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</Grid>
 							<div className={classes.btnContainer}>
 								<Button onClick={handleBack}>
-									Back
+									<FormattedMessage id="form.button.label.back"/>
 								</Button>
 								{activeStep === steps.length - 1 ?
 									null :
 									<Button type="button" disabled={(pristine || !valid) || activeStep === steps.length - 1} variant="contained" color="primary" onClick={handleNext}>
-										Next
+										<FormattedMessage id="form.button.label.next"/>
 									</Button>}
 								{
 									activeStep === steps.length - 1 &&
 										<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-											Submit
+											<FormattedMessage id="form.button.label.submit"/>
 										</Button>
 								}
 							</div>
@@ -626,50 +633,50 @@ function mapStateToProps(state) {
 	});
 }
 
-function getFieldArray() {
+function getFieldArray(intl) {
 	const fields = [
 		{
 			publisherBasicInfo: [
 				{
 					name: 'name',
 					type: 'text',
-					label: 'Name*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.name'}),
 					width: 'half'
 				},
 				{
 					name: 'postalAddress[address]',
 					type: 'text',
-					label: 'Address*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.address'}),
 					width: 'half'
 				},
 				{
 					name: 'postalAddress[city]',
 					type: 'text',
-					label: 'City*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.city'}),
 					width: 'half'
 				},
 				{
 					name: 'postalAddress[zip]',
 					type: 'text',
-					label: 'Zip*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.zip'}),
 					width: 'half'
 				},
 				{
 					name: 'phone',
 					type: 'text',
-					label: 'Phone*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.phone'}),
 					width: 'half'
 				},
 				{
 					name: 'publisherEmail',
 					type: 'text',
-					label: 'Publisher Email*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherEmail'}),
 					width: 'half'
 				},
 				{
 					name: 'publisherLanguage',
 					type: 'select',
-					label: 'Select Language',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.selectLanguage.label'}),
 					width: 'half',
 					defaultValue: 'eng',
 					options: [
@@ -685,35 +692,35 @@ function getFieldArray() {
 				{
 					name: 'publicationDetails[frequency][currentYear]',
 					type: 'text',
-					label: 'Publication Estimate this Year*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.thisYear'}),
 					width: 'half'
 				},
 				{
 					name: 'publicationDetails[frequency][nextYear]',
 					type: 'text',
-					label: 'Publication Estimate next Year*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.nextYear'}),
 					width: 'half'
 				},
 				{
 					name: 'publicationDetails[previouslyPublished]',
 					type: 'select',
-					label: 'Have you published previously?*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.previouslyPublished'}),
 					width: 'half',
 					options: [
 						{label: '', value: ''},
-						{label: 'Yes', value: 'true'},
-						{label: 'No', value: 'false'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.previouslyPublished.yes'}), value: 'true'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.previouslyPublished.yes'}), value: 'false'}
 					]
 				},
 				{
 					name: 'publicationDetails[publishingActivities]',
 					type: 'select',
-					label: 'Are your publishing activities occasional/continuous?*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.occasionalOrContinuous'}),
 					width: 'half',
 					options: [
 						{label: '', value: ''},
-						{label: 'Occasional', value: 'occasional'},
-						{label: 'Continuous', value: 'continuous'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.occasional'}), value: 'occasional'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.continuous'}), value: 'continuous'}
 					]
 				}
 			]
@@ -723,19 +730,19 @@ function getFieldArray() {
 				{
 					name: 'givenName',
 					type: 'text',
-					label: 'Given Name',
+					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.givenName'}),
 					width: 'full'
 				},
 				{
 					name: 'familyName',
 					type: 'text',
-					label: 'Family Name',
+					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.familyName'}),
 					width: 'full'
 				},
 				{
 					name: 'email',
 					type: 'email',
-					label: 'Email*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.email'}),
 					width: 'full'
 				}
 			]
@@ -745,49 +752,49 @@ function getFieldArray() {
 				{
 					name: 'givenName',
 					type: 'text',
-					label: 'First Name*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.givenName'}),
 					width: 'half'
 				},
 				{
 					name: 'familyName',
 					type: 'text',
-					label: 'Last Name*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.familyName'}),
 					width: 'half'
 				},
 				{
 					name: 'address',
 					type: 'text',
-					label: 'Address*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.address'}),
 					width: 'half'
 				},
 				{
 					name: 'zip',
 					type: 'text',
-					label: 'Postcode/zip*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.zip'}),
 					width: 'half'
 				},
 				{
 					name: 'city',
 					type: 'text',
-					label: 'City*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.city'}),
 					width: 'half'
 				},
 				{
 					name: 'country',
 					type: 'text',
-					label: 'Country*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.country'}),
 					width: 'half'
 				},
 				{
 					name: 'phone',
 					type: 'text',
-					label: 'Telephone/Mobile',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.phone'}),
 					width: 'half'
 				},
 				{
 					name: 'email',
 					type: 'text',
-					label: 'Contact email*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.email'}),
 					width: 'half'
 				}
 			]
@@ -797,19 +804,19 @@ function getFieldArray() {
 				{
 					name: 'title',
 					type: 'text',
-					label: 'Title*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.title'}),
 					width: 'half'
 				},
 				{
 					name: 'subtitle',
 					type: 'text',
-					label: 'Sub-Title',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.subtitle'}),
 					width: 'half'
 				},
 				{
 					name: 'language',
 					type: 'select',
-					label: 'Select Language*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.language.title'}),
 					width: 'half',
 					defaultValue: 'eng',
 					options: [
@@ -821,7 +828,7 @@ function getFieldArray() {
 				{
 					name: 'publicationTime',
 					type: 'dateTime',
-					label: 'Publication Time*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.publicationTime'}),
 					width: 'half'
 				}
 			]
@@ -834,26 +841,26 @@ function getFieldArray() {
 						{
 							name: 'authorGivenName',
 							type: 'text',
-							label: 'Given Name*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.authors.authorGivenName'}),
 							width: 'half'
 						},
 						{
 							name: 'authorFamilyName',
 							type: 'text',
-							label: 'Family Name*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.authors.authorFamilyName'}),
 							width: 'half'
 						},
 						{
 							name: 'role',
 							type: 'select',
-							label: 'Role*',
+							label: intl.formatMessage({id: 'publicationRegistration.form.authors.role'}),
 							width: 'half',
 							options: [
 								{label: '', value: ''},
-								{label: 'Author', value: 'author'},
-								{label: 'Illustrator', value: 'illustrator'},
-								{label: 'Translator', value: 'translator'},
-								{label: 'Editor', value: 'editor'}
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.author'}), value: 'author'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.illustrator'}), value: 'illustrator'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.translator'}), value: 'translator'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.editor'}), value: 'editor'}
 							]
 						}
 					]
@@ -868,19 +875,19 @@ function getFieldArray() {
 						{
 							name: 'seriesDetails[seriesTitle]',
 							type: 'text',
-							label: 'Series title',
+							label: intl.formatMessage({id: 'publicationRegistration.form.series.title'}),
 							width: 'half'
 						},
 						{
 							name: 'seriesDetails[identifier]',
 							type: 'text',
-							label: 'Identifier',
+							label: intl.formatMessage({id: 'publicationRegistration.form.series.identifier'}),
 							width: 'half'
 						},
 						{
 							name: 'seriesDetails[volume]',
 							type: 'text',
-							label: 'Volume',
+							label: intl.formatMessage({id: 'publicationRegistration.form.series.volume'}),
 							width: 'half'
 						}
 					]
@@ -894,9 +901,9 @@ function getFieldArray() {
 					type: 'radio',
 					width: 'full',
 					options: [
-						{label: 'Electronic', value: 'electronic'},
-						{label: 'Printed', value: 'printed'},
-						{label: 'Both (Printed and Electronic)', value: 'both'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.electronic'}), value: 'electronic'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.both'}), value: 'both'}
 					]
 				}
 			]

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React from 'react';
 import {Grid, Typography, Box} from '@material-ui/core';
 import {Field, FieldArray} from 'redux-form';
@@ -14,7 +15,7 @@ import renderSelectAutoComplete from '../render/renderSelectAutoComplete';
 import PopoverComponent from '../../PopoverComponent';
 import HelpIcon from '@material-ui/icons/Help';
 
-export function element({array, classes, clearFields, publicationIssnValues, fieldName, publicationIsbnValues}) {
+export function element({array, classes, clearFields, publicationIssnValues, fieldName, publicationIsbnValues, intl}) {
 	return array.map(list => {
 		switch (list.type) {
 			case 'arrayString':
@@ -129,7 +130,11 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 					return (
 						<>
 							<Grid key={list.name} item xs={12}>
-								<Box mt={1}><Typography variant="h6">Select the way you want Publication to be issued</Typography></Box>
+								<Box mt={1}>
+									<Typography variant="h6">
+										<FormattedMessage id="publicationRegistration.form.formatDetails.select.label"/>
+									</Typography>
+								</Box>
 
 								<Field
 									value={publicationIsbnValues && publicationIsbnValues.selectFormat}
@@ -140,7 +145,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 									props={{className: classes.radioDirectionRow, publicationValues: publicationIsbnValues, clearFields: clearFields}}
 								/>
 							</Grid>
-							{publicationIsbnValues && publicationIsbnValues.selectFormat && subElementFormatDetails({value: publicationIsbnValues.selectFormat, classes})}
+							{publicationIsbnValues && publicationIsbnValues.selectFormat && subElementFormatDetails({value: publicationIsbnValues.selectFormat, classes, intl})}
 						</>
 					);
 				}
@@ -225,8 +230,8 @@ function getUrl() {
 	];
 }
 
-function subElementFormatDetails({value, classes}) {
-	const array = getSubFormatDetailsFieldArray();
+function subElementFormatDetails({value, classes, intl}) {
+	const array = getSubFormatDetailsFieldArray(intl);
 	switch (value) {
 		case 'electronic':
 			return element({array: array[0].electronic, fieldName: 'electronic', classes});
@@ -239,12 +244,12 @@ function subElementFormatDetails({value, classes}) {
 	}
 }
 
-function getSubFormatDetailsFieldArray() {
+function getSubFormatDetailsFieldArray(intl) {
 	const array = [
 		{
 			electronic: [
 				{
-					label: 'Fileformat*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
 					width: 'full',
@@ -261,37 +266,37 @@ function getSubFormatDetailsFieldArray() {
 		{
 			printed: [
 				{
-					label: 'PrintFormat*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'select',
 					width: 'half',
 					options: [
 						{label: '', value: ''},
-						{label: 'paperback', value: 'paperback'},
-						{label: 'hardback', value: 'hardback'},
-						{label: 'spiral-binding', value: 'spiral-binding'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 					]
 				},
 				{
-					label: 'Manufacturer',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.manufacturer'}),
 					name: 'formatDetails[manufacturer]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: 'city',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.city'}),
 					name: 'formatDetails[city]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: 'Run',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.run'}),
 					name: 'formatDetails[run]',
 					type: 'number',
 					width: 'half'
 				},
 				{
-					label: 'Edition',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
 					type: 'number',
 					width: 'half'
@@ -301,7 +306,7 @@ function getSubFormatDetailsFieldArray() {
 		{
 			both: [
 				{
-					label: 'Fileformat*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
 					width: 'full',
@@ -314,37 +319,37 @@ function getSubFormatDetailsFieldArray() {
 					]
 				},
 				{
-					label: 'PrintFormat*',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'select',
 					width: 'full',
 					options: [
 						{label: '', value: ''},
-						{label: 'paperback', value: 'paperback'},
-						{label: 'hardback', value: 'hardback'},
-						{label: 'spiral-binding', value: 'spiral-binding'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 					]
 				},
 				{
-					label: 'Manufacturer',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.manufacturer'}),
 					name: 'formatDetails[manufacturer]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: 'city',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.city'}),
 					name: 'formatDetails[city]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: 'Run',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.run'}),
 					name: 'formatDetails[run]',
 					type: 'number',
 					width: 'half'
 				},
 				{
-					label: 'Edition',
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
 					type: 'number',
 					width: 'half'
@@ -362,7 +367,6 @@ export function formatAddress(obj) {
 	return result;
 }
 
-// eslint-disable-next-line complexity
 function replaceKey(key) {
 	switch (key) {
 		case 'affiliateOfAddress':
