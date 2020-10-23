@@ -132,7 +132,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							<Grid key={list.name} item xs={12}>
 								<Box mt={1}>
 									<Typography variant="h6">
-										<FormattedMessage id="publicationRegistration.form.basicInformation.formatDetails.select.label"/>
+										<FormattedMessage id="publicationRegistration.form.formatDetails.select.label"/>
 									</Typography>
 								</Box>
 
@@ -249,7 +249,7 @@ function getSubFormatDetailsFieldArray(intl) {
 		{
 			electronic: [
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.fileformat'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
 					width: 'full',
@@ -266,37 +266,37 @@ function getSubFormatDetailsFieldArray(intl) {
 		{
 			printed: [
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printformat'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'select',
 					width: 'half',
 					options: [
 						{label: '', value: ''},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 					]
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.manufacturer'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.manufacturer'}),
 					name: 'formatDetails[manufacturer]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.city'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.city'}),
 					name: 'formatDetails[city]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.run'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.run'}),
 					name: 'formatDetails[run]',
 					type: 'number',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.edition'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
 					type: 'number',
 					width: 'half'
@@ -306,7 +306,7 @@ function getSubFormatDetailsFieldArray(intl) {
 		{
 			both: [
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.fileformat'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
 					width: 'full',
@@ -319,37 +319,37 @@ function getSubFormatDetailsFieldArray(intl) {
 					]
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printformat'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'select',
 					width: 'full',
 					options: [
 						{label: '', value: ''},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 					]
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.manufacturer'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.manufacturer'}),
 					name: 'formatDetails[manufacturer]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.city'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.city'}),
 					name: 'formatDetails[city]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.run'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.run'}),
 					name: 'formatDetails[run]',
 					type: 'number',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed.edition'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
 					type: 'number',
 					width: 'half'

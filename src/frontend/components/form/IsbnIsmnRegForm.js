@@ -86,7 +86,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		if (publicationValues && publicationValues.type && publicationValues.type.value === 'map') {
 			fieldArray[4].basicInformation.push({
-				label: 'Scale',
+				label: intl.formatMessage({id: 'publicationRegistration.form.map.scale'}),
 				name: 'mapDetails[scale]',
 				type: 'text',
 				width: 'half'
@@ -467,9 +467,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{
 					name: 'selectUniversity',
 					type: 'selectAutoComplete',
-					label: 'Select University/Publisher',
+					label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.selectUniversity.label'}),
 					width: 'full',
-					placeholder: 'Select University/Publisher',
+					placeholder: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.selectUniversity.placeholder'}),
 					disable: checkDisable,
 					options: publisher
 				}
@@ -481,9 +481,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{
 					name: 'insertUniversity',
 					type: 'checkbox',
-					label: 'Check if you do not find the university',
+					label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.insertUniversity.checkbox.label'}),
 					width: 'half',
-					info: 'You can enter university name and city which you did not find'
+					info: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.insertUniversity.checkbox.info'})
 				}
 			];
 		}
@@ -570,17 +570,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</Grid>
 							<div className={classes.btnContainer}>
 								<Button onClick={handleBack}>
-									Back
+									<FormattedMessage id="form.button.label.back"/>
 								</Button>
 								{activeStep === steps.length - 1 ?
 									null :
 									<Button type="button" disabled={(pristine || !valid) || activeStep === steps.length - 1} variant="contained" color="primary" onClick={handleNext}>
-										Next
+										<FormattedMessage id="form.button.label.next"/>
 									</Button>}
 								{
 									activeStep === steps.length - 1 &&
 										<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-											Submit
+											<FormattedMessage id="form.button.label.submit"/>
 										</Button>
 								}
 							</div>
@@ -841,26 +841,26 @@ function getFieldArray(intl) {
 						{
 							name: 'authorGivenName',
 							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.authorGivenName'}),
+							label: intl.formatMessage({id: 'publicationRegistration.form.authors.authorGivenName'}),
 							width: 'half'
 						},
 						{
 							name: 'authorFamilyName',
 							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.authorFamilyName'}),
+							label: intl.formatMessage({id: 'publicationRegistration.form.authors.authorFamilyName'}),
 							width: 'half'
 						},
 						{
 							name: 'role',
 							type: 'select',
-							label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.role'}),
+							label: intl.formatMessage({id: 'publicationRegistration.form.authors.role'}),
 							width: 'half',
 							options: [
 								{label: '', value: ''},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.role.author'}), value: 'author'},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.role.illustrator'}), value: 'illustrator'},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.role.translator'}), value: 'translator'},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.authors.role.editor'}), value: 'editor'}
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.author'}), value: 'author'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.illustrator'}), value: 'illustrator'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.translator'}), value: 'translator'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.editor'}), value: 'editor'}
 							]
 						}
 					]
@@ -875,19 +875,19 @@ function getFieldArray(intl) {
 						{
 							name: 'seriesDetails[seriesTitle]',
 							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.series.title'}),
+							label: intl.formatMessage({id: 'publicationRegistration.form.series.title'}),
 							width: 'half'
 						},
 						{
 							name: 'seriesDetails[identifier]',
 							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.series.identifier'}),
+							label: intl.formatMessage({id: 'publicationRegistration.form.series.identifier'}),
 							width: 'half'
 						},
 						{
 							name: 'seriesDetails[volume]',
 							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.series.volume'}),
+							label: intl.formatMessage({id: 'publicationRegistration.form.series.volume'}),
 							width: 'half'
 						}
 					]
@@ -901,9 +901,9 @@ function getFieldArray(intl) {
 					type: 'radio',
 					width: 'full',
 					options: [
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.electronic'}), value: 'electronic'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.printed'}), value: 'printed'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.formatDetails.both'}), value: 'both'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.electronic'}), value: 'electronic'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.both'}), value: 'both'}
 					]
 				}
 			]
