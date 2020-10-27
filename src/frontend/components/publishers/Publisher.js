@@ -39,6 +39,7 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm, Field} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import useFormStyles from '../../styles/form';
@@ -72,6 +73,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		isAuthenticated,
 		userInfo} = props;
 	const classes = commonStyles();
+	const intl = useIntl();
 	const formClasses = useFormStyles();
 	const [isEdit, setIsEdit] = useState(false);
 	/* global COOKIE_NAME */
@@ -129,7 +131,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedPublisherDetail).map(key => {
 										return typeof formattedPublisherDetail[key] === 'string' ?
 											(
-												<ListComponent label={key} value={formattedPublisherDetail[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedPublisherDetail[key]}/>
 											) :
 											null;
 									})
@@ -142,7 +144,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedPublisherDetail).map(key => {
 										return typeof formattedPublisherDetail[key] === 'object' ?
 											(
-												<ListComponent label={key} value={formattedPublisherDetail[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedPublisherDetail[key]}/>
 											) :
 											null;
 									})
@@ -203,7 +205,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (rangleListLoading) {
 				data = <Spinner/>;
 			} else if (isbnRangeList.length === 0) {
-				data = 'No ranges found';
+				data = intl.formatMessage({id: 'publisher.heading.noRanges'});
 			} else {
 				data = (
 					<TableComponent data={isbnRangeList} value={isbnValue} handleChange={e => handleChange(e, 'isbn')}/>
@@ -218,7 +220,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (rangleListLoading) {
 				data = <Spinner/>;
 			} else if (ismnRangeList.length === 0) {
-				data = 'No ranges found';
+				data = intl.formatMessage({id: 'publisher.heading.noRanges'});
 			} else {
 				data = (
 					<TableComponent data={ismnRangeList} value={ismnValue} handleChange={e => handleChange(e, 'ismn')}/>
@@ -228,7 +230,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			return data;
 		}
 
-		return <Typography variant="h6">Choose range to assign</Typography>;
+		return <Typography variant="h6"><FormattedMessage id="publisher.heading.assignRange"/></Typography>;
 	}
 
 	const component = (
@@ -240,9 +242,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{publisherDetail}
 						</Grid>
 						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>Cancel</Button>
+							<Button onClick={handleCancel}>
+								<FormattedMessage id="form.button.cancel"/>
+							</Button>
 							<Button variant="contained" color="primary" onClick={handleSubmit(handlePublisherUpdate)}>
-								UPDATE
+								<FormattedMessage id="form.button.update"/>
 							</Button>
 						</div>
 					</form>
@@ -255,18 +259,29 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								startIcon={<ArrowBackIosIcon/>}
 								onClick={handleRange}
 							>
-								Back
+								<FormattedMessage id="form.button.back"/>
 							</Button>&nbsp;
-							<Button variant={rangeType === 'isbn' ? 'contained' : 'outlined'} color="primary" onClick={() => displayISBNRanges('isbn')}>ISBN Ranges</Button>&nbsp;
-							<Button variant={rangeType === 'ismn' ? 'contained' : 'outlined'} color="primary" onClick={() => displayISMNRanges('ismn')}>ISMN Ranges</Button>
+							<Button variant={rangeType === 'isbn' ? 'contained' : 'outlined'} color="primary" onClick={() => displayISBNRanges('isbn')}>
+								<FormattedMessage id="publisher.button.label.IsbnRanges"/>
+							</Button>&nbsp;
+							<Button variant={rangeType === 'ismn' ? 'contained' : 'outlined'} color="primary" onClick={() => displayISMNRanges('ismn')}>
+								<FormattedMessage id="publisher.button.label.IsmnRanges"/>
+							</Button>
 							{displayRanges(rangeType)}
-							{rangeType ? <Button variant="outlined" color="primary" onClick={handleRangeUpdate}>Update {rangeType}</Button> : null}
+							{rangeType ?
+								<Button variant="outlined" color="primary" onClick={handleRangeUpdate}>
+									<FormattedMessage id="form.button.update"/> {rangeType}
+								</Button> :
+								null}
 						</div> :
 						<>
 							<Grid container spacing={3} className={classes.listItemSpinner}>
 								{publisherDetail}
 							</Grid>
-							{isAuthenticated && userInfo.role === 'admin' && <Button variant="outlined" color="primary" onClick={handleRange}>Assign Ranges</Button>}
+							{isAuthenticated && userInfo.role === 'admin' &&
+								<Button variant="outlined" color="primary" onClick={handleRange}>
+									<FormattedMessage id="publisher.button.label.assignRanges"/>
+								</Button>}
 							{isAuthenticated && userInfo.role === 'publisher' &&
 								<div className={classes.btnContainer}>
 									<Fab

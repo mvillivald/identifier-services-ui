@@ -34,13 +34,15 @@ import {
 	ExpansionPanelDetails,
 	ExpansionPanelSummary
 } from '@material-ui/core';
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {FormattedMessage, useIntl} from 'react-intl';
+
 import ListComponent from '../ListComponent';
 import Spinner from '../Spinner';
 
 export default function (props) {
 	const {publication, loading} = props;
+	const intl = useIntl();
 
 	const {_id, seriesDetails, ...formattedPublication} = {...publication, ...publication.seriesDetails};
 	const {publisher, ...withoutPublisher} = {...formattedPublication};
@@ -61,7 +63,7 @@ export default function (props) {
 									Object.keys(formattedPublication).map(key => {
 										return typeof formattedPublication[key] === 'string' ?
 											(
-												<ListComponent label={key} value={formattedPublication[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
 											) :
 											null;
 									})
@@ -74,7 +76,7 @@ export default function (props) {
 									Object.keys(formattedPublication).map(key => {
 										return typeof formattedPublication[key] === 'object' ?
 											(
-												<ListComponent label={key} value={formattedPublication[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
 											) :
 											null;
 									})
@@ -88,7 +90,8 @@ export default function (props) {
 
 								{
 									Object.keys(withoutPublisher).map(key => {
-										return <ListComponent key={key} label={key} value={withoutPublisher[key]}/>;
+										console.log(key)
+										return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
 									})
 								}
 							</List>
@@ -100,13 +103,15 @@ export default function (props) {
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
-									<Typography variant="h6">Publisher Details</Typography>
+									<Typography variant="h6">
+										<FormattedMessage id="publicationRender.heading.publisherDetails"/>
+									</Typography>
 								</ExpansionPanelSummary>
 								<ExpansionPanelDetails>
 									<List>
 										{
 											Object.keys(formatOnlyPublisher).map(key => {
-												return <ListComponent key={key} label={key} value={formatOnlyPublisher[key]}/>;
+												return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formatOnlyPublisher[key]}/>;
 											})
 										}
 									</List>

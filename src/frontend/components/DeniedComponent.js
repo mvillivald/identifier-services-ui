@@ -28,14 +28,19 @@
 
 import React from 'react';
 import {Typography} from '@material-ui/core';
+import {FormattedMessage} from 'react-intl';
 import {commonStyles} from '../styles/app';
 
 export default (() => {
 	const classes = commonStyles();
 	const component = (
 		<div className={classes.deniedContainer}>
-			<Typography variant="h3">Access Denied</Typography>
-			<Typography variant="caption">You are not authorized to access this page.</Typography>
+			<Typography variant="h3">
+				<FormattedMessage id="deniedComponent.accessdenied.heading"/>
+			</Typography>
+			<Typography variant="caption">
+				<FormattedMessage id="deniedComponent.accessdenied.message"/>
+			</Typography>
 		</div>
 	);
 	return {

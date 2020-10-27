@@ -30,6 +30,7 @@ import React, {useEffect, useState} from 'react';
 import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
 import {Grid, Typography, FormControlLabel, Checkbox} from '@material-ui/core';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import * as actions from '../../../store/actions';
 import Spinner from '../../Spinner';
@@ -42,6 +43,7 @@ import ModalLayout from '../../ModalLayout';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {fetchIDRIsmnList, ismnList, loading, offset, queryDocCount, userInfo} = props;
+	const intl= useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
@@ -73,9 +75,9 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'prefix', label: 'Prefix'},
-		{id: 'rangeStart', label: 'RangeStart'},
-		{id: 'rangeEnd', label: 'RangeEnd'}
+		{id: 'prefix', label: intl.formatMessage({id: 'ranges.prefix'})},
+		{id: 'rangeStart', label: intl.formatMessage({id: 'ranges.rangeStart'})},
+		{id: 'rangeEnd', label: intl.formatMessage({id: 'ranges.rangeEnd'})}
 	];
 
 	let ismnData;
@@ -113,7 +115,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">Search Identifier Ranges ISMN</Typography>
+				<Typography variant="h5">
+					<FormattedMessage id="ismnList.title.search"/>
+				</Typography>
 				<SearchComponent searchFunction={fetchIDRIsmnList} setSearchInputVal={setSearchInputVal}/>
 				<FormControlLabel
 					control={
@@ -124,11 +128,18 @@ export default connect(mapStateToProps, actions)(props => {
 							onChange={handleChange('checked')}
 						/>
 					}
-					label="Show only active ISMN"
+					label={intl.formatMessage({id: 'ismnList.label.checkbox'})}
 				/>
 				{
 					userInfo.role === 'admin' &&
-						<ModalLayout form label="Create ISMN Range" title="Create ISMN Range" name="issnCreationRange" variant="outlined" color="primary">
+						<ModalLayout
+							form
+							label={intl.formatMessage({id: 'ismnList.label.button.create'})}
+							title={intl.formatMessage({id: 'ismnList.label.button.create'})}
+							name="issnCreationRange"
+							variant="outlined"
+							color="primary"
+						>
 							<RangeCreationForm setUpdateComponent={setUpdateComponent} {...props}/>
 						</ModalLayout>
 				}

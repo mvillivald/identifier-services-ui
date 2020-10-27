@@ -27,12 +27,16 @@
  */
 import React, {useState} from 'react';
 import {TextField, Button} from '@material-ui/core';
-import useStyles from '../../styles/login';
-import * as actions from '../../store/actions';
 import HttpStatus from 'http-status';
 import {connect} from 'react-redux';
+import {FormattedMessage, useIntl} from 'react-intl';
+
+import useStyles from '../../styles/login';
+import * as actions from '../../store/actions';
+
 export default connect(null, actions)(props => {
 	const {passwordResetForm, setPwd, handleClose} = props;
+	const intl = useIntl();
 	const [email, setEmail] = useState('');
 	const classes = useStyles();
 	const handleEmailChange = e => {
@@ -51,12 +55,12 @@ export default connect(null, actions)(props => {
 	const component = (
 		<>
 			<div>
-				Enter your email address and we will send you a link to reset your password.
+				<FormattedMessage id="passwordResetForm.header"/>
 			</div>
 			<form onSubmit={handleEmailSubmit}>
 				<TextField
 					variant="outlined"
-					placeholder="Enter Your email address"
+					placeholder={intl.formatmessage({id: 'passwordResetForm.placeholder.resetInput'})}
 					className={classes.resetInput}
 					value={email}
 					onChange={handleEmailChange}/>
@@ -66,7 +70,7 @@ export default connect(null, actions)(props => {
 					className={classes.resetBtn}
 					onClick={handleEmailSubmit}
 				>
-					Send password reset email
+					<FormattedMessage id="passwordResetForm.label.resetBtn"/>
 				</Button>
 			</form>
 		</>

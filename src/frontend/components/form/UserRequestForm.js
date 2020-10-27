@@ -32,6 +32,7 @@ import {Button, Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import renderRadioButton from './render/renderRadioButton';
@@ -42,25 +43,25 @@ const fieldArray = [
 	{
 		name: 'email',
 		type: 'email',
-		label: 'Email',
+		label: <FormattedMessage id="userCreation.form.label.email"/>,
 		width: 'full'
 	},
 	{
 		name: 'givenName',
 		type: 'text',
-		label: 'Given Name',
+		label: <FormattedMessage id="userCreation.form.label.givenName"/>,
 		width: 'half'
 	},
 	{
 		name: 'familyName',
 		type: 'text',
-		label: 'Family Name',
+		label: <FormattedMessage id="userCreation.form.label.familyName"/>,
 		width: 'half'
 	},
 	{
 		name: 'SSOId',
 		type: 'text',
-		label: 'SSO-Id',
+		label: <FormattedMessage id="userCreation.form.label.ssoId"/>,
 		width: 'half'
 	}
 ];
@@ -99,7 +100,7 @@ export default connect(null, actions)(reduxForm({
 					</Grid>
 					<div className={classes.btnContainer}>
 						<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-							Submit
+							<FormattedMessage id="form.button.label.submit"/>
 						</Button>
 					</div>
 				</div>

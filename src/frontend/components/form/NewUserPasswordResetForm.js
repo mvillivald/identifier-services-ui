@@ -33,6 +33,7 @@ import {Button, Grid, IconButton} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import CloseIcon from '@material-ui/icons/Close';
 import HttpStatus from 'http-status';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import useStyles from '../../styles/form';
 import ResetCaptchaButton from './ResetCaptchaButton';
@@ -45,13 +46,13 @@ const fieldArray = [
 	{
 		name: 'newPassword',
 		type: 'password',
-		label: 'New Password*',
+		label: <FormattedMessage id="newuserPasswordForm.label.newPassword"/>,
 		width: 'full'
 	},
 	{
 		name: 'confirmPassword',
 		type: 'password',
-		label: 'Re-type Password*',
+		label: <FormattedMessage id="newuserPasswordForm.label.confirmPassword"/>,
 		width: 'full'
 	}
 ];
@@ -74,6 +75,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		match,
 		valid
 	} = props;
+	const intl = useIntl();
 	const {params} = match;
 	const classes = useStyles();
 	const commonStyle = commonStyles();
@@ -95,7 +97,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const decode = await decodeToken({token: decrypted});
 		const {newPassword, confirmPassword} = values;
 		if (captchaInput.length === 0) {
-			setMessage({color: 'error', msg: 'Captcha not provided!!!'});
+			setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.notprovided'})});
 		} else if (captchaInput.length > 0) {
 			const result = await postCaptchaInput(captchaInput, captcha.id);
 			if (result === true) {
@@ -106,10 +108,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						props.history.push('/');
 					}
 				} else {
-					setError('Password does not match');
+					setError(intl.formatMessage({id: 'app.setError.password.mismatch'}));
 				}
 			} else {
-				setMessage({color: 'error', msg: 'Please type the correct word in the image below'});
+				setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.wrong.text'})});
 				loadSvgCaptcha();
 			}
 		}
@@ -149,7 +151,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</Grid>
 				<Grid item xs={12} className={classes.btnContainer}>
 					<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-						Submit
+						<FormattedMessage id="form.button.label.submit"/>
 					</Button>
 				</Grid>
 			</Grid>

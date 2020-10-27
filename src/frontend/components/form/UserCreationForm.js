@@ -32,6 +32,7 @@ import {Button, Grid, Radio} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
 import HttpStatus from 'http-status';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import useStyles from '../../styles/form';
@@ -43,31 +44,31 @@ const withoutSso = [
 	{
 		name: 'email',
 		type: 'text',
-		label: 'Email',
+		label: <FormattedMessage id="userCreation.form.label.email"/>,
 		width: 'full'
 	},
 	{
 		name: 'givenName',
 		type: 'text',
-		label: 'Given Name',
+		label: <FormattedMessage id="userCreation.form.label.givenName"/>,
 		width: 'half'
 	},
 	{
 		name: 'familyName',
 		type: 'text',
-		label: 'Family Name',
+		label: <FormattedMessage id="userCreation.form.label.familyName"/>,
 		width: 'half'
 	},
 	{
 		name: 'role',
 		type: 'radio',
-		label: 'Select Role',
+		label: <FormattedMessage id="userCreation.form.label.selectRole"/>,
 		width: 'half'
 	},
 	{
 		name: 'publisher',
 		type: 'select',
-		label: 'Select Publisher',
+		label: <FormattedMessage id="userCreation.form.label.selectPublisher"/>,
 		width: 'full'
 	}
 ];
@@ -76,19 +77,19 @@ const withSsoFields = [
 	{
 		name: 'userId',
 		type: 'text',
-		label: 'SSO-ID',
+		label: <FormattedMessage id="userCreation.form.label.ssoId"/>,
 		width: 'full'
 	},
 	{
 		name: 'role',
 		type: 'radio',
-		label: 'Select Role',
+		label: <FormattedMessage id="userCreation.form.label.selectRole"/>,
 		width: 'half'
 	},
 	{
 		name: 'publisher',
 		type: 'select',
-		label: 'Select Publisher',
+		label: <FormattedMessage id="userCreation.form.label.selectPublisher"/>,
 		width: 'full'
 	}
 ];
@@ -115,6 +116,7 @@ export default connect(
 			publisherOptions
 		} = props;
 		const classes = useStyles();
+		const intl = useIntl();
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
 		const token = cookie[COOKIE_NAME];
@@ -211,8 +213,8 @@ export default connect(
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field name={list.name} component={renderSimpleRadio} label={list.label}>
-									<Radio value="admin" label="Admin"/>
-									<Radio value="publisher-admin" label="Publisher-Admin"/>
+									<Radio value="admin" label={intl.formatMessage({id: 'userCreation.form.radio.label.admin'})}/>
+									<Radio value="publisher-admin" label={intl.formatMessage({id: 'userCreation.form.radio.label.publisherAdmin'})}/>
 								</Field>
 							</Grid>
 						);
@@ -253,18 +255,18 @@ export default connect(
 							</Grid>
 							<div className={classes.btnContainer}>
 								<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-									Submit
+									<FormattedMessage id="form.button.label.submit"/>
 								</Button>
 							</div>
 						</div>
 					) : (
 						<div className={classes.usercreationSelect}>
 							<Button variant="outlined" color="primary" onClick={handleClickYes}>
-								With SSO-ID
+								<FormattedMessage id="form.button.label.withSSOID"/>
 							</Button>{' '}
               &nbsp;
 							<Button variant="outlined" color="primary" onClick={handleClickNo}>
-								Without SSO-ID
+								<FormattedMessage id="form.button.label.withoutSSOID"/>
 							</Button>
 						</div>
 					)}

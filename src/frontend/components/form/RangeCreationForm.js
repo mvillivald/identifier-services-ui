@@ -31,6 +31,7 @@ import {Field, reduxForm} from 'redux-form';
 import {Button, Grid} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import useStyles from '../../styles/form';
@@ -40,19 +41,19 @@ const issnFields = [
 	{
 		name: 'prefix',
 		type: 'text',
-		label: 'Prefix*',
+		label: <FormattedMessage id="rangeCreation.form.prefix"/>,
 		width: 'half'
 	},
 	{
 		name: 'rangeStart',
 		type: 'text',
-		label: 'Range Start*',
+		label: <FormattedMessage id="rangeCreation.form.rangeStart"/>,
 		width: 'half'
 	},
 	{
 		name: 'rangeEnd',
 		type: 'text',
-		label: 'Range End*',
+		label: <FormattedMessage id="rangeCreation.form.rangeEnd"/>,
 		width: 'half'
 	}
 ];
@@ -67,6 +68,7 @@ export default connect(null, actions)(reduxForm({
 	props => {
 		const {location, handleSubmit, valid, createIssnRange, createIsmnRange, createIsbnRange, pristine, handleClose, setUpdateComponent} = props;
 		const classes = useStyles();
+		const intl = useIntl();
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
 
@@ -118,7 +120,7 @@ export default connect(null, actions)(reduxForm({
 						</Grid>
 						<div className={classes.btnContainer}>
 							<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-								Submit
+								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
 					</div>

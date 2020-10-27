@@ -32,6 +32,7 @@ import {Button, Grid} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import HttpStatus from 'http-status';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import useStyles from '../../styles/form';
@@ -41,19 +42,19 @@ const issnFields = [
 	{
 		name: 'prefix',
 		type: 'text',
-		label: 'Prefix*',
+		label: <FormattedMessage id="rangeCreation.form.prefix"/>,
 		width: 'half'
 	},
 	{
 		name: 'rangeStart',
 		type: 'text',
-		label: 'Range Start*',
+		label: <FormattedMessage id="rangeCreation.form.rangeStart"/>,
 		width: 'half'
 	},
 	{
 		name: 'rangeEnd',
 		type: 'text',
-		label: 'Range End*',
+		label: <FormattedMessage id="rangeCreation.form.rangeEnd"/>,
 		width: 'half'
 	}
 ];
@@ -107,7 +108,7 @@ export default connect(null, actions)(reduxForm({
 						</Grid>
 						<div className={classes.btnContainer}>
 							<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-								Submit
+								<FormattedMessage id="form.button.label.submit"/>
 							</Button>
 						</div>
 					</div>

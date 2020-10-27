@@ -35,11 +35,12 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {connect} from 'react-redux';
+import {validate} from '@natlibfi/identifier-services-commons';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
-import {connect} from 'react-redux';
-import {validate} from '@natlibfi/identifier-services-commons';
 import ModalLayout from '../../ModalLayout';
 import PublicationRenderComponent from '../PublicationRenderComponent';
 
@@ -49,6 +50,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	enableReinitialize: true
 })(props => {
 	const {id, issn, userInfo, loading, fetchIssn, handleSubmit} = props;
+	const intl = useIntl();
 	const classes = commonStyles();
 	const {role} = userInfo;
 	const [isEdit, setIsEdit] = useState(false);
@@ -78,7 +80,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	};
 
 	const component = (
-		<ModalLayout isTableRow color="primary" title="Publication ISSN Detail" {...props}>
+		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.publicationIssn'})} {...props}>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form>
@@ -86,9 +88,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<PublicationRenderComponent publication={issn} loading={loading} isEdit={isEdit}/>
 						</Grid>
 						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>Cancel</Button>
+							<Button onClick={handleCancel}>
+								<FormattedMessage id="form.button.label.cancel"/>
+							</Button>
 							<Button variant="contained" color="primary" onClick={handleSubmit(handlePublicationUpdate)}>
-								UPDATE
+								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
 					</form>
@@ -102,7 +106,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<Fab
 								color="primary"
 								size="small"
-								title="Edit Issn Detail"
+								title={intl.formatMessage({id: 'publication.issn.edit.label'})}
 								onClick={handleEditClick}
 							>
 								<EditIcon/>

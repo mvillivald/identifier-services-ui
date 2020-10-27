@@ -63,7 +63,9 @@ export default connect(mapStateToProps, actions)(props => {
 				>
 					<Button>
 						<LogOutIcon fontSize="large"/>
-						<Typography variant="h6">Logout</Typography>
+						<Typography variant="h6">
+							<FormattedMessage id="login.normal.button.logout"/>
+						</Typography>
 					</Button>
 				</div> :
 				<>

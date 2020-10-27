@@ -29,6 +29,7 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage} from 'react-intl';
 
 import * as actions from '../../../store/actions';
 import PublicationListRenderComponent from '../PublicationListRenderComponent';
@@ -56,9 +57,9 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'title', label: 'Title'},
-		{id: 'publicationTime', label: 'Publication Time'},
-		{id: 'state', label: 'State'}
+		{id: 'title', label: <FormattedMessage id="publicationList.isbnismn.headRows.title"/>},
+		{id: 'publicationTime', label: <FormattedMessage id="publicationList.isbnismn.headRows.publicationTime"/>},
+		{id: 'state', label: <FormattedMessage id="publicationList.isbnismn.headRows.state"/>}
 	];
 
 	return (

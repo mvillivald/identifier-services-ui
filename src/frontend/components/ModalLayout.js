@@ -33,6 +33,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
+import {useIntl} from 'react-intl';
 
 import useStyles from '../styles/modalLayout';
 import AlertDialogs from './AlertDialogs';
@@ -40,6 +41,7 @@ import AlertDialogs from './AlertDialogs';
 export default connect(mapStateToProps)(withRouter(props => {
 	const {label, name, children, icon, fab, variant, color, classed, isTableRow, form, title, dynamicTitle, setDynamicTitle, setPwd, modal, setModal} = props;
 	const classes = useStyles();
+	const intl = useIntl();
 	const [openModal, setOpen] = useState(false);
 	const [message, setMessage] = useState(null);
 	const [agree, setAgree] = useState(null);
@@ -91,7 +93,7 @@ export default connect(mapStateToProps)(withRouter(props => {
 				className={classes.container}
 				aria-labelledby={`modal-${name}`} aria-describedby="modal-description"
 				onClose={(form === true || fab) ? (() => {
-					setMessage('Do you want to Exit?');
+					setMessage(intl.formatMessage({id: 'app.modal.exit.message'}));
 					if (agree) {
 						setAgree(null);
 						setMessage(null);

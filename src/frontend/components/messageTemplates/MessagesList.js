@@ -28,7 +28,9 @@
 
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
+import {useCookies} from 'react-cookie';
 import {Grid, Typography} from '@material-ui/core';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import Message from './Message';
@@ -37,11 +39,11 @@ import ModalLayout from '../ModalLayout';
 import TableComponent from '../TableComponent';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
-import {useCookies} from 'react-cookie';
 import TemplateCreationForm from '../form/TemplateCreationForm';
 
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
+	const intl = useIntl();
 	const modalClasses = useModalStyles();
 	const {loading, fetchMessagesList, messagesList, totalMessages, queryDocCount, offset} = props;
 	/* global COOKIE_NAME */
@@ -64,9 +66,9 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'name', label: 'Name'},
-		{id: 'subject', label: 'Subject'},
-		{id: 'language', label: 'Language'}
+		{id: 'name', label: intl.formatMessage({id: 'messageTemplate.label.name'})},
+		{id: 'subject', label: intl.formatMessage({id: 'messageTemplate.label.subject'})},
+		{id: 'language', label: intl.formatMessage({id: 'messageTemplate.label.language'})}
 
 	];
 
@@ -74,7 +76,7 @@ export default connect(mapStateToProps, actions)(props => {
 	if (loading) {
 		messageData = <Spinner/>;
 	} else if (messagesList === undefined) {
-		messageData = <p>No Users Available</p>;
+		messageData = <p><FormattedMessage id="messageList.text.nodata"/></p>;
 	} else {
 		messageData = (
 			<TableComponent
@@ -106,8 +108,18 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">List of Avaiable messages</Typography>
-				<ModalLayout form label="New Template" title="New Template" name="template" variant="outlined" classed={modalClasses.button} color="primary">
+				<Typography variant="h5">
+					<FormattedMessage id="messageList.list.heading"/>
+				</Typography>
+				<ModalLayout
+					form
+					label={intl.formatMessage({id: 'app.modal.title.newTemplate'})}
+					title={intl.formatMessage({id: 'app.modal.title.newTemplate'})}
+					name="template"
+					variant="outlined"
+					classed={modalClasses.button}
+					color="primary"
+				>
 					<TemplateCreationForm {...props}/>
 				</ModalLayout>
 				{messageData}

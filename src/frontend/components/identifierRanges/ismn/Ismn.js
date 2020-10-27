@@ -38,6 +38,7 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm, Field} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
@@ -59,6 +60,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		ismn,
 		loading} = props;
 	const classes = commonStyles();
+	const intl = useIntl();
 	const [isEdit, setIsEdit] = useState(false);
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -93,7 +95,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<ListItem>
 									<ListItemText>
 										<Grid container>
-											<Grid item xs={4}>Prefix:</Grid>
+											<Grid item xs={4}>
+												<FormattedMessage id="ranges.prefix"/>:
+											</Grid>
 											<Grid item xs={8}><Field name="prefix" className={classes.editForm} component={renderTextField}/></Grid>
 										</Grid>
 									</ListItemText>
@@ -108,7 +112,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedIsmn).map(key => {
 										return typeof formattedIsmn[key] === 'string' ?
 											(
-												<ListComponent label={key} value={formattedIsmn[key]}/>
+												<ListComponent label={intl.formatMessage({id: `ranges.${key}`})} value={formattedIsmn[key]}/>
 											) :
 											null;
 									})
@@ -121,7 +125,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedIsmn).map(key => {
 										return typeof formattedIsmn[key] === 'object' ?
 											(
-												<ListComponent label={key} value={formattedIsmn[key]}/>
+												<ListComponent label={intl.formatMessage({id: `ranges.${key}`})} value={formattedIsmn[key]}/>
 											) :
 											null;
 									})
@@ -134,7 +138,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const component = (
-		<ModalLayout isTableRow color="primary" title="Identifier Ranges ISMN" {...props}>
+		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.identifierRangesIsmn'})} {...props}>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form>
@@ -142,9 +146,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{ismnDetail}
 						</Grid>
 						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>Cancel</Button>
+							<Button onClick={handleCancel}>
+								<FormattedMessage id="form.button.label.cancel"/>
+							</Button>
 							<Button variant="contained" color="primary">
-								UPDATE
+								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
 					</form>
@@ -157,7 +163,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<Fab
 							color="primary"
 							size="small"
-							title="Edit Ismn Detail"
+							title={intl.formatMessage({id: 'ismn.title.fab.edit'})}
 							onClick={handleEditClick}
 						>
 							<EditIcon/>

@@ -41,6 +41,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
@@ -72,6 +73,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setIsUpdating
 	} = props;
 	const classes = commonStyles();
+	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [buttonState, setButtonState] = useState('');
@@ -150,7 +152,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (rangeListLoading) {
 				data = <Spinner/>;
 			} else if (isbnRangeList.length === 0) {
-				data = 'No ranges found';
+				data = intl.formatMessage({id: 'publicationRequestRender.noRanges'});
 			} else {
 				data = (
 					<TableComponent data={isbnRangeList} value={rangeValue} handleChange={e => handleChange(e, 'isbn')}/>
@@ -165,7 +167,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (rangeListLoading) {
 				data = <Spinner/>;
 			} else if (ismnRangeList.length === 0) {
-				data = 'No ranges found';
+				data = intl.formatMessage({id: 'publicationRequestRender.noRanges'});
 			} else {
 				data = (
 					<TableComponent data={ismnRangeList} value={rangeValue} handleChange={e => handleChange(e, 'ismn')}/>
@@ -175,7 +177,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			return data;
 		}
 
-		return <Typography variant="h6">Choose range to assign</Typography>;
+		return (
+			<Typography variant="h6">
+				<FormattedMessage id="publicationRequestRender.heading.chooseRange"/>
+			</Typography>
+		);
 	}
 
 	function renderButton(state) {
@@ -185,29 +191,43 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
 						{
 							(rangeValue === null || rangeValue === undefined) ?
-								<Button variant="outlined" color="primary" onClick={handleRange}>Assign Ranges</Button> :
-								<Button disabled={publicationIsbnIsmnRequest.backgroundProcessingState !== 'processed'} variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
+								<Button variant="outlined" color="primary" onClick={handleRange}>
+									<FormattedMessage id="publicationRequestRender.button.label.assignRanges"/>
+								</Button> :
+								<Button disabled={publicationIsbnIsmnRequest.backgroundProcessingState !== 'processed'} variant="outlined" color="primary" onClick={handleAccept}>
+									<FormattedMessage id="publicationRequestRender.button.label.accept"/>
+								</Button>
 						}
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="publicationRequestRender.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'accepted':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>Accepted</Button>
+						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>
+							<FormattedMessage id="publicationRequestRender.button.label.accepted"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'rejected':
 				return (
 					<ButtonGroup color="error" aria-label="outlined primary button group">
-						<Button variant="contained" style={CustomColor.palette.red} size="small">Rejected</Button>
+						<Button variant="contained" style={CustomColor.palette.red} size="small">
+							<FormattedMessage id="publicationRequestRender.button.label.rejected"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'inProgress':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" color="primary" onClick={handleAccept}>
+							<FormattedMessage id="publicationRequestRender.button.label.accept"/>
+						</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="publicationRequestRender.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			default:
@@ -234,7 +254,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedPublicationIsbnIsmnRequest).map(key => {
 										return typeof formattedPublicationIsbnIsmnRequest[key] === 'string' ?
 											(
-												<ListComponent label={key} value={formattedPublicationIsbnIsmnRequest[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publicationRequest.label.${key}`})} value={formattedPublicationIsbnIsmnRequest[key]}/>
 											) :
 											null;
 									})
@@ -247,7 +267,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedPublicationIsbnIsmnRequest).map(key => {
 										return typeof formattedPublicationIsbnIsmnRequest[key] === 'object' ?
 											(
-												<ListComponent label={key} value={formattedPublicationIsbnIsmnRequest[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publicationRequest.label.${key}`})} value={formattedPublicationIsbnIsmnRequest[key]}/>
 											) :
 											null;
 									})
@@ -261,7 +281,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 								{
 									Object.keys(withoutPublisher).map(key => {
-										return <ListComponent key={key} label={key} value={withoutPublisher[key]}/>;
+										return <ListComponent key={key} label={intl.formatMessage({id: `publicationRequest.label.${key}`})} value={withoutPublisher[key]}/>;
 									})
 								}
 							</List>
@@ -273,13 +293,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
-									<Typography variant="h6">Publisher Details</Typography>
+									<FormattedMessage id="publicationRequest.label.publisherDetails"/>
 								</ExpansionPanelSummary>
 								<ExpansionPanelDetails>
 									<List>
 										{
 											Object.keys(formatOnlyPublisher).map(key => {
-												return <ListComponent key={key} label={key} value={formatOnlyPublisher[key]}/>;
+												return <ListComponent key={key} label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formatOnlyPublisher[key]}/>;
 											})
 										}
 									</List>
@@ -303,7 +323,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							endIcon={<ArrowForwardIosIcon/>}
 							onClick={handleRange}
 						>
-							Next
+							<FormattedMessage id="form.button.label.next"/>
 						</Button>
 					</div> :
 					<Grid container spacing={3} className={classes.listItemSpinner}>
@@ -321,8 +341,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									/>
 								</Grid>
 								<Grid item xs={12}>
-									<Button variant="contained" onClick={handleRejectClick}>Cancel</Button>
-									<Button variant="contained" color="primary" onClick={handleRejectSubmit}>Submit</Button>
+									<Button variant="contained" onClick={handleRejectClick}>
+										<FormattedMessage id="form.button.label.cancel"/>
+									</Button>
+									<Button variant="contained" color="primary" onClick={handleRejectSubmit}>
+										<FormattedMessage id="form.button.label.submit"/>
+									</Button>
 								</Grid>
 							</> :
 							<Grid item xs={12}>
