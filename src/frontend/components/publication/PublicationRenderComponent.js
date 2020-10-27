@@ -90,7 +90,7 @@ export default function (props) {
 
 								{
 									Object.keys(withoutPublisher).map(key => {
-										console.log(key)
+										console.log(key);
 										return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
 									})
 								}

@@ -43,7 +43,7 @@ import ModalLayout from '../../ModalLayout';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {fetchIDRIsmnList, ismnList, loading, offset, queryDocCount, userInfo} = props;
-	const intl= useIntl();
+	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();

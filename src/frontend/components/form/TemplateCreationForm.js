@@ -32,7 +32,7 @@ import {Button, Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
-import {useIntl, FormattedMessage} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import useStyles from '../../styles/form';
 import renderTextField from './render/renderTextField';

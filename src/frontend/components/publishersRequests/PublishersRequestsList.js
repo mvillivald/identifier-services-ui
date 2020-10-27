@@ -82,7 +82,7 @@ export default connect(mapStateToProps, actions)(props => {
 	if ((publishersRequestsList === undefined) || (loading)) {
 		publishersRequestsData = <Spinner/>;
 	} else if (publishersRequestsList.length === 0) {
-		publishersRequestsData = <p>No Data</p>;
+		publishersRequestsData = <p><FormattedMessage id="app.render.noData"/></p>;
 	} else {
 		publishersRequestsData = (
 			<TableComponent

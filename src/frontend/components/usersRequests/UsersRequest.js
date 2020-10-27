@@ -35,13 +35,14 @@ import {
 	List,
 	TextareaAutosize
 } from '@material-ui/core';
-
+import {validate} from '@natlibfi/identifier-services-commons';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {connect} from 'react-redux';
+import {FormattedMessage, useIntl} from 'react-intl';
+
 import {commonStyles} from '../../styles/app';
 import * as actions from '../../store/actions';
-import {connect} from 'react-redux';
-import {validate} from '@natlibfi/identifier-services-commons';
 import ModalLayout from '../ModalLayout';
 import Spinner from '../Spinner';
 import ListComponent from '../ListComponent';
@@ -54,6 +55,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 })(props => {
 	const {id, usersRequest, userInfo, loading, fetchUserRequest, updateUserRequest} = props;
 	const classes = commonStyles();
+	const intl = useIntl();
 	const {role} = userInfo;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -105,26 +107,36 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
 						<Button disabled={usersRequest.backgroundProcessingState !== 'processed'} variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="userRequest.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'accepted':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>Accepted</Button>
+						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>
+							<FormattedMessage id="userRequest.button.label.accepted"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'rejected':
 				return (
 					<ButtonGroup color="error" aria-label="outlined primary button group">
-						<Button variant="contained" style={CustomColor.palette.red} size="small">Rejected</Button>
+						<Button variant="contained" style={CustomColor.palette.red} size="small">
+							<FormattedMessage id="userRequest.button.label.rejected"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'inProgress':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" color="primary" onClick={handleAccept}>
+							<FormattedMessage id="userRequest.button.label.accept"/>
+						</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="userRequest.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			default:
@@ -144,7 +156,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Object.keys(usersRequest).map(key => {
 								return typeof usersRequest[key] === 'string' ?
 									(
-										<ListComponent label={key} value={usersRequest[key]}/>
+										<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={usersRequest[key]}/>
 									) :
 									null;
 							})
@@ -157,7 +169,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Object.keys(usersRequest).map(key => {
 								return typeof usersRequest[key] === 'object' ?
 									(
-										<ListComponent label={key} value={usersRequest[key]}/>
+										<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={usersRequest[key]}/>
 									) :
 									null;
 							})
@@ -179,17 +191,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<>
 							<Grid item xs={12}>
 								<TextareaAutosize
-									aria-label="Minimum height"
+									aria-label={intl.formatMessage({id: 'userRequest.textArea.ariaLabel.minHeight'})}
 									rows={8}
-									placeholder="Rejection reason here..."
+									placeholder={intl.formatMessage({id: 'userRequest.textArea.placeholder'})}
 									className={classes.textArea}
 									value={rejectReason}
 									onChange={handleRejectReason}
 								/>
 							</Grid>
 							<Grid item xs={12}>
-								<Button variant="contained" onClick={handleRejectClick}>Cancel</Button>
-								<Button variant="contained" color="primary" onClick={handleRejectSubmit}>Submit</Button>
+								<Button variant="contained" onClick={handleRejectClick}>
+									<FormattedMessage id="form.button.label.cancel"/>
+								</Button>
+								<Button variant="contained" color="primary" onClick={handleRejectSubmit}>
+									<FormattedMessage id="form.button.label.submit"/>
+								</Button>
 							</Grid>
 						</>
 					) : (

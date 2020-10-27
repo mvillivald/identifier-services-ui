@@ -15,12 +15,6 @@ export default function (props) {
 
 	const {label, value} = props;
 
-	function formatLabel(label) {
-		const res = label.replace(/([A-Z])/g, ' $1').trim();
-		const result = `${res.charAt(0).toUpperCase()}${res.slice(1)}`;
-		return result;
-	}
-
 	function renderSwitch(value) {
 		switch (typeof value) {
 			case undefined:

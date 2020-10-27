@@ -68,7 +68,6 @@ export default connect(null, actions)(reduxForm({
 	props => {
 		const {location, handleSubmit, valid, createIssnRange, createIsmnRange, createIsbnRange, pristine, handleClose, setUpdateComponent} = props;
 		const classes = useStyles();
-		const intl = useIntl();
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
 
