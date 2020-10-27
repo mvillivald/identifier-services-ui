@@ -31,7 +31,7 @@ import {Field, reduxForm} from 'redux-form';
 import {Button, Grid} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import useStyles from '../../styles/form';
