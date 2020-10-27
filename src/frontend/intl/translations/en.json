@@ -677,7 +677,7 @@
     "user.label.givenName": "Given Name",
     "user.label.familyName": "Family Name",
     "user.label.state": "State",
-    "user.label.backgroundProcessingstate": "Background Processing State",
+    "user.label.backgroundProcessingState": "Background Processing State",
     "user.label.role": "Role",
     "user.label.creator": "Creator",
     "user.label.userId": "User ID",
