@@ -7,6 +7,7 @@ import {Grid,
 	ExpansionPanelSummary,
 	ExpansionPanelDetails,
 	Typography} from '@material-ui/core';
+import {FormattedMessage} from 'react-intl';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useStyles from '../styles/listComponent';
 
@@ -87,7 +88,9 @@ export default function (props) {
 										{Object.keys(item).map(key => item[key] ?
 											(
 												<li key={key} className={classes.dropDownList}>
-													<span className={classes.label}>{key}: </span>
+													<span className={classes.label}>
+														<FormattedMessage id={`listComponent.${key}`}/>:
+													</span>
 													<span>{item[key]}</span>
 												</li>
 											) : null
@@ -101,7 +104,9 @@ export default function (props) {
 
 										(
 											<li key={key} className={classes.dropDownList}>
-												<span className={classes.label}>{key}: </span>
+												<span className={classes.label}>
+													<FormattedMessage id={`listComponent.${key}`}/>:
+												</span>
 												<span>{typeof value[key] === 'boolean' ? value[key].toString() : value[key]}</span>
 											</li>
 										)
