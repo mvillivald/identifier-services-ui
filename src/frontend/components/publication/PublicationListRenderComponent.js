@@ -28,6 +28,7 @@
 
 import React, {useState} from 'react';
 import {Grid, Typography} from '@material-ui/core';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import useModalStyles from '../../styles/formList';
@@ -40,6 +41,7 @@ import IsbnIsmnRegForm from '../form/IsbnIsmnRegForm';
 import IssnRegForm from '../form/IssnRegForm';
 
 export default function (props) {
+	const intl = useIntl();
 	const classes = commonStyles();
 	const modalClasses = useModalStyles();
 
@@ -66,7 +68,7 @@ export default function (props) {
 	if (loading) {
 		usersData = <Spinner/>;
 	} else if (publicationList === undefined || publicationList === null || publicationList.length === 0) {
-		usersData = <p>No Publication Available</p>;
+		usersData = <p><FormattedMessage id="publicationListRender.heading.noPublication"/></p>;
 	} else {
 		usersData = (
 			<TableComponent
@@ -100,17 +102,35 @@ export default function (props) {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">List of Avaiable Publications</Typography>
+				<Typography variant="h5">
+					<FormattedMessage id="publicationListRender.heading.list"/>
+				</Typography>
 				{(role === 'publisher' || role === 'publisher-admin') && (
 					isbnIsmn ?
 						(
-							<ModalLayout form label="ISBN-ISMN Publication Form" title="Create ISBN-ISMN" name="newIsbnIsmn" variant="outlined" classed={modalClasses.button} color="primary">
+							<ModalLayout
+								form
+								label={intl.formatMessage({id: 'app.modal.label.publicationIsbnIsmn.create'})}
+								title={intl.formatMessage({id: 'app.modal.title.publicationIsbnIsmn.create'})}
+								name="newIsbnIsmn"
+								variant="outlined"
+								classed={modalClasses.button}
+								color="primary"
+							>
 								<IsbnIsmnRegForm setIsCreating={setIsCreating} {...props}/>
 							</ModalLayout>
 						) : (
 							issn ?
 								(
-									<ModalLayout form label="ISSN Publication Form" title="Create ISSN" name="newIssn" variant="outlined" classed={modalClasses.button} color="primary">
+									<ModalLayout
+										form
+										label={intl.formatMessage({id: 'app.modal.label.publicationIssn.create'})}
+										title={intl.formatMessage({id: 'app.modal.title.publicationIssn.create'})}
+										name="newIssn"
+										variant="outlined"
+										classed={modalClasses.button}
+										color="primary"
+									>
 										<IssnRegForm setIsCreating={setIsCreating} {...props}/>
 									</ModalLayout>
 								) : null

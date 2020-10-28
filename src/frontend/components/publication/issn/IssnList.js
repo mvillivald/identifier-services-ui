@@ -29,6 +29,7 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage} from 'react-intl';
 
 import * as actions from '../../../store/actions';
 import PublicationListRenderComponent from '../PublicationListRenderComponent';
@@ -56,10 +57,10 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'title', label: 'Title'},
-		{id: 'state', label: 'State'},
-		{id: 'frequency', label: 'Frequency'},
-		{id: 'firstNumber', label: 'First Number'}
+		{id: 'title', label: <FormattedMessage id="publicationList.issn.headRows.title"/>},
+		{id: 'state', label: <FormattedMessage id="publicationList.issn.headRows.state"/>},
+		{id: 'frequency', label: <FormattedMessage id="publicationList.issn.headRows.frequency"/>},
+		{id: 'firstNumber', label: <FormattedMessage id="publicationList.issn.headRows.firstNumber"/>}
 	];
 
 	return (

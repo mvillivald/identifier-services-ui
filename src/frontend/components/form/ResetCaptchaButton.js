@@ -29,11 +29,16 @@
 import React from 'react';
 import {Button, Tooltip} from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
+import {useIntl} from 'react-intl';
 
 export default function (props) {
 	const {loadSvgCaptcha} = props;
+	const intl = useIntl();
 	const component = (
-		<Tooltip title="Reset Captcha" aria-label="Reset Captcha">
+		<Tooltip
+			title={intl.formatMessage({id: 'resetCaptcha.title.reset'})}
+			aria-label={intl.formatMessage({id: 'resetCaptcha.title.reset'})}
+		>
 			<Button onClick={() => loadSvgCaptcha()}>
 				<ReplayIcon/>
 			</Button>

@@ -30,6 +30,7 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Typography} from '@material-ui/core';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import SearchComponent from '../SearchComponent';
 import UserRequest from './UsersRequest';
@@ -48,6 +49,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const {loading, fetchUsersRequestsList, usersRequestsList, queryDocCount, totalDoc, offset, userInfo} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
+	const intl = useIntl();
 	const [inputVal, setSearchInputVal] = useState('');
 	const [sortStateBy, setSortStateBy] = useState('');
 	const [page, setPage] = useState(1);
@@ -73,9 +75,9 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'state', label: 'State'},
-		{id: 'publisher', label: 'Publisher'},
-		{id: 'email', label: 'email'}
+		{id: 'state', label: intl.formatMessage({id: 'userRequest.headRows.state'})},
+		{id: 'publisher', label: intl.formatMessage({id: 'userRequest.headRows.publisher'})},
+		{id: 'email', label: intl.formatMessage({id: 'userRequest.headRows.email'})}
 
 	];
 	let usersData;
@@ -113,7 +115,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">List of Users Creation Requests</Typography>
+				<Typography variant="h5">
+					<FormattedMessage id="userRequest.listAvailable"/>
+				</Typography>
 				<SearchComponent offset={offset} searchFunction={fetchUsersRequestsList} setSearchInputVal={setSearchInputVal}/>
 				<TabComponent
 					sortStateBy={sortStateBy}
@@ -121,7 +125,15 @@ export default connect(mapStateToProps, actions)(props => {
 				/>
 				{
 					userInfo.role === 'publisher-admin' &&
-						<ModalLayout form label="New UserRequest" title="New UserRequest" name="userRequest" variant="outlined" classed={modalClasses.button} color="primary">
+						<ModalLayout
+							form
+							label={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}
+							title={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}
+							name="userRequest"
+							variant="outlined"
+							classed={modalClasses.button}
+							color="primary"
+						>
 							<UserRequestForm setIsCreating={setIsCreating} {...props}/>
 						</ModalLayout>
 				}

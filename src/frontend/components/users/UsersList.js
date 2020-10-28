@@ -29,6 +29,8 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Typography} from '@material-ui/core';
+import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import useModalStyles from '../../styles/formList';
@@ -36,7 +38,6 @@ import TableComponent from '../TableComponent';
 import User from './User';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
-import {useCookies} from 'react-cookie';
 import ModalLayout from '../ModalLayout';
 import UserCreationForm from '../form/UserCreationForm';
 
@@ -47,6 +48,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const {loading, fetchUsersList, usersList, totalUsers, queryDocCount, offset, userInfo} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
+	const intl = useIntl();
 	const [page, setPage] = useState(1);
 	const [cursors] = useState([]);
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
@@ -67,14 +69,14 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'userId', label: 'User ID'},
-		{id: 'defaultLanguage', label: 'Language'}
+		{id: 'userId', label: intl.formatMessage({id: 'user.headRows.userId'})},
+		{id: 'defaultLanguage', label: intl.formatMessage({id: 'user.headRows.defaultLanguage'})}
 	];
 	let usersData;
 	if (loading) {
 		usersData = <Spinner/>;
 	} else if (usersList === undefined || usersList === null) {
-		usersData = <p>No Users Available</p>;
+		usersData = <p><FormattedMessage id="user.noUsers"/></p>;
 	} else {
 		usersData = (
 			<TableComponent
@@ -105,10 +107,19 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">List of Avaiable users</Typography>
+				<Typography variant="h5">
+					<FormattedMessage id="user.listAvailable"/>
+				</Typography>
 				{
 					userInfo.role === 'admin' &&
-						<ModalLayout form label="Create User" title="Create User" name="userCreation" variant="outlined" classed={modalClasses.button} color="primary">
+						<ModalLayout
+							form
+							label={intl.formatMessage({id: 'app.modal.title.createUser'})}
+							title={intl.formatMessage({id: 'app.modal.title.createUser'})}
+							name="userCreation" variant="outlined"
+							classed={modalClasses.button}
+							color="primary"
+						>
 							<UserCreationForm setIsCreating={setIsCreating} {...props}/>
 						</ModalLayout>
 				}

@@ -37,11 +37,12 @@ import {
 } from '@material-ui/core';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {connect} from 'react-redux';
+import {validate} from '@natlibfi/identifier-services-commons';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import * as actions from '../../store/actions';
-import {connect} from 'react-redux';
-import {validate} from '@natlibfi/identifier-services-commons';
 import ModalLayout from '../ModalLayout';
 import Spinner from '../Spinner';
 import ListComponent from '../ListComponent';
@@ -67,6 +68,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const classes = commonStyles();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
+	const intl = useIntl();
 	const [buttonState, setButtonState] = useState('');
 	const [reject, setReject] = useState(false);
 	const [rejectReason, setRejectReason] = useState('');
@@ -145,7 +147,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (rangleListLoading) {
 				data = <Spinner/>;
 			} else if (isbnRangeList.length === 0) {
-				data = 'No ranges found';
+				data = intl.formatMessage({id: 'publisherRequest.noRanges'});
 			} else {
 				data = (
 					<TableComponent data={isbnRangeList} value={isbnValue} handleChange={e => handleChange(e, 'isbn')}/>
@@ -159,7 +161,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (rangleListLoading) {
 				data = <Spinner/>;
 			} else if (isbnRangeList.length === 0) {
-				data = 'No ranges found';
+				data = intl.formatMessage({id: 'publisherRequest.noRanges'});
 			} else {
 				data = (
 					<TableComponent data={ismnRangeList} value={ismnValue} handleChange={e => handleChange(e, 'ismn')}/>
@@ -169,7 +171,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			return data;
 		}
 
-		return <Typography variant="h5">Choose range to assign</Typography>;
+		return <Typography variant="h5"><FormattedMessage id="publisher.heading.assignRange"/></Typography>;
 	}
 
 	function renderButton(state) {
@@ -180,26 +182,36 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						{/* <Button variant="outlined" color="primary" onClick={handleRange}>Assign Ranges</Button> */}
 
 						<Button disabled={publisherRequest.backgroundProcessingState !== 'processed'} variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="publisherRequest.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'accepted':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>Accepted</Button>
+						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>
+							<FormattedMessage id="publisherRequest.button.label.accepted"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'rejected':
 				return (
 					<ButtonGroup color="error" aria-label="outlined primary button group">
-						<Button variant="contained" style={CustomColor.palette.red} size="small">Rejected</Button>
+						<Button variant="contained" style={CustomColor.palette.red} size="small">
+							<FormattedMessage id="publisherRequest.button.label.rejected"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'inProgress':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" color="primary" onClick={handleAccept}>
+							<FormattedMessage id="publisherRequest.button.label.accept"/>
+						</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="publisherRequest.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			default:
@@ -222,7 +234,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Object.keys(formattedPublisherRequest).map(key => {
 								return typeof formattedPublisherRequest[key] === 'string' ?
 									(
-										<ListComponent label={key} value={formattedPublisherRequest[key]}/>
+										<ListComponent label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedPublisherRequest[key]}/>
 									) :
 									null;
 							})
@@ -235,7 +247,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Object.keys(formattedPublisherRequest).map(key => {
 								return typeof formattedPublisherRequest[key] === 'object' ?
 									(
-										<ListComponent label={key} value={formattedPublisherRequest[key]}/>
+										<ListComponent label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedPublisherRequest[key]}/>
 									) :
 									null;
 							})
@@ -247,12 +259,18 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const component = (
-		<ModalLayout isTableRow color="primary" title="Publisher Request Detail" {...props}>
+		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.publisherRequest'})} {...props}>
 			{assignRange ?
 				<div className={classes.listItem}>
-					<Button onClick={handleRange}>Go Back</Button>
-					<Button onClick={() => displayISBNRanges('isbn')}>ISBN Ranges</Button>
-					<Button onClick={() => displayISMNRanges('ismn')}>ISMN Ranges</Button>
+					<Button onClick={handleRange}>
+						<FormattedMessage id="publisherRequest.button.label.goBack"/>
+					</Button>
+					<Button onClick={() => displayISBNRanges('isbn')}>
+						<FormattedMessage id="publisherRequest.button.label.isbnRanges"/>
+					</Button>
+					<Button onClick={() => displayISMNRanges('ismn')}>
+						<FormattedMessage id="publisherRequest.button.label.ismnRanges"/>
+					</Button>
 					{displayRanges(rangeTpye)}
 				</div> :
 				<div className={classes.listItem}>
@@ -271,8 +289,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									/>
 								</Grid>
 								<Grid item xs={12}>
-									<Button variant="contained" onClick={handleRejectClick}>Cancel</Button>
-									<Button variant="contained" color="primary" onClick={handleRejectSubmit}>Submit</Button>
+									<Button variant="contained" onClick={handleRejectClick}>
+										<FormattedMessage id="form.button.label.cancel"/>
+									</Button>
+									<Button variant="contained" color="primary" onClick={handleRejectSubmit}>
+										<FormattedMessage id="form.button.label.submit"/>
+									</Button>
 								</Grid>
 							</> :
 							<Grid item xs={12}>

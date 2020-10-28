@@ -32,6 +32,7 @@ import {PropTypes} from 'prop-types';
 import {Grid, Button} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {connect} from 'react-redux';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import ResetCaptchaButton from './ResetCaptchaButton';
@@ -56,6 +57,7 @@ export default connect(mapToProps, actions)(reduxForm({
 			setMessage,
 			captcha
 		} = props;
+		const intl = useIntl();
 		const initialState = {};
 		const [state, setState] = useState(initialState);
 		const [captchaInput, setCaptchaInput] = useState('');
@@ -77,13 +79,13 @@ export default connect(mapToProps, actions)(reduxForm({
 			} else {
 				// eslint-disable-next-line no-lonely-if
 				if (captchaInput.length === 0) {
-					setMessage({color: 'error', msg: 'Captcha not provided'});
+					setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.notprovided'})});
 				} else if (captchaInput.length > 0) {
 					const result = await postCaptchaInput(captchaInput, captcha.id);
 					if (result === true) {
 						sendMessage(values);
 					} else {
-						setMessage({color: 'error', msg: 'Please type the correct word in the image below'});
+						setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.wrong.text'})});
 						loadSvgCaptcha();
 					}
 				}
@@ -96,19 +98,19 @@ export default connect(mapToProps, actions)(reduxForm({
 			{
 				name: 'name',
 				type: 'text',
-				label: 'Name',
+				label: intl.formatMessage({id: 'contact.form.name'}),
 				width: 'full'
 			},
 			{
 				name: 'email',
 				type: 'text',
-				label: 'Email',
+				label: intl.formatMessage({id: 'contact.form.email'}),
 				width: 'full'
 			},
 			{
 				name: 'description',
 				type: 'multiline',
-				label: 'Description',
+				label: intl.formatMessage({id: 'contact.form.description'}),
 				width: 'full'
 			}
 		];
@@ -161,7 +163,7 @@ export default connect(mapToProps, actions)(reduxForm({
 							size="small"
 							fullWidth={false}
 						>
-							Submit
+							<FormattedMessage id="form.button.label.submit"/>
 						</Button>
 					</Grid>
 				</Grid>

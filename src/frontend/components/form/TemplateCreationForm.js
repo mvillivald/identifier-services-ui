@@ -32,6 +32,7 @@ import {Button, Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage} from 'react-intl';
 
 import useStyles from '../../styles/form';
 import renderTextField from './render/renderTextField';
@@ -44,19 +45,19 @@ const fieldArray = [
 	{
 		name: 'templateName',
 		type: 'text',
-		label: 'Template Name*',
+		label: <FormattedMessage id="templateCreation.form.templateName"/>,
 		width: 'half'
 	},
 	{
 		name: 'subject',
 		type: 'text',
-		label: 'Subject*',
+		label: <FormattedMessage id="templateCreation.form.subject"/>,
 		width: 'half'
 	},
 	{
 		name: 'language',
 		type: 'select',
-		label: 'Select Language*',
+		label: <FormattedMessage id="templateCreation.form.selectLanguage"/>,
 		width: 'half',
 		defaultValue: 'eng',
 		options: [
@@ -68,13 +69,13 @@ const fieldArray = [
 	{
 		name: 'body',
 		type: 'textarea',
-		label: 'Body*',
+		label: <FormattedMessage id="templateCreation.form.body"/>,
 		width: 'full'
 	},
 	{
 		name: 'notes',
 		type: 'arrayString',
-		label: 'Notes',
+		label: <FormattedMessage id="templateCreation.form.notes"/>,
 		width: 'full',
 		subName: 'note'
 	}
@@ -123,7 +124,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<div className={classes.btnContainer}>
 						<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
-							Submit
+							<FormattedMessage id="form.button.label.submit"/>
 						</Button>
 					</div>
 				</div>

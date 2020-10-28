@@ -226,7 +226,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					reset();
 				}
 			} else if (captchaInput.length === 0) {
-				setMessage({color: 'error', msg: 'Captcha not provided'});
+				setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.notprovided'})});
 			} else if (captchaInput.length > 0) {
 				const result = await postCaptchaInput(captchaInput, captcha.id);
 				submitPublication(formatPublicationValues(values), result);
@@ -358,7 +358,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					reset();
 				}
 			} else {
-				setMessage({color: 'error', msg: 'Please type the correct word in the image below'});
+				setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.wrong.text'})});
 				loadSvgCaptcha();
 			}
 		}

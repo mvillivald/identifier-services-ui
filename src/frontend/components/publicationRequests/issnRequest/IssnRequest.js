@@ -42,6 +42,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
@@ -66,6 +67,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setIsUpdating
 	} = props;
 	const classes = commonStyles();
+	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [buttonState, setButtonState] = useState('');
@@ -112,27 +114,37 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			case 'new':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button disabled={issnRequest.backgroundProcessingState !== 'processed'} variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button disabled={issnRequest.backgroundProcessingState !== 'processed'} variant="outlined" color="primary" onClick={handleAccept}>
+							<FormattedMessage id="publicationRequestRender.button.label.accept"/>
+						</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="publicationRequestRender.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'accepted':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>Accepted</Button>
+						<Button variant="contained" color="primary" size="small" style={{cursor: 'not-allowed'}}>
+							<FormattedMessage id="publicationRequestRender.button.label.accepted"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'rejected':
 				return (
 					<ButtonGroup color="error" aria-label="outlined primary button group">
-						<Button variant="contained" style={CustomColor.palette.red} size="small">Rejected</Button>
+						<Button variant="contained" style={CustomColor.palette.red} size="small">
+							<FormattedMessage id="publicationRequestRender.button.label.rejected"/>
+						</Button>
 					</ButtonGroup>
 				);
 			case 'inProgress':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
 						<Button variant="outlined" color="primary" onClick={handleAccept}>Accept</Button>
-						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>Reject</Button>
+						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
+							<FormattedMessage id="publicationRequestRender.button.label.reject"/>
+						</Button>
 					</ButtonGroup>
 				);
 			default:
@@ -159,7 +171,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedIssnRequest).map(key => {
 										return typeof formattedIssnRequest[key] === 'string' ?
 											(
-												<ListComponent label={key} value={formattedIssnRequest[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publicationRequest.label.${key}`})} value={formattedIssnRequest[key]}/>
 											) :
 											null;
 									})
@@ -172,7 +184,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedIssnRequest).map(key => {
 										return typeof formattedIssnRequest[key] === 'object' ?
 											(
-												<ListComponent label={key} value={formattedIssnRequest[key]}/>
+												<ListComponent label={intl.formatMessage({id: `publicationRequest.label.${key}`})} value={formattedIssnRequest[key]}/>
 											) :
 											null;
 									})
@@ -186,7 +198,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 								{
 									Object.keys(withoutPublisher).map(key => {
-										return <ListComponent key={key} label={key} value={withoutPublisher[key]}/>;
+										return <ListComponent key={key} label={intl.formatMessage({id: `publicationRequest.label.${key}`})} value={withoutPublisher[key]}/>;
 									})
 								}
 							</List>
@@ -198,13 +210,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
-									<Typography variant="h6">Publisher Details</Typography>
+									<Typography variant="h6">
+										<FormattedMessage id="publicationRequest.label.publisherDetails"/>
+									</Typography>
 								</ExpansionPanelSummary>
 								<ExpansionPanelDetails>
 									<List>
 										{
 											Object.keys(formatOnlyPublisher).map(key => {
-												return <ListComponent key={key} label={key} value={formatOnlyPublisher[key]}/>;
+												return <ListComponent key={key} label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formatOnlyPublisher[key]}/>;
 											})
 										}
 									</List>
@@ -235,8 +249,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								/>
 							</Grid>
 							<Grid item xs={12}>
-								<Button variant="contained" onClick={handleRejectClick}>Cancel</Button>
-								<Button variant="contained" color="primary" onClick={handleRejectSubmit}>Submit</Button>
+								<Button variant="contained" onClick={handleRejectClick}>
+									<FormattedMessage id="form.button.label.cancel"/>
+								</Button>
+								<Button variant="contained" color="primary" onClick={handleRejectSubmit}>
+									<FormattedMessage id="form.button.label.submit"/>
+								</Button>
 							</Grid>
 						</> :
 						<Grid item xs={12}>

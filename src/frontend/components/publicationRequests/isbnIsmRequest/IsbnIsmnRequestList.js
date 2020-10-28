@@ -29,6 +29,7 @@
 import React, {useEffect, useState} from 'react';
 import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
+import {FormattedMessage} from 'react-intl';
 import {Grid, Typography} from '@material-ui/core';
 
 import * as actions from '../../../store/actions';
@@ -70,16 +71,16 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'state', label: 'State'},
-		{id: 'title', label: 'Title'},
-		{id: 'language', label: 'Language'}
+		{id: 'state', label: <FormattedMessage id="publicationList.isbnismn.headRows.state"/>},
+		{id: 'title', label: <FormattedMessage id="publicationList.isbnismn.headRows.title"/>},
+		{id: 'language', label: <FormattedMessage id="publicationList.isbnismn.headRows.language"/>}
 	];
 
 	let publicationIsbnIsmnRequestData;
 	if ((publicationIsbnIsmnRequestList === undefined) || (loading)) {
 		publicationIsbnIsmnRequestData = <Spinner/>;
 	} else if (publicationIsbnIsmnRequestList.length === 0) {
-		publicationIsbnIsmnRequestData = <p>No Data</p>;
+		publicationIsbnIsmnRequestData = <p><FormattedMessage id="app.render.noData"/></p>;
 	} else {
 		publicationIsbnIsmnRequestData = (
 			<TableComponent
@@ -110,7 +111,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">Search Publication Requests for ISBN-ISMN</Typography>
+				<Typography variant="h5">
+					<FormattedMessage id="publicationRequestRender.heading.search.IsbnIsmn"/>
+				</Typography>
 				<SearchComponent searchFunction={fetchPublicationIsbnIsmnRequestsList} setSearchInputVal={setSearchInputVal}/>
 				<TabComponent
 					tabClass={classes.tab}

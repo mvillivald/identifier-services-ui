@@ -39,6 +39,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {reduxForm, Field} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {FormattedMessage, useIntl} from 'react-intl';
 import HttpStatus from 'http-status';
 
 import {commonStyles} from '../../styles/app';
@@ -59,6 +60,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 })(props => {
 	const {id, user, userInfo, isAuthenticated, loading, fetchUser, deleteUser, setModal, setIsCreating} = props;
 	const classes = commonStyles();
+	const intl = useIntl();
 	const formClasses = useFormStyles();
 	const {role} = userInfo;
 	const [isEdit, setIsEdit] = useState(false);
@@ -117,7 +119,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(user).map(key => {
 										return typeof user[key] === 'string' ?
 											(
-												<ListComponent label={key} value={user[key]}/>
+												<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
 											) :
 											null;
 									})
@@ -130,7 +132,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(user).map(key => {
 										return typeof user[key] === 'object' ?
 											(
-												<ListComponent label={key} value={user[key]}/>
+												<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
 											) :
 											null;
 									})
@@ -151,9 +153,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{userDetail}
 						</Grid>
 						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>Cancel</Button>
+							<Button onClick={handleCancel}>
+								<FormattedMessage id="form.button.label.cancel"/>
+							</Button>
 							<Button variant="contained" color="primary">
-								UPDATE
+								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
 					</form>
@@ -170,12 +174,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								startIcon={<DeleteForeverIcon/>}
 								onClick={handleDeleteUser}
 							>
-								Delete
+								<FormattedMessage id="user.button.label.delete"/>
 							</Button>
 							<Fab
 								color="primary"
 								size="small"
-								title="Edit User Detail"
+								title={intl.formatMessage({id: 'user.fab.label.editUser'})}
 								onClick={handleEditClick}
 							>
 								<EditIcon/>

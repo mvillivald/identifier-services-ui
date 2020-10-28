@@ -28,13 +28,15 @@
 
 import React from 'react';
 import {TextField} from '@material-ui/core';
+import {useIntl} from 'react-intl';
 
 export default function (props) {
 	const {captchaInput, handleCaptchaInput, className} = props;
+	const intl = useIntl();
 	const component = (
 		<TextField
 			variant="outlined"
-			label="Type the word shown in the picture"
+			label={intl.formatMessage({id: 'captcha.input.label'})}
 			value={captchaInput}
 			className={className}
 			onChange={handleCaptchaInput}/>

@@ -30,7 +30,7 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
 import {Grid, Typography, Checkbox, FormControlLabel} from '@material-ui/core';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import SearchComponent from '../SearchComponent';
 import {commonStyles} from '../../styles/app';
@@ -44,6 +44,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const {loading, searchedPublishers, offset, location, searchPublisher, totalDoc, queryDocCount} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
+	const intl = useIntl();
 	const [inputVal, setSearchInputVal] = (location.state === undefined || location.state === null) ? useState('') : useState(location.state.searchText);
 	const [page, setPage] = React.useState(1);
 	const [activeCheck, setActiveCheck] = useState({
@@ -70,14 +71,14 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'name', label: 'Name'},
-		{id: 'phone', label: 'Phone'}
+		{id: 'name', label: intl.formatMessage({id: 'publisherList.headRows.name'})},
+		{id: 'phone', label: intl.formatMessage({id: 'publisherList.headRows.phone'})}
 	];
 	let publishersData;
 	if (loading) {
 		publishersData = <Spinner/>;
 	} else if (searchedPublishers.length === 0) {
-		publishersData = <p>No Search Result</p>;
+		publishersData = <p><FormattedMessage id="publisherList.emptySearch"/></p>;
 	} else {
 		publishersData = (
 			<TableComponent

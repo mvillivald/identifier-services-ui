@@ -11,6 +11,7 @@ import {
 	FormControlLabel
 } from '@material-ui/core';
 import {commonStyles} from '../../styles/app';
+import {FormattedMessage} from 'react-intl';
 
 export default function TableComponent(props) {
 	const {data, value, handleChange} = props;
@@ -21,10 +22,10 @@ export default function TableComponent(props) {
 			<Table aria-label="simple table">
 				<TableHead>
 					<TableRow>
-						<TableCell>Prefix</TableCell>
-						<TableCell align="right">Range start</TableCell>
-						<TableCell align="right">Range end</TableCell>
-						<TableCell align="right">Assign Range</TableCell>
+						<TableCell><FormattedMessage id="table.cell.prefix"/></TableCell>
+						<TableCell align="right"><FormattedMessage id="table.cell.rangeStart"/></TableCell>
+						<TableCell align="right"><FormattedMessage id="table.cell.rangeEnd"/></TableCell>
+						<TableCell align="right"><FormattedMessage id="table.cell.assignRange"/></TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>

@@ -133,7 +133,10 @@ export const commonStyles = makeStyles({
 		body: {
 			overflow: 'auto !important',
 			paddingRight: '0 !important',
-			background: '#ffffff'
+			background: '#ffffff',
+			'& ::-webkit-scrollbar': {
+				width: '1em'
+			}
 		},
 		a: {
 			textDecoration: 'none',
@@ -158,7 +161,8 @@ export const commonStyles = makeStyles({
 	listItem: {
 		width: 900,
 		minWidth: '750px',
-		padding: '20px'
+		padding: '20px',
+		height: 'auto'
 	},
 	btnContainer: {
 		display: 'flex',

@@ -32,6 +32,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import {FormattedMessage} from 'react-intl';
 
 const Transition = React.forwardRef((props, ref) => {
 	return <Slide ref={ref} direction="up" {...props}/>;
@@ -67,10 +68,10 @@ export default function (props) {
 				<DialogTitle id="alert-dialog-slide-title">{message}</DialogTitle>
 				<DialogActions>
 					<Button color="primary" onClick={handleClose}>
-						No
+						<FormattedMessage id="alert.dialogs.no"/>
 					</Button>
 					<Button color="primary" onClick={handleAgree}>
-						Yes
+						<FormattedMessage id="alert.dialogs.yes"/>
 					</Button>
 				</DialogActions>
 			</Dialog>

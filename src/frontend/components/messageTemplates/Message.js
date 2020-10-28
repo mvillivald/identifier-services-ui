@@ -37,13 +37,14 @@ import {
 } from '@material-ui/core';
 import {useCookies} from 'react-cookie';
 import {reduxForm, Field} from 'redux-form';
+import {connect} from 'react-redux';
+import EditIcon from '@material-ui/icons/Edit';
+import {FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import useFormStyles from '../../styles/form';
 import * as actions from '../../store/actions';
-import {connect} from 'react-redux';
 import ModalLayout from '../ModalLayout';
-import EditIcon from '@material-ui/icons/Edit';
 import renderTextArea from '../form/render/renderTextArea';
 import renderTextField from '../form/render/renderTextField';
 import Spinner from '../Spinner';
@@ -95,11 +96,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListItem>
 								<ListItemText>
 									<Grid container>
-										<Grid item xs={4}>Subject:</Grid>
+										<Grid item xs={4}>
+											<FormattedMessage id="messageTemplate.label.subject"/>
+										</Grid>
 										<Grid item xs={8}><Field name="subject" className={formClasses.editForm} component={renderTextField}/></Grid>
 									</Grid>
 									<Grid container>
-										<Grid item xs={4}>Body:</Grid>
+										<Grid item xs={4}>
+											<FormattedMessage id="messageTemplate.label.body"/>
+										</Grid>
 										<Grid item xs={8}><Field name="body" className={formClasses.editForm} component={renderTextArea} props={{encoded: true}}/></Grid>
 									</Grid>
 								</ListItemText>
@@ -112,14 +117,18 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<ListItemText>
 									<Grid container>
 										<>
-											<Grid item xs={4}>Subject:</Grid>
+											<Grid item xs={4}>
+												<FormattedMessage id="messageTemplate.label.subject"/>:
+											</Grid>
 											<Grid item xs={8}>{messageInfo.subject}</Grid>
 										</>
 									</Grid>
 									<hr/>
 									<Grid container>
 										<>
-											<Grid item xs={4}>Message:</Grid>
+											<Grid item xs={4}>
+												<FormattedMessage id="messageTemplate.label.message"/>
+											</Grid>
 											<Grid item xs={8}>{Buffer.from(messageInfo.body, 'base64').toString('utf8')}</Grid>
 										</>
 									</Grid>

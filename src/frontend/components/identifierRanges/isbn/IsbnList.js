@@ -29,6 +29,7 @@
 import React, {useEffect, useState} from 'react';
 import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {Grid, Typography, FormControlLabel, Checkbox} from '@material-ui/core';
 
 import * as actions from '../../../store/actions';
@@ -42,6 +43,7 @@ import RangeCreationForm from '../../form/RangeCreationForm';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {fetchIDRIsbnList, isbnList, loading, offset, queryDocCount, userInfo} = props;
+	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
@@ -73,16 +75,16 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'prefix', label: 'Prefix'},
-		{id: 'rangeStart', label: 'RangeStart'},
-		{id: 'rangeEnd', label: 'RangeEnd'}
+		{id: 'prefix', label: intl.formatMessage({id: 'ranges.prefix'})},
+		{id: 'rangeStart', label: intl.formatMessage({id: 'ranges.rangeStart'})},
+		{id: 'rangeEnd', label: intl.formatMessage({id: 'ranges.rangeEnd'})}
 	];
 
 	let isbnData;
 	if ((isbnList === undefined) || (loading)) {
 		isbnData = <Spinner/>;
 	} else if (isbnList.length === 0) {
-		isbnData = <p>No Data</p>;
+		isbnData = <p><FormattedMessage id="app.render.noData"/></p>;
 	} else {
 		isbnData = (
 			<TableComponent
@@ -113,7 +115,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid>
 			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">Search Identifier Ranges ISBN</Typography>
+				<Typography variant="h5">
+					<FormattedMessage id="isbnList.title.search"/>
+				</Typography>
 				<SearchComponent searchFunction={fetchIDRIsbnList} setSearchInputVal={setSearchInputVal}/>
 				<FormControlLabel
 					control={
@@ -124,11 +128,18 @@ export default connect(mapStateToProps, actions)(props => {
 							onChange={handleChange('checked')}
 						/>
 					}
-					label="Show only active ISBN"
+					label={intl.formatMessage({id: 'isbnList.label.checkbox'})}
 				/>
 				{
 					userInfo.role === 'admin' &&
-						<ModalLayout form label="Create ISBN Range" title="Create ISBN Range" name="issnCreationRange" variant="outlined" color="primary">
+						<ModalLayout
+							form
+							label={intl.formatMessage({id: 'isbnList.label.button.create'})}
+							title={intl.formatMessage({id: 'isbnList.label.button.create'})}
+							name="issnCreationRange"
+							variant="outlined"
+							color="primary"
+						>
 							<RangeCreationForm setUpdateComponent={setUpdateComponent} {...props}/>
 						</ModalLayout>
 				}

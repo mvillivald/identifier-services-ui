@@ -38,10 +38,11 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm, Field} from 'redux-form';
 import {useCookies} from 'react-cookie';
+import {connect} from 'react-redux';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
-import {connect} from 'react-redux';
 import {validate} from '@natlibfi/identifier-services-commons';
 import ModalLayout from '../../ModalLayout';
 import Spinner from '../../Spinner';
@@ -58,6 +59,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		id,
 		isbn,
 		loading} = props;
+	const intl = useIntl();
 	const classes = commonStyles();
 	const [isEdit, setIsEdit] = useState(false);
 	/* global COOKIE_NAME */
@@ -93,7 +95,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<ListItem>
 									<ListItemText>
 										<Grid container>
-											<Grid item xs={4}>Prefix:</Grid>
+											<Grid item xs={4}>
+												<FormattedMessage id="ranges.prefix"/>:
+											</Grid>
 											<Grid item xs={8}><Field name="prefix" className={classes.editForm} component={renderTextField}/></Grid>
 										</Grid>
 									</ListItemText>
@@ -108,7 +112,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedIsbn).map(key => {
 										return typeof formattedIsbn[key] === 'string' ?
 											(
-												<ListComponent label={key} value={formattedIsbn[key]}/>
+												<ListComponent label={intl.formatMessage({id: `ranges.${key}`})} value={formattedIsbn[key]}/>
 											) :
 											null;
 									})
@@ -121,7 +125,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(formattedIsbn).map(key => {
 										return typeof formattedIsbn[key] === 'object' ?
 											(
-												<ListComponent label={key} value={formattedIsbn[key]}/>
+												<ListComponent label={intl.formatMessage({id: `ranges.${key}`})} value={formattedIsbn[key]}/>
 											) :
 											null;
 									})
@@ -134,7 +138,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const component = (
-		<ModalLayout isTableRow color="primary" title="Identifier Ranges ISBN" {...props}>
+		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.identifierRangesIsbn'})} {...props}>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form>
@@ -142,9 +146,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{isbnDetail}
 						</Grid>
 						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>Cancel</Button>
+							<Button onClick={handleCancel}>
+								<FormattedMessage id="form.button.label.cancel"/>
+							</Button>
 							<Button variant="contained" color="primary">
-								UPDATE
+								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
 					</form>
@@ -157,7 +163,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<Fab
 							color="primary"
 							size="small"
-							title="Edit Isbn Detail"
+							title={intl.formatMessage({id: 'isbn.title.fab.edit'})}
 							onClick={handleEditClick}
 						>
 							<EditIcon/>
