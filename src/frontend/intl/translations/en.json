@@ -585,9 +585,9 @@
     "publisherRender.label.organizationDetails.affiliates": "Affiliates",
     "publisherRender.label.organizationDetails.distributorOf": "Distributor Of",
     "publisherRender.label.organizationDetails.distributor": "Affiliates",
-    "publisherRender.label.organizationDetails.metadataDelivery": "Metadata Delivery",
+    "publisherRender.label.metadataDelivery": "Metadata Delivery",
     "publisherRender.label.organizationDetails.primaryContact": "Primary Contact",
-    "publisherRender.label.organizationDetails.activity": "activity",
+    "publisherRender.label.activity": "activity",
     
     "publisherRender.label.primaryContact": "Primary Contact",
     "publisherRender.label.primaryContact.givenName": "Given Name",
