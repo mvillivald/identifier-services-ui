@@ -7,14 +7,19 @@ import {Grid,
 	ExpansionPanelSummary,
 	ExpansionPanelDetails,
 	Typography} from '@material-ui/core';
+import {Field} from 'redux-form';
 import {FormattedMessage} from 'react-intl';
+import renderTextField from './form/render/renderTextField';
+import renderSelect from './form/render/renderSelect';
+import useFormStyles from '../styles/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useStyles from '../styles/listComponent';
 
 export default function (props) {
 	const classes = useStyles();
 
-	const {label, value} = props;
+	const {label, value, edit, fieldName} = props;
+	const formClasses = useFormStyles();
 
 	function renderSwitch(value) {
 		switch (typeof value) {
@@ -25,14 +30,35 @@ export default function (props) {
 				return (
 					<>
 						<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
-						<Grid item xs={8}>{value}</Grid>
+						<Grid item xs={8}>
+							{
+								edit ?
+									<Field name={fieldName} className={formClasses.editForm} component={renderTextField}/> :
+									value
+							}
+						</Grid>
 					</>
 				);
 			case 'boolean':
 				return (
 					<>
 						<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
-						<Grid item xs={8}>{value.toString()}</Grid>
+						<Grid item xs={8}>
+							{
+								edit ?
+									<Field
+										name={fieldName}
+										type="select"
+										className={formClasses.editForm}
+										component={renderSelect}
+										option={[
+											{label: 'True', value: 'true'},
+											{label: 'False', value: 'false'}
+										]}
+									/> :
+									value.toString()
+							}
+						</Grid>
 					</>
 				);
 			case 'object':
@@ -91,7 +117,13 @@ export default function (props) {
 													<span className={classes.label}>
 														<FormattedMessage id={`listComponent.${key}`}/>:
 													</span>
-													<span>{item[key]}</span>
+													<span>
+														{
+															edit ?
+																<Field name={`${item}[${key}]`} className={formClasses.editForm} component={renderTextField}/> :
+																item[key]
+														}
+													</span>
 												</li>
 											) : null
 										)}
@@ -101,13 +133,32 @@ export default function (props) {
 								Object.entries(value).map(([key, val]) =>
 									typeof val === 'object' ?
 										renderExpansion(key, val) :
-
 										(
 											<li key={key} className={classes.dropDownList}>
 												<span className={classes.label}>
 													<FormattedMessage id={`listComponent.${key}`}/>:
 												</span>
-												<span>{typeof value[key] === 'boolean' ? value[key].toString() : value[key]}</span>
+												<span>
+													{
+														typeof value[key] === 'boolean' ?
+															(edit ?
+																<Field
+																	name={`${fieldName}[${key}]`}
+																	type="select"
+																	className={formClasses.editForm}
+																	component={renderSelect}
+																	option={[
+																		{label: 'True', value: 'true'},
+																		{label: 'False', value: 'false'}
+																	]}
+																/> :
+																value[key].toString()
+															) : (edit ?
+																<Field name={`${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/> :
+																value[key]
+															)
+													}
+												</span>
 											</li>
 										)
 								)
