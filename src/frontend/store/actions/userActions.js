@@ -28,7 +28,7 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
-import {USERS_LIST, ERROR, USERS_REQUESTS_LIST, FETCH_USER, FETCH_USERS_REQUEST} from './types';
+import {USERS_LIST, ERROR, USERS_REQUESTS_LIST, FETCH_USER, UPDATE_USER, FETCH_USERS_REQUEST} from './types';
 import {setLoader, setListLoader, success, setMessage, fail} from './commonAction';
 import HttpStatus from 'http-status';
 
@@ -206,6 +206,28 @@ export const updateUserRequest = (id, values, token) => async dispatch => {
 			dispatch(success(FETCH_USERS_REQUEST, result.value));
 			dispatch(setMessage({color: 'success', msg: 'Record Successfully Updated!!!'}));
 			return response.status;
+		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const updateUser = (id, values, token) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/users/${id}`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+		if (response.status === HttpStatus.OK) {
+			const result = await response.json();
+			dispatch(success(UPDATE_USER, result));
+			dispatch(setMessage({color: 'success', msg: 'User Updated Succesfully.'}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));

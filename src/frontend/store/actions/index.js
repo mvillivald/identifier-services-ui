@@ -76,6 +76,7 @@ export {
 	fetchUsersList,
 	fetchUsersRequestsList,
 	updateUserRequest,
+	updateUser,
 	deleteUser
 } from './userActions';
 

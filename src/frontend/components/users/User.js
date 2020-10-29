@@ -31,26 +31,22 @@ import {
 	Button,
 	Grid,
 	List,
-	ListItem,
-	ListItemText,
 	Fab
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import {reduxForm, Field} from 'redux-form';
+import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
 import {FormattedMessage, useIntl} from 'react-intl';
 import HttpStatus from 'http-status';
 
 import {commonStyles} from '../../styles/app';
-import useFormStyles from '../../styles/form';
 import * as actions from '../../store/actions';
 import {connect} from 'react-redux';
 import {validate} from '@natlibfi/identifier-services-commons';
 import ModalLayout from '../ModalLayout';
 import Spinner from '../Spinner';
 import CustomColor from '../../styles/app';
-import renderTextField from '../form/render/renderTextField';
 import ListComponent from '../ListComponent';
 
 export default connect(mapStateToProps, actions)(reduxForm({
@@ -58,10 +54,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {id, user, userInfo, isAuthenticated, loading, fetchUser, deleteUser, setModal, setIsCreating} = props;
+	const {id, user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, deleteUser, setModal, setIsCreating} = props;
 	const classes = commonStyles();
 	const intl = useIntl();
-	const formClasses = useFormStyles();
 	const {role} = userInfo;
 	const [isEdit, setIsEdit] = useState(false);
 	/* global COOKIE_NAME */
@@ -72,7 +67,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchUser(id, token);
 		}
-	}, [cookie, fetchUser, id]);
+	}, [cookie, fetchUser, id, userUpdated]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -91,6 +86,24 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setIsEdit(false);
 	};
 
+	const handleOnSubmit = values => {
+		const newValues = {...values, givenName: values.firstname, familyName: values.lastname, displayName: values.displayname};
+		updateUser(id, newValues, cookie[COOKIE_NAME]);
+		setIsEdit(false);
+	};
+
+	const editableFields = ['firstname', 'lastname', 'displayname', 'username', 'preferences'];
+
+	function isEditable(key) {
+		if (userInfo.role === 'admin') {
+			return isEdit;
+		}
+
+		if (userInfo.role === 'publisher-admin') {
+			return isEdit && editableFields.includes(key);
+		}
+	}
+
 	let userDetail;
 	if ((Object.keys(user).length === 0) || loading) {
 		userDetail = <Spinner/>;
@@ -101,6 +114,32 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					<>
 						<Grid item xs={12} md={6}>
 							<List>
+								{
+									Object.keys(user).map(key => {
+										return typeof user[key] === 'string' ?
+											(
+												<ListComponent edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
+											) :
+											null;
+									})
+								}
+							</List>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<List>
+								{
+									Object.keys(user).map(key => {
+										return typeof user[key] === 'object' ?
+											(
+												<ListComponent edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
+											) :
+											null;
+									})
+								}
+							</List>
+						</Grid>
+						{/* <Grid item xs={12} md={6}>
+							<List>
 								<ListItem>
 									<ListItemText>
 										<Grid container>
@@ -110,7 +149,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</ListItemText>
 								</ListItem>
 							</List>
-						</Grid>
+						</Grid> */}
 					</> :
 					<>
 						<Grid item xs={12} md={6}>
@@ -148,7 +187,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		<ModalLayout isTableRow color="primary" {...props} title="User details">
 			{isEdit ?
 				<div className={classes.listItem}>
-					<form>
+					<form onSubmit={handleSubmit(handleOnSubmit)}>
 						<Grid container spacing={3} className={classes.listItemSpinner}>
 							{userDetail}
 						</Grid>
@@ -156,7 +195,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<Button onClick={handleCancel}>
 								<FormattedMessage id="form.button.label.cancel"/>
 							</Button>
-							<Button variant="contained" color="primary">
+							<Button variant="contained" color="primary" type="submit">
 								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
@@ -166,8 +205,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					<Grid container spacing={3} className={classes.listItemSpinner}>
 						{userDetail}
 					</Grid>
-					{isAuthenticated && role === 'admin' &&
-						<div className={classes.usersBtnContainer}>
+					<div className={classes.usersBtnContainer}>
+						{isAuthenticated && role === 'admin' &&
 							<Button
 								variant="contained"
 								style={CustomColor.palette.red}
@@ -175,7 +214,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								onClick={handleDeleteUser}
 							>
 								<FormattedMessage id="user.button.label.delete"/>
-							</Button>
+							</Button>}
+						{isAuthenticated && (role === 'admin' || role === 'publisher-admin') &&
 							<Fab
 								color="primary"
 								size="small"
@@ -183,8 +223,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								onClick={handleEditClick}
 							>
 								<EditIcon/>
-							</Fab>
-						</div>}
+							</Fab>}
+					</div>
 				</div>}
 		</ModalLayout>
 	);
@@ -196,6 +236,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 function mapStateToProps(state) {
 	return ({
 		user: state.users.user,
+		userUpdated: state.users.userUpdated,
 		loading: state.users.loading,
 		initialValues: state.users.user,
 		userInfo: state.login.userInfo,
