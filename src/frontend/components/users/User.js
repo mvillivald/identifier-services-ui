@@ -92,16 +92,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setIsEdit(false);
 	};
 
-	const editableFields = ['firstname', 'lastname', 'displayname', 'username', 'preferences'];
-
 	function isEditable(key) {
-		if (userInfo.role === 'admin') {
-			return isEdit;
-		}
+		const editableFields = userInfo.role === 'admin' ?
+			['id', 'publisher', 'firstname', 'lastname', 'displayname', 'preferences'] :
+			(userInfo.role === 'publisher-admin' ?
+				['firstname', 'lastname', 'displayname', 'preferences'] :
+				[]);
 
-		if (userInfo.role === 'publisher-admin') {
-			return isEdit && editableFields.includes(key);
-		}
+		return isEdit && editableFields.includes(key);
 	}
 
 	let userDetail;
@@ -171,7 +169,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(user).map(key => {
 										return typeof user[key] === 'object' ?
 											(
-												<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
+												<ListComponent fieldName={key} label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
 											) :
 											null;
 									})

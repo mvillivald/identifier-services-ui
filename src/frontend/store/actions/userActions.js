@@ -28,9 +28,22 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
-import {USERS_LIST, ERROR, USERS_REQUESTS_LIST, FETCH_USER, UPDATE_USER, FETCH_USERS_REQUEST} from './types';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
+import {USERS_LIST, ERROR, USERS_REQUESTS_LIST, FETCH_USER, UPDATE_USER, FETCH_USERS_REQUEST, USERS_REQUESTS_UPDATE} from './types';
 import {setLoader, setListLoader, success, setMessage, fail} from './commonAction';
 import HttpStatus from 'http-status';
+
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+
+};
+
+const cache = createIntlCache();
 
 export const fetchUsersList = (token, offset) => async dispatch => {
 	dispatch(setListLoader());
@@ -188,9 +201,15 @@ export const fetchUsersRequestsList = ({searchText, sortStateBy, token, offset})
 	}
 };
 
-export const updateUserRequest = (id, values, token) => async dispatch => {
+export const updateUserRequest = (id, values, token, lang) => async dispatch => {
 	dispatch(setLoader());
 	try {
+		const messsages = translations[lang];
+		const intl = createIntl({
+			locale: lang,
+			defaultLocale: 'fi',
+			messages: messsages
+		}, cache);
 		delete values.backgroundProcessingState;
 		const response = await fetch(`${API_URL}/requests/users/${id}`, {
 			method: 'PUT',
@@ -203,8 +222,8 @@ export const updateUserRequest = (id, values, token) => async dispatch => {
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
-			dispatch(success(FETCH_USERS_REQUEST, result.value));
-			dispatch(setMessage({color: 'success', msg: 'Record Successfully Updated!!!'}));
+			dispatch(success(USERS_REQUESTS_UPDATE, result.value));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'userRequest.update.message.success'})}));
 			return response.status;
 		}
 	} catch (err) {
