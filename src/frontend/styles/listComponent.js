@@ -40,7 +40,10 @@ const useStyles = makeStyles({
 	},
 	dropDownList: {
 		display: 'flex',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
+		'& span': {
+			minWidth: '80px'
+		}
 	}
 });
 

@@ -26,7 +26,7 @@
  *
  */
 
-import {USERS_LIST, LOADER, LIST_LOADER, ERROR, USERS_REQUESTS_LIST, FETCH_USER, UPDATE_USER, FETCH_USERS_REQUEST} from '../actions/types';
+import {USERS_LIST, LOADER, LIST_LOADER, ERROR, USERS_REQUESTS_LIST, FETCH_USER, UPDATE_USER, USERS_REQUESTS_UPDATE, FETCH_USERS_REQUEST} from '../actions/types';
 
 const initialState = {
 	usersList: [],
@@ -43,6 +43,7 @@ const initialState = {
 	loading: false,
 	listLoading: false,
 	userUpdated: {},
+	userRequestUpdated: {},
 	error: {}
 };
 
@@ -92,6 +93,12 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				usersRequest: action.payload,
+				loading: false
+			};
+		case USERS_REQUESTS_UPDATE:
+			return {
+				...state,
+				userRequestUpdated: action.payload,
 				loading: false
 			};
 		case ERROR:

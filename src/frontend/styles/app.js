@@ -123,6 +123,12 @@ const theme = createMuiTheme({
 					backgroundColor: '#00224f !important'
 				}
 			}
+		},
+		MuiFab: {
+			sizeSmall: {
+				width: '35px',
+				height: '20px'
+			}
 		}
 	}
 });
@@ -201,6 +207,9 @@ export const commonStyles = makeStyles({
 	radioLabel: {
 		display: 'flex',
 		justifyContent: 'flex-end'
+	},
+	fab: {
+		marginLeft: '10px'
 	}
 
 });

@@ -134,32 +134,53 @@ export default function (props) {
 									typeof val === 'object' ?
 										renderExpansion(key, val) :
 										(
-											<li key={key} className={classes.dropDownList}>
-												<span className={classes.label}>
-													<FormattedMessage id={`listComponent.${key}`}/>:
-												</span>
-												<span>
-													{
-														typeof value[key] === 'boolean' ?
-															(edit ?
-																<Field
-																	name={`${fieldName}[${key}]`}
-																	type="select"
-																	className={formClasses.editForm}
-																	component={renderSelect}
-																	option={[
-																		{label: 'True', value: 'true'},
-																		{label: 'False', value: 'false'}
-																	]}
-																/> :
-																value[key].toString()
-															) : (edit ?
-																<Field name={`${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/> :
-																value[key]
-															)
-													}
-												</span>
-											</li>
+											(
+												<li key={key} className={classes.dropDownList}>
+													<span className={classes.label}>
+														<FormattedMessage id={`listComponent.${key}`}/>:
+													</span>
+													<span>
+														{
+															typeof value[key] === 'boolean' ?
+																(edit ?
+																	<Field
+																		name={`${fieldName}[${key}]`}
+																		type="select"
+																		className={formClasses.editForm}
+																		component={renderSelect}
+																		options={[
+																			{label: 'True', value: 'true'},
+																			{label: 'False', value: 'false'}
+																		]}
+																	/> :
+																	value[key].toString()
+																) : (
+																	edit ?
+																		(
+																			key === 'defaultLanguage' ?
+																				(
+																					<Grid item xs={8}>
+																						<Field
+																							name={`${fieldName}[${key}]`}
+																							type="select"
+																							component={renderSelect}
+																							options={[
+																								{label: 'Fin', value: 'fin'},
+																								{label: 'Eng', value: 'eng'},
+																								{label: 'Swd', value: 'swe'}
+																							]}
+																						/>
+																					</Grid>
+																				) : (
+																					<Field name={`${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
+																				)
+																		) :
+																		value[key]
+																)
+														}
+													</span>
+												</li>
+											)
 										)
 								)
 							)}
