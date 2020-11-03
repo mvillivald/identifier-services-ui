@@ -14,11 +14,13 @@ import renderSelect from './form/render/renderSelect';
 import useFormStyles from '../styles/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useStyles from '../styles/listComponent';
+import {element, fieldArrayElement} from './form/publisherRegistrationForm/commons';
+import {fieldArray} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
 	const classes = useStyles();
 
-	const {label, value, edit, fieldName} = props;
+	const {label, value, edit, fieldName, clearFields} = props;
 	const formClasses = useFormStyles();
 
 	function renderSwitch(value) {
@@ -74,6 +76,31 @@ export default function (props) {
 			}
 
 			if (Array.isArray(obj)) {
+				if (edit && fieldName === 'classification') {
+					return (
+						<>
+							<Grid item xs={8}>
+								{ element({
+									array: fieldArray[1].publishingActivities.filter(item => item.name === 'classification'),
+									classes: formClasses,
+									clearFields
+								})}
+							</Grid>
+						</>
+					);
+				}
+
+				if (edit && fieldName === 'primaryContact') {
+					return (
+						<>
+							<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
+							<Grid item xs={8}>
+								{fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields})}
+							</Grid>
+						</>
+					);
+				}
+
 				if (obj.some(item => typeof item === 'string')) {
 					return (
 						<>
@@ -95,7 +122,7 @@ export default function (props) {
 			return renderExpansion(label, obj);
 		}
 
-		function renderExpansion(label, value) {
+		function renderExpansion(label, value, subFieldName) {
 			const component = (
 				<Grid item xs={12}>
 					<ExpansionPanel>
@@ -104,10 +131,13 @@ export default function (props) {
 							aria-controls="panel1a-content"
 							className={classes.exPanel}
 						>
-							<Typography><span className={classes.label}>{label}</span></Typography>
+							<Typography>
+								<span className={classes.label}>
+									<FormattedMessage id={`listComponent.${label}`}/>
+								</span>
+							</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails className={classes.objDetail}>
-
 							{(Array.isArray(value) && value.length > 0) ? (
 								value.map(item => (
 									<ul key={item} style={{borderBottom: '1px dashed', listStyleType: 'none'}}>
@@ -132,7 +162,7 @@ export default function (props) {
 							) : (
 								Object.entries(value).map(([key, val]) =>
 									typeof val === 'object' ?
-										renderExpansion(key, val) :
+										renderExpansion(key, val, value) :
 										(
 											(
 												<li key={key} className={classes.dropDownList}>
@@ -172,7 +202,7 @@ export default function (props) {
 																						/>
 																					</Grid>
 																				) : (
-																					<Field name={`${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
+																					<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
 																				)
 																		) :
 																		value[key]
