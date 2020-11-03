@@ -29,7 +29,7 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
-import {PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
+import {PUBLISHER, UPDATE_PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 import HttpStatus from 'http-status';
 
@@ -64,8 +64,8 @@ export const updatePublisher = (id, values, token) => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		const result = await response.json();
-		dispatch(success(PUBLISHER, result.value));
-		dispatch(setMessage({color: 'success', msg: 'Range updated'}));
+		dispatch(success(UPDATE_PUBLISHER, result.value));
+		dispatch(setMessage({color: 'success', msg: 'Publisher updated'}));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

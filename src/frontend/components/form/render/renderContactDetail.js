@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -41,7 +42,8 @@ import useStyles from '../../../styles/form';
 export default connect(state => ({
 	values: getFormValues('publisherRegistrationForm')(state) ||
 		getFormValues('issnRegForm')(state) ||
-		getFormValues('isbnIsmnRegForm')(state)
+		getFormValues('isbnIsmnRegForm')(state) ||
+		getFormValues('publisherUpdateForm')(state)
 
 }))(props => {
 	const [errors, setErrors] = React.useState();

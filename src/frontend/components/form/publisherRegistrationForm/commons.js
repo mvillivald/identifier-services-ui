@@ -14,6 +14,7 @@ import renderContactDetail from '../render/renderContactDetail';
 import renderSelectAutoComplete from '../render/renderSelectAutoComplete';
 import PopoverComponent from '../../PopoverComponent';
 import HelpIcon from '@material-ui/icons/Help';
+import {classificationCodes} from './formFieldVariable';
 
 export function element({array, classes, clearFields, publicationIssnValues, fieldName, publicationIsbnValues, intl}) {
 	return array.map(list => {
@@ -403,4 +404,15 @@ export function formatLabel(label) {
 	const res = label[0].replace(/([A-Z])/g, ' $1').trim();
 	const result = `${res.charAt(0).toUpperCase()}${res.slice(1)}`;
 	return result;
+}
+
+export function formatClassificationDefaultValue(arr) {
+	return arr.reduce((acc, item) => {
+		classificationCodes.map(obj => { // eslint-disable-line array-callback-return
+			if (obj.value.toString() === item.toString()) {
+				acc.push(obj);
+			}
+		});
+		return acc;
+	}, []);
 }

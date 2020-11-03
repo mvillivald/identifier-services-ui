@@ -698,5 +698,13 @@
     "listComponent.type": "Type",
     "listComponent.note": "Note",
     "listComponent.id": "ID",
-    "listComponent.state": "State"
+    "listComponent.state": "State",
+    "listComponent.Postal Address": "Postal Address",
+    "listComponent.PublicationDetails": "Publication Details",
+    "listComponent.Last Updated": "Last Updated",
+    "listComponent.activity": "Activity",
+    "listComponent.Prefereces": "Preferences",
+    "listComponent.Classification": "Classification",
+    "listComponent.Primary Contact": "Primary Contact"
+
 }

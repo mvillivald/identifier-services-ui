@@ -65,14 +65,13 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	textField: {
-		height: '40px',
+		height: '60px',
 		width: '100%'
 	},
 	arrayString: {
 		width: '95%'
 	},
 	selectField: {
-		height: '40px',
 		width: '100%'
 	},
 	full: {
