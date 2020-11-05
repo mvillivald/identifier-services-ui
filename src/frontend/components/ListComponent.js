@@ -35,7 +35,32 @@ export default function (props) {
 						<Grid item xs={8}>
 							{
 								edit ?
-									<Field name={fieldName} className={formClasses.editForm} component={renderTextField}/> :
+									(
+										fieldName === 'frequency' ?
+											(
+												<Grid item xs={8}>
+													<Field
+														name={fieldName}
+														type="select"
+														component={renderSelect}
+														options={[
+															{label: '', value: ''},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.yearly'}), value: 'yearly'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.monthly'}), value: 'monthly'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.weekly'}), value: 'weekly'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.daily'}), value: 'daily'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.biyearly'}), value: 'bi-yearly'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.quarterly'}), value: 'quarterly'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.bimonthly'}), value: 'bi-monthly'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.continuously'}), value: 'continuously'},
+															{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.irregular'}), value: 'irregular'}
+														]}
+													/>
+												</Grid>
+											) : (
+												<Field name={fieldName} className={formClasses.editForm} component={renderTextField}/>
+											)
+									) :
 									value
 							}
 						</Grid>
@@ -218,41 +243,45 @@ export default function (props) {
 																						/>
 																					</Grid>
 																				) : (
-																					((value.format === 'electronic' || value.format === 'printed-and-electroinc') && key === 'fileFormat') ?
+																					key === 'format' ?
 																						(
-																							<Grid item xs={8}>
-																								<Field
-																									name={`${fieldName}[${key}]`}
-																									type="select"
-																									component={renderSelect}
-																									options={[
-																										{label: '', value: ''},
-																										{label: 'Pdf', value: 'pdf'},
-																										{label: 'Epub', value: 'epub'},
-																										{label: 'CD', value: 'cd'},
-																										{label: 'MP3', value: 'mp3'}
-																									]}
-																								/>
-																							</Grid>
-																						) : ((value.format === 'printed' || value.format === 'printed-and-electroinc') && key === 'printFormat') ?
-																							(
-																								<Grid item xs={8}>
-																									<Field
-																										name={`${fieldName}[${key}]`}
-																										type="select"
-																										component={renderSelect}
-																										options={[
-																											{label: '', value: ''},
-																											{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
-																											{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
-																											{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
-																										]}
-																									/>
-																								</Grid>
-																							) : (
-																								<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
-																							)
-																				)) :
+																							value[key]
+																						) : (
+																							((value.format === 'electronic' || value.format === 'printed-and-electroinc') && key === 'fileFormat') ?
+																								(
+																									<Grid item xs={8}>
+																										<Field
+																											name={`${fieldName}[${key}]`}
+																											type="select"
+																											component={renderSelect}
+																											options={[
+																												{label: '', value: ''},
+																												{label: 'Pdf', value: 'pdf'},
+																												{label: 'Epub', value: 'epub'},
+																												{label: 'CD', value: 'cd'},
+																												{label: 'MP3', value: 'mp3'}
+																											]}
+																										/>
+																									</Grid>
+																								) : ((value.format === 'printed' || value.format === 'printed-and-electroinc') && key === 'printFormat') ?
+																									(
+																										<Grid item xs={8}>
+																											<Field
+																												name={`${fieldName}[${key}]`}
+																												type="select"
+																												component={renderSelect}
+																												options={[
+																													{label: '', value: ''},
+																													{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+																													{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+																													{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
+																												]}
+																											/>
+																										</Grid>
+																									) : (
+																										<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
+																									)
+																						))) :
 																		value[key]
 																)
 														}

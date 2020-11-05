@@ -55,6 +55,7 @@ export const IDR_ISMN_LIST = 'IDR_ISMN_LIST';
 export const IDR_ISMN = 'IDR_ISMN';
 
 export const UPDATE_ISBN_ISMN = 'UPDATE_ISBN_ISMN';
+export const UPDATE_ISSN = 'UPDATE_ISSN';
 
 export const SEARCH_PUBLISHER = 'SEARCH_PUBLISHER';
 export const ERROR = 'ERROR';

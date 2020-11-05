@@ -80,9 +80,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
-			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type'] :
+			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
 			(userInfo.role === 'publisher-admin' ?
-				['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type'] :
+				['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
 				[]);
 
 		return isEdit && !nonEditableFields.includes(key);
@@ -94,7 +94,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				<div className={classes.listItem}>
 					<form>
 						<Grid container spacing={3} className={classes.listItemSpinner}>
-							<PublicationRenderComponent formName="isbnIsmnUpdateForm" publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
+							<PublicationRenderComponent publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 						</Grid>
 						<div className={classes.btnContainer}>
 							<Button onClick={handleCancel}>
@@ -108,7 +108,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</div> :
 				<div className={classes.listItem}>
 					<Grid container spacing={3} className={classes.listItemSpinner}>
-						<PublicationRenderComponent formName="isbnIsmnUpdateForm" publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
+						<PublicationRenderComponent publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 					</Grid>
 					{role !== undefined && role === 'admin' &&
 						<div className={classes.btnContainer}>

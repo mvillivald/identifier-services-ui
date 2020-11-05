@@ -49,7 +49,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {id, issn, userInfo, loading, fetchIssn, handleSubmit} = props;
+	const {id, issn, userInfo, loading, fetchIssn, handleSubmit, clearFields, updatePublicationIssn, updatedIssn} = props;
 	const intl = useIntl();
 	const classes = commonStyles();
 	const {role} = userInfo;
@@ -61,7 +61,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchIssn({id: id, token: cookie[COOKIE_NAME]});
 		}
-	}, [cookie, fetchIssn, id]);
+	}, [cookie, fetchIssn, id, updatedIssn]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -75,9 +75,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const {_id, ...updateValues} = values;
 		const token = cookie[COOKIE_NAME];
 		console.log(updateValues, token);
-		// UpdatePublication(match.params.id, updateValues, token);
+		updatePublicationIssn(id, updateValues, token);
 		setIsEdit(false);
 	};
+
+	function isEditable(key) {
+		const nonEditableFields = userInfo.role === 'admin' ?
+			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
+			(userInfo.role === 'publisher-admin' ?
+				['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
+				[]);
+
+		return isEdit && !nonEditableFields.includes(key);
+	}
 
 	const component = (
 		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.publicationIssn'})} {...props}>
@@ -85,7 +95,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				<div className={classes.listItem}>
 					<form>
 						<Grid container spacing={3} className={classes.listItemSpinner}>
-							<PublicationRenderComponent publication={issn} loading={loading} isEdit={isEdit}/>
+							<PublicationRenderComponent publication={issn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 						</Grid>
 						<div className={classes.btnContainer}>
 							<Button onClick={handleCancel}>
@@ -99,7 +109,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</div> :
 				<div className={classes.listItem}>
 					<Grid container spacing={3} className={classes.listItemSpinner}>
-						<PublicationRenderComponent publication={issn} loading={loading} isEdit={isEdit}/>
+						<PublicationRenderComponent publication={issn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 					</Grid>
 					{role !== undefined && role === 'admin' &&
 						<div className={classes.btnContainer}>
@@ -125,6 +135,7 @@ function mapStateToProps(state) {
 		issn: state.publication.issn,
 		loading: state.publication.loading,
 		initialValues: state.publication.issn,
-		userInfo: state.login.userInfo
+		userInfo: state.login.userInfo,
+		updatedIssn: state.publication.updatedIssn
 	});
 }

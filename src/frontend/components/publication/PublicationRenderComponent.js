@@ -41,7 +41,7 @@ import ListComponent from '../ListComponent';
 import Spinner from '../Spinner';
 
 export default function (props) {
-	const {publication, loading, isEdit, isEditable, clearFields, formName} = props;
+	const {publication, loading, isEdit, isEditable, clearFields} = props;
 	const intl = useIntl();
 
 	const {_id, seriesDetails, ...formattedPublication} = {...publication, ...publication.seriesDetails};
@@ -64,7 +64,7 @@ export default function (props) {
 										Object.keys(formattedPublication).map(key => {
 											return typeof formattedPublication[key] === 'string' ?
 												(
-													<ListComponent formName={formName} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+													<ListComponent clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
 												) :
 												null;
 										})
@@ -77,7 +77,7 @@ export default function (props) {
 										Object.keys(formattedPublication).map(key => {
 											return typeof formattedPublication[key] === 'object' ?
 												(
-													<ListComponent formName={formName} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+													<ListComponent clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
 												) :
 												null;
 										})
