@@ -257,7 +257,7 @@ function getSubFormatDetailsFieldArray(intl) {
 					options: [
 						{label: '', value: ''},
 						{label: 'Pdf', value: 'pdf'},
-						{label: 'Epub', value: 'epbu'},
+						{label: 'Epub', value: 'epub'},
 						{label: 'CD', value: 'cd'},
 						{label: 'MP3', value: 'mp3'}
 					]
@@ -314,7 +314,7 @@ function getSubFormatDetailsFieldArray(intl) {
 					options: [
 						{label: '', value: ''},
 						{label: 'Pdf', value: 'pdf'},
-						{label: 'Epub', value: 'epbu'},
+						{label: 'Epub', value: 'epub'},
 						{label: 'CD', value: 'cd'},
 						{label: 'MP3', value: 'mp3'}
 					]

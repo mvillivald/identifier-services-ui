@@ -31,6 +31,7 @@ import fetch from 'node-fetch';
 import {
 	ISBN_ISMN_LIST,
 	FETCH_ISBN_ISMN,
+	UPDATE_ISBN_ISMN,
 	ISSN_LIST,
 	FETCH_ISSN,
 	ERROR,
@@ -99,6 +100,26 @@ export const fetchIsbnIsmn = ({id, token}) => async dispatch => {
 		});
 		const result = await response.json();
 		dispatch(success(FETCH_ISBN_ISMN, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		delete values.backgroundProcessingState;
+		const response = await fetch(`${API_URL}/publications/isbn-ismn/${id}`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+		const result = await response.json();
+		dispatch(success(UPDATE_ISBN_ISMN, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

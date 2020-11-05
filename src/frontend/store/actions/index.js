@@ -90,6 +90,7 @@ export {
 export {
 	fetchIsbnIsmn,
 	fetchIsbnIsmnList,
+	updatePublicationIsbnIsmn,
 	fetchIssn,
 	fetchIssnList,
 	publicationCreation,

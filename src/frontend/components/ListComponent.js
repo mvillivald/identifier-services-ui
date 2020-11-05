@@ -8,7 +8,7 @@ import {Grid,
 	ExpansionPanelDetails,
 	Typography} from '@material-ui/core';
 import {Field} from 'redux-form';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import renderTextField from './form/render/renderTextField';
 import renderSelect from './form/render/renderSelect';
 import useFormStyles from '../styles/form';
@@ -19,8 +19,8 @@ import {fieldArray} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
 	const classes = useStyles();
-
 	const {label, value, edit, fieldName, clearFields} = props;
+	const intl = useIntl();
 	const formClasses = useFormStyles();
 
 	function renderSwitch(value) {
@@ -85,6 +85,22 @@ export default function (props) {
 									classes: formClasses,
 									clearFields
 								})}
+							</Grid>
+						</>
+					);
+				}
+
+				if (edit && fieldName === 'authors') {
+					const fieldsAuthor = ['givenName', 'familyName', 'role'];
+					return (
+						<>
+							<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
+							<Grid item xs={8}>
+								{obj.map((o, i) =>
+									fieldsAuthor.map(field =>
+										<Field key={`author[${field}]`} name={`authors[${i}].${field}`} className={formClasses.editForm} component={renderTextField}/>
+									)
+								)}
 							</Grid>
 						</>
 					);
@@ -202,9 +218,41 @@ export default function (props) {
 																						/>
 																					</Grid>
 																				) : (
-																					<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
-																				)
-																		) :
+																					((value.format === 'electronic' || value.format === 'printed-and-electroinc') && key === 'fileFormat') ?
+																						(
+																							<Grid item xs={8}>
+																								<Field
+																									name={`${fieldName}[${key}]`}
+																									type="select"
+																									component={renderSelect}
+																									options={[
+																										{label: '', value: ''},
+																										{label: 'Pdf', value: 'pdf'},
+																										{label: 'Epub', value: 'epub'},
+																										{label: 'CD', value: 'cd'},
+																										{label: 'MP3', value: 'mp3'}
+																									]}
+																								/>
+																							</Grid>
+																						) : ((value.format === 'printed' || value.format === 'printed-and-electroinc') && key === 'printFormat') ?
+																							(
+																								<Grid item xs={8}>
+																									<Field
+																										name={`${fieldName}[${key}]`}
+																										type="select"
+																										component={renderSelect}
+																										options={[
+																											{label: '', value: ''},
+																											{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+																											{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+																											{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
+																										]}
+																									/>
+																								</Grid>
+																							) : (
+																								<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
+																							)
+																				)) :
 																		value[key]
 																)
 														}

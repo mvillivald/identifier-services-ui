@@ -705,6 +705,15 @@
     "listComponent.activity": "Activity",
     "listComponent.Prefereces": "Preferences",
     "listComponent.Classification": "Classification",
-    "listComponent.Primary Contact": "Primary Contact"
-
+    "listComponent.Primary Contact": "Primary Contact",
+    "listComponent.Authors": "Authors",
+    "listComponent.Format Details": "Format Details",
+    "listComponent.Metadata Reference": "Metadata Reference",
+    "listComponent.Identifier": "Identifier",
+    "listComponent.isbnClassification": "Isbn Classification",
+    "listComponent.printFormat": "Print Format",
+    "listComponent.manufacturer": "Manufacturer",
+    "listComponent.run": "Run",
+    "listComponent.edition": "Edition",
+    "listComponent.subtitle": "Subtitle"
 }

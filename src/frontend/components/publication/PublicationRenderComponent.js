@@ -41,7 +41,7 @@ import ListComponent from '../ListComponent';
 import Spinner from '../Spinner';
 
 export default function (props) {
-	const {publication, loading} = props;
+	const {publication, loading, isEdit, isEditable, clearFields, formName} = props;
 	const intl = useIntl();
 
 	const {_id, seriesDetails, ...formattedPublication} = {...publication, ...publication.seriesDetails};
@@ -56,70 +56,139 @@ export default function (props) {
 		publicationDetail = (
 			<>
 				{typeof formattedPublication.publisher === 'string' ?
-					<>
-						<Grid item xs={12} md={6}>
-							<List>
-								{
-									Object.keys(formattedPublication).map(key => {
-										return typeof formattedPublication[key] === 'string' ?
-											(
-												<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
-											) :
-											null;
-									})
-								}
-							</List>
-						</Grid>
-						<Grid item xs={12} md={6}>
-							<List>
-								{
-									Object.keys(formattedPublication).map(key => {
-										return typeof formattedPublication[key] === 'object' ?
-											(
-												<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
-											) :
-											null;
-									})
-								}
-							</List>
-						</Grid>
-					</> :
-					<>
-						<Grid item xs={12} md={6}>
-							<List>
+					(isEdit ?
+						<>
+							<Grid item xs={12} md={6}>
+								<List>
+									{
+										Object.keys(formattedPublication).map(key => {
+											return typeof formattedPublication[key] === 'string' ?
+												(
+													<ListComponent formName={formName} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+												) :
+												null;
+										})
+									}
+								</List>
+							</Grid>
+							<Grid item xs={12} md={6}>
+								<List>
+									{
+										Object.keys(formattedPublication).map(key => {
+											return typeof formattedPublication[key] === 'object' ?
+												(
+													<ListComponent formName={formName} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+												) :
+												null;
+										})
+									}
+								</List>
+							</Grid>
+						</> :
+						<>
+							<Grid item xs={12} md={6}>
+								<List>
+									{
+										Object.keys(formattedPublication).map(key => {
+											return typeof formattedPublication[key] === 'string' ?
+												(
+													<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+												) :
+												null;
+										})
+									}
+								</List>
+							</Grid>
+							<Grid item xs={12} md={6}>
+								<List>
+									{
+										Object.keys(formattedPublication).map(key => {
+											return typeof formattedPublication[key] === 'object' ?
+												(
+													<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+												) :
+												null;
+										})
+									}
+								</List>
+							</Grid>
+						</>
+					) : (
+						isEdit ?
+							(
+								<>
+									<Grid item xs={12} md={6}>
+										<List>
 
-								{
-									Object.keys(withoutPublisher).map(key => {
-										console.log(key);
-										return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
-									})
-								}
-							</List>
-						</Grid>
-						<Grid item xs={12} md={6}>
-							<ExpansionPanel>
-								<ExpansionPanelSummary
-									expandIcon={<ExpandMoreIcon/>}
-									aria-controls="panel1a-content"
-									id="panel1a-header"
-								>
-									<Typography variant="h6">
-										<FormattedMessage id="publicationRender.heading.publisherDetails"/>
-									</Typography>
-								</ExpansionPanelSummary>
-								<ExpansionPanelDetails>
-									<List>
-										{
-											Object.keys(formatOnlyPublisher).map(key => {
-												return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formatOnlyPublisher[key]}/>;
-											})
-										}
-									</List>
-								</ExpansionPanelDetails>
-							</ExpansionPanel>
+											{
+												Object.keys(withoutPublisher).map(key => {
+													return <ListComponent key={key} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
+												})
+											}
+										</List>
+									</Grid>
+									<Grid item xs={12} md={6}>
+										<ExpansionPanel>
+											<ExpansionPanelSummary
+												expandIcon={<ExpandMoreIcon/>}
+												aria-controls="panel1a-content"
+												id="panel1a-header"
+											>
+												<Typography variant="h6">
+													<FormattedMessage id="publicationRender.heading.publisherDetails"/>
+												</Typography>
+											</ExpansionPanelSummary>
+											<ExpansionPanelDetails>
+												<List>
+													{
+														Object.keys(formatOnlyPublisher).map(key => {
+															return <ListComponent key={key} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formatOnlyPublisher[key]}/>;
+														})
+													}
+												</List>
+											</ExpansionPanelDetails>
+										</ExpansionPanel>
 
-						</Grid>
-					</>}
+									</Grid>
+								</>
+							) : (
+								<>
+									<Grid item xs={12} md={6}>
+										<List>
+
+											{
+												Object.keys(withoutPublisher).map(key => {
+													return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
+												})
+											}
+										</List>
+									</Grid>
+									<Grid item xs={12} md={6}>
+										<ExpansionPanel>
+											<ExpansionPanelSummary
+												expandIcon={<ExpandMoreIcon/>}
+												aria-controls="panel1a-content"
+												id="panel1a-header"
+											>
+												<Typography variant="h6">
+													<FormattedMessage id="publicationRender.heading.publisherDetails"/>
+												</Typography>
+											</ExpansionPanelSummary>
+											<ExpansionPanelDetails>
+												<List>
+													{
+														Object.keys(formatOnlyPublisher).map(key => {
+															return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formatOnlyPublisher[key]}/>;
+														})
+													}
+												</List>
+											</ExpansionPanelDetails>
+										</ExpansionPanel>
+
+									</Grid>
+								</>
+							)
+					)}
 			</>
 		);
 	}
