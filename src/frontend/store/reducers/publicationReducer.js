@@ -32,6 +32,8 @@ import {
 	ERROR,
 	ISBN_ISMN_LIST,
 	FETCH_ISBN_ISMN,
+	UPDATE_ISBN_ISMN,
+	UPDATE_ISSN,
 	ISSN_LIST,
 	FETCH_ISSN,
 	PUBLICATIONISBNISMN_REQUESTS_LIST,
@@ -43,6 +45,8 @@ import {
 const initialState = {
 	isbnIsmn: {},
 	isbnIsmnList: [],
+	updatedIsbnIsmn: {},
+	updatedIssn: {},
 
 	issn: {},
 	issnList: [],
@@ -77,6 +81,18 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				isbnIsmn: action.payload,
+				loading: false
+			};
+		case UPDATE_ISBN_ISMN:
+			return {
+				...state,
+				updatedIsbnIsmn: action.payload,
+				loading: false
+			};
+		case UPDATE_ISSN:
+			return {
+				...state,
+				updatedIssn: action.payload,
 				loading: false
 			};
 		case FETCH_ISSN:

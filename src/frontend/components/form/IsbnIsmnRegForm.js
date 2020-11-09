@@ -633,7 +633,7 @@ function mapStateToProps(state) {
 	});
 }
 
-function getFieldArray(intl) {
+export function getFieldArray(intl) {
 	const fields = [
 		{
 			publisherBasicInfo: [

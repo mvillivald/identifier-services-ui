@@ -34,12 +34,14 @@ import {
 	PUBLISHERS_REQUESTS_LIST,
 	PUBLISHER_REQUEST,
 	UNIVERSITY_PUBLISHER,
-	PUBLISHER_OPTIONS
+	PUBLISHER_OPTIONS,
+	UPDATE_PUBLISHER
 } from '../actions/types';
 
 const initialState = {
 	publishersList: [],
 	publisher: {},
+	publisherUpdated: {},
 	publisherOptions: [],
 	searchedPublisher: [],
 
@@ -79,6 +81,12 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				publisher: action.payload,
+				loading: false
+			};
+		case UPDATE_PUBLISHER:
+			return {
+				...state,
+				publisherUpdated: action.payload,
 				loading: false
 			};
 		case PUBLISHERS_REQUESTS_LIST:

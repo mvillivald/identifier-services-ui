@@ -90,8 +90,10 @@ export {
 export {
 	fetchIsbnIsmn,
 	fetchIsbnIsmnList,
+	updatePublicationIsbnIsmn,
 	fetchIssn,
 	fetchIssnList,
+	updatePublicationIssn,
 	publicationCreation,
 	publicationCreationRequest,
 	fetchPublicationIsbnIsmnRequestsList,
