@@ -107,9 +107,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				case 2:
 					return fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields});
 				case 3:
-					return orgDetail1({arr: fieldArray[3].organization, classes, fieldName: 'affiliates', clearFields});
+					return orgDetail1({arr: fieldArray[3].affiliate, classes, fieldName: 'affiliates', clearFields});
 				case 4:
-					return orgDetail2({arr: fieldArray[4].organization, classes});
+					return orgDetail2({arr: fieldArray[4].distributor, classes});
 				case 5:
 					return renderPreview(publisherValues);
 				default:
@@ -166,6 +166,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		}
 
 		function formatPublisher(values) {
+			const newPublisherCategory = values.publisherCategory && values.publisherCategory.value;
 			const newClassification = values.classification.map(item => item.value.toString());
 			const organizationDetails = {
 				affiliateOf: values.affiliateOf && formatAddress(values.affiliateOf),
@@ -178,6 +179,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 			const newPublisher = {
 				...rest,
+				publisherCategory: newPublisherCategory,
 				organizationDetails: organizationDetails && organizationDetails,
 				classification: newClassification,
 				publicationDetails: {...publicationDetails, frequency: {currentYear: Number(publicationDetails.frequency.currentYear), nextYear: Number(publicationDetails.frequency.nextYear)}}
@@ -333,8 +335,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{
 								Object.keys(publisherValues).map(key => {
 									return typeof publisherValues[key] === 'object' ?
-										<ListComponent label={key} value={key === 'classification' ?
-											publisherValues[key].map(item => (item.value).toString()) : publisherValues[key]}/> :
+										<ListComponent label={key} value={
+											key === 'classification' ?
+												publisherValues[key].map(item => (item.value).toString()) :
+												(key === 'publisherCategory' ? publisherValues[key].value : publisherValues[key])
+										}/> :
 										null;
 								})
 							}
