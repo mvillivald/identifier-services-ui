@@ -117,6 +117,14 @@ export const classificationCodes = [
 	{label: <FormattedMessage id="publisher.classification.numismatics"/>, value: 950}
 ];
 
+const publisherCategory = [
+	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.privatePerson"/>, value: 'private person'},
+	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.associationCorporationOrganisation"/>, value: 'association/corporation/organisation'},
+	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.cityMunicipality"/>, value: 'city/municipality'},
+	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.school"/>, value: 'school'},
+	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.clericalOrganisation"/>, value: 'clerical organisation'}
+];
+
 export const fieldArray = [
 	{
 		basicInformation: [
@@ -125,6 +133,13 @@ export const fieldArray = [
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.name"/>,
 				width: 'half'
+			},
+			{
+				name: 'aliases',
+				type: 'arrayString',
+				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.aliases"/>,
+				width: 'full',
+				subName: 'alias'
 			},
 			{
 				name: 'postalAddress[address]',
@@ -149,6 +164,14 @@ export const fieldArray = [
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.phone"/>,
 				width: 'half'
+			},
+			{
+				name: 'publisherCategory',
+				type: 'multiSelect',
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory"/>,
+				width: 'full',
+				options: publisherCategory,
+				isMulti: false
 			},
 			{
 				name: 'publisherEmail',
@@ -191,13 +214,6 @@ export const fieldArray = [
 				width: 'half'
 			},
 			{
-				name: 'aliases',
-				type: 'arrayString',
-				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.aliases"/>,
-				width: 'full',
-				subName: 'alias'
-			},
-			{
 				name: 'classification',
 				type: 'multiSelect',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.classification"/>,
@@ -231,10 +247,16 @@ export const fieldArray = [
 		]
 	},
 	{
-		organization: [
+		affiliate: [
 			{
 				title: 'AffiliateOf',
 				fields: [
+					{
+						name: 'affiliateOf[affiliateOfName]',
+						type: 'text',
+						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfName"/>,
+						width: 'half'
+					},
 					{
 						name: 'affiliateOf[affiliateOfAddress]',
 						type: 'text',
@@ -258,12 +280,6 @@ export const fieldArray = [
 						type: 'text',
 						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfZip"/>,
 						width: 'half'
-					},
-					{
-						name: 'affiliateOf[affiliateOfName]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfName"/>,
-						width: 'half'
 					}
 
 				]
@@ -271,6 +287,12 @@ export const fieldArray = [
 			{
 				title: 'Affiliates',
 				fields: [
+					{
+						name: 'affiliatesName',
+						type: 'text',
+						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateName"/>,
+						width: 'half'
+					},
 					{
 						name: 'affiliatesAddress',
 						type: 'text',
@@ -294,22 +316,22 @@ export const fieldArray = [
 						type: 'text',
 						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateZip"/>,
 						width: 'half'
-					},
-					{
-						name: 'affiliatesName',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateName"/>,
-						width: 'half'
 					}
 				]
 			}
 		]
 	},
 	{
-		organization: [
+		distributor: [
 			{
 				title: 'DistributorOf',
 				fields: [
+					{
+						name: 'distributorOf[distributorOfName]',
+						type: 'text',
+						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfName"/>,
+						width: 'half'
+					},
 					{
 						name: 'distributorOf[distributorOfAddress]',
 						type: 'text',
@@ -333,18 +355,18 @@ export const fieldArray = [
 						type: 'text',
 						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfZip"/>,
 						width: 'half'
-					},
-					{
-						name: 'distributorOf[distributorOfName]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfName"/>,
-						width: 'half'
 					}
 				]
 			},
 			{
 				title: 'Distributor',
 				fields: [
+					{
+						name: 'distributor[distributorName]',
+						type: 'text',
+						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorName"/>,
+						width: 'half'
+					},
 					{
 						name: 'distributor[distributorAddress]',
 						type: 'text',
@@ -367,12 +389,6 @@ export const fieldArray = [
 						name: 'distributor[distributorZip]',
 						type: 'text',
 						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorZip"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributor[distributorName]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorName"/>,
 						width: 'half'
 					}
 				]
