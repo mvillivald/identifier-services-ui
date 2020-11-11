@@ -34,7 +34,7 @@ import {
 } from '@material-ui/pickers';
 
 export default function MaterialUIPickers(props) {
-	const {input, className} = props;
+	const {input, className, label} = props;
 
 	const component = (
 		<MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -44,7 +44,7 @@ export default function MaterialUIPickers(props) {
 					className={className}
 					margin="normal"
 					id="date-picker-dialog"
-					label="Publication date"
+					label={label}
 					format="MM/dd/yyyy"
 					value={input.value || null}
 					KeyboardButtonProps={{
