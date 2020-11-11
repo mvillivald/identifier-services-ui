@@ -93,21 +93,23 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			});
 		}
 
-		if (publicationValues && publicationValues.type && publicationValues.type.value !== 'dissertation') {
-			fieldArray[4].basicInformation.push({
-				name: 'isbnClassification',
-				type: 'multiSelect',
-				width: 'half',
-				label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.label'}),
-				isMulti: true,
-				isCreatable: false,
-				options: [
-					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.nonFiction'}), value: 1},
-					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.fiction'}), value: 2},
-					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.cartoon'}), value: 3},
-					{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.childrenBook'}), value: 4}
-				]
-			});
+		fieldArray[4].basicInformation.push({
+			name: 'isbnClassification',
+			type: 'multiSelect',
+			width: 'half',
+			label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.label'}),
+			isMulti: true,
+			isCreatable: false,
+			options: [
+				{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.nonFiction'}), value: 1},
+				{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.fiction'}), value: 2},
+				{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.cartoon'}), value: 3},
+				{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.childrenBook'}), value: 4}
+			]
+		});
+
+		if (publicationValues && publicationValues.type && (publicationValues.type.value === 'dissertation' || publicationValues.type.value === 'music' || publicationValues.type.value === 'map')) {
+			fieldArray[4].basicInformation.splice(4, 1);
 		}
 
 		const steps = getSteps(fieldArray, dissFieldArray);
@@ -709,7 +711,7 @@ export function getFieldArray(intl) {
 					options: [
 						{label: '', value: ''},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.previouslyPublished.yes'}), value: 'true'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.previouslyPublished.yes'}), value: 'false'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.previouslyPublished.no'}), value: 'false'}
 					]
 				},
 				{
@@ -901,8 +903,8 @@ export function getFieldArray(intl) {
 					type: 'radio',
 					width: 'full',
 					options: [
-						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.electronic'}), value: 'electronic'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.electronic'}), value: 'electronic'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.both'}), value: 'both'}
 					]
 				}
