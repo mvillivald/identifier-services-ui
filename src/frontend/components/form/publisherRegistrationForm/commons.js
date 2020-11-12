@@ -107,6 +107,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							label={list.label}
 							name={list.name}
 							type={list.type}
+							min={0}
 							disabled={Boolean(list.name === 'publisher')}
 						/>
 					</Grid>
