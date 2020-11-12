@@ -366,8 +366,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		}
 
 		function renderPreview(publicationValues) {
-			publicationValues = {...publicationValues, publicationTime: publicationValues.publicationTime.toLocaleString()};
-			const formatPublicationValue = formatPublicationValues(publicationValues);
+			publicationValues = {
+				...publicationValues,
+				publicationTime: publicationValues.publicationTime.toLocaleString()
+			};
+			const formatPublicationValue = {
+				...formatPublicationValues(publicationValues),
+				isbnClassification: publicationValues.isbnClassification.map(item => item.label.toString())
+			};
 			return (
 				<Grid container item xs={12}>
 					<Grid item xs={12} md={6}>
@@ -376,7 +382,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								Object.keys(formatPublicationValue).map(key => {
 									return (typeof formatPublicationValue[key] === 'string' || typeof formatPublicationValue[key] === 'boolean') ?
 										(
-											<ListComponent label={key} value={formatPublicationValue[key]}/>
+											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatPublicationValue[key]}/>
 										) :
 										null;
 								})
@@ -389,12 +395,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								Object.keys(formatPublicationValue).map(key => {
 									if (typeof formatPublicationValue[key] === 'object') {
 										if (Array.isArray(formatPublicationValue[key])) {
-											return <ListComponent label={key} value={formatPublicationValue[key]}/>;
+											return <ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatPublicationValue[key]}/>;
 										}
 
 										const obj = formatPublicationValue[key];
 										Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : '');
-										return <ListComponent label={key} value={obj}/>;
+										return <ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={obj}/>;
 									}
 
 									return null;

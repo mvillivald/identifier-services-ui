@@ -416,3 +416,4 @@ export function formatClassificationDefaultValue(arr) {
 		return acc;
 	}, []);
 }
+
