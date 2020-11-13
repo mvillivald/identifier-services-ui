@@ -836,6 +836,8 @@ export function getFieldArray(intl) {
 				{
 					name: 'publicationTime',
 					type: 'dateTime',
+					views: ['year', 'month'],
+					format: 'MM/yyyy',
 					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.publicationTime'}),
 					width: 'half'
 				}
