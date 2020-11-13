@@ -174,9 +174,21 @@ export const fieldArray = [
 				isMulti: false
 			},
 			{
-				name: 'publisherEmail',
+				name: 'givenName',
 				type: 'text',
-				label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherEmail"/>,
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.givenName"/>,
+				width: 'half'
+			},
+			{
+				name: 'familyName',
+				type: 'text',
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.familyName"/>,
+				width: 'half'
+			},
+			{
+				name: 'email',
+				type: 'text',
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.email"/>,
 				width: 'half'
 			},
 			{
@@ -221,29 +233,6 @@ export const fieldArray = [
 				width: 'full',
 				isMulti: true
 			}
-		]
-	},
-	{
-		primaryContact: [
-			{
-				name: 'givenName',
-				type: 'text',
-				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.primaryContact.givenName"/>,
-				width: 'full'
-			},
-			{
-				name: 'familyName',
-				type: 'text',
-				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.primaryContact.familyName"/>,
-				width: 'full'
-			},
-			{
-				name: 'email',
-				type: 'email',
-				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.primaryContact.email"/>,
-				width: 'full'
-			}
-
 		]
 	},
 	{

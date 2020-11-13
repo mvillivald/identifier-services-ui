@@ -105,12 +105,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				case 1:
 					return element({array: fieldArray[1].publishingActivities, classes, clearFields});
 				case 2:
-					return fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields});
+					return orgDetail1({arr: fieldArray[2].affiliate, classes, fieldName: 'affiliates', clearFields});
 				case 3:
-					return orgDetail1({arr: fieldArray[3].affiliate, classes, fieldName: 'affiliates', clearFields});
+					return orgDetail2({arr: fieldArray[3].distributor, classes});
 				case 4:
-					return orgDetail2({arr: fieldArray[4].distributor, classes});
-				case 5:
 					return renderPreview(publisherValues);
 				default:
 					return 'Unknown step';
