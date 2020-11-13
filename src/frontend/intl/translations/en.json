@@ -810,7 +810,7 @@
     "listComponent.seriesDetails": "Series Details",
     "listComponent.formatDetails": "Format Details",
     "listComponent.publisher": "Publisher",
-
+    "listComponent.isPublic": "is Public",
 
     "listComponent.label": "Select the way you want Publication to be issued",
     "listComponent.electronic": "Electronic",

@@ -174,7 +174,7 @@ export default function (props) {
 						>
 							<Typography>
 								<span className={classes.label}>
-									<FormattedMessage id={`listComponent.${label}`}/>
+									<FormattedMessage id={label}/>
 								</span>
 							</Typography>
 						</ExpansionPanelSummary>
@@ -186,7 +186,7 @@ export default function (props) {
 											(
 												<li key={key} className={classes.dropDownList}>
 													<span className={classes.label}>
-														<FormattedMessage id={`listComponent.${key}`}/>:
+														<FormattedMessage id={key}/>:
 													</span>
 													<span>
 														{
@@ -208,7 +208,7 @@ export default function (props) {
 											(
 												<li key={key} className={classes.dropDownList}>
 													<span className={classes.label}>
-														<FormattedMessage id={`listComponent.${key}`}/>:
+														<FormattedMessage id={key}/>:
 													</span>
 													<span>
 														{
