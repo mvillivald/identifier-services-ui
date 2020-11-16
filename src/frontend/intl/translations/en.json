@@ -747,7 +747,6 @@
     "listComponent.affiliatesCity": "City",
     "listComponent.affiliatesZip": "Zip",
     "listComponent.affiliatesName": "Name",
-
     "listComponent.distributorOfAddress": "Address",
     "listComponent.distributorOfAddressDetails": "Address Details",
     "listComponent.distributorOfCity": "City",
@@ -758,21 +757,14 @@
     "listComponent.distributorCity": "City",
     "listComponent.distributorZip": "Zip",
     "listComponent.distributorName": "Name",
-
     "listComponent.universityName" : "University Name",
-   
     "listComponent.scale":"Scale",
-    "listComponent.selectLanguage.label": "Select Language",
-
     "listComponent.thisYear": "Publication Estimate this Year",
-    "listComponent.previouslyPublished.yes": "Yes",
-    "listComponent.previouslyPublished.no": "No",
-    
-    "listComponent.occasionalOrContinuous": "Are your publishing activities occasional/continuous?",
+    "listComponent.yes": "Yes",
+    "listComponent.no": "No",
     "listComponent.occasional": "Occasional",
     "listComponent.continuous": "Continuous",
     "listComponent.country": "Country",
-
     "listComponent.subtitle": "Sub-Title",
     "listComponent.publicationTime": "Publication time",
     "listComponent.nonFiction": "Non-Fiction",
@@ -805,21 +797,30 @@
     "listComponent.illustrator": "Illustrator",
     "listComponent.translator": "Translator",
     "listComponent.editor": "Editor",
+    "listComponent.previousPublication": "Previous Publication",
     "listComponent.seriesDetails": "Series Details",
+    "listComponent.mainSeries": "Main Series",
+    "listComponent.subSeries": "Sub Series",
     "listComponent.formatDetails": "Format Details",
     "listComponent.publisher": "Publisher",
     "listComponent.isPublic": "is Public",
-
-    "listComponent.label": "Select the way you want Publication to be issued",
     "listComponent.electronic": "Electronic",
     "listComponent.printed": "Printed",
     "listComponent.cd": "CD",
     "listComponent.both": "Both(Printed and Electronic)",
- 
     "listComponent.fileformat": "File Format",
     "listComponent.printformat": "Print Format",
     "listComponent.paperback": "paperback",
     "listComponent.hardback": "hardback",
-    "listComponent.spiral-binding": "spiral-binding"
+    "listComponent.spiral-binding": "spiral-binding",
+    "listComponent.creator": "Creator",
+    "listComponent.publicationType": "Publication Type",
+    "listComponent.metadataReference": "Metadata Reference",
+    "listComponent.backgroundProcessingState": "Background Processing State",
+    "listComponent.rejectionReason": "Rejected Reason",
+    "listComponent.createdResource": "Created Resource",
+    "listComponent.lastUpdated": "Last Updated",
+    "listComponent.associatedRange": "Associated Range",
+    "listComponent.publisherDetails": "Publisher Details"
 
 }
