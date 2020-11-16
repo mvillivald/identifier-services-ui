@@ -92,16 +92,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				case 0:
 					return publisherElement({array: fieldArray[0].publisherBasicInfo, classes, clearFields});
 				case 1:
-					return fieldArrayElement({data: fieldArray[1].primaryContact, fieldName: 'primaryContact', clearFields, publication: true});
+					return publisherElement({array: fieldArray[1].basicInformation, classes, clearFields});
 				case 2:
-					return publisherElement({array: fieldArray[2].basicInformation, classes, clearFields});
+					return withFormTitle({arr: fieldArray[2].Time, publicationValues, clearFields});
 				case 3:
-					return withFormTitle({arr: fieldArray[3].Time, publicationValues, clearFields});
+					return withFormTitle({arr: fieldArray[3].PreviousPublication, publicationValues, clearFields});
 				case 4:
-					return withFormTitle({arr: fieldArray[4].PreviousPublication, publicationValues, clearFields});
+					return withFormTitle({arr: fieldArray[4].SeriesDetails, publicationValues, clearFields});
 				case 5:
-					return withFormTitle({arr: fieldArray[5].SeriesDetails, publicationValues, clearFields});
-				case 6:
 					return renderPreview(publicationValues);
 				default:
 					return 'Unknown step';
@@ -143,10 +141,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				publisherEmail: values.publisherEmail,
 				phone: values.phone,
 				language: values.publisherLanguage,
-				primaryContact: values.primaryContact,
 				aliases: values.aliases && values.aliases
 			};
-			const {name, postalAddress, publisherEmail, phone, publisherLanguage, primaryContact, ...formattedPublicationValues} = {
+			const {name, postalAddress, publisherEmail, phone, publisherLanguage, ...formattedPublicationValues} = {
 				...values,
 				publisher,
 				firstNumber: values.firstNumber,
@@ -190,7 +187,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								Object.keys(formatValues).map(key => {
 									return (typeof formatValues[key] === 'string') ?
 										(
-											<ListComponent label={key} value={formatValues[key]}/>
+											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatValues[key]}/>
 										) :
 										null;
 								})
@@ -203,7 +200,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								Object.keys(formatValues).map(key => {
 									return (typeof formatValues[key] === 'object') ?
 										(
-											<ListComponent label={key} value={formatValues[key]}/>
+											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatValues[key]}/>
 										) :
 										null;
 								})
@@ -360,9 +357,21 @@ function getFieldArray(intl) {
 					width: 'half'
 				},
 				{
-					name: 'publisherEmail',
+					name: 'givenName',
 					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherEmail'}),
+					label: <FormattedMessage id="publisherRegistration.form.basicInformation.givenName"/>,
+					width: 'half'
+				},
+				{
+					name: 'familyName',
+					type: 'text',
+					label: <FormattedMessage id="publisherRegistration.form.basicInformation.familyName"/>,
+					width: 'half'
+				},
+				{
+					name: 'email',
+					type: 'text',
+					label: <FormattedMessage id="publisherRegistration.form.basicInformation.email"/>,
 					width: 'half'
 				},
 				{
@@ -376,28 +385,6 @@ function getFieldArray(intl) {
 						{label: 'Suomi', value: 'fin'},
 						{label: 'Svenska', value: 'swe'}
 					]
-				}
-			]
-		},
-		{
-			primaryContact: [
-				{
-					name: 'givenName',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.givenName'}),
-					width: 'full'
-				},
-				{
-					name: 'familyName',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.familyName'}),
-					width: 'full'
-				},
-				{
-					name: 'email',
-					type: 'email',
-					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.email'}),
-					width: 'full'
 				}
 			]
 		},

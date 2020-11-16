@@ -33,7 +33,7 @@ import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import HttpStatus from 'http-status';
 import HelpIcon from '@material-ui/icons/Help';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import useStyles from '../../../styles/form';
 import ResetCaptchaButton from '../ResetCaptchaButton';
@@ -77,6 +77,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			reset
 		} = props;
 		const classes = useStyles();
+		const intl = useIntl();
 		const [activeStep, setActiveStep] = useState(0);
 		const [captchaInput, setCaptchaInput] = useState('');
 		const [affiliateOf, setAffiliateOf] = useState(false);
@@ -105,12 +106,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				case 1:
 					return element({array: fieldArray[1].publishingActivities, classes, clearFields});
 				case 2:
-					return fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields});
+					return orgDetail1({arr: fieldArray[2].affiliate, classes, fieldName: 'affiliates', clearFields});
 				case 3:
-					return orgDetail1({arr: fieldArray[3].affiliate, classes, fieldName: 'affiliates', clearFields});
+					return orgDetail2({arr: fieldArray[3].distributor, classes});
 				case 4:
-					return orgDetail2({arr: fieldArray[4].distributor, classes});
-				case 5:
 					return renderPreview(publisherValues);
 				default:
 					return 'Unknown step';
@@ -323,7 +322,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								Object.keys(publisherValues).map(key => {
 									return typeof publisherValues[key] === 'string' ?
 										(
-											<ListComponent label={key} value={publisherValues[key]}/>
+											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={publisherValues[key]}/>
 										) :
 										null;
 								})
@@ -335,7 +334,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{
 								Object.keys(publisherValues).map(key => {
 									return typeof publisherValues[key] === 'object' ?
-										<ListComponent label={key} value={
+										<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={
 											key === 'classification' ?
 												publisherValues[key].map(item => (item.value).toString()) :
 												(key === 'publisherCategory' ? publisherValues[key].value : publisherValues[key])

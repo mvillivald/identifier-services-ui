@@ -85,7 +85,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const [cookie] = useCookies(COOKIE_NAME);
 
 		if (publicationValues && publicationValues.type && publicationValues.type.value === 'map') {
-			fieldArray[4].basicInformation.push({
+			fieldArray[3].basicInformation.push({
 				label: intl.formatMessage({id: 'publicationRegistration.form.map.scale'}),
 				name: 'mapDetails[scale]',
 				type: 'text',
@@ -93,7 +93,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			});
 		}
 
-		fieldArray[4].basicInformation.push({
+		fieldArray[3].basicInformation.push({
 			name: 'isbnClassification',
 			type: 'multiSelect',
 			width: 'half',
@@ -109,7 +109,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		});
 
 		if (publicationValues && publicationValues.type && (publicationValues.type.value === 'dissertation' || publicationValues.type.value === 'music' || publicationValues.type.value === 'map')) {
-			fieldArray[4].basicInformation.splice(4, 1);
+			fieldArray[3].basicInformation.splice(4, 1);
 		}
 
 		const steps = getSteps(fieldArray, dissFieldArray);
@@ -125,13 +125,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (isAuthenticated) {
 				switch (step) {
 					case 0:
-						return element({array: fieldArray[4].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
+						return element({array: fieldArray[3].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
 					case 1:
-						return withFormTitle({arr: fieldArray[5].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
+						return withFormTitle({arr: fieldArray[4].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
 					case 2:
-						return withFormTitle({arr: fieldArray[6].Series, publicationValues, clearFields});
+						return withFormTitle({arr: fieldArray[5].Series, publicationValues, clearFields});
 					case 3:
-						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
+						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 4:
 						return renderPreview(publicationValues);
 					default:
@@ -146,16 +146,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 1:
 						return element({array: fieldArray[1].publishingActivities, classes, clearFields});
 					case 2:
-						return fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields, publication: true});
+						return element({array: fieldArray[3].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
 					case 3:
-						return element({array: fieldArray[4].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
+						return withFormTitle({arr: fieldArray[4].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
 					case 4:
-						return withFormTitle({arr: fieldArray[5].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
+						return withFormTitle({arr: fieldArray[5].Series, publicationValues, clearFields});
 					case 5:
-						return withFormTitle({arr: fieldArray[6].Series, publicationValues, clearFields});
+						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 6:
-						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
-					case 7:
 						return renderPreview(publicationValues);
 					default:
 						return 'Unknown step';
@@ -169,15 +167,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<>{element({array: dissertCheckBox(), classes})}{element({array: dissFieldArray[0].UniversityInfo, classes})}</> :
 							<>{element({array: searchPublisherComponent(), classes})}{element({array: dissertCheckBox(), classes})}</>;
 					case 1:
-						return element({array: fieldArray[3].contactInfo, classes});
+						return element({array: fieldArray[2].contactInfo, classes});
 					case 2:
-						return element({array: fieldArray[4].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
+						return element({array: fieldArray[3].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
 					case 3:
-						return withFormTitle({arr: fieldArray[5].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
+						return withFormTitle({arr: fieldArray[4].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
 					case 4:
-						return withFormTitle({arr: fieldArray[6].Series, publicationValues, clearFields});
+						return withFormTitle({arr: fieldArray[5].Series, publicationValues, clearFields});
 					case 5:
-						return element({array: fieldArray[7].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
+						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 6:
 						return renderPreview(publicationValues);
 					default:
@@ -252,10 +250,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{
 					name: values.name,
 					postalAddress: values.postalAddress,
-					publisherEmail: values.publisherEmail,
+					email: values.email,
 					phone: values.phone && values.phone,
 					language: values.publisherLanguage,
-					primaryContact: values.primaryContact,
 					code: values.code && values.code,
 					publicationDetails: {
 						...values.publicationDetails,
@@ -267,7 +264,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					}
 				});
 			const publisher = isAuthenticated ? user.publisher : dissertPublisher;
-
 			const formatAuthors = values.authors.map(item => Object.keys(item).reduce((acc, key) => {
 				return {...acc, [replaceKey(key)]: item[key]};
 			}, {}));
@@ -288,10 +284,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				selectFormat,
 				name,
 				postalAddress,
-				publisherEmail,
+				email,
 				phone,
 				publisherLanguage,
-				primaryContact,
 				code,
 				publicationDetails,
 				insertUniversity,
@@ -303,7 +298,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				zip,
 				city,
 				country,
-				email,
 				...formattedPublicationValue
 			} = {
 				...values,
@@ -370,10 +364,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				...publicationValues,
 				publicationTime: publicationValues.publicationTime.toLocaleString()
 			};
-			const formatPublicationValue = {
-				...formatPublicationValues(publicationValues),
-				isbnClassification: publicationValues.isbnClassification.map(item => item.label.toString())
-			};
+			const formatPublicationValue = publicationValues.isbnClassification ?
+				{
+					...formatPublicationValues(publicationValues),
+					isbnClassification: publicationValues.isbnClassification.map(item => item.label.toString())
+				} : formatPublicationValues(publicationValues);
 			return (
 				<Grid container item xs={12}>
 					<Grid item xs={12} md={6}>
@@ -416,7 +411,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			const result = [];
 			if (isAuthenticated) {
 				fieldArray.forEach((item, i) => {
-					if (i >= 4) {
+					if (i >= 3) {
 						result.push(Object.keys(item));
 					}
 				});
@@ -425,7 +420,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 			if (!isAuthenticated && publicationValues && publicationValues.type && publicationValues.type.value === 'dissertation') {
 				dissFieldArray.forEach(item => result.push(Object.keys(item)));
-				fieldArray.forEach((item, i) => i >= 3 && result.push(Object.keys(item)));
+				fieldArray.forEach((item, i) => i >= 2 && result.push(Object.keys(item)));
 				return result;
 			}
 
@@ -676,9 +671,21 @@ export function getFieldArray(intl) {
 					width: 'half'
 				},
 				{
-					name: 'publisherEmail',
+					name: 'givenName',
 					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherEmail'}),
+					label: <FormattedMessage id="publicationRegistration.form.basicInformation.givenName"/>,
+					width: 'half'
+				},
+				{
+					name: 'familyName',
+					type: 'text',
+					label: <FormattedMessage id="publicationRegistration.form.basicInformation.familyName"/>,
+					width: 'half'
+				},
+				{
+					name: 'email',
+					type: 'text',
+					label: <FormattedMessage id="publicationRegistration.form.basicInformation.email"/>,
 					width: 'half'
 				},
 				{
@@ -730,28 +737,6 @@ export function getFieldArray(intl) {
 						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.occasional'}), value: 'occasional'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.continuous'}), value: 'continuous'}
 					]
-				}
-			]
-		},
-		{
-			primaryContact: [
-				{
-					name: 'givenName',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.givenName'}),
-					width: 'full'
-				},
-				{
-					name: 'familyName',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.familyName'}),
-					width: 'full'
-				},
-				{
-					name: 'email',
-					type: 'email',
-					label: intl.formatMessage({id: 'publicationRegistration.form.primaryContact.email'}),
-					width: 'full'
 				}
 			]
 		},
