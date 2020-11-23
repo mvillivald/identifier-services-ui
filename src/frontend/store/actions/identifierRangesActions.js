@@ -27,9 +27,101 @@
  */
 /* global API_URL */
 import fetch from 'node-fetch';
-import {ERROR, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN} from './types';
+import {ERROR, IDR_LIST, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN} from './types';
 import {setLoader, setRangeListLoader, success, fail, setMessage} from './commonAction';
 import HttpStatus from 'http-status';
+
+export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
+	dispatch(setRangeListLoader());
+	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
+		(rangeType === 'subRange' ? {isbnIsnmRangeId: searchText} :
+			(rangeType === 'isbnIsmnBatch' ? {publisherIdentifierRangeId: searchText} :
+				(rangeType === 'identifier' ? {publisherIdentifierRangeId: searchText} : {prefix: searchText})));
+	const fetchUrl = rangeType === 'range' ?
+		`${API_URL}/ranges/query` :
+		rangeType === 'subRange' ?
+			`${API_URL}/ranges/query/subRange` :
+			rangeType === 'isbnIsmnBatch' ?
+				`${API_URL}/ranges/query/isbnIsmnBatch` :
+				`${API_URL}/ranges/query/identifier`;
+
+	try {
+		const response = await fetch(fetchUrl, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: query
+				}],
+				offset: offset
+			})
+		});
+		const result = await response.json();
+		dispatch(success(IDR_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+// Not being Used but will be used in future
+export const searchIDRList = ({searchField, searchText, token, offset, rangeType}) => async dispatch => {
+	dispatch(setRangeListLoader());
+	const query = {[searchField]: searchText};
+	const fetchUrl = rangeType === 'range' ?
+		`${API_URL}/ranges/query` :
+		rangeType === 'subRange' ?
+			`${API_URL}/ranges/query/subRange` :
+			rangeType === 'isbnIsmnBatch' ?
+				`${API_URL}/ranges/query/isbnIsmnBatch` :
+				`${API_URL}/ranges/query/identifier`;
+
+	try {
+		const response = await fetch(fetchUrl, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: query
+				}],
+				offset: offset
+			})
+		});
+		const result = await response.json();
+		dispatch(success(IDR_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const createIsbnIsmnRange = (values, token) => async dispatch => {
+	const response = await fetch(`${API_URL}/ranges`, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		},
+		credentials: 'same-origin',
+		body: JSON.stringify(values)
+	});
+	if (response.status === HttpStatus.CREATED) {
+		dispatch(setMessage({color: 'success', msg: 'ISBNISMN range created successfully'}));
+		return response.status;
+	}
+
+	if (response.status === HttpStatus.CONFLICT) {
+		dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
+		return response.status;
+	}
+
+	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISBNISMN range'}));
+	return response.status;
+};
 
 // ***************ISBN****************************
 

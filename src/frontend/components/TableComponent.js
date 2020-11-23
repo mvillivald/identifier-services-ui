@@ -170,7 +170,17 @@ export default function (props) {
 								>
 									{Object.keys(row).map(key => (key !== 'id' && key !== 'mongoId') && (
 										<TableCell key={row[key]} component="th" scope="row">
-											{row[key]}
+											{headRows.map(h => (
+												h.id === key &&
+													(row[key] === true ?
+														'true' :
+														(
+															row[key] === false ?
+																'false' :
+																row[key]
+														)
+													)
+											))}
 										</TableCell>
 									))}
 								</TableRow>
