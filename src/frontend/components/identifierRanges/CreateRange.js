@@ -39,7 +39,9 @@ import {
 
 import * as actions from '../../store/actions';
 import renderTextField from '../form/render/renderTextField';
+import renderSelect from '../form/render/renderSelect';
 import {commonStyles} from '../../styles/app';
+import formStyles from '../../styles/form';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'rangeCreation',
@@ -50,6 +52,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
+	const formClasses = formStyles();
 
 	async function handleCreateRange(values) {
 		await createIsbnIsmnRange(values, cookie[COOKIE_NAME]);
@@ -57,27 +60,57 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const formFields = [
-		'prefix',
-		'langGroup',
-		'category',
-		'rangeStart',
-		'rangeEnd',
-		'idOld'
+		{name: 'prefix', type: 'select', option: [{label: '978', value: '978'}]},
+		{name: 'langGroup', type: 'text'},
+		{name: 'category', type: 'select', option: categoryOption()},
+		{name: 'rangeStart', type: 'text'},
+		{name: 'rangeEnd', type: 'text'},
+		{name: 'idOld', type: 'text'}
 	];
+
+	function categoryOption() {
+		return [
+			{label: '', value: ''},
+			{label: '1', value: '1'},
+			{label: '2', value: '2'},
+			{label: '3', value: '3'},
+			{label: '4', value: '4'},
+			{label: '5', value: '5'}
+		];
+	}
 
 	const component = (
 		<div className={classes.listItem}>
 			<form onSubmit={handleSubmit(handleCreateRange)}>
 				<Grid container spacing={2} className={classes.listItemSpinner}>
 					{formFields.map(field => (
-						<Grid key={field} item container xs={4} md={4}>
-							<Grid item xs={6}>
-								<FormattedMessage id={`ranges.${field}`}/>:
-							</Grid>
-							<Grid item xs={6}>
-								<Field name={field} className={classes.editForm} component={renderTextField}/>
-							</Grid>
-						</Grid>
+						field.type === 'text' ?
+							(
+								<Grid key={field.name} item container xs={4} md={4}>
+									<Grid item xs={12} md={12}>
+										<Field
+											name={field.name}
+											type={field.type}
+											className={formClasses.selectField}
+											label={<FormattedMessage id={`ranges.${field.name}`}/>}
+											component={renderTextField}
+										/>
+									</Grid>
+								</Grid>
+							) : (
+								<Grid key={field.name} item container xs={4} md={4}>
+									<Grid item xs={12} md={12}>
+										<Field
+											name={field.name}
+											type={field.type}
+											className={formClasses.selectField}
+											label={<FormattedMessage id={`ranges.${field.name}`}/>}
+											component={renderSelect}
+											options={field.option}
+										/>
+									</Grid>
+								</Grid>
+							)
 					))}
 				</Grid>
 				<div className={classes.btnContainer}>
