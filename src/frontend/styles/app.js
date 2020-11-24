@@ -129,6 +129,17 @@ const theme = createMuiTheme({
 				width: '35px',
 				height: '20px'
 			}
+		},
+		MuiTableCell: {
+			root: {
+				fontSize: '0.7rem',
+				padding: '16px 0'
+			}
+		},
+		MuiIconButton: {
+			root: {
+				padding: 0
+			}
 		}
 	}
 });
@@ -162,7 +173,8 @@ export const commonStyles = makeStyles({
 		}
 	},
 	listItemSpinner: {
-		justifyContent: 'center'
+		justifyContent: 'center',
+		marginBottom: 10
 	},
 	listItem: {
 		width: 900,
