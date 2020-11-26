@@ -134,6 +134,15 @@ const theme = createMuiTheme({
 			root: {
 				fontSize: '0.7rem',
 				padding: '16px 0'
+			},
+			body: {
+				width: 200
+			},
+			head: {
+				width: 200
+			},
+			footer: {
+				width: '10%'
 			}
 		},
 		MuiIconButton: {
@@ -172,12 +181,18 @@ export const commonStyles = makeStyles({
 			marginBottom: 8
 		}
 	},
+	listComponent: {
+		maxWidth: '1200px',
+		margin: '0 auto',
+		'& h5': {
+			marginBottom: 8
+		}
+	},
 	listItemSpinner: {
 		justifyContent: 'center',
 		marginBottom: 10
 	},
 	listItem: {
-		width: 900,
 		minWidth: '750px',
 		padding: '20px',
 		height: 'auto'
@@ -222,6 +237,16 @@ export const commonStyles = makeStyles({
 	},
 	fab: {
 		marginLeft: '10px'
+	},
+	main: {
+		width: 1200,
+		minHeight: 90,
+		maxHeight: 900,
+		position: 'relative',
+		margin: '0px auto',
+		borderRadius: 5,
+		backgroundColor: '#fff',
+		outline: 'none'
 	}
 
 });

@@ -136,7 +136,8 @@ export default function (props) {
 						<>
 							<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
 							<Grid item xs={8}>
-								{fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields})}
+								{ /* TO DO: fix needed to edit primary contact */ }
+								{/* {fieldArrayElement({data: fieldArray[1].primaryContact, fieldName: 'primaryContact', clearFields})} */}
 							</Grid>
 						</>
 					);

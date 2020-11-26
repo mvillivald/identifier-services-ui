@@ -105,8 +105,10 @@ export {
 } from './publicationAction';
 
 export {
+	fetchIDR,
 	fetchIDRList,
 	searchIDRList,
+	createNewRange,
 	createIsbnIsmnRange,
 	fetchIDRIsbnList,
 	fetchIDRIsbn,

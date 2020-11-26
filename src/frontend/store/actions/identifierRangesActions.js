@@ -27,7 +27,7 @@
  */
 /* global API_URL */
 import fetch from 'node-fetch';
-import {ERROR, IDR_LIST, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN} from './types';
+import {ERROR, IDR, IDR_LIST, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN} from './types';
 import {setLoader, setRangeListLoader, success, fail, setMessage} from './commonAction';
 import HttpStatus from 'http-status';
 
@@ -61,6 +61,40 @@ export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}
 		});
 		const result = await response.json();
 		dispatch(success(IDR_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchIDR = (id, token) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/ranges/subRange/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		});
+		const result = await response.json();
+		dispatch(success(IDR, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const createNewRange = (values, token) => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/ranges/subRange`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(values)
+		});
+		const result = await response.json();
+		return result;
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
