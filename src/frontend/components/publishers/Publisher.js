@@ -77,7 +77,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [assignRange, setAssignRange] = useState(false);
 	const [newPublisherRangeId, setNewPublisherRangeId] = useState(null);
 	const [enableUpdate, setEnableUpdate] = useState(false);
-	const [closeModal, setCloseModal] = useState(true);
 
 	const activeCheck = {
 		checked: true
@@ -212,8 +211,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setIsEdit(false);
 		}
 
-		setCloseModal(false);
-		setIsEdit(false);
+		handleCloseModal();
 	};
 
 	function handleRange() {
@@ -221,8 +219,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
 	}
 
+	function handleCloseModal() {
+		setAssignRange(false);
+		setIsEdit(false);
+	}
+
 	const component = (
-		<ModalLayout isTableRow={closeModal} mainClass={classes.main} color="primary" title={intl.formatMessage({id: 'app.modal.title.publisher'})} {...props}>
+		<ModalLayout isTableRow handleCloseModal={handleCloseModal} mainClass={classes.main} color="primary" title={intl.formatMessage({id: 'app.modal.title.publisher'})} {...props}>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form>

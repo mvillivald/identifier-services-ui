@@ -34,7 +34,7 @@ import HttpStatus from 'http-status';
 export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
-		(rangeType === 'subRange' ? {isbnIsnmRangeId: searchText} :
+		(rangeType === 'subRange' ? {isbnIsmnRangeId: searchText} :
 			(rangeType === 'isbnIsmnBatch' ? {publisherIdentifierRangeId: searchText} :
 				(rangeType === 'identifier' ? {publisherIdentifierRangeId: searchText} : {prefix: searchText})));
 	const fetchUrl = rangeType === 'range' ?

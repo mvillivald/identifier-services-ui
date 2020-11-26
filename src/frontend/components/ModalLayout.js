@@ -39,7 +39,7 @@ import useStyles from '../styles/modalLayout';
 import AlertDialogs from './AlertDialogs';
 
 export default connect(mapStateToProps)(withRouter(props => {
-	const {label, name, children, icon, fab, variant, color, mainClass, classed, isTableRow, form, title, dynamicTitle, setDynamicTitle, setPwd, modal, setModal} = props;
+	const {label, name, children, icon, fab, variant, color, mainClass, classed, isTableRow, handleCloseModal, form, title, dynamicTitle, setDynamicTitle, setPwd, modal, setModal} = props;
 	const classes = useStyles();
 	const intl = useIntl();
 	const [openModal, setOpen] = useState(false);
@@ -73,6 +73,12 @@ export default connect(mapStateToProps)(withRouter(props => {
 		}
 
 		if (isTableRow) {
+			if (isTableRow === false) {
+				if (handleCloseModal) {
+					handleCloseModal();
+				}
+			}
+
 			setModal(!isTableRow);
 		}
 	}

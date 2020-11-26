@@ -174,7 +174,7 @@ export default connect(mapStateToProps, actions)(props => {
 	function listRender(item) {
 		if (rangeType === 'subRange') {
 			return Object.entries(item)
-				.filter(([key]) => key === 'isbnIsnmRangeId' === false)
+				.filter(([key]) => key === 'isbnIsmnRangeId' === false)
 				.filter(([key]) => key === 'publisherId' === false)
 				.reduce((acc, [
 					key,

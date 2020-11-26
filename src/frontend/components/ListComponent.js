@@ -14,7 +14,7 @@ import renderSelect from './form/render/renderSelect';
 import useFormStyles from '../styles/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useStyles from '../styles/listComponent';
-import {element, fieldArrayElement} from './form/publisherRegistrationForm/commons';
+import {element} from './form/publisherRegistrationForm/commons';
 import {fieldArray} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
