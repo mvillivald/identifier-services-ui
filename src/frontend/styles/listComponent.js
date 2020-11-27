@@ -44,6 +44,17 @@ const useStyles = makeStyles({
 		'& span': {
 			minWidth: '80px'
 		}
+	},
+	arrayContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		'& div': {
+			maxWidth: '100%',
+			flexBasis: 'unset',
+			'& div': {
+				width: 'auto'
+			}
+		}
 	}
 });
 

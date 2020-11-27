@@ -31,7 +31,6 @@ import {
 	Button,
 	Grid,
 	List,
-	Typography,
 	Fab
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
@@ -46,7 +45,7 @@ import {validate} from '@natlibfi/identifier-services-commons';
 import ModalLayout from '../ModalLayout';
 import Spinner from '../Spinner';
 import ListComponent from '../ListComponent';
-import TableComponent from '../publishersRequests/TableComponent';
+import SelectRange from './SelectRange';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {formatClassificationDefaultValue} from '../form/publisherRegistrationForm/commons';
 
@@ -57,17 +56,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 })(props => {
 	const {
 		fetchPublisher,
+		fetchIDR,
 		updatePublisher,
 		id,
 		publisher,
 		publisherUpdated,
 		loading,
+		range,
+		createNewRange,
 		handleSubmit,
-		fetchIDRIsbnList,
-		fetchIDRIsmnList,
-		rangleListLoading,
-		isbnRangeList,
-		ismnRangeList,
+		fetchIDRList,
 		isAuthenticated,
 		clearFields,
 		userInfo} = props;
@@ -77,9 +75,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [assignRange, setAssignRange] = useState(false);
-	const [rangeType, setRangeType] = useState('');
-	const [isbnValue, setIsbnValue] = React.useState('');
-	const [ismnValue, setIsmnValue] = React.useState('');
+	const [newPublisherRangeId, setNewPublisherRangeId] = useState(null);
+	const [enableUpdate, setEnableUpdate] = useState(false);
 
 	const activeCheck = {
 		checked: true
@@ -89,7 +86,23 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchPublisher(id, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchPublisher, id, isbnValue, ismnValue, publisherUpdated]);
+	}, [cookie, fetchPublisher, id, publisherUpdated]);
+
+	useEffect(() => {
+		async function run() {
+			if (newPublisherRangeId !== null) {
+				// TO DO Check for active only
+				const newRange = await createNewRange({id, rangeId: newPublisherRangeId}, cookie[COOKIE_NAME]);
+				if (newRange) {
+					fetchIDR(newRange, cookie[COOKIE_NAME]);
+					setEnableUpdate(true);
+				}
+			}
+		}
+
+		run();
+	}, [cookie, createNewRange, fetchIDR, id, newPublisherRangeId]);
+
 	const handleEditClick = () => {
 		setIsEdit(true);
 	};
@@ -108,11 +121,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
-	const {organizationDetails, _id, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: publisher && publisher.notes && publisher.notes.map(item => {
+	const {organizationDetails, _id, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
 		return {note: Buffer.from(item).toString('base64')};
-	})};
+	}) : ''};
 	let publisherDetail;
-	if ((Object.keys(publisher).length === 0) || loading) {
+	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading) {
 		publisherDetail = <Spinner/>;
 	} else {
 		publisherDetail = (
@@ -121,9 +134,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					<>
 						<Grid item xs={12} md={6}>
 							<List>
+								{console.log(formattedPublisherDetail)}
 								{
 									Object.keys(formattedPublisherDetail).map(key => {
-										return typeof formattedPublisherDetail[key] === 'string' ?
+										return (formattedPublisherDetail[key] !== undefined && typeof formattedPublisherDetail[key] === 'string') ?
 											(
 												<ListComponent clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedPublisherDetail[key]}/>
 											) :
@@ -136,7 +150,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<List>
 								{
 									Object.keys(formattedPublisherDetail).map(key => {
-										return typeof formattedPublisherDetail[key] === 'object' ?
+										return (formattedPublisherDetail[key] !== undefined && typeof formattedPublisherDetail[key] === 'object') ?
 											(
 												<ListComponent clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedPublisherDetail[key]}/>
 											) :
@@ -180,84 +194,38 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	const handlePublisherUpdate = values => {
 		const token = cookie[COOKIE_NAME];
-		const {_id, ...updateValues} = values;
-		const newClassification = values.classification.map(item => item.value.toString());
-		updatePublisher(_id, {...updateValues, classification: newClassification}, token);
-		setIsEdit(false);
-	};
+		if (assignRange) {
+			const {_id, publisherRangeId, publisherIdentifier, ...updateValues} = publisher;
+			if (Object.keys(range).length > 0) {
+				const newPublisher = {
+					...updateValues,
+					publisherRangeId: publisherRangeId ? [...publisherRangeId, newPublisherRangeId] : [newPublisherRangeId],
+					publisherIdentifier: publisherIdentifier ? [...publisherIdentifier, range.publisherIdentifier] : [range.publisherIdentifier]
+				};
+				updatePublisher(_id, {...newPublisher}, token);
+			}
+		} else {
+			const {_id, ...updateValues} = values;
+			const newClassification = values.classification.map(item => item.value.toString());
+			updatePublisher(_id, {...updateValues, classification: newClassification}, token);
+			setIsEdit(false);
+		}
 
-	const handleRangeUpdate = () => {
-		const token = cookie[COOKIE_NAME];
-		const {_id, ...publisherWithRange} = {
-			...publisher,
-			isbnRange: isbnValue,
-			ismnRange: ismnValue
-		};
-		updatePublisher(_id, publisherWithRange, token);
+		handleCloseModal();
 	};
 
 	function handleRange() {
-		setIsbnValue(publisher.isbnRange);
-		setIsmnValue(publisher.ismnRange);
 		setAssignRange(!assignRange);
+		fetchIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
 	}
 
-	function displayISBNRanges(type) {
-		setRangeType(type);
-		fetchIDRIsbnList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck});
-	}
-
-	function displayISMNRanges(type) {
-		setRangeType(type);
-		fetchIDRIsmnList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck});
-	}
-
-	function handleChange(e, val) {
-		if (val === 'isbn') {
-			setIsbnValue(e.target.value);
-		}
-
-		if (val === 'ismn') {
-			setIsmnValue(e.target.value);
-		}
-	}
-
-	function displayRanges(val) {
-		if (val === 'isbn') {
-			let data;
-			if (rangleListLoading) {
-				data = <Spinner/>;
-			} else if (isbnRangeList.length === 0) {
-				data = intl.formatMessage({id: 'publisher.heading.noRanges'});
-			} else {
-				data = (
-					<TableComponent data={isbnRangeList} value={isbnValue} handleChange={e => handleChange(e, 'isbn')}/>
-				);
-			}
-
-			return data;
-		}
-
-		if (val === 'ismn') {
-			let data;
-			if (rangleListLoading) {
-				data = <Spinner/>;
-			} else if (ismnRangeList.length === 0) {
-				data = intl.formatMessage({id: 'publisher.heading.noRanges'});
-			} else {
-				data = (
-					<TableComponent data={ismnRangeList} value={ismnValue} handleChange={e => handleChange(e, 'ismn')}/>
-				);
-			}
-
-			return data;
-		}
-
-		return <Typography variant="h6"><FormattedMessage id="publisher.heading.assignRange"/></Typography>;
+	function handleCloseModal() {
+		setAssignRange(false);
+		setIsEdit(false);
 	}
 
 	const component = (
-		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.publisher'})} {...props}>
+		<ModalLayout isTableRow handleCloseModal={handleCloseModal} mainClass={classes.main} color="primary" title={intl.formatMessage({id: 'app.modal.title.publisher'})} {...props}>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form>
@@ -276,27 +244,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</div> :
 				<div className={classes.listItem}>
 					{assignRange ?
-						<div className={classes.listItem}>
-							<Button
-								variant="outlined"
-								startIcon={<ArrowBackIosIcon/>}
-								onClick={handleRange}
-							>
-								<FormattedMessage id="form.button.label.back"/>
-							</Button>&nbsp;
-							<Button variant={rangeType === 'isbn' ? 'contained' : 'outlined'} color="primary" onClick={() => displayISBNRanges('isbn')}>
-								<FormattedMessage id="publisher.button.label.IsbnRanges"/>
-							</Button>&nbsp;
-							<Button variant={rangeType === 'ismn' ? 'contained' : 'outlined'} color="primary" onClick={() => displayISMNRanges('ismn')}>
-								<FormattedMessage id="publisher.button.label.IsmnRanges"/>
-							</Button>
-							{displayRanges(rangeType)}
-							{rangeType ?
-								<Button variant="outlined" color="primary" onClick={handleRangeUpdate}>
-									<FormattedMessage id="form.button.label.update"/> {rangeType}
-								</Button> :
-								null}
-						</div> :
+						<>
+							<SelectRange rangeType="range" setNewPublisherRangeId={setNewPublisherRangeId} {...props}/>
+							<>
+								<Button
+									variant="outlined"
+									startIcon={<ArrowBackIosIcon/>}
+									onClick={handleRange}
+								>
+									<FormattedMessage id="form.button.label.back"/>
+								</Button>
+								<Button disabled={!enableUpdate} variant="outlined" color="primary" onClick={handlePublisherUpdate}>
+									<FormattedMessage id="form.button.label.update"/> range
+								</Button>
+							</>
+						</> :
 						<>
 							<Grid container spacing={3} className={classes.listItemSpinner}>
 								{publisherDetail}
@@ -359,9 +321,7 @@ function mapStateToProps(state) {
 		loading: state.publisher.loading,
 		initialValues: formatInitialValues(state.publisher.publisher),
 		isAuthenticated: state.login.isAuthenticated,
-		userInfo: state.login.userInfo,
-		rangleListLoading: state.identifierRanges.rangeListLoading,
-		isbnRangeList: state.identifierRanges.isbnList,
-		ismnRangeList: state.identifierRanges.ismnList
+		range: state.identifierRanges.range,
+		userInfo: state.login.userInfo
 	});
 }

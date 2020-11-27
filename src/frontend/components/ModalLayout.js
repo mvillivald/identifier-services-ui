@@ -39,7 +39,7 @@ import useStyles from '../styles/modalLayout';
 import AlertDialogs from './AlertDialogs';
 
 export default connect(mapStateToProps)(withRouter(props => {
-	const {label, name, children, icon, fab, variant, color, classed, isTableRow, form, title, dynamicTitle, setDynamicTitle, setPwd, modal, setModal} = props;
+	const {label, name, children, icon, fab, variant, color, mainClass, classed, isTableRow, handleCloseModal, form, title, dynamicTitle, setDynamicTitle, setPwd, modal, setModal} = props;
 	const classes = useStyles();
 	const intl = useIntl();
 	const [openModal, setOpen] = useState(false);
@@ -73,7 +73,8 @@ export default connect(mapStateToProps)(withRouter(props => {
 		}
 
 		if (isTableRow) {
-			setModal(false);
+			handleCloseModal && handleCloseModal(); // eslint-disable-line no-unused-expressions
+			setModal(!isTableRow);
 		}
 	}
 
@@ -101,7 +102,7 @@ export default connect(mapStateToProps)(withRouter(props => {
 					}
 				}) : handleClose}
 			>
-				<div className={classes.main}>
+				<div className={mainClass ? mainClass : classes.main}>
 					<IconButton aria-label="Close" className={classes.closeButton} onClick={handleClose}>
 						<CloseIcon/>
 					</IconButton>

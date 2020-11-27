@@ -113,9 +113,7 @@ const useStyles = makeStyles(theme => ({
 		cursor: 'pointer'
 	},
 	table: {
-		minWidth: 500,
-		marginTop: 60
-
+		minWidth: 500
 	},
 	tableRow: {
 		'&:hover': {

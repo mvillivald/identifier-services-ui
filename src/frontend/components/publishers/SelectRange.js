@@ -35,33 +35,24 @@ import {
 	Grid,
 	FormControlLabel,
 	Checkbox,
-	Breadcrumbs,
-	Button,
 	Typography
 } from '@material-ui/core';
 
-import ModalLayout from '../ModalLayout';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
 import TableComponent from '../TableComponent';
 import {commonStyles} from '../../styles/app';
-import CreateRange from './CreateRange';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIDRList, rangesList, userInfo, loading, offset, queryDocCount} = props;
+	const {fetchIDRList, rangesList, loading, offset, queryDocCount, rangeType, setNewPublisherRangeId} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
-	const [inputVal, setInputVal] = useState('');
 	const [page, setPage] = React.useState(1);
 	const [cursors] = useState([]);
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [updateComponent] = useState(false);
-	const [rangeType, setRangeType] = useState('range');
-	const [rangeId, setRangeId] = useState('');
-	const [subRangeId, setSubRangeId] = useState('');
-	const [modal, setModal] = useState(false);
 	const [activeCheck, setActiveCheck] = useState({
 		checked: false
 	});
@@ -69,50 +60,19 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchIDRList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
-	}, [updateComponent, activeCheck, cookie, fetchIDRList, inputVal, lastCursor, rangeType]);
+		fetchIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+	}, [updateComponent, activeCheck, cookie, fetchIDRList, lastCursor, rangeType]);
 
 	const handleTableRowClick = id => {
+		// TO DO alert Confirm message
 		setRowSelectedId(id);
 		if (rangeType === 'range') {
-			setRangeType('subRange');
-			setRangeId(id);
-			setSubRangeId('');
-			setInputVal(id);
+			setNewPublisherRangeId(id);
 		}
-
-		if (rangeType === 'subRange') {
-			setRangeType('isbnIsmnBatch');
-			setSubRangeId(id);
-			setInputVal(id);
-		}
-
-		if (rangeType === 'isbnIsmnBatch') {
-			setRangeType('identifier');
-			setInputVal(id);
-		}
-
-		setPage(1);
-		setLastCursor(null);
 	};
 
 	const handleChange = name => event => {
 		setActiveCheck({...activeCheck, [name]: event.target.checked});
-	};
-
-	const handleOnClickBreadCrumbsRange = () => {
-		setRangeType('range');
-		setInputVal('');
-	};
-
-	const handleOnClickBreadCrumbsSubRange = () => {
-		setRangeType('subRange');
-		setInputVal(rangeId);
-	};
-
-	const handleOnClickBreadCrumbsIsbnIsmnBatch = () => {
-		setRangeType('isbnIsmnBatch');
-		setInputVal(subRangeId);
 	};
 
 	function headRows() {
@@ -125,18 +85,6 @@ export default connect(mapStateToProps, actions)(props => {
 			if (rangeType === 'range') {
 				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed', 'idOld');
 				return array;
-			}
-
-			if (rangeType === 'subRange') {
-				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed', 'idOld');
-			}
-
-			if (rangeType === 'isbnIsmnBatch') {
-				array.unshift('identifierType', 'identifierCount', 'identifierCanceledCount', 'identifierDeletedCount', 'publisherId', 'publicationId', 'publisherIdentifierRangeId');
-			}
-
-			if (rangeType === 'identifier') {
-				array.unshift('identifierType', 'identifier', 'identifierBatchId', 'publisherIdentifierRangeId', 'publicationType');
 			}
 
 			return array;
@@ -172,52 +120,18 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function listRender(item) {
-		if (rangeType === 'subRange') {
-			return Object.entries(item)
-				.filter(([key]) => key === 'isbnIsmnRangeId' === false)
-				.filter(([key]) => key === 'publisherId' === false)
-				.reduce((acc, [
-					key,
-					value
-				]) => ({...acc, [key]: formatDate(key, value)}), {});
-		}
-
 		return {
 			...item,
 			created: moment(item.created.replace('Z', ''), moment.defaultFormat).format('L')
 		};
-
-		function formatDate(key, value) {
-			if (key === 'created') {
-				return moment(value, moment.defaultFormat).format('L');
-			}
-
-			return value;
-		}
 	}
 
 	const component = (
 		<Grid>
-			<Grid item xs={12} className={classes.listSearch}>
-				{(rangeType !== 'range') &&
-					<Breadcrumbs>
-						<Button variant="text" onClick={handleOnClickBreadCrumbsRange}>
-							<FormattedMessage id="rangesList.breadCrumbs.label.ranges"/>
-						</Button>
-						{(rangeType === 'isbnIsmnBatch' || rangeType === 'identifier') &&
-							<Button variant="text" onClick={handleOnClickBreadCrumbsSubRange}>
-								<FormattedMessage id="rangesList.breadCrumbs.label.subrange"/>
-							</Button>}
-						{rangeType === 'identifier' &&
-							<Button variant="text" onClick={handleOnClickBreadCrumbsIsbnIsmnBatch}>
-								<FormattedMessage id="rangesList.breadCrumbs.label.isbnIsmnBatch"/>
-							</Button>}
-						<Typography>{rowSelectedId}</Typography>
-					</Breadcrumbs>}
+			<Grid item xs={12} className={classes.listComponent}>
 				<Typography variant="h5">
 					<FormattedMessage id={`rangesList.title.${rangeType}`}/>
 				</Typography>
-				{/* <SearchComponent searchFunction={fetchIDRList} setSearchInputVal={setSearchInputVal}/> */}
 				<FormControlLabel
 					control={
 						<Checkbox
@@ -229,27 +143,6 @@ export default connect(mapStateToProps, actions)(props => {
 					}
 					label={intl.formatMessage({id: 'rangesList.label.checkbox'})}
 				/>
-				<Grid>
-					{
-						userInfo.role === 'admin' &&
-							(
-								<ModalLayout
-									form
-									isTableRow
-									modal={modal}
-									setModal={setModal}
-									color="primary"
-									title={intl.formatMessage({id: 'app.modal.title.identifierRangesIsbn'})}
-									label={intl.formatMessage({id: 'app.modal.title.identifierRangesIsbn'})}
-									name="rangeCreation"
-									variant="outlined"
-								>
-									<CreateRange {...props}/>
-								</ModalLayout>
-							)
-					}
-				</Grid>
-
 				{data}
 			</Grid>
 		</Grid>
@@ -261,10 +154,8 @@ export default connect(mapStateToProps, actions)(props => {
 
 function mapStateToProps(state) {
 	return ({
-		userInfo: state.login.userInfo,
 		loading: state.identifierRanges.rangeListLoading,
 		rangesList: state.identifierRanges.rangesList,
-		range: state.identifierRanges.range,
 		offset: state.identifierRanges.offset,
 		totalDoc: state.identifierRanges.totalDoc,
 		queryDocCount: state.identifierRanges.queryDocCount

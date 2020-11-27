@@ -14,7 +14,7 @@ import renderSelect from './form/render/renderSelect';
 import useFormStyles from '../styles/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useStyles from '../styles/listComponent';
-import {element, fieldArrayElement} from './form/publisherRegistrationForm/commons';
+import {element} from './form/publisherRegistrationForm/commons';
 import {fieldArray} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
@@ -136,7 +136,8 @@ export default function (props) {
 						<>
 							<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
 							<Grid item xs={8}>
-								{fieldArrayElement({data: fieldArray[2].primaryContact, fieldName: 'primaryContact', clearFields})}
+								{ /* TO DO: fix needed to edit primary contact */ }
+								{/* {fieldArrayElement({data: fieldArray[1].primaryContact, fieldName: 'primaryContact', clearFields})} */}
 							</Grid>
 						</>
 					);
@@ -144,7 +145,7 @@ export default function (props) {
 
 				if (obj.some(item => typeof item === 'string')) {
 					return (
-						<>
+						<Grid item container className={classes.arrayContainer}>
 							<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
 							<Grid item xs={8}>
 								{obj.map(item => {
@@ -153,7 +154,7 @@ export default function (props) {
 									);
 								})}
 							</Grid>
-						</>
+						</Grid>
 					);
 				}
 
