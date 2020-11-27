@@ -149,6 +149,11 @@ const theme = createMuiTheme({
 			root: {
 				padding: 0
 			}
+		},
+		MuiGrid: {
+			container: {
+				flexWrap: 'nowrap'
+			}
 		}
 	}
 });
@@ -193,9 +198,11 @@ export const commonStyles = makeStyles({
 		marginBottom: 10
 	},
 	listItem: {
+		maxHeight: '70vh',
 		minWidth: '750px',
 		padding: '20px',
-		height: 'auto'
+		height: 'auto',
+		overflowY: 'auto'
 	},
 	btnContainer: {
 		display: 'flex',

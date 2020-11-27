@@ -145,7 +145,7 @@ export default function (props) {
 
 				if (obj.some(item => typeof item === 'string')) {
 					return (
-						<>
+						<Grid item container className={classes.arrayContainer}>
 							<Grid item xs={4}><span className={classes.label}>{label}:</span></Grid>
 							<Grid item xs={8}>
 								{obj.map(item => {
@@ -154,7 +154,7 @@ export default function (props) {
 									);
 								})}
 							</Grid>
-						</>
+						</Grid>
 					);
 				}
 

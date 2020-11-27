@@ -73,12 +73,7 @@ export default connect(mapStateToProps)(withRouter(props => {
 		}
 
 		if (isTableRow) {
-			if (isTableRow === false) {
-				if (handleCloseModal) {
-					handleCloseModal();
-				}
-			}
-
+			handleCloseModal && handleCloseModal();
 			setModal(!isTableRow);
 		}
 	}
