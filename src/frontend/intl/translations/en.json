@@ -205,9 +205,12 @@
 
     "publicationRegistration.form.basicInformation.title": "Title*",
     "publicationRegistration.form.basicInformation.subtitle": "Sub-Title",
+    "publicationRegistration.form.basicInformation.familyName": "Family Name",
+    "publicationRegistration.form.basicInformation.givenName": "Given name",
+    "publicationRegistration.form.basicInformation.email": "Email",
     "publicationRegistration.form.basicInformation.language.title": "Select Language*",
     "publicationRegistration.form.basicInformation.publicationTime": "Publication time*",
-    "publicationRegistration.form.basicInformation.classification.label": "Classification",
+    "publicationRegistration.form.basicInformation.classification.label": "Classification*",
     "publicationRegistration.form.basicInformation.classification.nonFiction": "Non-Fiction",
     "publicationRegistration.form.basicInformation.classification.fiction": "Fiction",
     "publicationRegistration.form.basicInformation.classification.cartoon": "Cartoon",

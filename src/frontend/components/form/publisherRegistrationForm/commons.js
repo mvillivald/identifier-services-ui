@@ -252,6 +252,7 @@ function getSubFormatDetailsFieldArray(intl) {
 		{
 			electronic: [
 				{
+					isMulti: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
@@ -269,9 +270,10 @@ function getSubFormatDetailsFieldArray(intl) {
 		{
 			printed: [
 				{
+					isMulti: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
-					type: 'select',
+					type: 'multiSelect',
 					width: 'half',
 					options: [
 						{label: '', value: ''},
@@ -309,6 +311,7 @@ function getSubFormatDetailsFieldArray(intl) {
 		{
 			both: [
 				{
+					isMulti: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
@@ -322,9 +325,10 @@ function getSubFormatDetailsFieldArray(intl) {
 					]
 				},
 				{
+					isMulti: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
-					type: 'select',
+					type: 'multiSelect',
 					width: 'full',
 					options: [
 						{label: '', value: ''},

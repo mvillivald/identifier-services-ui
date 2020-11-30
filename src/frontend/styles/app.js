@@ -149,11 +149,6 @@ const theme = createMuiTheme({
 			root: {
 				padding: 0
 			}
-		},
-		MuiGrid: {
-			container: {
-				flexWrap: 'nowrap'
-			}
 		}
 	}
 });
