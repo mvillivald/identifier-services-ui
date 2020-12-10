@@ -38,30 +38,69 @@ import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useIntl, FormattedMessage} from 'react-intl';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import ModalLayout from '../../ModalLayout';
 import PublicationRenderComponent from '../PublicationRenderComponent';
 
+import SelectPublicationIdentifierRange from './SelectPublicationIdentifierRange';
+
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'isbnIsmnUpdateForm',
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {id, isbnIsmn, userInfo, loading, fetchIsbnIsmn, handleSubmit, clearFields, updatePublicationIsbnIsmn, updatedIsbnIsmn} = props;
+	const {id,
+		isbnIsmn,
+		userInfo,
+		loading,
+		fetchIsbnIsmn,
+		handleSubmit,
+		clearFields,
+		updatePublicationIsbnIsmn,
+		updatedIsbnIsmn,
+		fetchPublisherOption,
+		publisherOption,
+		createIsbnIsmnBatch
+	} = props;
 	const intl = useIntl();
 	const classes = commonStyles();
 	const {role} = userInfo;
 	const [isEdit, setIsEdit] = useState(false);
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
+	const [assignRange, setAssignRange] = useState(false);
+	const [subRangeId, setSubRangeId] = useState(null);
+	const [publisherId, setPublisherId] = useState(null);
+	const [disableAssign, setDisableAssign] = useState(true);
 
 	useEffect(() => {
 		if (id !== null) {
 			fetchIsbnIsmn({id: id, token: cookie[COOKIE_NAME]});
+			fetchPublisherOption({token: cookie[COOKIE_NAME]});
 		}
-	}, [cookie, fetchIsbnIsmn, id, updatedIsbnIsmn]);
+	}, [cookie, fetchIsbnIsmn, fetchPublisherOption, id, updatedIsbnIsmn]);
+
+	useEffect(() => {
+		if (Object.keys(isbnIsmn).length > 0) {
+			if (isbnIsmn.identifier && isbnIsmn.identifier.length > 0) {
+				setDisableAssign(true);
+			} else {
+				setDisableAssign(false);
+			}
+		}
+	}, [isbnIsmn]);
+
+	useEffect(() => {
+		if (subRangeId !== null && publisherId !== null) {
+			createIsbnIsmnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+			setSubRangeId(null);
+			setPublisherId(null);
+		}
+	}, [cookie, createIsbnIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -88,8 +127,23 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
+	function handleRange() {
+		setAssignRange(!assignRange);
+	}
+
+	function handleCloseModal() {
+		setAssignRange(false);
+		setIsEdit(false);
+	}
+
 	const component = (
-		<ModalLayout isTableRow color="primary" title={intl.formatMessage({id: 'app.modal.title.publicationIsbnIsmn'})} {...props}>
+		<ModalLayout
+			isTableRow
+			color="primary"
+			title={intl.formatMessage({id: 'app.modal.title.publicationIsbnIsmn'})}
+			handleCloseModal={handleCloseModal}
+			{...props}
+		>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form>
@@ -106,22 +160,60 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</div>
 					</form>
 				</div> :
-				<div className={classes.listItem}>
-					<Grid container spacing={3} className={classes.listItemSpinner}>
-						<PublicationRenderComponent publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
-					</Grid>
-					{role !== undefined && role === 'admin' &&
-						<div className={classes.btnContainer}>
-							<Fab
-								color="primary"
-								size="small"
-								title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
-								onClick={handleEditClick}
-							>
-								<EditIcon/>
-							</Fab>
-						</div>}
-				</div>}
+				(assignRange ?
+					<div className={classes.listItem}>
+						<SelectPublicationIdentifierRange
+							isbnIsmn={isbnIsmn}
+							rangeType="subRange"
+							setSubRangeId={setSubRangeId}
+							setPublisherId={setPublisherId}
+							handleRange={handleRange}
+							publisherOption={publisherOption}
+							{...props}
+						/>
+						{
+							publisherId ?
+								<Button
+									variant="outlined"
+									endIcon={<ArrowForwardIosIcon/>}
+									onClick={handleRange}
+								>
+									<FormattedMessage id="form.button.label.next"/>
+								</Button> :
+								<Button
+									variant="outlined"
+									startIcon={<ArrowBackIosIcon/>}
+									onClick={handleRange}
+								>
+									<FormattedMessage id="form.button.label.back"/>
+								</Button>
+						}
+					</div> :
+					<div className={classes.listItem}>
+						<Grid container spacing={3} className={classes.listItemSpinner}>
+							<PublicationRenderComponent publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
+						</Grid>
+						{role !== undefined && role === 'admin' &&
+							<div className={classes.btnContainer}>
+								<Grid item xs={12}>
+									{
+										(subRangeId === null || subRangeId === undefined) &&
+											<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
+												<FormattedMessage id="publicationRequestRender.button.label.assignRanges"/>
+											</Button>
+									}
+								</Grid>
+								<Fab
+									color="primary"
+									size="small"
+									title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
+									onClick={handleEditClick}
+								>
+									<EditIcon/>
+								</Fab>
+							</div>}
+					</div>
+				)}
 		</ModalLayout>
 	);
 	return {
@@ -134,6 +226,7 @@ function mapStateToProps(state) {
 		isbnIsmn: state.publication.isbnIsmn,
 		loading: state.publication.loading,
 		initialValues: state.publication.isbnIsmn,
+		publisherOption: state.publisher.publisherOptions,
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,
 		userInfo: state.login.userInfo
 	});

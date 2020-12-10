@@ -43,7 +43,7 @@ const initialState = {
 	publisher: {},
 	publisherUpdated: {},
 	publisherOptions: [],
-	searchedPublisher: [],
+	searchedPublisher: null,
 
 	publishersRequestsList: [],
 	publisherRequest: {},
@@ -56,6 +56,7 @@ const initialState = {
 
 	loading: false,
 	listLoading: false,
+	searchListLoading: false,
 	error: {}
 };
 
@@ -124,7 +125,7 @@ export default function (state = initialState, action) {
 				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
 				queryDocCount: action.payload.queryDocCount,
-				listLoading: false
+				searchListLoading: false
 			};
 		case PUBLISHER_OPTIONS:
 			return {

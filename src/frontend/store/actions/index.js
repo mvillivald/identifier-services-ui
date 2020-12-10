@@ -110,6 +110,7 @@ export {
 	searchIDRList,
 	createNewRange,
 	createIsbnIsmnRange,
+	createIsbnIsmnBatch,
 	fetchIDRIsbnList,
 	fetchIDRIsbn,
 	fetchIDRIsmnList,

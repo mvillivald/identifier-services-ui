@@ -77,7 +77,7 @@ export default connect(mapStateToProps, actions)(props => {
 	let publishersData;
 	if (loading) {
 		publishersData = <Spinner/>;
-	} else if (searchedPublishers.length === 0) {
+	} else if (searchedPublishers === null || searchedPublishers.length === 0) {
 		publishersData = <p><FormattedMessage id="publisherList.emptySearch"/></p>;
 	} else {
 		publishersData = (

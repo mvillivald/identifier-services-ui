@@ -182,6 +182,7 @@ export const commonStyles = makeStyles({
 		}
 	},
 	listComponent: {
+		minHeight: '300px',
 		maxWidth: '1200px',
 		margin: '0 auto',
 		'& h5': {
@@ -249,6 +250,10 @@ export const commonStyles = makeStyles({
 		borderRadius: 5,
 		backgroundColor: '#fff',
 		outline: 'none'
+	},
+	formControl: {
+		margin: theme.spacing(1),
+		width: '100%'
 	}
 
 });
