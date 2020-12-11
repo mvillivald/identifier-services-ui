@@ -30,7 +30,7 @@
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
 import {PUBLISHER, UPDATE_PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
-import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
+import {setLoader, setListLoader, setMessage, success, fail, setSearchListLoader} from './commonAction';
 import HttpStatus from 'http-status';
 
 export const fetchPublisher = (id, token) => async dispatch => {
@@ -88,9 +88,9 @@ export const fetchPublisherOption = token => async dispatch => {
 };
 
 export const searchPublisher = ({searchText, token, offset, activeCheck}) => async dispatch => {
-	dispatch(setListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{name: searchText}, {aliases: searchText}, {publisherEmail: searchText}], activity: {active: true}} :
-		{$or: [{name: searchText}, {aliases: searchText}, {publisherEmail: searchText}]};
+	dispatch(setSearchListLoader());
+	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}} :
+		{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}]};
 
 	try {
 		const properties = {

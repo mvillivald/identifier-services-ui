@@ -74,7 +74,7 @@ export default connect(mapStateToProps)(withRouter(props => {
 
 		if (isTableRow) {
 			handleCloseModal && handleCloseModal(); // eslint-disable-line no-unused-expressions
-			setModal(!isTableRow);
+			setModal(false);
 		}
 	}
 

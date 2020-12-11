@@ -33,10 +33,25 @@ import HttpStatus from 'http-status';
 
 export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
-		(rangeType === 'subRange' ? {isbnIsmnRangeId: searchText} :
-			(rangeType === 'isbnIsmnBatch' ? {publisherIdentifierRangeId: searchText} :
-				(rangeType === 'identifier' ? {publisherIdentifierRangeId: searchText} : {prefix: searchText})));
+	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
+		(
+			rangeType === 'subRange' ?
+				{$or: [{isbnIsmnRangeId: searchText}, {publisherId: searchText}], active: true} :
+				(rangeType === 'isbnIsmnBatch' ?
+					{publisherIdentifierRangeId: searchText} :
+					(rangeType === 'identifier' ?
+						{publisherIdentifierRangeId: searchText} :
+						{prefix: searchText, active: true}))
+		) :
+		(
+			rangeType === 'subRange' ?
+				{$or: [{isbnIsmnRangeId: searchText}, {publisherId: searchText}]} :
+				(rangeType === 'isbnIsmnBatch' ?
+					{publisherIdentifierRangeId: searchText} :
+					(rangeType === 'identifier' ?
+						{publisherIdentifierRangeId: searchText} :
+						{prefix: searchText}))
+		);
 	const fetchUrl = rangeType === 'range' ?
 		`${API_URL}/ranges/query` :
 		rangeType === 'subRange' ?
@@ -155,6 +170,28 @@ export const createIsbnIsmnRange = (values, token) => async dispatch => {
 
 	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISBNISMN range'}));
 	return response.status;
+};
+
+export const createIsbnIsmnBatch = (values, token) => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/ranges/isbnIsmnBatch`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+
+		if (response) {
+			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
+			console.log(response);
+			return response;
+		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };
 
 // ***************ISBN****************************

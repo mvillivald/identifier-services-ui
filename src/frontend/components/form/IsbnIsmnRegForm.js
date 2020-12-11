@@ -318,7 +318,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					const formatDetails = {
 						...values.formatDetails,
 						format: 'electronic',
-						fileFormat: values.formatDetails.fileFormat.value
+						fileFormat: reFormat(values.formatDetails.fileFormat)
 					};
 					return formatDetails;
 				}
@@ -326,6 +326,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				if (values.selectFormat === 'printed') {
 					const formatDetails = {
 						...values.formatDetails,
+						printFormat: reFormat(values.formatDetail.printFormat),
 						format: 'printed',
 						run: values.formatDetails.run && Number(values.formatDetails.run),
 						edition: values.formatDetails.edition && Number(values.formatDetails.edition)
@@ -337,12 +338,20 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					const formatDetails = {
 						...values.formatDetails,
 						format: 'printed-and-electronic',
-						fileFormat: values.formatDetails.fileFormat.value,
+						fileFormat: reFormat(values.formatDetails.fileFormat),
+						printFormat: reFormat(values.formatDetails.printFormat),
 						run: values.formatDetails.run && Number(values.formatDetails.run),
 						edition: values.formatDetails.edition && Number(values.formatDetails.edition)
 					};
 					return formatDetails;
 				}
+			}
+
+			function reFormat(value) {
+				return value.reduce((acc, item) => {
+					acc.push(item.value);
+					return acc;
+				}, []);
 			}
 		}
 

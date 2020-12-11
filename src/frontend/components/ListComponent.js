@@ -182,73 +182,92 @@ export default function (props) {
 						<ExpansionPanelDetails className={classes.objDetail}>
 							{(Array.isArray(value) && value.length > 0) ? (
 								value.map(item => (
-									<ul key={item} style={{borderBottom: '1px dashed', listStyleType: 'none'}}>
-										{Object.keys(item).map(key => item[key] ?
-											(
-												<li key={key} className={classes.dropDownList}>
-													<span className={classes.label}>
-														<FormattedMessage id={key}/>:
-													</span>
-													<span>
-														{
-															edit ?
-																<Field name={`${item}[${key}]`} className={formClasses.editForm} component={renderTextField}/> :
-																item[key]
-														}
-													</span>
-												</li>
-											) : null
-										)}
-									</ul>
+									typeof item === 'string' ?
+										<Chip key={item} label={item}/> :
+										(
+											<ul key={item} style={{borderBottom: '1px dashed', listStyleType: 'none'}}>
+												{Object.keys(item).map(key => item[key] ?
+													(
+														<li key={key} className={classes.dropDownList}>
+															<span className={classes.label}>
+																<FormattedMessage id={key}/>:
+															</span>
+															<span>
+																{
+																	edit ?
+																		<Field name={`${item}[${key}]`} className={formClasses.editForm} component={renderTextField}/> :
+																		item[key]
+																}
+															</span>
+														</li>
+													) : null
+												)}
+											</ul>
+										)
 								))
 							) : (
 								Object.entries(value).map(([key, val]) =>
 									typeof val === 'object' ?
 										renderExpansion(key, val, value) :
 										(
-											(
-												<li key={key} className={classes.dropDownList}>
-													<span className={classes.label}>
-														<FormattedMessage id={key}/>:
-													</span>
-													<span>
-														{
-															typeof value[key] === 'boolean' ?
-																(edit ?
-																	<Field
-																		name={`${fieldName}[${key}]`}
-																		type="select"
-																		className={formClasses.editForm}
-																		component={renderSelect}
-																		options={[
-																			{label: 'True', value: 'true'},
-																			{label: 'False', value: 'false'}
-																		]}
-																	/> :
-																	value[key].toString()
-																) : (
-																	edit ?
-																		(
-																			key === 'defaultLanguage' ?
-																				(
-																					<Grid item xs={8}>
-																						<Field
-																							name={`${fieldName}[${key}]`}
-																							type="select"
-																							component={renderSelect}
-																							options={[
-																								{label: 'Fin', value: 'fin'},
-																								{label: 'Eng', value: 'eng'},
-																								{label: 'Swd', value: 'swe'}
-																							]}
-																						/>
-																					</Grid>
-																				) : (
-																					key === 'format' ?
-																						(
-																							value[key]
-																						) : (
-																							((value.format === 'electronic' || value.format === 'printed-and-electroinc') && key === 'fileFormat') ?
+											<li key={key} className={classes.dropDownList}>
+												<span className={classes.label}>
+													<FormattedMessage id={key}/>:
+												</span>
+												<span>
+													{
+														typeof value[key] === 'boolean' ?
+															(edit ?
+																<Field
+																	name={`${fieldName}[${key}]`}
+																	type="select"
+																	className={formClasses.editForm}
+																	component={renderSelect}
+																	options={[
+																		{label: 'True', value: 'true'},
+																		{label: 'False', value: 'false'}
+																	]}
+																/> :
+																value[key].toString()
+															) : (
+																edit ?
+																	(
+																		key === 'defaultLanguage' ?
+																			(
+																				<Grid item xs={8}>
+																					<Field
+																						name={`${fieldName}[${key}]`}
+																						type="select"
+																						component={renderSelect}
+																						options={[
+																							{label: 'Fin', value: 'fin'},
+																							{label: 'Eng', value: 'eng'},
+																							{label: 'Swd', value: 'swe'}
+																						]}
+																					/>
+																				</Grid>
+																			) : (
+																				key === 'format' ?
+																					(
+																						value[key]
+																					) : (
+																						((value.format === 'electronic' || value.format === 'printed-and-electroinc') && key === 'fileFormat') ?
+																							(
+																								<Grid item xs={8}>
+																									<Field
+																										name={`${fieldName}[${key}]`}
+																										type="select"
+																										component={renderSelect}
+																										options={[
+																											{label: '', value: ''},
+																											{label: 'Pdf', value: 'pdf'},
+																											{label: 'Epub', value: 'epub'},
+																											{label: 'CD', value: 'cd'},
+																											{label: 'MP3', value: 'mp3'}
+																										]}
+																									/>
+																								</Grid>
+																							) : ((value.format === 'printed' || value.format === 'printed-and-electroinc') && key === 'printFormat') ?
 																								(
 																									<Grid item xs={8}>
 																										<Field
@@ -257,38 +276,22 @@ export default function (props) {
 																											component={renderSelect}
 																											options={[
 																												{label: '', value: ''},
-																												{label: 'Pdf', value: 'pdf'},
-																												{label: 'Epub', value: 'epub'},
-																												{label: 'CD', value: 'cd'},
-																												{label: 'MP3', value: 'mp3'}
+																												{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
+																												{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
+																												{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 																											]}
 																										/>
 																									</Grid>
-																								) : ((value.format === 'printed' || value.format === 'printed-and-electroinc') && key === 'printFormat') ?
-																									(
-																										<Grid item xs={8}>
-																											<Field
-																												name={`${fieldName}[${key}]`}
-																												type="select"
-																												component={renderSelect}
-																												options={[
-																													{label: '', value: ''},
-																													{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
-																													{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
-																													{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
-																												]}
-																											/>
-																										</Grid>
-																									) : (
-																										<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
-																									)
-																						))) :
-																		value[key]
-																)
-														}
-													</span>
-												</li>
-											)
+																								) : (
+																									<Field name={subFieldName ? `${fieldName}[${Object.keys(subFieldName)[0]}][${key}]` : `${fieldName}[${key}]`} className={formClasses.editForm} component={renderTextField}/>
+																								)
+																					))
+																	) :
+																	value[key]
+															)
+													}
+												</span>
+											</li>
 										)
 								)
 							)}

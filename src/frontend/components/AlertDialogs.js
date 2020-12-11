@@ -39,7 +39,7 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 export default function (props) {
-	const {openAlert, message, setMessage, setOpenAlert} = props;
+	const {openAlert, message, setMessage, setOpenAlert, handleOnAgree, handleOnCancel} = props;
 	const [open, setOpen] = React.useState(openAlert);
 
 	useEffect(() => {
@@ -49,10 +49,13 @@ export default function (props) {
 	function handleClose() {
 		setOpen(false);
 		setMessage(null);
+		handleOnCancel && handleOnCancel(); // eslint-disable-line no-unused-expressions
 	}
 
 	function handleAgree() {
-		handleClose();
+		setOpen(false);
+		setMessage(null);
+		handleOnAgree && handleOnAgree(); // eslint-disable-line no-unused-expressions
 		setOpenAlert(true);
 	}
 
