@@ -25,7 +25,9 @@
  * for the JavaScript code in this file.
  *
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useCookies} from 'react-cookie';
+import {connect} from 'react-redux';
 import {
 	Grid,
 	List,
@@ -39,18 +41,38 @@ import {FormattedMessage, useIntl} from 'react-intl';
 
 import ListComponent from '../ListComponent';
 import Spinner from '../Spinner';
+import * as actions from '../../store/actions';
 
-export default function (props) {
-	const {publication, loading, isEdit, isEditable, clearFields} = props;
+export default connect(mapStateToProps, actions)(props => {
+	const {publication, isEdit, isEditable, clearFields, fetchPublisher, fetchedPublisher, publisherLoading} = props;
 	const intl = useIntl();
+	/* global COOKIE_NAME */
+	const [cookie] = useCookies(COOKIE_NAME);
+	const [publisherName, setPublisherName] = useState(null);
 
-	const {_id, seriesDetails, ...formattedPublication} = {...publication, ...publication.seriesDetails};
+	const {_id, seriesDetails, id, ...formattedPublication} = {...publication, ...publication.seriesDetails};
 	const {publisher, ...withoutPublisher} = {...formattedPublication};
 	const onlyPublisher = formattedPublication && typeof formattedPublication.publisher === 'object' && formattedPublication.publisher;
 	const {organizationDetails, ...formatOnlyPublisher} = {...onlyPublisher, ...onlyPublisher.organizationDetails};
 
+	useEffect(() => {
+		if (formattedPublication.publisher !== undefined) {
+			fetchPublisher(formattedPublication.publisher, cookie[COOKIE_NAME]);
+		}
+	}, [cookie, fetchPublisher, formattedPublication.publisher]);
+
+	useEffect(() => {
+		if (Object.keys(fetchedPublisher).length > 0) {
+			setPublisherName(fetchedPublisher.name);
+		}
+	}, [fetchedPublisher]);
+
+	function formatValueforAssociatedRange(value) {
+		return value.map(item => item.subRange);
+	}
+
 	let publicationDetail;
-	if (formattedPublication === undefined || loading) {
+	if (formattedPublication === undefined || publisherLoading) {
 		publicationDetail = <Spinner/>;
 	} else {
 		publicationDetail = (
@@ -90,6 +112,10 @@ export default function (props) {
 								<List>
 									{
 										Object.keys(formattedPublication).map(key => {
+											if (key === 'publisher') {
+												return <ListComponent clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={publisherName !== null && publisherName}/>;
+											}
+
 											return typeof formattedPublication[key] === 'string' ?
 												(
 													<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
@@ -105,7 +131,9 @@ export default function (props) {
 										Object.keys(formattedPublication).map(key => {
 											return typeof formattedPublication[key] === 'object' ?
 												(
-													<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
+													key === 'associatedRange' ?
+														<ListComponent clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formatValueforAssociatedRange(formattedPublication[key])}/> :
+														<ListComponent label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={formattedPublication[key]}/>
 												) :
 												null;
 										})
@@ -119,7 +147,6 @@ export default function (props) {
 								<>
 									<Grid item xs={12} md={6}>
 										<List>
-
 											{
 												Object.keys(withoutPublisher).map(key => {
 													return <ListComponent key={key} clearFields={clearFields} edit={isEditable(key)} fieldName={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
@@ -155,7 +182,6 @@ export default function (props) {
 								<>
 									<Grid item xs={12} md={6}>
 										<List>
-
 											{
 												Object.keys(withoutPublisher).map(key => {
 													return <ListComponent key={key} label={intl.formatMessage({id: `publicationRender.label.${key}`})} value={withoutPublisher[key]}/>;
@@ -194,4 +220,11 @@ export default function (props) {
 	}
 
 	return publicationDetail;
+});
+
+function mapStateToProps(state) {
+	return ({
+		fetchedPublisher: state.publisher.publisher,
+		publisherLoading: state.publisher.loading
+	});
 }

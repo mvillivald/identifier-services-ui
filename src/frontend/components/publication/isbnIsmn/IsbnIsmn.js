@@ -56,7 +56,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const {id,
 		isbnIsmn,
 		userInfo,
-		loading,
 		fetchIsbnIsmn,
 		handleSubmit,
 		clearFields,
@@ -148,7 +147,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				<div className={classes.listItem}>
 					<form>
 						<Grid container spacing={3} className={classes.listItemSpinner}>
-							<PublicationRenderComponent publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
+							<PublicationRenderComponent publication={isbnIsmn} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 						</Grid>
 						<div className={classes.btnContainer}>
 							<Button onClick={handleCancel}>
@@ -191,7 +190,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</div> :
 					<div className={classes.listItem}>
 						<Grid container spacing={3} className={classes.listItemSpinner}>
-							<PublicationRenderComponent publication={isbnIsmn} loading={loading} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
+							<PublicationRenderComponent publication={isbnIsmn} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 						</Grid>
 						{role !== undefined && role === 'admin' &&
 							<div className={classes.btnContainer}>

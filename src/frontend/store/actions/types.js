@@ -49,6 +49,8 @@ export const ISSN_REQUEST = 'ISSN_REQUEST';
 export const IDR_ISBN_LIST = 'IDR_ISBN_LIST';
 export const IDR_ISBN = 'IDR_ISBN';
 
+export const IDENTIFIER = 'IDENTIFIER';
+
 export const IDR = 'IDR';
 export const IDR_LIST = 'IDR_LIST';
 

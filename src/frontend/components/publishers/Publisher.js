@@ -121,7 +121,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
-	const {organizationDetails, _id, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
+	const {organizationDetails, _id, publisherRangeId, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
 		return {note: Buffer.from(item).toString('base64')};
 	}) : ''};
 	let publisherDetail;

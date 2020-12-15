@@ -48,7 +48,7 @@ export default connect(mapStateToProps, actions)(props => {
 	useEffect(() => {
 		fetchIsbnIsmnList({token: cookie[COOKIE_NAME], offset: lastCursor});
 		setIsCreating(false);
-	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating, modal]);
+	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating]);
 
 	const handleTableRowClick = id => {
 		setIsbnIsmnId(id);

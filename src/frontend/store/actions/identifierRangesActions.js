@@ -27,7 +27,7 @@
  */
 /* global API_URL */
 import fetch from 'node-fetch';
-import {ERROR, IDR, IDR_LIST, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN} from './types';
+import {ERROR, IDENTIFIER, IDR, IDR_LIST, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN} from './types';
 import {setLoader, setRangeListLoader, success, fail, setMessage} from './commonAction';
 import HttpStatus from 'http-status';
 
@@ -40,7 +40,7 @@ export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}
 				(rangeType === 'isbnIsmnBatch' ?
 					{publisherIdentifierRangeId: searchText} :
 					(rangeType === 'identifier' ?
-						{publisherIdentifierRangeId: searchText} :
+						{identifierBatchId: searchText} :
 						{prefix: searchText, active: true}))
 		) :
 		(
@@ -49,7 +49,7 @@ export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}
 				(rangeType === 'isbnIsmnBatch' ?
 					{publisherIdentifierRangeId: searchText} :
 					(rangeType === 'identifier' ?
-						{publisherIdentifierRangeId: searchText} :
+						{identifierBatchId: searchText} :
 						{prefix: searchText}))
 		);
 	const fetchUrl = rangeType === 'range' ?
@@ -93,6 +93,23 @@ export const fetchIDR = (id, token) => async dispatch => {
 		});
 		const result = await response.json();
 		dispatch(success(IDR, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchIdentifier = (id, token) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/ranges/identifier/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		});
+		const result = await response.json();
+		dispatch(success(IDENTIFIER, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
@@ -186,7 +203,6 @@ export const createIsbnIsmnBatch = (values, token) => async dispatch => {
 
 		if (response) {
 			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
-			console.log(response);
 			return response;
 		}
 	} catch (err) {
