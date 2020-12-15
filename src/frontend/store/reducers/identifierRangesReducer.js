@@ -30,6 +30,7 @@ import {
 	LOADER,
 	RANGE_LIST_LOADER,
 	ERROR,
+	IDENTIFIER,
 	IDR,
 	IDR_LIST,
 	IDR_ISBN_LIST,
@@ -49,6 +50,8 @@ const initialState = {
 
 	issnList: [],
 	issn: {},
+
+	identifier: {},
 
 	rangesList: [],
 	range: {},
@@ -89,6 +92,12 @@ export default function (state = initialState, action) {
 				totalDoc: action.payload.totalDoc,
 				queryDocCount: action.payload.queryDocCount,
 				rangeListLoading: false
+			};
+		case IDENTIFIER:
+			return {
+				...state,
+				identifier: action.payload,
+				loading: false
 			};
 		case IDR:
 			return {

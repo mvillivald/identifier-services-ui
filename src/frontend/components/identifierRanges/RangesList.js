@@ -46,6 +46,7 @@ import Spinner from '../Spinner';
 import TableComponent from '../TableComponent';
 import {commonStyles} from '../../styles/app';
 import CreateRange from './CreateRange';
+import Identifier from './Identifier';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {fetchIDRList, rangesList, userInfo, loading, offset, queryDocCount} = props;
@@ -62,6 +63,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rangeId, setRangeId] = useState('');
 	const [subRangeId, setSubRangeId] = useState('');
 	const [modal, setModal] = useState(false);
+	const [identifierModal, setIdentifierModal] = useState(false);
+	const [identifierId, setIdentifierId] = useState(null);
 	const [activeCheck, setActiveCheck] = useState({
 		checked: false
 	});
@@ -79,17 +82,25 @@ export default connect(mapStateToProps, actions)(props => {
 			setRangeId(id);
 			setSubRangeId('');
 			setInputVal(id);
+			setIdentifierId(null);
 		}
 
 		if (rangeType === 'subRange') {
 			setRangeType('isbnIsmnBatch');
 			setSubRangeId(id);
+			setIdentifierId(null);
 			setInputVal(id);
 		}
 
 		if (rangeType === 'isbnIsmnBatch') {
 			setRangeType('identifier');
+			setIdentifierId(null);
 			setInputVal(id);
+		}
+
+		if (rangeType === 'identifier') {
+			setIdentifierModal(true);
+			setIdentifierId(id);
 		}
 
 		setPage(1);
@@ -136,7 +147,7 @@ export default connect(mapStateToProps, actions)(props => {
 			}
 
 			if (rangeType === 'identifier') {
-				array.unshift('identifierType', 'identifier', 'identifierBatchId', 'publisherIdentifierRangeId', 'publicationType');
+				array.unshift('identifier', 'identifierBatchId', 'publisherIdentifierRangeId', 'publicationType');
 			}
 
 			return array;
@@ -182,11 +193,20 @@ export default connect(mapStateToProps, actions)(props => {
 				]) => ({...acc, [key]: formatDate(key, value)}), {});
 		}
 
-		return {
-			...item,
-			created: moment(item.created.replace('Z', ''), moment.defaultFormat).format('L')
-		};
+		if (rangeType === 'identifier') {
+			return Object.entries(item)
+				.reduce((acc, [
+					key,
+					value
+				]) => ({...acc, [key]: formatDate(key, value)}), {});
+		}
 
+		return item.created === undefined ?
+			{...item} :
+			{
+				...item,
+				created: moment(item.created.replace('Z', ''), moment.defaultFormat).format('L')
+			};
 		function formatDate(key, value) {
 			if (key === 'created') {
 				return moment(value, moment.defaultFormat).format('L');
@@ -249,6 +269,7 @@ export default connect(mapStateToProps, actions)(props => {
 							)
 					}
 				</Grid>
+				{ identifierModal && <Identifier id={identifierId} setIdentifierId={setIdentifierId} modal={identifierModal} setIdentifierModal={setIdentifierModal} {...props}/> }
 
 				{data}
 			</Grid>

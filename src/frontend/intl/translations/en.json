@@ -683,6 +683,10 @@
     "user.label.role": "Role",
     "user.label.creator": "Creator",
     "user.label.userId": "User ID",
+    "user.label.identifier": "Identifier",
+    "user.label.identifierBatchId": "Identifier Batch Id",
+    "user.label.publicationType": "Publication Type",
+    "user.label.publisherIdentifierRangeId": "Publisher Identifier RangeId",
     
     "user.noUsers": "No User Available",
     "user.listAvailable": "List of Available users",
