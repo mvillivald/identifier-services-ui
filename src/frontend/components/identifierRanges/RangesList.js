@@ -134,12 +134,12 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'range') {
-				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed', 'idOld');
+				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
 				return array;
 			}
 
 			if (rangeType === 'subRange') {
-				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed', 'idOld');
+				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed');
 			}
 
 			if (rangeType === 'isbnIsmnBatch') {

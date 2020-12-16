@@ -190,11 +190,11 @@ export const commonStyles = makeStyles({
 		}
 	},
 	listItemSpinner: {
-		justifyContent: 'center',
+		justifyContent: 'left',
 		marginBottom: 10
 	},
 	listItem: {
-		maxHeight: '70vh',
+		maxHeight: '60vh',
 		minWidth: '750px',
 		padding: '20px',
 		height: 'auto',

@@ -429,7 +429,6 @@
     "ranges.next": "Next",
     "ranges.active": "Active",
     "ranges.isClosed": "IsClosed",
-    "ranges.idOld": "IdOld",
     "ranges.created": "Created",
     "ranges.createdBy": "CreatedBy",
     "ranges.publisherIdentifier": "Publisher Identifier",

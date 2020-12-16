@@ -109,12 +109,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setIsUpdating(true);
 	}
 
-	function renderButton(state) {
+	function renderButton(state, bgState) {
 		switch (state) {
 			case 'new':
 				return (
 					<ButtonGroup color="primary" aria-label="outlined primary button group">
-						<Button disabled variant="outlined" color="primary">
+						<Button disabled={state === 'new' && bgState !== 'processed'} variant="outlined" color="primary">
 							<FormattedMessage id="publicationRequestRender.button.label.accept"/>
 						</Button>
 						<Button variant="outlined" style={{color: 'red'}} onClick={handleRejectClick}>
@@ -258,7 +258,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</Grid>
 						</> :
 						<Grid item xs={12}>
-							{renderButton(publicationIsbnIsmnRequest.state)}
+							{renderButton(publicationIsbnIsmnRequest.state, publicationIsbnIsmnRequest.backgroundProcessingState)}
 						</Grid>}
 				</Grid>
 			</div>
