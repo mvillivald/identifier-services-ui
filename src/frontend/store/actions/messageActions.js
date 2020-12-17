@@ -28,10 +28,10 @@
 
 /* global API_URL */
 /* eslint no-undef: "error" */
-import {FETCH_MESSAGE, FETCH_MESSAGES_LIST, ERROR} from './types';
+import {FETCH_MESSAGE, FETCH_MESSAGES_LIST, FETCH_ALL_MESSAGES_LIST, ERROR} from './types';
 import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
-import {setLoader, setMessage, success, fail} from './commonAction';
+import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 
 export const sendMessage = values => async dispatch => {
 	dispatch(setLoader());
@@ -78,6 +78,22 @@ export const fetchMessagesList = (token, offset) => async dispatch => {
 		});
 		const result = await response.json();
 		dispatch(success(FETCH_MESSAGES_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchAllMessagesList = token => async dispatch => {
+	dispatch(setListLoader());
+	try {
+		const response = await fetch(`${API_URL}/templates/query/all`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+		const result = await response.json();
+		dispatch(success(FETCH_ALL_MESSAGES_LIST, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

@@ -32,6 +32,7 @@ import {
 	Grid,
 	Fab
 } from '@material-ui/core';
+import Select from 'react-select';
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
@@ -62,7 +63,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		updatePublicationIsbnIsmn,
 		updatedIsbnIsmn,
 		fetchPublisherOption,
+		fetchAllMessagesList,
 		publisherOption,
+		messageTemplates,
 		createIsbnIsmnBatch
 	} = props;
 	const intl = useIntl();
@@ -75,6 +78,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [subRangeId, setSubRangeId] = useState(null);
 	const [publisherId, setPublisherId] = useState(null);
 	const [disableAssign, setDisableAssign] = useState(true);
+	const [sendingMessage, setSendingMessage] = useState(false);
+	const [selectedTemplate, setSelectedTemplate] = useState(null);
 
 	useEffect(() => {
 		if (id !== null) {
@@ -82,6 +87,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			fetchPublisherOption({token: cookie[COOKIE_NAME]});
 		}
 	}, [cookie, fetchIsbnIsmn, fetchPublisherOption, id, updatedIsbnIsmn]);
+
+	useEffect(() => {
+		fetchAllMessagesList(cookie[COOKIE_NAME]);
+	}, [cookie, fetchAllMessagesList]);
 
 	useEffect(() => {
 		if (Object.keys(isbnIsmn).length > 0) {
@@ -143,81 +152,115 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			handleCloseModal={handleCloseModal}
 			{...props}
 		>
-			{isEdit ?
-				<div className={classes.listItem}>
-					<form>
-						<Grid container spacing={3} className={classes.listItemSpinner}>
-							<PublicationRenderComponent publication={isbnIsmn} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
-						</Grid>
-						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>
-								<FormattedMessage id="form.button.label.cancel"/>
-							</Button>
-							<Button variant="contained" color="primary" onClick={handleSubmit(handlePublicationUpdate)}>
-								<FormattedMessage id="form.button.label.update"/>
-							</Button>
-						</div>
-					</form>
-				</div> :
-				(assignRange ?
-					<div className={classes.listItem}>
-						<SelectPublicationIdentifierRange
-							isbnIsmn={isbnIsmn}
-							rangeType="subRange"
-							setSubRangeId={setSubRangeId}
-							setPublisherId={setPublisherId}
-							handleRange={handleRange}
-							publisherOption={publisherOption}
-							{...props}
-						/>
-						{
-							publisherId ?
-								<Button
-									variant="outlined"
-									endIcon={<ArrowForwardIosIcon/>}
-									onClick={handleRange}
-								>
-									<FormattedMessage id="form.button.label.next"/>
-								</Button> :
-								<Button
-									variant="outlined"
-									startIcon={<ArrowBackIosIcon/>}
-									onClick={handleRange}
-								>
-									<FormattedMessage id="form.button.label.back"/>
-								</Button>
-						}
-					</div> :
-					<div className={classes.listItem}>
-						<Grid container spacing={3} className={classes.listItemSpinner}>
-							<PublicationRenderComponent publication={isbnIsmn} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
-						</Grid>
-						{role !== undefined && role === 'admin' &&
-							<div className={classes.btnContainer}>
-								<Grid item xs={12}>
-									{
-										(subRangeId === null || subRangeId === undefined) &&
-											<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
-												<FormattedMessage id="publicationRequestRender.button.label.assignRanges"/>
-											</Button>
-									}
+			{ sendingMessage ?
+				messageElement() :
+				(
+					isEdit ?
+						<div className={classes.listItem}>
+							<form>
+								<Grid container spacing={3} className={classes.listItemSpinner}>
+									<PublicationRenderComponent publication={isbnIsmn} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
 								</Grid>
-								<Fab
-									color="primary"
-									size="small"
-									title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
-									onClick={handleEditClick}
-								>
-									<EditIcon/>
-								</Fab>
-							</div>}
-					</div>
+								<div className={classes.btnContainer}>
+									<Button onClick={handleCancel}>
+										<FormattedMessage id="form.button.label.cancel"/>
+									</Button>
+									<Button variant="contained" color="primary" onClick={handleSubmit(handlePublicationUpdate)}>
+										<FormattedMessage id="form.button.label.update"/>
+									</Button>
+								</div>
+							</form>
+						</div> :
+						(assignRange ?
+							<div className={classes.listItem}>
+								<SelectPublicationIdentifierRange
+									isbnIsmn={isbnIsmn}
+									rangeType="subRange"
+									setSubRangeId={setSubRangeId}
+									setPublisherId={setPublisherId}
+									handleRange={handleRange}
+									publisherOption={publisherOption}
+									{...props}
+								/>
+								{
+									publisherId ?
+										<Button
+											variant="outlined"
+											endIcon={<ArrowForwardIosIcon/>}
+											onClick={handleRange}
+										>
+											<FormattedMessage id="form.button.label.next"/>
+										</Button> :
+										<Button
+											variant="outlined"
+											startIcon={<ArrowBackIosIcon/>}
+											onClick={handleRange}
+										>
+											<FormattedMessage id="form.button.label.back"/>
+										</Button>
+								}
+							</div> :
+							<div className={classes.listItem}>
+								<Grid container spacing={3} className={classes.listItemSpinner}>
+									<PublicationRenderComponent publication={isbnIsmn} isEdit={isEdit} clearFields={clearFields} isEditable={isEditable}/>
+								</Grid>
+								{role !== undefined && role === 'admin' &&
+									<div className={classes.btnContainer}>
+										<Grid item xs={12}>
+											{
+												(subRangeId === null || subRangeId === undefined) &&
+													<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
+														<FormattedMessage id="publicationRequestRender.button.label.assignRanges"/>
+													</Button>
+											}
+											{
+												isbnIsmn.associatedRange && Object.keys(isbnIsmn.associatedRange).length > 0 &&
+													<Button variant="outlined" color="primary" onClick={() => setSendingMessage(true)}>
+														<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
+													</Button>
+											}
+										</Grid>
+										<Fab
+											color="primary"
+											size="small"
+											title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
+											onClick={handleEditClick}
+										>
+											<EditIcon/>
+										</Fab>
+									</div>}
+							</div>
+						)
 				)}
+
 		</ModalLayout>
 	);
 	return {
 		...component
 	};
+
+	function messageElement() {
+		return (
+			<div className={classes.listItem}>
+				{/* Selectable list of Message Templates */}
+				<Select
+					isMulti={false}
+					options={messageSelectOptions(messageTemplates)}
+					placeholder="Select message template from the list"
+					value={selectedTemplate}
+					onBlur={value => setSelectedTemplate(value)}
+					onChange={value => setSelectedTemplate(value)}
+				/>
+				{/* Format and Edit Message */}
+			</div>
+		);
+	}
+
+	function messageSelectOptions(templates) {
+		if (templates !== undefined) {
+			return templates.map(item => ({value: item.value, label: item.label}));
+		}
+	}
 }));
 
 function mapStateToProps(state) {
@@ -227,6 +270,8 @@ function mapStateToProps(state) {
 		initialValues: state.publication.isbnIsmn,
 		publisherOption: state.publisher.publisherOptions,
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,
-		userInfo: state.login.userInfo
+		userInfo: state.login.userInfo,
+		messageListLoading: state.contact.listLoading,
+		messageTemplates: state.contact.messagesList
 	});
 }

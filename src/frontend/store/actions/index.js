@@ -48,6 +48,7 @@ export {
 	sendMessage,
 	createMessageTemplate,
 	fetchMessagesList,
+	fetchAllMessagesList,
 	fetchMessage,
 	updateMessageTemplate
 } from './messageActions';

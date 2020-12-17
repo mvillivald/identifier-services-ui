@@ -548,6 +548,7 @@
     "publicationRequestRender.noRanges": "No ranges found",
     "publicationRequestRender.heading.chooseRange": "Choose range to assign",
     "publicationRequestRender.button.label.assignRanges": "Assign Ranges",
+    "publicationRequestRender.button.label.sendMessage": "Send Message",
     "publicationRequestRender.button.label.accept": "Accept",
     "publicationRequestRender.button.label.accepted": "Accepted",
     "publicationRequestRender.button.label.reject": "Reject",
