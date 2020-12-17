@@ -26,7 +26,7 @@
  *
  */
 
-import {SNACKBAR_MESSAGE, LOADER, FETCH_MESSAGE, FETCH_MESSAGES_LIST} from '../actions/types';
+import {SNACKBAR_MESSAGE, LIST_LOADER, LOADER, FETCH_MESSAGE, FETCH_MESSAGES_LIST, FETCH_ALL_MESSAGES_LIST} from '../actions/types';
 
 const initialState = {
 	messagesList: [],
@@ -35,7 +35,8 @@ const initialState = {
 	queryDocCount: null,
 	messageInfo: null,
 	responseMessage: null,
-	loading: false
+	loading: false,
+	listLoading: false
 };
 
 export default function (state = initialState, action) {
@@ -44,6 +45,11 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				loading: true
+			};
+		case LIST_LOADER:
+			return {
+				...state,
+				listLoading: true
 			};
 		case SNACKBAR_MESSAGE:
 			return {
@@ -65,6 +71,12 @@ export default function (state = initialState, action) {
 				totalMessages: action.payload.totalDoc,
 				queryDocCount: action.payload.queryDocCount,
 				loading: false
+			};
+		case FETCH_ALL_MESSAGES_LIST:
+			return {
+				...state,
+				listLoading: false,
+				messagesList: action.payload
 			};
 		default:
 			return state;
