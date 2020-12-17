@@ -64,8 +64,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		{name: 'langGroup', type: 'text'},
 		{name: 'category', type: 'select', option: categoryOption()},
 		{name: 'rangeStart', type: 'text'},
-		{name: 'rangeEnd', type: 'text'},
-		{name: 'idOld', type: 'text'}
+		{name: 'rangeEnd', type: 'text'}
 	];
 
 	function categoryOption() {
@@ -74,8 +73,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			{label: '1', value: '1'},
 			{label: '2', value: '2'},
 			{label: '3', value: '3'},
-			{label: '4', value: '4'},
-			{label: '5', value: '5'}
+			{label: '4', value: '4'}
 		];
 	}
 

@@ -140,7 +140,7 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'subRange') {
-				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed', 'idOld');
+				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed');
 			}
 
 			return array;
