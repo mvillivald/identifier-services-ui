@@ -25,55 +25,64 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'frontend', 'index.js')),
-	output: {
-		path: path.resolve(__dirname, '../dist/public'),
-		filename: '[name]-bundle.js',
-		publicPath: '/'
-	},
-	node: {
-		dns: 'mock',
-		net: 'mock',
-		fs: 'empty',
-		tls: 'mock',
-		// eslint-disable-next-line camelcase
-		child_process: 'empty'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: 'images/[name].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+import React from 'react';
+
+import {useQuill} from 'react-quilljs';
+import 'quill/dist/quill.snow.css';
+
+export default function () {
+	const theme = 'snow';
+
+	const modules = {
+		toolbar: [
+			['bold', 'italic', 'underline', 'strike'],
+			[{align: []}],
+
+			[{list: 'ordered'}, {list: 'bullet'}],
+			[{indent: '-1'}, {indent: '+1'}],
+
+			[{size: ['small', false, 'large', 'huge']}],
+			[{header: [1, 2, 3, 4, 5, 6, false]}],
+			['link', 'image', 'video'],
+			[{color: []}, {background: []}],
+
+			['clean']
+		],
+		clipboard: {
+			matchVisual: false
+		}
+	};
+
+	const placeholder = 'Compose an epic...';
+
+	const formats = [
+		'bold',
+		'italic',
+		'underline',
+		'strike',
+		'align',
+		'list',
+		'indent',
+		'size',
+		'header',
+		'link',
+		'image',
+		'video',
+		'color',
+		'background',
+		'clean'
+	];
+
+	const {quillRef} = useQuill({theme, modules, formats, placeholder});
+
+	const component = (
+		<div style={{width: '100%', height: 400, border: '1px solid lightgray'}}>
+			<div ref={quillRef}/>
+		</div>
+	);
+	return {
+		...component
+	};
+}
+

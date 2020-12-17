@@ -46,7 +46,7 @@ import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import ModalLayout from '../../ModalLayout';
 import PublicationRenderComponent from '../PublicationRenderComponent';
-
+import RichTextEditor from './RichTextEditor';
 import SelectPublicationIdentifierRange from './SelectPublicationIdentifierRange';
 
 export default connect(mapStateToProps, actions)(reduxForm({
@@ -125,6 +125,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setIsEdit(false);
 	};
 
+	function handleOnClickSendMessage() {
+		setSendingMessage(true);
+	}
+
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
 			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
@@ -142,6 +146,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function handleCloseModal() {
 		setAssignRange(false);
 		setIsEdit(false);
+		setSendingMessage(false);
 	}
 
 	const component = (
@@ -215,7 +220,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											}
 											{
 												isbnIsmn.associatedRange && Object.keys(isbnIsmn.associatedRange).length > 0 &&
-													<Button variant="outlined" color="primary" onClick={() => setSendingMessage(true)}>
+													<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
 														<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
 													</Button>
 											}
@@ -252,6 +257,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					onChange={value => setSelectedTemplate(value)}
 				/>
 				{/* Format and Edit Message */}
+				<RichTextEditor/>
 			</div>
 		);
 	}
