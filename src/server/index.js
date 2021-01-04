@@ -40,7 +40,7 @@ import uuidv4 from 'uuid/v4';
 import fs from 'fs';
 import HttpStatus from 'http-status';
 import jose from 'jose';
-import {HTTP_PORT, TOKEN_MAX_AGE, SMTP_URL, API_URL, SYSTEM_USERNAME, SYSTEM_PASSWORD, PRIVATE_KEY_URL, NOTIFICATION_URL, COOKIE_NAME} from './config';
+import {HTTP_PORT, TOKEN_MAX_AGE, SMTP_URL, API_URL, ADMINISTRATORS_EMAIL, SYSTEM_USERNAME, SYSTEM_PASSWORD, PRIVATE_KEY_URL, NOTIFICATION_URL, COOKIE_NAME} from './config';
 import * as frontendConfig from './frontEndConfig';
 
 function bodyParse() {
@@ -63,16 +63,17 @@ process.on('SIGINT', () => {
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.post('/message', (req, res) => {
+	const {body} = req;
 	async function main() {
 		const parseUrl = parse(SMTP_URL, true);
 		const emailcontent = `
 			<h3>Contact Details</h3>
 			<ul>
-				<li>Name: ${req.body.name}</li>
-				<li>Email: ${req.body.email}</li>
+				<li>Name: ${body.name}</li>
+				<li>Email: ${body.email}</li>
 			</ul>
 			<h3>Message</h3>
-			<p>${req.body.description}</p>
+			<p>${body.description ? body.description : body.body}</p>
 		`;
 
 		let transporter = nodemailer.createTransport({
@@ -82,11 +83,10 @@ app.post('/message', (req, res) => {
 		});
 
 		await transporter.sendMail({
-			from: 'test@test.com',
-			to: 'sanjogstha7@gmail.com',
-			replyTo: 'test@test.com',
-			subject: 'New Message',
-			text: 'hello World!!',
+			from: ADMINISTRATORS_EMAIL,
+			to: body.sendTo ? body.sendTo : body.email,
+			replyTo: ADMINISTRATORS_EMAIL,
+			subject: body.subject,
 			html: emailcontent
 		});
 		res.send('Message Sent');
