@@ -133,7 +133,7 @@ export default connect(mapStateToProps, actions)(props => {
 
 function mapStateToProps(state) {
 	return ({
-		loading: state.publisher.listLoading,
+		loading: state.publisher.searchListLoading,
 		searchedPublishers: state.publisher.searchedPublisher,
 		publishersList: state.publisher.publishersList,
 		offset: state.publisher.offset,
