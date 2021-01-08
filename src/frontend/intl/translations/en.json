@@ -543,6 +543,7 @@
     "publicationRender.label.identifier": "Identifier",
     "publicationRender.label.metadataReference": "Metadata Reference",
     "publicationRender.label.resource": "Resource",
+    "publicationRender.label.isbnClassification": "Isbn Classification",
     "publicationRender.label.backgroundProcessingState": "Background Processing State",
 
     "publicationRequestRender.noRanges": "No ranges found",
@@ -612,6 +613,7 @@
     "publisherRender.label.publisherRangeId": "Publisher Range ID",
     "publisherRender.label.publisherIdentifier": "Publisher Identifier",
     "publisherRender.label.publisherType": "Publisher Type",
+    "publisherRender.label.publisherCategory": "Publisher Category",
     "publisherRender.label.university": "University",
     "publisherRender.label.publicationDetails": "PublicationDetails",
     "publisherRender.label.publicationDetails.frequency": "Frequency",
@@ -625,7 +627,7 @@
     "publisherRender.label.organizationDetails.distributor": "Affiliates",
     "publisherRender.label.metadataDelivery": "Metadata Delivery",
     "publisherRender.label.organizationDetails.primaryContact": "Primary Contact",
-    "publisherRender.label.activity": "activity",
+    "publisherRender.label.activity": "Activity",
     
     "publisherRender.label.primaryContact": "Primary Contact",
     "publisherRender.label.primaryContact.givenName": "Given Name",

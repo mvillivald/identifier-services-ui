@@ -435,7 +435,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 			if (!isAuthenticated && publicationValues && publicationValues.type && publicationValues.type.value !== 'dissertation') {
 				fieldArray.forEach(item => result.push(Object.keys(item)));
-				result.splice(3, 1);
+				result.splice(2, 1);
 				return result;
 			}
 		}
