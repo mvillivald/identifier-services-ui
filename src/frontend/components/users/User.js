@@ -44,7 +44,6 @@ import {commonStyles} from '../../styles/app';
 import * as actions from '../../store/actions';
 import {connect} from 'react-redux';
 import {validate} from '@natlibfi/identifier-services-commons';
-import ModalLayout from '../ModalLayout';
 import Spinner from '../Spinner';
 import CustomColor from '../../styles/app';
 import ListComponent from '../ListComponent';
@@ -54,7 +53,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {id, user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, deleteUser, setModal, setIsCreating} = props;
+	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, deleteUser, setModal, setIsCreating, match} = props;
+	const {id} = match.params;
 	const classes = commonStyles();
 	const intl = useIntl();
 	const {role} = userInfo;
@@ -182,13 +182,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const component = (
-		<ModalLayout isTableRow color="primary" {...props} title="User details">
+		<Grid item xs={12}>
 			{isEdit ?
 				<div className={classes.listItem}>
 					<form onSubmit={handleSubmit(handleOnSubmit)}>
-						<Grid container spacing={3} className={classes.listItemSpinner}>
-							{userDetail}
-						</Grid>
 						<div className={classes.btnContainer}>
 							<Button onClick={handleCancel}>
 								<FormattedMessage id="form.button.label.cancel"/>
@@ -197,12 +194,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<FormattedMessage id="form.button.label.update"/>
 							</Button>
 						</div>
+						<Grid container spacing={3} className={classes.listItemSpinner}>
+							{userDetail}
+						</Grid>
 					</form>
 				</div> :
 				<div className={classes.listItem}>
-					<Grid container spacing={3} className={classes.listItemSpinner}>
-						{userDetail}
-					</Grid>
 					<div className={classes.usersBtnContainer}>
 						{isAuthenticated && role === 'admin' &&
 							<Button
@@ -223,8 +220,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<EditIcon/>
 							</Fab>}
 					</div>
+					<Grid container spacing={3} className={classes.listItemSpinner}>
+						{userDetail}
+					</Grid>
 				</div>}
-		</ModalLayout>
+		</Grid>
 	);
 	return {
 		...component

@@ -35,13 +35,12 @@ import * as actions from '../../../store/actions';
 import PublicationListRenderComponent from '../PublicationListRenderComponent';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIssnList, issnList, loading} = props;
+	const {fetchIssnList, issnList, loading, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [cursors] = useState([]);
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [modal, setModal] = useState(false);
-	const [issnId, setIssnId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 
@@ -51,21 +50,19 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [lastCursor, cursors, fetchIssnList, cookie, isCreating]);
 
 	const handleTableRowClick = id => {
-		setIssnId(id);
-		setModal(true);
+		history.push(`/publications/issn/${id}`);
 		setRowSelectedId(id);
 	};
 
 	const headRows = [
-		{id: 'title', label: <FormattedMessage id="publicationList.issn.headRows.title"/>},
-		{id: 'state', label: <FormattedMessage id="publicationList.issn.headRows.state"/>},
-		{id: 'frequency', label: <FormattedMessage id="publicationList.issn.headRows.frequency"/>},
-		{id: 'firstNumber', label: <FormattedMessage id="publicationList.issn.headRows.firstNumber"/>}
+		{id: 'publicationType', label: <FormattedMessage id="publicationList.issn.headRows.publicationType"/>},
+		{id: 'type', label: <FormattedMessage id="publicationList.issn.headRows.type"/>},
+		{id: 'email', label: <FormattedMessage id="publicationList.issn.headRows.email"/>},
+		{id: 'title', label: <FormattedMessage id="publicationList.issn.headRows.title"/>}
 	];
 
 	return (
 		<PublicationListRenderComponent
-			issn
 			loading={loading}
 			headRows={headRows}
 			handleTableRowClick={handleTableRowClick}
@@ -73,7 +70,6 @@ export default connect(mapStateToProps, actions)(props => {
 			cursors={cursors}
 			publicationList={issnList}
 			setLastCursor={setLastCursor}
-			id={issnId}
 			modal={modal}
 			setModal={setModal}
 			setIsCreating={setIsCreating}

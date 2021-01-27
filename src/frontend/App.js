@@ -30,24 +30,33 @@ import React, {useState, useEffect} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {Switch, Route, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {MuiThemeProvider} from '@material-ui/core/styles';
+import {Grid} from '@material-ui/core';
 import {IntlProvider} from 'react-intl';
+import {MuiThemeProvider} from '@material-ui/core/styles';
 import {useCookies} from 'react-cookie';
 
 import Home from './components/main';
 import TopNav from './components/navbar/topNav';
 import AdminNav from './components/navbar/adminNav';
 import NewUserPasswordResetForm from './components/form/NewUserPasswordResetForm';
+import Publisher from './components/publishers/Publisher';
 import PublishersList from './components/publishers/PublishersList';
 import PublisherProfile from './components/publishers/PublisherProfile';
+import User from './components/users/User';
 import UsersList from './components/users/UsersList';
 import IsbnIsmnList from './components/publication/isbnIsmn/IsbnIsmnList';
+import IsbnIsmn from './components/publication/isbnIsmn/IsbnIsmn';
 import IssnList from './components/publication/issn/IssnList';
+import Issn from './components/publication/issn/Issn';
 import UsersRequestsList from './components/usersRequests/UsersRequestsList';
+import UsersRequest from './components/usersRequests/UsersRequest';
 import MessagesList from './components/messageTemplates/MessagesList';
 import PublishersRequestsList from './components/publishersRequests/PublishersRequestsList';
+import PublishersRequest from './components/publishersRequests/publisherRequest';
+import PublicationIsbnIsmnRequest from './components/publicationRequests/isbnIsmRequest/IsbnIsmnRequest';
 import PublicationIsbnIsmnRequestList from './components/publicationRequests/isbnIsmRequest/IsbnIsmnRequestList';
 import IssnRequestList from './components/publicationRequests/issnRequest/IssnRequestList';
+import IssnRequest from './components/publicationRequests/issnRequest/IssnRequest';
 import IDRISNBISMNList from './components/identifierRanges/RangesList';
 import IDRIsbnList from './components/identifierRanges/isbn/IsbnList';
 import IDRIsmnList from './components/identifierRanges/ismn/IsmnList';
@@ -77,27 +86,28 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 	const routeField = [
 		{path: '/', component: Home},
 		{path: '/publishers', component: PublishersList},
+		{path: '/publishers/:id', component: Publisher},
 		{path: '/users/passwordReset/:token', component: NewUserPasswordResetForm},
-		{path: '/publishers/:id', component: PublisherProfile}
+		{path: '/publishers/profile/:id', component: PublisherProfile}
 	];
 
 	const privateRoutesList = [
 		{path: '/users', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: UsersList},
-		{path: '/users/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: UsersList},
+		{path: '/users/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: User},
 		{path: '/publications/isbn-ismn', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: IsbnIsmnList},
-		{path: '/publication/isbn-ismn/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: IsbnIsmnList},
+		{path: '/publications/isbn-ismn/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: IsbnIsmn},
 		{path: '/publications/issn', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: IssnList},
-		{path: '/publication/issn/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: IssnList},
+		{path: '/publications/issn/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: Issn},
 		{path: '/requests/users', role: ['admin', 'publisher-admin'], component: UsersRequestsList},
-		{path: '/requests/users/:id', role: ['admin', 'publisher-admin'], component: UsersRequestsList},
+		{path: '/requests/users/:id', role: ['admin', 'publisher-admin'], component: UsersRequest},
 		{path: '/templates', role: ['admin'], component: MessagesList},
 		{path: '/templates/:id', role: ['admin'], component: MessagesList},
 		{path: '/requests/publishers', role: ['publisher', 'admin'], component: PublishersRequestsList},
-		{path: '/requests/publishers/:id', role: ['system', 'admin'], component: PublishersRequestsList},
+		{path: '/requests/publishers/:id', role: ['system', 'admin'], component: PublishersRequest},
 		{path: '/requests/publications/isbn-ismn', role: ['publisher', 'publisher-admin', 'admin'], component: PublicationIsbnIsmnRequestList},
-		{path: '/requests/publications/isbn-ismn/:id', role: ['publisher', 'publisher-admin', 'admin'], component: PublicationIsbnIsmnRequestList},
+		{path: '/requests/publications/isbn-ismn/:id', role: ['publisher', 'publisher-admin', 'admin'], component: PublicationIsbnIsmnRequest},
 		{path: '/requests/publications/issn', role: ['publisher', 'publisher-admin', 'admin'], component: IssnRequestList},
-		{path: '/requests/publications/issn/:id', role: ['publisher', 'publisher-admin', 'admin'], component: IssnRequestList},
+		{path: '/requests/publications/issn/:id', role: ['publisher', 'publisher-admin', 'admin'], component: IssnRequest},
 		{path: '/ranges', role: ['admin'], component: IDRISNBISMNList},
 		{path: '/ranges/isbn', role: ['admin'], component: IDRIsbnList},
 		{path: '/ranges/isbn/:id', role: ['admin'], component: IDRIsbnList},
@@ -140,21 +150,29 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 	const component = (
 		<IntlProvider locale={lang} messages={translations[lang]}>
 			<MuiThemeProvider theme={theme}>
-				<TopNav userInfo={userInfo} isAuthenticated={isAuthenticatedState} history={history}/>
-				<CssBaseline/>
-				<AdminNav userInfo={userInfo} isAuthenticated={isAuthenticatedState}/>
-				<section className={classes.bodyContainer}>
-					{
-						isAuthenticatedState ? (userInfo.role === 'publisher') &&
-							<Tooltips label="contact form" title="contactForm"/> :
-							null
-					}
-					<Switch>
-						{routes}
-					</Switch>
-					{responseMessage && <SnackBar variant={responseMessage.color} openSnackBar={Boolean(responseMessage)} {...props}/>}
-				</section>
-				<Footer/>
+				<Grid container>
+					<Grid container item xs={12}>
+						<TopNav userInfo={userInfo} isAuthenticated={isAuthenticatedState} history={history}/>
+					</Grid>
+					<Grid container item xs={12}>
+						<CssBaseline/>
+					</Grid>
+					<Grid container item xs={12}>
+						<AdminNav userInfo={userInfo} isAuthenticated={isAuthenticatedState}/>
+					</Grid>
+					<Grid container item xs={12} className={classes.bodyContainer}>
+						{
+							isAuthenticatedState ? (userInfo.role === 'publisher') &&
+								<Tooltips label="contact form" title="contactForm"/> :
+								null
+						}
+						<Switch>
+							{routes}
+						</Switch>
+						{responseMessage && <SnackBar variant={responseMessage.color} openSnackBar={Boolean(responseMessage)} {...props}/>}
+					</Grid>
+					<Footer/>
+				</Grid>
 			</MuiThemeProvider>
 		</IntlProvider>
 	);

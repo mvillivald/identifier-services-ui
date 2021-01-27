@@ -33,7 +33,6 @@ import {useCookies} from 'react-cookie';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import SearchComponent from '../SearchComponent';
-import UserRequest from './UsersRequest';
 import {commonStyles} from '../../styles/app';
 import useModalStyles from '../../styles/formList';
 import TableComponent from '../TableComponent';
@@ -46,7 +45,7 @@ import TabComponent from '../TabComponent';
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const modalClasses = useModalStyles();
-	const {loading, fetchUsersRequestsList, usersRequestsList, queryDocCount, totalDoc, offset, userInfo} = props;
+	const {loading, fetchUsersRequestsList, usersRequestsList, queryDocCount, totalDoc, offset, userInfo, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
@@ -55,9 +54,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [page, setPage] = useState(1);
 	const [cursors] = useState([]);
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	const [modal, setModal] = useState(false);
 	const [isCreating, setIsCreating] = useState(false);
-	const [userRequestId, setUserRequestId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	useEffect(() => {
 		fetchUsersRequestsList({searchText: inputVal, sortStateBy: sortStateBy, token: cookie[COOKIE_NAME], offset: lastCursor});
@@ -65,8 +62,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [lastCursor, cursors, inputVal, sortStateBy, fetchUsersRequestsList, cookie, isCreating]);
 
 	const handleTableRowClick = id => {
-		setUserRequestId(id);
-		setModal(true);
+		history.push(`/requests/users/${id}`);
 		setRowSelectedId(id);
 	};
 
@@ -113,33 +109,30 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const component = (
-		<Grid>
-			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">
-					<FormattedMessage id="userRequest.listAvailable"/>
-				</Typography>
-				<SearchComponent offset={offset} searchFunction={fetchUsersRequestsList} setSearchInputVal={setSearchInputVal}/>
-				<TabComponent
-					sortStateBy={sortStateBy}
-					handleChange={handleChange}
-				/>
-				{
-					userInfo.role === 'publisher-admin' &&
-						<ModalLayout
-							form
-							label={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}
-							title={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}
-							name="userRequest"
-							variant="outlined"
-							classed={modalClasses.button}
-							color="primary"
-						>
-							<UserRequestForm setIsCreating={setIsCreating} {...props}/>
-						</ModalLayout>
-				}
-				{usersData}
-				<UserRequest id={userRequestId} modal={modal} setModal={setModal}/>
-			</Grid>
+		<Grid item xs={12} className={classes.listSearch}>
+			<Typography variant="h5">
+				<FormattedMessage id="userRequest.listAvailable"/>
+			</Typography>
+			<SearchComponent offset={offset} searchFunction={fetchUsersRequestsList} setSearchInputVal={setSearchInputVal}/>
+			<TabComponent
+				sortStateBy={sortStateBy}
+				handleChange={handleChange}
+			/>
+			{
+				userInfo.role === 'publisher-admin' &&
+					<ModalLayout
+						form
+						label={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}
+						title={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}
+						name="userRequest"
+						variant="outlined"
+						classed={modalClasses.button}
+						color="primary"
+					>
+						<UserRequestForm setIsCreating={setIsCreating} {...props}/>
+					</ModalLayout>
+			}
+			{usersData}
 		</Grid>
 	);
 	return {

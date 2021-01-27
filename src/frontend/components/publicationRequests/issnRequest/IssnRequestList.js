@@ -38,10 +38,9 @@ import TableComponent from '../../TableComponent';
 import {commonStyles} from '../../../styles/app';
 import SearchComponent from '../../SearchComponent';
 import TabComponent from '../../TabComponent';
-import IssnRequest from './IssnRequest';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIssnRequestsList, issnRequestList, loading, offset, queryDocCount} = props;
+	const {fetchIssnRequestsList, issnRequestList, loading, offset, queryDocCount, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
@@ -50,19 +49,14 @@ export default connect(mapStateToProps, actions)(props => {
 	const [cursors] = useState([]);
 	const [sortStateBy, setSortStateBy] = useState('');
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	const [issnRequestId, setIssnRequestId] = useState(null);
-	const [modal, setModal] = useState(false);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
-	const [isUpdating, setIsUpdating] = useState(false);
 
 	useEffect(() => {
 		fetchIssnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor});
-		setIsUpdating(false);
-	}, [cookie, fetchIssnRequestsList, inputVal, sortStateBy, lastCursor, isUpdating]);
+	}, [cookie, fetchIssnRequestsList, inputVal, sortStateBy, lastCursor]);
 
 	const handleTableRowClick = id => {
-		setIssnRequestId(id);
-		setModal(true);
+		history.push(`/requests/publications/issn/${id}`);
 		setRowSelectedId(id);
 	};
 
@@ -109,21 +103,18 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const component = (
-		<Grid>
-			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">
-					<FormattedMessage id="publicationRequestRender.heading.search.Issn"/>
-				</Typography>
-				<SearchComponent searchFunction={fetchIssnRequestsList} setSearchInputVal={setSearchInputVal}/>
-				<TabComponent
-					tabClass={classes.tab}
-					tabsClass={classes.tabs}
-					sortStateBy={sortStateBy}
-					handleChange={handleChange}
-				/>
-				{issnRequestData}
-				<IssnRequest modal={modal} setModal={setModal} setIsUpdating={setIsUpdating} id={issnRequestId} setIssnId={setIssnRequestId}/>
-			</Grid>
+		<Grid item xs={12} className={classes.listSearch}>
+			<Typography variant="h5">
+				<FormattedMessage id="publicationRequestRender.heading.search.Issn"/>
+			</Typography>
+			<SearchComponent searchFunction={fetchIssnRequestsList} setSearchInputVal={setSearchInputVal}/>
+			<TabComponent
+				tabClass={classes.tab}
+				tabsClass={classes.tabs}
+				sortStateBy={sortStateBy}
+				handleChange={handleChange}
+			/>
+			{issnRequestData}
 		</Grid>
 	);
 	return {

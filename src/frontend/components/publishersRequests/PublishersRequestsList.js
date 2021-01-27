@@ -35,7 +35,6 @@ import {FormattedMessage} from 'react-intl';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
 import TableComponent from '../TableComponent';
-import PublisherRequest from './publisherRequest';
 import useModalStyles from '../../styles/formList';
 import SearchComponent from '../SearchComponent';
 import TabComponent from '../TabComponent';
@@ -43,7 +42,7 @@ import ModalLayout from '../ModalLayout';
 import PublisherRegistrationForm from '../form/publisherRegistrationForm/PublisherRegistrationForm';
 import {commonStyles} from '../../styles/app';
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchPublishersRequestsList, publishersRequestsList, loading, offset, queryDocCount} = props;
+	const {fetchPublishersRequestsList, publishersRequestsList, loading, offset, queryDocCount, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
@@ -53,8 +52,6 @@ export default connect(mapStateToProps, actions)(props => {
 	const [cursors] = useState([]);
 	const [sortStateBy, setSortStateBy] = useState('');
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	const [modal, setModal] = useState(false);
-	const [publisherRequestId, setPublisherRequestId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 
@@ -63,8 +60,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [cookie, fetchPublishersRequestsList, isCreating, inputVal, sortStateBy, lastCursor]);
 
 	const handleTableRowClick = id => {
-		setPublisherRequestId(id);
-		setModal(true);
+		history.push(`/requests/publishers/${id}`);
 		setRowSelectedId(id);
 	};
 
@@ -111,22 +107,19 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const component = (
-		<Grid>
-			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5"><FormattedMessage id="request.publisher.search-title"/></Typography>
-				<SearchComponent searchFunction={fetchPublishersRequestsList} setSearchInputVal={setSearchInputVal}/>
-				<TabComponent
-					tabClass={classes.tab}
-					tabsClass={classes.tabs}
-					sortStateBy={sortStateBy}
-					handleChange={handleChange}
-				/>
-				<ModalLayout form label="Publisher Registration" title={<FormattedMessage id="request.button.publisher-registration"/>} name="newPublisher" variant="outlined" classed={modalClasses.button} color="primary">
-					<PublisherRegistrationForm setIsCreating={setIsCreating} {...props}/>
-				</ModalLayout>
-				{publishersRequestsData}
-				<PublisherRequest id={publisherRequestId} modal={modal} setModal={setModal}/>
-			</Grid>
+		<Grid item xs={12} className={classes.listSearch}>
+			<Typography variant="h5"><FormattedMessage id="request.publisher.search-title"/></Typography>
+			<SearchComponent searchFunction={fetchPublishersRequestsList} setSearchInputVal={setSearchInputVal}/>
+			<TabComponent
+				tabClass={classes.tab}
+				tabsClass={classes.tabs}
+				sortStateBy={sortStateBy}
+				handleChange={handleChange}
+			/>
+			<ModalLayout form label="Publisher Registration" title={<FormattedMessage id="request.button.publisher-registration"/>} name="newPublisher" variant="outlined" classed={modalClasses.button} color="primary">
+				<PublisherRegistrationForm setIsCreating={setIsCreating} {...props}/>
+			</ModalLayout>
+			{publishersRequestsData}
 		</Grid>
 	);
 	return {

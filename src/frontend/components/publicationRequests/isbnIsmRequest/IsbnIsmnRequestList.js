@@ -35,13 +35,12 @@ import {Grid, Typography} from '@material-ui/core';
 import * as actions from '../../../store/actions';
 import Spinner from '../../Spinner';
 import TableComponent from '../../TableComponent';
-import IsbnIsmnRequest from './IsbnIsmnRequest';
 import {commonStyles} from '../../../styles/app';
 import SearchComponent from '../../SearchComponent';
 import TabComponent from '../../TabComponent';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchPublicationIsbnIsmnRequestsList, publicationIsbnIsmnRequestList, loading, offset, queryDocCount} = props;
+	const {fetchPublicationIsbnIsmnRequestsList, publicationIsbnIsmnRequestList, loading, offset, queryDocCount, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
@@ -50,19 +49,14 @@ export default connect(mapStateToProps, actions)(props => {
 	const [cursors] = useState([]);
 	const [sortStateBy, setSortStateBy] = useState('');
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	const [modal, setModal] = useState(false);
-	const [isbnIsmnRequestId, setIsbnIsmnRequestId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
-	const [isUpdating, setIsUpdating] = useState(false);
 
 	useEffect(() => {
 		fetchPublicationIsbnIsmnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor});
-		setIsUpdating(false);
-	}, [cookie, fetchPublicationIsbnIsmnRequestsList, inputVal, sortStateBy, lastCursor, isUpdating]);
+	}, [cookie, fetchPublicationIsbnIsmnRequestsList, inputVal, sortStateBy, lastCursor]);
 
 	const handleTableRowClick = id => {
-		setIsbnIsmnRequestId(id);
-		setModal(true);
+		history.push(`/requests/publications/isbn-ismn/${id}`);
 		setRowSelectedId(id);
 	};
 
@@ -109,21 +103,18 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const component = (
-		<Grid>
-			<Grid item xs={12} className={classes.listSearch}>
-				<Typography variant="h5">
-					<FormattedMessage id="publicationRequestRender.heading.search.IsbnIsmn"/>
-				</Typography>
-				<SearchComponent searchFunction={fetchPublicationIsbnIsmnRequestsList} setSearchInputVal={setSearchInputVal}/>
-				<TabComponent
-					tabClass={classes.tab}
-					tabsClass={classes.tabs}
-					sortStateBy={sortStateBy}
-					handleChange={handleChange}
-				/>
-				{publicationIsbnIsmnRequestData}
-				<IsbnIsmnRequest id={isbnIsmnRequestId} modal={modal} setIsUpdating={setIsUpdating} setModal={setModal}/>
-			</Grid>
+		<Grid item xs={12} className={classes.listSearch}>
+			<Typography variant="h5">
+				<FormattedMessage id="publicationRequestRender.heading.search.IsbnIsmn"/>
+			</Typography>
+			<SearchComponent searchFunction={fetchPublicationIsbnIsmnRequestsList} setSearchInputVal={setSearchInputVal}/>
+			<TabComponent
+				tabClass={classes.tab}
+				tabsClass={classes.tabs}
+				sortStateBy={sortStateBy}
+				handleChange={handleChange}
+			/>
+			{publicationIsbnIsmnRequestData}
 		</Grid>
 	);
 	return {
