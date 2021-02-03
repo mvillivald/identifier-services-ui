@@ -48,6 +48,7 @@ import {validate} from '@natlibfi/identifier-services-commons';
 import Spinner from '../../Spinner';
 import ListComponent from '../../ListComponent';
 import CustomColor from '../../../styles/app';
+import {isbnClassificationCodes} from '../../form/publisherRegistrationForm/formFieldVariable';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publicationRequestIsbnIsmn',
@@ -58,6 +59,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		match,
 		loading,
 		userInfo,
+		clearFields,
 		fetchPublicationIsbnIsmnRequest,
 		publicationIsbnIsmnRequest,
 		updatePublicationIsbnIsmnRequest,
@@ -111,12 +113,28 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function handlePublicationRequestUpdate(values) {
 		const newPublicationIsbnIsmnRequest = {
 			...values,
+			authors: formatAuthorsValue(publicationIsbnIsmnRequest.authors, values.authors),
+			isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : [],
+			publisher: formatPublisher(values.publisher),
 			state: 'new',
 			backgroundProcessingState: 'inProgress'
 		};
+		delete newPublicationIsbnIsmnRequest._id;
 		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME]);
 		setIsEdit(false);
-		setButtonState(publicationIsbnIsmnRequest.state);
+	}
+
+	function formatAuthorsValue(oldValue, newValue) {
+		if (newValue !== undefined) {
+			const value = newValue.map(item => ({
+				givenName: item.authorGivenName ? item.authorGivenName : '',
+				familyName: item.authorFamilyName ? item.authorFamilyName : '',
+				role: item.role && item.role
+			}));
+			return value;
+		}
+
+		return oldValue;
 	}
 
 	function handleAccept() {
@@ -142,6 +160,28 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function formatValueforAssociatedRange(value) {
 		return value.map(item => item.subRange);
+	}
+
+	function formatPublisher(values) {
+		const {publicationDetails} = values;
+		if (publicationDetails) {
+			const {frequency} = publicationDetails;
+			if (frequency) {
+				const {currentYear, nextYear} = frequency;
+				return {
+					...values,
+					publicationDetails: {
+						...publicationDetails,
+						frequency: {
+							currentYear: Number(currentYear),
+							nextYear: Number(nextYear)
+						}
+					}
+				};
+			}
+		} else {
+			return values;
+		}
 	}
 
 	function renderButton(state, bgState) {
@@ -321,25 +361,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Author Details
 						</Typography>
 						<hr/>
-						{publicationIsbnIsmnRequest.authors && publicationIsbnIsmnRequest.authors.map((item, index) => (
-							<div key={`${item.givenName}${Math.random()}`}>
-								<ListComponent
-									edit={isEdit && isEditable} fieldName={`authors[${index}][givenName]`}
-									label={intl.formatMessage({id: 'listComponent.givenName'})}
-									value={item.givenName ? item.givenName : ''}
-								/>
-								<ListComponent
-									edit={isEdit && isEditable} fieldName={`authors[${index}][familyName]`}
-									label={intl.formatMessage({id: 'listComponent.familyName'})}
-									value={item.familyName ? item.familyName : ''}
-								/>
-								<ListComponent
-									edit={isEdit && isEditable} fieldName={`authors[${index}][role]`}
-									label={intl.formatMessage({id: 'listComponent.role'})}
-									value={item.role ? item.role : ''}
-								/>
-							</div>
-						))}
+						<ListComponent
+							clearFields={clearFields}
+							edit={isEdit && isEditable} fieldName="authors"
+							value={publicationIsbnIsmnRequest.authors ? publicationIsbnIsmnRequest.authors : []}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							Additional Details
+						</Typography>
+						<hr/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="additionalDetails"
+							value={publicationIsbnIsmnRequest.additionalDetails ? publicationIsbnIsmnRequest.additionalDetails : ''}
+						/>
 					</Grid>
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
@@ -348,11 +384,47 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Publication Details
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.isbnClassification'})} value={publicationIsbnIsmnRequest.isbnClassification ? publicationIsbnIsmnRequest.isbnClassification : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.publicationType'})} value={publicationIsbnIsmnRequest.publicationType ? publicationIsbnIsmnRequest.publicationType : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.isPublic'})} value={publicationIsbnIsmnRequest.isPublic ? publicationIsbnIsmnRequest.isPublic : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.type'})} value={publicationIsbnIsmnRequest.type ? publicationIsbnIsmnRequest.type : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.identifier'})} value={publicationIsbnIsmnRequest.identifier ? publicationIsbnIsmnRequest.identifier : ''}/>
+						<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+							<ListComponent
+								edit={isEdit && isEditable} fieldName="isbnClassification"
+								label={intl.formatMessage({id: 'listComponent.classification'})}
+								value={publicationIsbnIsmnRequest.isbnClassification ? publicationIsbnIsmnRequest.isbnClassification : []}
+							/>
+						</Grid>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.publicationType'})}
+							value={publicationIsbnIsmnRequest.publicationType ? publicationIsbnIsmnRequest.publicationType : ''}
+						/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="isPublic"
+							label={intl.formatMessage({id: 'listComponent.isPublic'})}
+							value={publicationIsbnIsmnRequest.isPublic ? publicationIsbnIsmnRequest.isPublic : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.type'})}
+							value={publicationIsbnIsmnRequest.type ? publicationIsbnIsmnRequest.type : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.identifier'})}
+							value={publicationIsbnIsmnRequest.identifier ? publicationIsbnIsmnRequest.identifier : ''}
+						/>
+					</Grid>
+
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							Uniform Details
+						</Typography>
+						<hr/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="uniform[name]"
+							label={intl.formatMessage({id: 'listComponent.name'})}
+							value={publicationIsbnIsmnRequest.uniform && publicationIsbnIsmnRequest.uniform.name ? publicationIsbnIsmnRequest.uniform.name : ''}
+						/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="uniform[language]"
+							label={intl.formatMessage({id: 'listComponent.language'})}
+							value={publicationIsbnIsmnRequest.uniform && publicationIsbnIsmnRequest.uniform.language ? publicationIsbnIsmnRequest.uniform.language : ''}
+						/>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -458,9 +530,24 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							Other References
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.state'})} value={publicationIsbnIsmnRequest.state ? publicationIsbnIsmnRequest.state : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.creator'})} value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="state"
+							label={intl.formatMessage({id: 'listComponent.state'})}
+							value={publicationIsbnIsmnRequest.state ? publicationIsbnIsmnRequest.state : ''}
+						/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="backgroundProcessingState"
+							label={intl.formatMessage({id: 'listComponent.backgroundProcessingState'})}
+							value={publicationIsbnIsmnRequest.backgroundProcessingState ? publicationIsbnIsmnRequest.backgroundProcessingState : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.creator'})}
+							value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.associatedRange'})}
+							value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}
+						/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 							value={publicationIsbnIsmnRequest.lastUpdated ?
@@ -552,11 +639,43 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 function mapStateToProps(state) {
 	return ({
-		initialValues: state.publication.publicationIsbnIsmnRequest,
+		initialValues: formatInitialValues(state.publication.publicationIsbnIsmnRequest),
 		publicationIsbnIsmnRequest: state.publication.publicationIsbnIsmnRequest,
 		loading: state.publication.loading,
 		isAuthenticated: state.login.isAuthenticated,
 		userInfo: state.login.userInfo,
 		rangesList: state.identifierRanges.rangesList
 	});
+}
+
+function formatInitialValues(values) {
+	if (Object.keys(values).length > 0) {
+		const formattedValues = {
+			...values,
+			authors: values.authors && values.authors.map(item => formatAuthorsForEditing(item)),
+			isbnClassification: values.isbnClassification && values.isbnClassification.map(item => {
+				return formatClassificationForEditing(Number(item));
+			})
+		};
+		return formattedValues;
+	}
+
+	function formatClassificationForEditing(v) {
+		return isbnClassificationCodes.reduce((acc, k) => {
+			if (k.value === v) {
+				acc = k;
+				return acc;
+			}
+
+			return acc;
+		}, {});
+	}
+
+	function formatAuthorsForEditing(v) {
+		return {
+			authorGivenName: v.givenName,
+			authorFamilyName: v.familyName,
+			role: v.role
+		};
+	}
 }

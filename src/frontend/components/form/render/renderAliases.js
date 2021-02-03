@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -39,7 +40,9 @@ export default connect(state => ({
 	values: getFormValues('userCreation')(state) ||
 		getFormValues('publisherRegistrationForm')(state) ||
 		getFormValues('issnRegForm')(state) ||
-		getFormValues('isbnIsmnRegForm')(state)
+		getFormValues('isbnIsmnRegForm')(state) ||
+		getFormValues('publisherUpdateForm')(state) ||
+		getFormValues('publisherRequestUpdateForm')(state)
 }))(props => {
 	const [errors, setErrors] = useState();
 	const {fields, values, className, clearFields, name, subName, label} = props;
@@ -52,11 +55,15 @@ export default connect(state => ({
 						setErrors('Alias already exist');
 					} else {
 						fields.push(values[subName]);
-						clearFields(undefined, false, false, subName);
+						if (clearFields) {
+							clearFields(undefined, false, false, subName);
+						}
 					}
 				} else {
 					fields.push(values[subName]);
-					clearFields(undefined, false, false, subName);
+					if (clearFields) {
+						clearFields(undefined, false, false, subName);
+					}
 				}
 			} else {
 				setErrors('Required');
