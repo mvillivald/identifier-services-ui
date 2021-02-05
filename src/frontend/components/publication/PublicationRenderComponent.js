@@ -328,6 +328,7 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						<ListComponent
+							edit={isEdit && isEditable} fieldName="metadataReference[state]"
 							label={intl.formatMessage({id: 'listComponent.state'})}
 							value={publication.metadataReference ?
 								(publication.metadataReference.state ?
@@ -343,13 +344,21 @@ export default connect(mapStateToProps, actions)(props => {
 									''
 								) : ''}
 						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.status'})}
+							value={publication.metadataReference ?
+								(publication.metadataReference.status ?
+									publication.metadataReference.status :
+									''
+								) : ''}
+						/>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
 							Other References
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? publication.associatedRange : ''}/>
+						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.request'})} value={publication.request ? publication.request : ''}/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
@@ -543,14 +552,23 @@ export default connect(mapStateToProps, actions)(props => {
 							label={intl.formatMessage({id: 'listComponent.isPublic'})}
 							value={publication.isPublic ? publication.isPublic : ''}
 						/>
+						<ListComponent label={intl.formatMessage({id: 'listComponent.type'})} value={publication.type ? publication.type : ''}/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.scale'})}
+							value={publication.mapDetails ?
+								(publication.mapDetails.scale ?
+									publication.mapDetails.scale :
+									''
+								) : ''}
+						/>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
 							Metadata References
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.type'})} value={publication.type ? publication.type : ''}/>
 						<ListComponent
+							edit={isEdit && isEditable} fieldName="metadataReference[state]"
 							label={intl.formatMessage({id: 'listComponent.state'})}
 							value={publication.metadataReference ?
 								(publication.metadataReference.state ?
@@ -567,10 +585,10 @@ export default connect(mapStateToProps, actions)(props => {
 								) : ''}
 						/>
 						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.scale'})}
-							value={publication.mapDetails ?
-								(publication.mapDetails.scale ?
-									publication.mapDetails.scale :
+							label={intl.formatMessage({id: 'listComponent.status'})}
+							value={publication.metadataReference ?
+								(publication.metadataReference.status ?
+									publication.metadataReference.status :
 									''
 								) : ''}
 						/>
@@ -598,7 +616,7 @@ export default connect(mapStateToProps, actions)(props => {
 							References
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : ''}/>
+						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.request'})} value={publication.request ? publication.request : ''}/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
