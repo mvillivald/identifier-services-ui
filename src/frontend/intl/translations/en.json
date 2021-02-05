@@ -14,6 +14,7 @@
             "app.subSubMenu.ISSN": "ISSN",
         "app.subMenu.users": "Users",
     "app.menu.users": "Users",
+    "app.menu.statistics": "Statistics",
     "app.menu.identifierRanges": "Identifier Ranges",
         "app.subMenu.IRISBNISMN": "ISBN and ISMN",
         "app.subMenu.IRISSN": "ISSN",
@@ -411,6 +412,8 @@
 
     "app.setError.password.mismatch": "Password does not match",
 
+    "statistics.label.heading": "Statistics",
+
     "rangeCreation.form.prefix": "Prefix*",
     "rangeCreation.form.rangeStart": "Range Start*",
     "rangeCreation.form.rangeEnd": "Range End*",
@@ -753,7 +756,10 @@
     "listComponent.previouslyPublished": "Previously Published",
     "listComponent.publisherCategory": "Publisher Category",
     "listComponent.publisherType": "Publisher Type",
+    "listComponent.publisherRangeId": "Publisher Range ID",
+    "listComponent.publisherIdentifier": "Publisher Identifier",
     "listComponent.publishingActivities": "Publishing Activities",
+    "listComponent.metadataDelivery": "Metadata Delivery",
     "listComponent.type": "Type",
     "listComponent.note": "Note",
     "listComponent.id": "ID",
@@ -881,6 +887,8 @@
     "listComponent.lastUpdatedBy": "Last Updated By",
     "listComponent.selectFormat": "Format",
     "listComponent.formatTypes": "Format Types",
+    "listComponent.manual": "Manual",
+    "listComponent.external": "External",
 
     "listComponent.publisherDetails": "Publisher Details"
 

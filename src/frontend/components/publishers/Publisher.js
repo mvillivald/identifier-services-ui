@@ -153,12 +153,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 							<ListComponent
 								edit={isEdit && isEditable}
-								fieldName="publisherCategory"
-								label={intl.formatMessage({id: 'listComponent.publisherCategory'})}
-								value={formattedPublisherDetail.publisherCategory ? formattedPublisherDetail.publisherCategory : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
 								fieldName="language"
 								label={intl.formatMessage({id: 'listComponent.language'})}
 								value={formattedPublisherDetail.language ? formattedPublisherDetail.language : ''}
@@ -180,6 +174,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								fieldName="familyName"
 								label={intl.formatMessage({id: 'listComponent.familyName'})}
 								value={formattedPublisherDetail.familyName ? formattedPublisherDetail.familyName : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable}
+								fieldName="publisherCategory"
+								label={intl.formatMessage({id: 'listComponent.publisherCategory'})}
+								value={formattedPublisherDetail.publisherCategory ? formattedPublisherDetail.publisherCategory : ''}
 							/>
 							<ListComponent
 								edit={isEdit && isEditable}
@@ -400,6 +400,41 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
+							<FormattedMessage id="listComponent.publisherIdentifier"/>
+						</Typography>
+						<hr/>
+						<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+							<ListComponent
+								edit={isEdit && isEditable} fieldName="publisherIdentifier"
+								clearFields={clearFields}
+								value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
+							/>
+						</Grid>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							<FormattedMessage id="listComponent.otherReference"/>
+						</Typography>
+						<hr/>
+						<ListComponent
+							fieldName="publisherRangeId"
+							label={intl.formatMessage({id: 'listComponent.publisherRangeId'})}
+							value={formattedPublisherDetail.publisherRangeId ? formattedPublisherDetail.publisherRangeId : ''}
+						/>
+						<ListComponent
+							fieldName="request"
+							label={intl.formatMessage({id: 'listComponent.request'})}
+							value={formattedPublisherDetail.request ? formattedPublisherDetail.request : ''}
+						/>
+						<ListComponent
+							edit={isEdit && isEditable}
+							fieldName="metadataDelivery"
+							label={intl.formatMessage({id: 'listComponent.metadataDelivery'})}
+							value={formattedPublisherDetail.metadataDelivery ? formattedPublisherDetail.metadataDelivery : ''}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
 							<FormattedMessage id="listComponent.activity"/>
 						</Typography>
 						<hr/>
@@ -440,14 +475,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							<FormattedMessage id="listComponent.notes"/>
+							<FormattedMessage id="listComponent.additionalDetails"/>
 						</Typography>
 						<hr/>
 						<ListComponent
 							edit={isEdit && isEditable}
-							fieldName="notes"
-							label={intl.formatMessage({id: 'listComponent.notes'})}
-							value={formattedPublisherDetail.notes ? formattedPublisherDetail.notes : []}
+							fieldName="additionalDetails"
+							label={intl.formatMessage({id: 'listComponent.additionalDetails'})}
+							value={formattedPublisherDetail.additionalDetails ? formattedPublisherDetail.additionalDetails : ''}
 						/>
 					</Grid>
 				</Grid>

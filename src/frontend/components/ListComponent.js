@@ -48,6 +48,8 @@ export default function (props) {
 										renderEditPublisherType(fieldName)
 									) : fieldName === 'publisherCategory' ? (
 										renderEditPublisherCategory(fieldName)
+									) : fieldName === 'metadataDelivery' ? (
+										renderEditMetadataDelivery(fieldName)
 									) : fieldName === 'publishingActivities' ? (
 										renderEditPublishingActivities(fieldName)
 									) : fieldName === 'backgroundProcessingState' ? (
@@ -159,6 +161,12 @@ export default function (props) {
 						<Grid item xs={4}>
 							<span> No affiliate Added</span>
 						</Grid>
+					);
+				}
+
+				if (fieldName === 'publisherIdentifier') {
+					return (
+						<Chip label={value}/>
 					);
 				}
 
@@ -484,6 +492,22 @@ export default function (props) {
 					options={[
 						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.continuous'}), value: 'continuous'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.publishingActivities.occasional'}), value: 'occasional'}
+					]}
+				/>
+			</Grid>
+		);
+	}
+
+	function renderEditMetadataDelivery(fieldName) {
+		return (
+			<Grid item xs={8}>
+				<Field
+					name={fieldName}
+					type="select"
+					component={renderSelect}
+					options={[
+						{label: intl.formatMessage({id: 'listComponent.manual'}), value: 'manual'},
+						{label: intl.formatMessage({id: 'listComponent.external'}), value: 'external'}
 					]}
 				/>
 			</Grid>
