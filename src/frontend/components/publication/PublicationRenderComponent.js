@@ -73,7 +73,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [fetchedPublisher, setPublisherEmail]);
 
 	function formatValueforAssociatedRange(value) {
-		return value.map(item => item.subRange);
+		return value.map(item => item.subRange ? item.subRange : item.block);
 	}
 
 	let publicationDetail;
