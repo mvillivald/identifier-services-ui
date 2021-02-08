@@ -8,6 +8,7 @@ import renderAliases from '../render/renderAliases';
 import renderDateTime from '../render/renderDateTime';
 import renderRadioButton from '../render/renderRadioButton';
 import renderCheckbox from '../render/renderCheckbox';
+import renderSelect from '../render/renderSelect';
 import renderMultiSelect from '../render/renderMultiSelect';
 import renderContactDetail from '../render/renderContactDetail';
 import renderSelectAutoComplete from '../render/renderSelectAutoComplete';
@@ -43,6 +44,22 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							views={list.views}
 						/>
 					</Grid>
+				);
+			case 'select':
+				return (
+					<>
+						<Grid key={list.name} item xs={6}>
+							<Field
+								className={`${classes.selectField} ${list.width}`}
+								component={renderSelect}
+								label={list.label}
+								name={list.name}
+								type={list.type}
+								options={list.options}
+								props={{publicationValues: publicationIssnValues || publicationIsbnValues, clearFields}}
+							/>
+						</Grid>
+					</>
 				);
 			case 'multiSelect':
 				return (
