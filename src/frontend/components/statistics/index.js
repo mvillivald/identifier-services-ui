@@ -70,6 +70,15 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [rangeStatistics]);
 
 	useEffect(() => {
+		if (publicationType === 'issn') {
+			if (selectedIssnType === 'issn' && startDate !== null && endDate !== null) {
+				fetchRangeStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
+				fetchIssnStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
+			}
+		}
+	}, [startDate, endDate]);
+
+	function handleStatistics() {
 		if (fetchedRangeStatistics !== null) {
 			const totalStatistics = fetchedRangeStatistics.map(item => filterDoc(item));
 			if (issnStatistics !== null) {
@@ -80,7 +89,7 @@ export default connect(mapStateToProps, actions)(props => {
 				exportXLS(wbout, ws);
 			}
 		}
-	}, [exportXLS, fetchedRangeStatistics, getMonthlyStatistics, issnStatistics]);
+	}
 
 	const classes = useStyles();
 
@@ -192,15 +201,6 @@ export default connect(mapStateToProps, actions)(props => {
 		}
 
 		return newResult;
-	}
-
-	function handleStatistics() {
-		if (publicationType === 'issn') {
-			if (selectedIssnType === 'issn' && startDate !== null && endDate !== null) {
-				fetchRangeStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
-				fetchIssnStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
-			}
-		}
 	}
 
 	const elements = (
