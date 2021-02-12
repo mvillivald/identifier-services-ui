@@ -36,6 +36,9 @@ import {MuiThemeProvider} from '@material-ui/core/styles';
 import {useCookies} from 'react-cookie';
 
 import Home from './components/main';
+import IsbnIsmnRegistrationForm from './components/form/IsbnIsmnRegForm';
+import IssnRegistrationForm from './components/form/IssnRegForm';
+import PublisherRegistrationForm from './components/form/publisherRegistrationForm/PublisherRegistrationForm';
 import TopNav from './components/navbar/topNav';
 import AdminNav from './components/navbar/adminNav';
 import NewUserPasswordResetForm from './components/form/NewUserPasswordResetForm';
@@ -92,6 +95,12 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/publishers/profile/:id', component: PublisherProfile}
 	];
 
+	const routeForms = [
+		{path: '/isbnIsmnRegistrationForm', component: IsbnIsmnRegistrationForm},
+		{path: '/issnRegistrationForm', component: IssnRegistrationForm},
+		{path: '/publisherRegistrationForm', component: PublisherRegistrationForm}
+	];
+
 	const privateRoutesList = [
 		{path: '/users', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: UsersList},
 		{path: '/users/:id', role: ['admin', 'publisher-admin', 'publisher', 'system'], component: User},
@@ -130,6 +139,16 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 					render={props => <fields.component {...props}/>}
 				/>
 			))}
+			{
+				routeForms.map(fields => (
+					<Route
+						key={fields.path}
+						exact
+						path={fields.path}
+						render={props => <fields.component {...props}/>}
+					/>
+				))
+			}
 			{privateRoutesList.map(pRoute => (
 				<PrivateRoute
 					key={pRoute.path}

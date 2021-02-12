@@ -90,7 +90,7 @@ export default connect(null, actions)(reduxForm({
 			return (
 				<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 					<Field
-						className={`${classes.textField} ${list.width}`}
+						className={classes.textField}
 						component={renderTextField}
 						label={list.label}
 						name={list.name}

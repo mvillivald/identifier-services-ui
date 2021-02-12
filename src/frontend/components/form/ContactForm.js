@@ -123,7 +123,7 @@ export default connect(mapToProps, actions)(reduxForm({
 							(list.type === 'text') ?
 								<Grid key={list.name} item xs={12}>
 									<Field
-										className={`${classes.textField} ${list.width}`}
+										className={classes.textField}
 										component={renderTextField}
 										label={list.label}
 										name={list.name}
@@ -132,7 +132,7 @@ export default connect(mapToProps, actions)(reduxForm({
 								</Grid> :
 								<Grid key={list.name} item xs={12}>
 									<Field
-										className={`${classes.textArea} ${list.width}`}
+										className={classes.textArea}
 										component={renderTextArea}
 										label={list.label}
 										name={list.name}

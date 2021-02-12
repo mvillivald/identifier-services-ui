@@ -27,6 +27,7 @@
  */
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Typography} from '@material-ui/core';
 
 export const classificationCodes = [
 	{label: <FormattedMessage id="publisher.classification.general"/>, value: 0},
@@ -124,7 +125,7 @@ export const isbnClassificationCodes = [
 	{label: <FormattedMessage id="publicationRegistration.form.basicInformation.classification.childrenBook"/>, value: 4}
 ];
 
-const publisherCategory = [
+export const publisherCategory = [
 	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.privatePerson"/>, value: 'private person'},
 	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.associationCorporationOrganisation"/>, value: 'association/corporation/organisation'},
 	{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.cityMunicipality"/>, value: 'city/municipality'},
@@ -238,7 +239,8 @@ export const fieldArray = [
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.classification"/>,
 				options: classificationCodes,
 				width: 'full',
-				isMulti: true
+				instructions: getClassificationInstruction(),
+				isMulti: false
 			}
 		]
 	},
@@ -396,3 +398,16 @@ export const fieldArray = [
 		review: 'review'
 	}
 ];
+
+function getClassificationInstruction() {
+	return (
+		<>
+			<Typography>
+				<FormattedMessage id="publisherRegistration.form.classificationInstruction1"/>
+			</Typography>
+			<Typography>
+				<FormattedMessage id="publisherRegistration.form.classificationInstruction2"/>
+			</Typography>
+		</>
+	);
+}

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -29,7 +30,7 @@
 import React, {useState, useEffect} from 'react';
 import {reduxForm, getFormValues} from 'redux-form';
 import {validate} from '@natlibfi/identifier-services-commons';
-import {Button, Grid, Stepper, Step, StepLabel, Typography, List} from '@material-ui/core';
+import {Button, Grid, Stepper, Step, StepLabel, Typography} from '@material-ui/core';
 import {connect} from 'react-redux';
 import HttpStatus from 'http-status';
 import {useCookies} from 'react-cookie';
@@ -40,7 +41,8 @@ import * as actions from '../../store/actions';
 import useStyles from '../../styles/form';
 import Captcha from '../Captcha';
 import ListComponent from '../ListComponent';
-import {element as publisherElement, fieldArrayElement} from './publisherRegistrationForm/commons';
+import {element as publisherElement, fieldArrayElement} from './commons';
+import {getMultipleSelectInstruction, getCreateableSelectInstruction} from './commons';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'issnRegForm',
@@ -101,6 +103,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 4:
 						return publisherElement({array: fieldArray[5].formatDetails, publicationIssnValues: publicationValues, classes, clearFields, intl});
 					case 5:
+						return renderAdditionalInformation();
+					case 6:
 						return renderPreview(publicationValues);
 					default:
 						return 'Unknown step';
@@ -122,6 +126,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 5:
 						return publisherElement({array: fieldArray[5].formatDetails, publicationIssnValues: publicationValues, classes, clearFields, intl});
 					case 6:
+						return renderAdditionalInformation();
+					case 7:
 						return renderPreview(publicationValues);
 					default:
 						return 'Unknown step';
@@ -204,6 +210,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			}
 		}
 
+		function renderAdditionalInformation() {
+			return publisherElement({array: [{
+				name: 'additionalDetails',
+				type: 'textArea',
+				label: intl.formatMessage({id: 'publicationRegistration.form.additionalDetails'}),
+				width: 'half'
+			}], classes, fieldName: 'additionalDetails'});
+		}
+
 		function renderPreview(publicationValues) {
 			const values = formatPublicationValues(publicationValues);
 			const {seriesDetails, ...formatValues} = {
@@ -212,40 +227,235 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				subSeries: values.seriesDetails && values.seriesDetails.subSeries
 			};
 			return (
-				<Grid container item className={classes.bodyContainer} xs={12}>
-					<Grid item xs={12} md={6}>
-						<List>
-							{
-								Object.keys(formatValues).map(key => {
-									return (typeof formatValues[key] === 'string') ?
-										(
-											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatValues[key]}/>
+				<>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.basicInformations"/>
+							</Typography>
+							<hr/>
+							<ListComponent fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={formatValues.title ? formatValues.title : ''}/>
+							<ListComponent fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatValues.subTitle ? formatValues.subTitle : ''}/>
+							<ListComponent fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={formatValues.language ? formatValues.language : ''}/>
+							<ListComponent fieldName="manufacturer" label={intl.formatMessage({id: 'listComponent.manufacturer'})} value={formatValues.manufacturer ? formatValues.manufacturer : ''}/>
+							<ListComponent fieldName="city" label={intl.formatMessage({id: 'listComponent.city'})} value={formatValues.city ? formatValues.city : ''}/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.publisher"/>&nbsp;
+								<FormattedMessage id="listComponent.informations"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="publisher[name]"
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={formatValues.publisher && formatValues.publisher.name ? formatValues.publisher.name : ''}
+							/>
+							<ListComponent
+								fieldName="publisher[postalAddress][address]"
+								label={intl.formatMessage({id: 'listComponent.address'})}
+								value={formatValues.publisher && formatValues.publisher.postalAddress && formatValues.publisher.postalAddress ?
+									formatValues.publisher.postalAddress.address && formatValues.publisher.postalAddress.address :
+									(formatValues.publisher && formatValues.publisher.address ?
+										formatValues.publisher.address :
+										'')}
+							/>
+							<ListComponent
+								fieldName="publisher[postalAddress][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={formatValues.publisher && formatValues.publisher.postalAddress && formatValues.publisher.postalAddress ?
+									formatValues.publisher.postalAddress.city && formatValues.publisher.postalAddress.city :
+									(formatValues.publisher && formatValues.publisher.city ?
+										formatValues.publisher.city :
+										'')}
+							/>
+							<ListComponent
+								fieldName="publisher[postalAddress][zip]"
+								label={intl.formatMessage({id: 'listComponent.zip'})}
+								value={formatValues.publisher && formatValues.publisher.postalAddress && formatValues.publisher.postalAddress ?
+									formatValues.publisher.postalAddress.zip && formatValues.publisher.postalAddress.zip :
+									(formatValues.publisher && formatValues.publisher.zip ?
+										formatValues.publisher.zip :
+										'')}
+							/>
+							<ListComponent
+								fieldName="publisher[phone]"
+								label={intl.formatMessage({id: 'listComponent.phone'})}
+								value={formatValues.publisher && formatValues.publisher.phone ? formatValues.publisher.phone : ''}
+							/>
+							<ListComponent
+								fieldName="publisher[givenName]"
+								label={intl.formatMessage({id: 'listComponent.givenName'})}
+								value={formatValues.publisher && formatValues.publisher.givenName ? formatValues.publisher.givenName : ''}
+							/>
+							<ListComponent
+								fieldName="publisher[familyName]"
+								label={intl.formatMessage({id: 'listComponent.familyName'})}
+								value={formatValues.publisher && formatValues.publisher.familyName ? formatValues.publisher.familyName : ''}
+							/>
+							<ListComponent
+								fieldName="publisher[email]"
+								label={intl.formatMessage({id: 'listComponent.email'})}
+								value={formatValues.publisher && formatValues.publisher.email ? formatValues.publisher.email : ''}
+							/>
+							<ListComponent
+								fieldName="publisher[language]"
+								label={intl.formatMessage({id: 'listComponent.language'})}
+								value={formatValues.publisher && formatValues.publisher.language ? formatValues.publisher.language : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.mainSeries"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="seriesDetails[mainSeries][title]"
+								label={intl.formatMessage({id: 'listComponent.title'})}
+								value={formatValues.seriesDetails ?
+									(formatValues.seriesDetails.mainSeries ?
+										(formatValues.seriesDetails.mainSeries.title ?
+											formatValues.seriesDetails.mainSeries.title :
+											''
 										) :
-										null;
-								})
-							}
-						</List>
+										''
+									) :	''}
+							/>
+							<ListComponent
+								fieldName="seriesDetails[mainSeries][identifier]"
+								label={intl.formatMessage({id: 'listComponent.identifier'})}
+								value={formatValues.seriesDetails ?
+									(formatValues.seriesDetails.mainSeries ?
+										(formatValues.seriesDetails.mainSeries.identifier ?
+											formatValues.seriesDetails.mainSeries.identifier :
+											''
+										) :
+										''
+									) : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.subSeries"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="seriesDetails[subSeries][title]"
+								label={intl.formatMessage({id: 'listComponent.title'})}
+								value={formatValues.seriesDetails ?
+									(formatValues.seriesDetails.subSeries ?
+										(formatValues.seriesDetails.subSeries.title ?
+											formatValues.seriesDetails.subSeries.title :
+											''
+										) :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								fieldName="seriesDetails[subSeries][identifier]"
+								label={intl.formatMessage({id: 'listComponent.identifier'})}
+								value={formatValues.seriesDetails ?
+									(formatValues.seriesDetails.subSeries ?
+										(formatValues.seriesDetails.subSeries.identifier ?
+											formatValues.seriesDetails.subSeries.identifier :
+											''
+										) :
+										''
+									) : ''}
+							/>
+						</Grid>
 					</Grid>
-					<Grid item xs={12} md={6}>
-						<List>
-							{
-								Object.keys(formatValues).map(key => {
-									if (typeof formatValues[key] === 'object') {
-										if (Array.isArray(formatValues[key])) {
-											return <ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatValues[key]}/>;
-										}
-
-										const obj = formatValues[key];
-										Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : '');
-										return <ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={obj}/>;
-									}
-
-									return null;
-								})
-							}
-						</List>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								Time Details
+							</Typography>
+							<hr/>
+							<ListComponent fieldName="firstYear" label={intl.formatMessage({id: 'listComponent.firstYear'})} value={formatValues.firstYear ? formatValues.firstYear : ''}/>
+							<ListComponent fieldName="firstNumber" label={intl.formatMessage({id: 'listComponent.firstNumber'})} value={formatValues.firstNumber ? formatValues.firstNumber : ''}/>
+							<ListComponent fieldName="frequency" label={intl.formatMessage({id: 'listComponent.frequency'})} value={formatValues.frequency ? formatValues.frequency : ''}/>
+							<ListComponent fieldName="type" label={intl.formatMessage({id: 'listComponent.type'})} value={formatValues.type ? formatValues.type : ''}/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.previouslyPublished"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="previousPublication[lastYear]"
+								label={intl.formatMessage({id: 'listComponent.lastYear'})}
+								value={formatValues.previousPublication ?
+									(formatValues.previousPublication.lastYear ?
+										formatValues.previousPublication.lastYear :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								fieldName="previousPublication[lastNumber]"
+								label={intl.formatMessage({id: 'listComponent.lastNumber'})}
+								value={formatValues.previousPublication ?
+									(formatValues.previousPublication.lastNumber ?
+										formatValues.previousPublication.lastNumber :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								fieldName="previousPublication[title]"
+								label={intl.formatMessage({id: 'listComponent.title'})}
+								value={formatValues.previousPublication ?
+									(formatValues.previousPublication.title ?
+										formatValues.previousPublication.title :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								fieldName="previousPublication[identifier]"
+								label={intl.formatMessage({id: 'listComponent.identifier'})}
+								value={formatValues.previousPublication ?
+									(formatValues.previousPublication.identifier ?
+										formatValues.previousPublication.identifier :
+										''
+									) : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.formatDetails"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="issnFormatDetails"
+								label={intl.formatMessage({id: 'listComponent.selectFormat'})}
+								value={formatValues.formatDetails ? formatValues.formatDetails : []}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.url'})}
+								value={formatValues.formatDetails ?
+									(formatValues.formatDetails.url ?
+										formatValues.formatDetails.url :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								fieldName="manufacturer"
+								label={intl.formatMessage({id: 'listComponent.manufacturer'})}
+								value={formatValues.manufacturer ?
+									formatValues.manufacturer : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.additionalDetails"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="additionalDetails"
+								value={formatValues.additionalDetails ? formatValues.additionalDetails : ''}
+							/>
+						</Grid>
 					</Grid>
-				</Grid>
+				</>
+
 			);
 		}
 
@@ -448,21 +658,17 @@ function getFieldArray(intl) {
 					defaultValue: 'eng',
 					options: [
 						{label: 'English (Default Language)', value: 'eng'},
+						{label: 'French', value: 'fre'},
+						{label: 'Germany', value: 'ger'},
+						{label: 'Russain', value: 'rus'},
+						{label: 'Sami', value: 'smi'},
 						{label: 'Suomi', value: 'fin'},
-						{label: 'Svenska', value: 'swe'}
+						{label: 'Spanish', value: 'esp'},
+						{label: 'Svenska', value: 'swe'},
+						{label: 'Other', value: 'other'},
+						{label: 'Bilingual', value: 'bilingual'}
+
 					]
-				},
-				{
-					name: 'additionalDetails',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.additionalDetails'}),
-					width: 'half'
-				},
-				{
-					name: 'manufacturer',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.manufacturer'}),
-					width: 'half'
 				},
 				{
 					name: 'city',
@@ -479,7 +685,7 @@ function getFieldArray(intl) {
 					fields: [
 						{
 							name: 'firstYear',
-							type: 'number',
+							type: 'numeric',
 							label: intl.formatMessage({id: 'publicationRegistration.form.Time.firstYear'}),
 							width: 'half'
 						},
@@ -536,18 +742,6 @@ function getFieldArray(intl) {
 					title: 'Previous Publication',
 					fields: [
 						{
-							name: 'previousPublication[lastYear]',
-							type: 'number',
-							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.lastYear'}),
-							width: 'full'
-						},
-						{
-							name: 'previousPublication[lastNumber]',
-							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.lastNumber'}),
-							width: 'full'
-						},
-						{
 							name: 'previousPublication[title]',
 							type: 'text',
 							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.title'}),
@@ -557,6 +751,18 @@ function getFieldArray(intl) {
 							name: 'previousPublication[identifier]',
 							type: 'text',
 							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.identifier'}),
+							width: 'half'
+						},
+						{
+							name: 'previousPublication[lastYear]',
+							type: 'numeric',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.lastYear'}),
+							width: 'half'
+						},
+						{
+							name: 'previousPublication[lastNumber]',
+							type: 'text',
+							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.lastNumber'}),
 							width: 'half'
 						}
 					]
@@ -626,14 +832,24 @@ function getFieldArray(intl) {
 					width: 'full',
 					isMulti: true,
 					isCreatable: true,
+					instructions: getIssnFormatDetailsInstruction(),
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails'}),
 					options: [
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.online'}), value: 'online'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cdRom'}), value: 'CD-ROM'}
 					]
+				},
+				{
+					name: 'manufacturer',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.manufacturer'}),
+					width: 'half'
 				}
 			]
+		},
+		{
+			additionalDetails: 'additionalDetails'
 		},
 		{
 			preview: 'preview'
@@ -641,4 +857,13 @@ function getFieldArray(intl) {
 	];
 
 	return fields;
+}
+
+function getIssnFormatDetailsInstruction() {
+	return (
+		<>
+			{getMultipleSelectInstruction()}
+			{getCreateableSelectInstruction()}
+		</>
+	);
 }

@@ -3,18 +3,19 @@ import React from 'react';
 import {Grid, Typography, Box} from '@material-ui/core';
 import {Field, FieldArray} from 'redux-form';
 import {FormattedMessage} from 'react-intl';
-import renderTextField from '../render/renderTextField';
-import renderAliases from '../render/renderAliases';
-import renderDateTime from '../render/renderDateTime';
-import renderRadioButton from '../render/renderRadioButton';
-import renderCheckbox from '../render/renderCheckbox';
-import renderSelect from '../render/renderSelect';
-import renderMultiSelect from '../render/renderMultiSelect';
-import renderContactDetail from '../render/renderContactDetail';
-import renderSelectAutoComplete from '../render/renderSelectAutoComplete';
-import PopoverComponent from '../../PopoverComponent';
+import renderTextField from './render/renderTextField';
+import renderAliases from './render/renderAliases';
+import renderDateTime from './render/renderDateTime';
+import renderRadioButton from './render/renderRadioButton';
+import renderCheckbox from './render/renderCheckbox';
+import renderTextArea from './render/renderTextArea';
+import renderSelect from './render/renderSelect';
+import renderMultiSelect from './render/renderMultiSelect';
+import renderContactDetail from './render/renderContactDetail';
+import renderSelectAutoComplete from './render/renderSelectAutoComplete';
+import PopoverComponent from '../PopoverComponent';
 import HelpIcon from '@material-ui/icons/Help';
-import {classificationCodes} from './formFieldVariable';
+import {classificationCodes} from './publisherRegistrationForm/formFieldVariable';
 
 export function element({array, classes, clearFields, publicationIssnValues, fieldName, publicationIsbnValues, intl}) {
 	return array.map(list => {
@@ -23,7 +24,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				return (
 					<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
 						<FieldArray
-							className={`${classes.arrayString} ${list.width}`}
+							className={classes.arrayString}
 							component={renderAliases}
 							name={list.name}
 							type={list.type}
@@ -34,23 +35,23 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				);
 			case 'dateTime':
 				return (
-					<Grid key={list.name} item xs={6}>
+					<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
 						<Field
-							className={classes.dateTimePicker}
+							className={classes}
 							component={renderDateTime}
 							label={list.label}
 							name={list.name}
-							type={list.type}
-							views={list.views}
+							min={list.min}
+							formName={list.formName}
 						/>
 					</Grid>
 				);
 			case 'select':
 				return (
 					<>
-						<Grid key={list.name} item xs={6}>
+						<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
 							<Field
-								className={`${classes.selectField} ${list.width}`}
+								className={classes.selectField}
 								component={renderSelect}
 								label={list.label}
 								name={list.name}
@@ -66,10 +67,10 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 					<Grid key={list.name} container item xs={list.width === 'half' ? 6 : 12}>
 						<Grid item xs={12}>
 							<Field
-								className={`${classes.selectField} ${list.width}`}
+								className={classes.selectField}
 								component={renderMultiSelect}
 								label={list.label}
-								infoIconComponent={list.name === 'classification' && <PopoverComponent icon={<HelpIcon/>} infoText={getClassificationInstruction()}/>}
+								infoIconComponent={list.instructions && <PopoverComponent icon={<HelpIcon/>} infoText={list.instructions}/>}
 								name={list.name}
 								type={list.type}
 								options={list.options}
@@ -87,7 +88,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				);
 			case 'checkbox':
 				return (
-					<Grid key={list.name} container item xs={6} className={classes.popOver}>
+					<Grid key={list.name} container item xs={list.width === 'half' ? 6 : 12} className={classes.popOver}>
 						<Grid item>
 							<Field
 								component={renderCheckbox}
@@ -99,15 +100,15 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 						<PopoverComponent icon={<HelpIcon/>} infoText={list.info}/>
 					</Grid>
 				);
-			case 'number':
+			case 'numeric':
 				return (
 					<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 						<Field
-							className={`${classes.textField} ${list.width}`}
+							className={classes.textField}
 							component={renderTextField}
 							label={list.label}
 							name={list.name}
-							type={list.type}
+							type="text"
 							min={0}
 							disabled={Boolean(list.name === 'publisher')}
 						/>
@@ -117,7 +118,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				return (
 					<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 						<Field
-							className={`${classes.textField} ${list.width}`}
+							className={classes.textField}
 							component={renderTextField}
 							label={list.label}
 							name={list.name}
@@ -132,7 +133,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				if (fieldName === 'formatDetails') {
 					return (
 						<>
-							<Grid key={list.name} item xs={12}>
+							<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
 								<Box mt={1}>
 									<Typography variant="h6">
 										<FormattedMessage id="publicationRegistration.form.formatDetails.select.label"/>
@@ -154,7 +155,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				}
 
 				return (
-					<Grid key={list.name} item xs={12}>
+					<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
 						<>
 							<Field
 								value={publicationIsbnValues && publicationIsbnValues.select}
@@ -176,7 +177,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							<Field
 								disableClearable
 								freeSolo
-								className={`${classes.selectField} ${list.width}`}
+								className={classes.selectField}
 								name={list.name}
 								component={renderSelectAutoComplete}
 								placeholder={list.placeholder}
@@ -186,6 +187,19 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							/>
 						</Grid>
 					</>
+				);
+
+			case 'textArea':
+				return (
+					<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
+						<Field
+							className={`${classes.textArea} ${classes.full}`}
+							component={renderTextArea}
+							name={fieldName}
+							label={list.label}
+							type="multiline"
+						/>
+					</Grid>
 				);
 
 			default:
@@ -207,19 +221,6 @@ export function fieldArrayElement({data, fieldName, clearFields, formName, publi
 	return {
 		...comp
 	};
-}
-
-function getClassificationInstruction() {
-	return (
-		<>
-			<Typography>
-				<FormattedMessage id="publisherRegistration.form.classificationInstruction1"/>
-			</Typography>
-			<Typography>
-				<FormattedMessage id="publisherRegistration.form.classificationInstruction2"/>
-			</Typography>
-		</>
-	);
 }
 
 function getUrl() {
@@ -256,6 +257,7 @@ function getSubFormatDetailsFieldArray(intl) {
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
+					instructions: getMultipleSelectInstruction(),
 					width: 'full',
 					options: [
 						{label: '', value: ''},
@@ -274,7 +276,8 @@ function getSubFormatDetailsFieldArray(intl) {
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'multiSelect',
-					width: 'half',
+					instructions: getMultipleSelectInstruction(),
+					width: 'full',
 					options: [
 						{label: '', value: ''},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
@@ -297,13 +300,13 @@ function getSubFormatDetailsFieldArray(intl) {
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.run'}),
 					name: 'formatDetails[run]',
-					type: 'number',
+					type: 'numeric',
 					width: 'half'
 				},
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
-					type: 'number',
+					type: 'numeric',
 					width: 'half'
 				}
 			]
@@ -352,13 +355,13 @@ function getSubFormatDetailsFieldArray(intl) {
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.run'}),
 					name: 'formatDetails[run]',
-					type: 'number',
+					type: 'numeric',
 					width: 'half'
 				},
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
-					type: 'number',
+					type: 'numeric',
 					width: 'half'
 				}
 			]
@@ -421,5 +424,25 @@ export function formatClassificationDefaultValue(arr) {
 		});
 		return acc;
 	}, []);
+}
+
+export function getMultipleSelectInstruction() {
+	return (
+		<>
+			<Typography>
+				<FormattedMessage id="form.multipleSelectInstruction"/>
+			</Typography>
+		</>
+	);
+}
+
+export function getCreateableSelectInstruction() {
+	return (
+		<>
+			<Typography>
+				<FormattedMessage id="form.createableSelectInstruction"/>
+			</Typography>
+		</>
+	);
 }
 

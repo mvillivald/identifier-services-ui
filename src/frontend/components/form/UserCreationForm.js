@@ -204,7 +204,7 @@ export default connect(
 				case 'text':
 					return (
 						<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
-							<Field className={`${classes.textField} ${list.width}`} component={renderTextField} label={list.label} name={list.name}/>
+							<Field className={classes.textField} component={renderTextField} label={list.label} name={list.name}/>
 						</Grid>
 					);
 
@@ -228,7 +228,7 @@ export default connect(
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field
 									createable
-									className={`${classes.textField} ${list.width}`}
+									className={classes.textField}
 									component={renderMultiSelect}
 									label={list.label}
 									name={list.name}

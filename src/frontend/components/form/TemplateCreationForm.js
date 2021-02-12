@@ -150,7 +150,7 @@ function element(list, classes, clearFields) {
 		case 'arrayString':
 			return (
 				<FieldArray
-					className={`${classes.arrayString} ${list.width}`}
+					className={classes.arrayString}
 					component={renderStringArray}
 					name={list.name}
 					type={list.type}
@@ -161,7 +161,7 @@ function element(list, classes, clearFields) {
 		case 'select':
 			return (
 				<Field
-					className={`${classes.selectField} ${list.width}`}
+					className={classes.selectField}
 					component={renderSelect}
 					label={list.label}
 					name={list.name}
@@ -172,7 +172,7 @@ function element(list, classes, clearFields) {
 		case 'text':
 			return (
 				<Field
-					className={`${classes.textField} ${list.width}`}
+					className={classes.textField}
 					component={renderTextField}
 					label={list.label}
 					name={list.name}
@@ -182,7 +182,7 @@ function element(list, classes, clearFields) {
 		case 'textarea':
 			return (
 				<Field
-					className={`${classes.textArea} ${list.width}`}
+					className={classes.textArea}
 					component={renderTextArea}
 					label={list.label}
 					name={list.name}

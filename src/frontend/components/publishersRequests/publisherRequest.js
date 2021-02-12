@@ -372,7 +372,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						}
 					</Grid>
 					<Grid item xs={12}>
-						{console.log(formattedPublisherRequest)}
 						<Typography variant="h6">
 							<FormattedMessage id="listComponent.distributorOf"/>
 						</Typography>

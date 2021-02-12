@@ -30,17 +30,18 @@
 import React, {useState, useEffect} from 'react';
 import {reduxForm, getFormValues, Field} from 'redux-form';
 import {validate} from '@natlibfi/identifier-services-commons';
-import {Button, Grid, Stepper, Step, StepLabel, Typography, List} from '@material-ui/core';
+import {Button, Grid, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
 import {FormattedMessage, useIntl} from 'react-intl';
 import HttpStatus from 'http-status';
+import moment from 'moment';
 
 import * as actions from '../../store/actions';
 import useStyles from '../../styles/form';
 import ResetCaptchaButton from './ResetCaptchaButton';
 import Captcha from '../Captcha';
-import {element, fieldArrayElement} from './publisherRegistrationForm/commons';
+import {element, fieldArrayElement, getMultipleSelectInstruction} from './commons';
 import ListComponent from '../ListComponent';
 import renderSelectAutoComplete from './render/renderSelectAutoComplete';
 
@@ -81,17 +82,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const [activeStep, setActiveStep] = useState(0);
 		const [captchaInput, setCaptchaInput] = useState('');
 		const [typeSelect, setTypeSelect] = useState(true);
+		const [isbnFromUniversity, setIsbnFromUniversity] = useState(false);
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
-
-		if (publicationValues && publicationValues.type && publicationValues.type.value === 'map') {
-			fieldArray[3].basicInformation.push({
-				label: intl.formatMessage({id: 'publicationRegistration.form.map.scale'}),
-				name: 'mapDetails[scale]',
-				type: 'text',
-				width: 'half'
-			});
-		}
 
 		fieldArray[3].basicInformation.push({
 			name: 'isbnClassification',
@@ -99,6 +92,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			width: 'half',
 			label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.label'}),
 			isMulti: true,
+			instructions: getMultipleSelectInstruction(),
 			isCreatable: false,
 			options: [
 				{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.nonFiction'}), value: 1},
@@ -110,6 +104,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		if (publicationValues && publicationValues.type && (publicationValues.type.value === 'dissertation' || publicationValues.type.value === 'music' || publicationValues.type.value === 'map')) {
 			fieldArray[3].basicInformation.splice(4, 1);
+		}
+
+		if (publicationValues && publicationValues.type && publicationValues.type.value === 'map') {
+			fieldArray[3].basicInformation.push({
+				label: intl.formatMessage({id: 'publicationRegistration.form.map.scale'}),
+				name: 'mapDetails[scale]',
+				type: 'text',
+				width: 'half'
+			});
 		}
 
 		const steps = getSteps(fieldArray, dissFieldArray);
@@ -133,6 +136,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 3:
 						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 4:
+						return renderAdditionalInformation();
+					case 5:
 						return renderPreview(publicationValues);
 					default:
 						return 'Unknown step';
@@ -154,6 +159,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 5:
 						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 6:
+						return renderAdditionalInformation();
+					case 7:
 						return renderPreview(publicationValues);
 					default:
 						return 'Unknown step';
@@ -177,6 +184,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 5:
 						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
 					case 6:
+						return renderAdditionalInformation();
+					case 7:
 						return renderPreview(publicationValues);
 					default:
 						return 'Unknown step';
@@ -327,9 +336,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					const formatDetails = {
 						...values.formatDetails,
 						printFormat: reFormat(values.formatDetails.printFormat),
-						format: 'printed',
-						run: values.formatDetails.run && Number(values.formatDetails.run),
-						edition: values.formatDetails.edition && Number(values.formatDetails.edition)
+						format: 'printed'
 					};
 					return formatDetails;
 				}
@@ -339,9 +346,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						...values.formatDetails,
 						format: 'printed-and-electronic',
 						fileFormat: reFormat(values.formatDetails.fileFormat),
-						printFormat: reFormat(values.formatDetails.printFormat),
-						run: values.formatDetails.run && Number(values.formatDetails.run),
-						edition: values.formatDetails.edition && Number(values.formatDetails.edition)
+						printFormat: reFormat(values.formatDetails.printFormat)
 					};
 					return formatDetails;
 				}
@@ -368,6 +373,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			}
 		}
 
+		function renderAdditionalInformation() {
+			return element({array: [{
+				name: 'additionalDetails',
+				type: 'textArea',
+				label: intl.formatMessage({id: 'publicationRegistration.form.additionalDetails'}),
+				width: 'half'
+			}], classes, fieldName: 'additionalDetails'});
+		}
+
 		function renderPreview(publicationValues) {
 			publicationValues = {
 				...publicationValues,
@@ -379,40 +393,275 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					isbnClassification: publicationValues.isbnClassification.map(item => item.label.toString())
 				} : formatPublicationValues(publicationValues);
 			return (
-				<Grid container item xs={12}>
-					<Grid item xs={12} md={6}>
-						<List>
-							{
-								Object.keys(formatPublicationValue).map(key => {
-									return (typeof formatPublicationValue[key] === 'string' || typeof formatPublicationValue[key] === 'boolean') ?
-										(
-											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatPublicationValue[key]}/>
-										) :
-										null;
-								})
-							}
-						</List>
+				<>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.basicInformations"/>
+								</Typography>
+								<hr/>
+								<ListComponent label={intl.formatMessage({id: 'listComponent.title'})} value={formatPublicationValue.title ? formatPublicationValue.title : ''}/>
+								<ListComponent label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatPublicationValue.subTitle ? formatPublicationValue.subTitle : ''}/>
+								<ListComponent label={intl.formatMessage({id: 'listComponent.language'})} value={formatPublicationValue.language ? formatPublicationValue.language : ''}/>
+								<ListComponent label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={formatPublicationValue.publicationTime ? formatPublicationValue.publicationTime : ''}/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.publisher"/>&nbsp;
+									<FormattedMessage id="listComponent.informations"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.name'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.name ? formatPublicationValue.publisher.name : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.address'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+										formatPublicationValue.publisher.postalAddress.address && formatPublicationValue.publisher.postalAddress.address :
+										(formatPublicationValue.publisher && formatPublicationValue.publisher.address ?
+											formatPublicationValue.publisher.address :
+											'')}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.city'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+										formatPublicationValue.publisher.postalAddress.city && formatPublicationValue.publisher.postalAddress.city :
+										(formatPublicationValue.publisher && formatPublicationValue.publisher.city ?
+											formatPublicationValue.publisher.city :
+											'')}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.zip'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+										formatPublicationValue.publisher.postalAddress.zip && formatPublicationValue.publisher.postalAddress.zip :
+										(formatPublicationValue.publisher && formatPublicationValue.publisher.zip ?
+											formatPublicationValue.publisher.zip :
+											'')}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.phone'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.phone ? formatPublicationValue.publisher.phone : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.givenName'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.givenName ? formatPublicationValue.publisher.givenName : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.familyName'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.familyName ? formatPublicationValue.publisher.familyName : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.email'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.email ? formatPublicationValue.publisher.email : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.language'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.language ? formatPublicationValue.publisher.language : ''}
+								/>
+							</Grid>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.publisher"/>&nbsp;
+								<FormattedMessage id="listComponent.publishingActivities"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.currentYear'})}
+								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency &&
+									formatPublicationValue.publisher.publicationDetails.frequency.currentYear ? formatPublicationValue.publisher.publicationDetails.frequency.currentYear : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.nextYear'})}
+								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency &&
+									formatPublicationValue.publisher.publicationDetails.frequency.nextYear ? formatPublicationValue.publisher.publicationDetails.frequency.nextYear : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.previouslyPublished'})}
+								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.previouslyPublished ?
+									formatPublicationValue.publisher.publicationDetails.frequency.previouslyPublished : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.publishingActivities'})}
+								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency.publishingActivities ?
+									formatPublicationValue.publisher.publicationDetails.frequency.publishingActivities : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.authors"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								clearFields={clearFields}
+								fieldName="authors"
+								value={formatPublicationValue.authors ? formatPublicationValue.authors : []}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.additionalDetails"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								value={formatPublicationValue.additionalDetails ? formatPublicationValue.additionalDetails : ''}
+							/>
+						</Grid>
 					</Grid>
-					<Grid item className={classes.bodyContainer} xs={12} md={6}>
-						<List>
-							{
-								Object.keys(formatPublicationValue).map(key => {
-									if (typeof formatPublicationValue[key] === 'object') {
-										if (Array.isArray(formatPublicationValue[key])) {
-											return <ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={formatPublicationValue[key]}/>;
-										}
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.publicationDetails"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.classification'})}
+									value={formatPublicationValue.isbnClassification ? formatPublicationValue.isbnClassification : []}
+								/>
+							</Grid>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.publicationType'})}
+								value={formatPublicationValue.publicationType ? formatPublicationValue.publicationType : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.isPublic'})}
+								value={formatPublicationValue.isPublic ? formatPublicationValue.isPublic : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.type'})}
+								value={formatPublicationValue.type ? formatPublicationValue.type : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.identifier'})}
+								value={formatPublicationValue.identifier ? formatPublicationValue.identifier : ''}
+							/>
+						</Grid>
 
-										const obj = formatPublicationValue[key];
-										Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : '');
-										return <ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={obj}/>;
-									}
-
-									return null;
-								})
-							}
-						</List>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.uniformDetails"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={formatPublicationValue.uniform && formatPublicationValue.uniform.name ? formatPublicationValue.uniform.name : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.language'})}
+								value={formatPublicationValue.uniform && formatPublicationValue.uniform.language ? formatPublicationValue.uniform.language : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.seriesDetails"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.volume'})}
+								value={formatPublicationValue.seriesDetails ?
+									(formatPublicationValue.seriesDetails.volume ?
+										formatPublicationValue.seriesDetails.volume :
+										''
+									) :	''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.title'})}
+								value={formatPublicationValue.seriesDetails ?
+									(formatPublicationValue.seriesDetails.title ?
+										formatPublicationValue.seriesDetails.title :
+										''
+									) :	''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.identifier'})}
+								value={formatPublicationValue.seriesDetails ?
+									(formatPublicationValue.seriesDetails.identifier ?
+										formatPublicationValue.seriesDetails.identifier :
+										''
+									) :	''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.formatDetails"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.selectFormat'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.format ?
+										formatPublicationValue.formatDetails.format :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.fileFormat'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.fileFormat ?
+										formatPublicationValue.formatDetails.fileFormat :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.printFormat'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.printFormat ?
+										formatPublicationValue.formatDetails.printFormat :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.manufacturer'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.manufacturer ?
+										formatPublicationValue.formatDetails.manufacturer :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.city ?
+										formatPublicationValue.formatDetails.city :
+										''
+									) : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.otherReference"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.state'})}
+								value={formatPublicationValue.state ? formatPublicationValue.state : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.creator'})}
+								value={formatPublicationValue.creator ? formatPublicationValue.creator : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
+								value={formatPublicationValue.lastUpdated ?
+									(formatPublicationValue.lastUpdated.timestamp ?
+										formatPublicationValue.lastUpdated.timestamp :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
+								value={formatPublicationValue.lastUpdated ?
+									(formatPublicationValue.lastUpdated.user ?
+										formatPublicationValue.lastUpdated.user :
+										''
+									) : ''}
+							/>
+						</Grid>
 					</Grid>
-				</Grid>
+				</>
 			);
 		}
 
@@ -540,8 +789,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								]}
 							/>
 						</Grid>
+						<Grid item xs={12} className="select-useType">
+							<form>
+								<Typography variant="body2" class={{margin: '30px 0 10px 0'}}>
+									<FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.label"/>
+									<strong><FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.labelBold"/></strong>
+								</Typography>
+								<FormControlLabel
+									control={
+										<Checkbox
+											color="primary"
+											checked={isbnFromUniversity}
+											onChange={() => setIsbnFromUniversity(!isbnFromUniversity)}
+										/>
+									}
+									label={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity'})}
+								/>
+							</form>
+						</Grid>
 						<Button
-							disabled={publicationValues && (!publicationValues.isPublic || !publicationValues.type)}
+							disabled={publicationValues && (!publicationValues.isPublic || !publicationValues.type || !isbnFromUniversity)}
 							variant="contained"
 							color="primary"
 							className="continue-button"
@@ -562,7 +829,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<div className={classes.subContainer}>
 							<Grid container spacing={2} direction="row">
 								{(getStepContent(activeStep))}
-
 								{
 									activeStep === steps.length - 1 &&
 										<Grid item xs={12} className={classes.captchaContainer}>
@@ -823,17 +1089,24 @@ export function getFieldArray(intl) {
 					defaultValue: 'eng',
 					options: [
 						{label: 'English (Default Language)', value: 'eng'},
+						{label: 'French', value: 'fre'},
+						{label: 'Germany', value: 'ger'},
+						{label: 'Russain', value: 'rus'},
+						{label: 'Sami', value: 'smi'},
 						{label: 'Suomi', value: 'fin'},
-						{label: 'Svenska', value: 'swe'}
+						{label: 'Spanish', value: 'esp'},
+						{label: 'Svenska', value: 'swe'},
+						{label: 'Other', value: 'other'},
+						{label: 'Bilingual', value: 'bilingual'}
 					]
 				},
 				{
 					name: 'publicationTime',
 					type: 'dateTime',
-					views: ['year', 'month'],
-					format: 'MM/yyyy',
+					width: 'half',
 					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.publicationTime'}),
-					width: 'half'
+					min: moment(Date.now()).format('YYYY-MM-DD'),
+					formName: 'isbnIsmnRegForm'
 				}
 			]
 		},
@@ -856,7 +1129,9 @@ export function getFieldArray(intl) {
 						},
 						{
 							name: 'role',
-							type: 'select',
+							type: 'multiSelect',
+							isMulti: true,
+							instructions: getMultipleSelectInstruction(),
 							label: intl.formatMessage({id: 'publicationRegistration.form.authors.role'}),
 							width: 'half',
 							options: [
@@ -911,6 +1186,9 @@ export function getFieldArray(intl) {
 					]
 				}
 			]
+		},
+		{
+			additionalDetails: 'additionalDetails'
 		},
 		{
 			preview: 'preview'

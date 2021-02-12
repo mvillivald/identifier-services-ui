@@ -30,9 +30,15 @@ import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		width: 900,
-		margin: '40px 0px 40px 0px',
+		margin: '40px 60px',
 		flexGrow: 1
+	},
+	previewContainer: {
+		width: '100%',
+		margin: '40px 0px 40px 0px',
+		flexGrow: 1,
+		maxHeight: 900,
+		overflow: 'auto'
 	},
 	passwordResetContainer: {
 		width: '30%',
@@ -81,7 +87,8 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'row'
 	},
 	textArea: {
-		width: '100%'
+		width: '100%',
+		background: '#f5f3f3'
 	},
 	stepLabel: {
 		textTransform: 'capitalize'
@@ -116,7 +123,9 @@ const useStyles = makeStyles(theme => ({
 	},
 	affiliatesAddBtn: {
 		display: 'flex',
-		alignItems: 'center'
+		flexWrap: 'wrap',
+		alignItems: 'flex-end',
+		padding: 10
 	},
 	captcha: {
 		marginTop: '10px',
@@ -153,9 +162,14 @@ const useStyles = makeStyles(theme => ({
 	addFabBtn: {
 		marginTop: '15px'
 	},
-	dateTimePicker: {
-		width: '100%',
-		marginTop: '0 !important'
+	dateContainer: {
+		display: 'flex',
+		flexWrap: 'wrap'
+	},
+	dateTextField: {
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1),
+		width: '100%'
 	},
 	paperRoot: {
 		padding: theme.spacing(1, 1),
@@ -195,7 +209,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	notesContainer: {
 		maxWidth: '900px',
-		background: '#f1eded',
 		padding: '20px',
 		'& button': {
 			margin: '20px 0'

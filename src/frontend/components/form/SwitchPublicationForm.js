@@ -25,47 +25,40 @@
  * for the JavaScript code in this file.
  *
  */
-import React, {useState} from 'react';
+import React from 'react';
 import {Button, Typography} from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
 
 import useStyles from '../../styles/form';
-import IsbnIsmnRegForm from './IsbnIsmnRegForm';
-import IssnRegForm from './IssnRegForm';
 
 export default function (props) {
-	const {setTitle} = props;
-	const [value, setValue] = useState('');
+	const {history, handleClose} = props;
 	const classes = useStyles();
 
 	const handleIsbnIsmnClick = () => {
-		setValue('isbn-ismn');
-		setTitle('ISBN-ISMN');
+		handleClose();
+		history.push('/isbnIsmnRegistrationForm');
 	};
 
 	const handleIssnClick = () => {
-		setValue('issn');
-		setTitle('ISSN');
+		handleClose();
+		history.push('/issnRegistrationForm');
 	};
 
 	const component = (
 		<>
-			{value === '' ?
-				<>
-					<div className={classes.pubFormSelect}>
-						<Typography variant="h6">
-							<FormattedMessage id="app.modal.publicationRegistration.selectType"/>
-						</Typography>
-						<Button variant="contained" color="primary" onClick={handleIsbnIsmnClick}>
-							<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISBN-ISMN"/>
-						</Button>
-						<Button variant="contained" color="primary" onClick={handleIssnClick}>
-							<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISSN"/>
+			<div className={classes.pubFormSelect}>
+				<Typography variant="h6">
+					<FormattedMessage id="app.modal.publicationRegistration.selectType"/>
+				</Typography>
+				<Button variant="contained" color="primary" onClick={handleIsbnIsmnClick}>
+					<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISBN-ISMN"/>
+				</Button>
+				<Button variant="contained" color="primary" onClick={handleIssnClick}>
+					<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISSN"/>
 
-						</Button>
-					</div>
-				</> :
-				value === 'isbn-ismn' ? <IsbnIsmnRegForm {...props}/> : <IssnRegForm {...props}/>}
+				</Button>
+			</div>
 		</>
 	);
 

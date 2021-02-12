@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -28,7 +29,7 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {reduxForm, getFormValues} from 'redux-form';
-import {Button, Grid, Stepper, Step, StepLabel, Typography, List} from '@material-ui/core';
+import {Button, Grid, Stepper, Step, StepLabel, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import HttpStatus from 'http-status';
@@ -43,7 +44,7 @@ import RenderInformation from './RenderInformation';
 import Captcha from '../../Captcha';
 import {fieldArray} from './formFieldVariable';
 import * as actions from '../../../store/actions';
-import {element, fieldArrayElement, formatAddress} from './commons';
+import {element, fieldArrayElement, formatAddress} from '../commons';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherRegistrationForm',
@@ -315,36 +316,276 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		function renderPreview(publisherValues) {
 			return (
-				<Grid container item className={classes.bodyContainer} xs={12}>
-					<Grid item xs={12} md={6}>
-						<List>
+				<>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.basicInformations"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									fieldName="name"
+									label={intl.formatMessage({id: 'listComponent.name'})}
+									value={publisherValues.name ? publisherValues.name : ''}
+								/>
+								<ListComponent
+									fieldName="phone"
+									label={intl.formatMessage({id: 'listComponent.phone'})}
+									value={publisherValues.phone ? publisherValues.phone : ''}
+								/>
+								<ListComponent
+									fieldName="publisherCategory"
+									label={intl.formatMessage({id: 'listComponent.publisherCategory'})}
+									value={publisherValues.publisherCategory ? publisherValues.publisherCategory.value : ''}
+								/>
+								<ListComponent
+									fieldName="language"
+									label={intl.formatMessage({id: 'listComponent.language'})}
+									value={publisherValues.language ? publisherValues.language : ''}
+								/>
+								<ListComponent
+									fieldName="email"
+									label={intl.formatMessage({id: 'listComponent.email'})}
+									value={publisherValues.email ? publisherValues.email : ''}
+								/>
+								<ListComponent
+									fieldName="givenName"
+									label={intl.formatMessage({id: 'listComponent.givenName'})}
+									value={publisherValues.givenName ? publisherValues.givenName : ''}
+								/>
+								<ListComponent
+									fieldName="familyName"
+									label={intl.formatMessage({id: 'listComponent.familyName'})}
+									value={publisherValues.familyName ? publisherValues.familyName : ''}
+								/>
+								<ListComponent
+									fieldName="publisherType"
+									label={intl.formatMessage({id: 'listComponent.publisherType'})}
+									value={publisherValues.publisherType ? publisherValues.publisherType : ''}
+								/>
+								<ListComponent
+									fieldName="creator"
+									label={intl.formatMessage({id: 'listComponent.creator'})}
+									value={publisherValues.creator ? publisherValues.creator : ''}
+								/>
+								<ListComponent
+									fieldName="website"
+									label={intl.formatMessage({id: 'listComponent.website'})}
+									value={publisherValues.website ? publisherValues.website : ''}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.postalAddress"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									fieldName="postalAddress[address]"
+									label={intl.formatMessage({id: 'listComponent.address'})}
+									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.address ?
+										publisherValues.postalAddress.address : ''}
+								/>
+								<ListComponent
+									fieldName="postalAddress[city]"
+									label={intl.formatMessage({id: 'listComponent.city'})}
+									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.city ?
+										publisherValues.postalAddress.city : ''}
+								/>
+								<ListComponent
+									fieldName="postalAddress[zip]"
+									label={intl.formatMessage({id: 'listComponent.zip'})}
+									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.zip ?
+										publisherValues.postalAddress.zip : ''}
+								/>
+								<ListComponent
+									fieldName="postalAddress[public]"
+									label={intl.formatMessage({id: 'listComponent.public'})}
+									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.public ?
+										publisherValues.postalAddress.public : ''}
+								/>
+							</Grid>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.affiliateOf"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="organizationDetails[affiliateOf][address]"
+								label={intl.formatMessage({id: 'listComponent.address'})}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.address ?
+									publisherValues.affiliateOf.address : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[affiliateOf][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.city ?
+									publisherValues.affiliateOf.city : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[affiliateOf][zip]"
+								label={intl.formatMessage({id: 'listComponent.zip'})}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.zip ?
+									publisherValues.affiliateOf.zip : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[affiliateOf][name]"
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.name ?
+									publisherValues.affiliateOf.name : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.affiliates"/>
+							</Typography>
+							<hr/>
 							{
-								Object.keys(publisherValues).map(key => {
-									return typeof publisherValues[key] === 'string' ?
-										(
-											<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={publisherValues[key]}/>
-										) :
-										null;
-								})
+								publisherValues && publisherValues.affiliates && publisherValues.affiliates.map(item => (
+									<Grid key={`${item.name}${item.address}`} container>
+										<ListComponent
+											fieldName="organizationDetails[affiliates][address]"
+											label={intl.formatMessage({id: 'listComponent.address'})}
+											value={item.address ? item.address : ''}
+										/>
+										<ListComponent
+											fieldName="organizationDetails[affiliates][city]"
+											label={intl.formatMessage({id: 'listComponent.city'})}
+											value={item.city ? item.city : ''}
+										/>
+										<ListComponent
+											fieldName="organizationDetails[affiliates][zip]"
+											label={intl.formatMessage({id: 'listComponent.zip'})}
+											value={item.zip ? item.zip : ''}
+										/>
+										<ListComponent
+											fieldName="organizationDetails[affiliates][name]"
+											label={intl.formatMessage({id: 'listComponent.name'})}
+											value={item.name ? item.name : ''}
+										/>
+									</Grid>
+
+								))
 							}
-						</List>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.distributorOf"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="organizationDetails[distributorOf][address]"
+								label={intl.formatMessage({id: 'listComponent.address'})}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.address ?
+									publisherValues.distributorOf.address : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[distributorOf][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.city ?
+									publisherValues.distributorOf.city : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[distributorOf][zip]"
+								label={intl.formatMessage({id: 'listComponent.zip'})}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.zip ?
+									publisherValues.distributorOf.zip : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[distributorOf][name]"
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.name ?
+									publisherValues.distributorOf.name : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.distributor"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="organizationDetails[distributor][address]"
+								label={intl.formatMessage({id: 'listComponent.address'})}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.address ?
+									publisherValues.distributor.address : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[distributor][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.city ?
+									publisherValues.distributor.city : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[distributor][zip]"
+								label={intl.formatMessage({id: 'listComponent.zip'})}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.zip ?
+									publisherValues.distributor.zip : ''}
+							/>
+							<ListComponent
+								fieldName="organizationDetails[distributor][name]"
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.name ?
+									publisherValues.distributor.name : ''}
+							/>
+						</Grid>
 					</Grid>
-					<Grid item xs={12} md={6}>
-						<List>
-							{
-								Object.keys(publisherValues).map(key => {
-									return typeof publisherValues[key] === 'object' ?
-										<ListComponent label={intl.formatMessage({id: `listComponent.${key}`})} value={
-											key === 'classification' ?
-												publisherValues[key].map(item => (item.value).toString()) :
-												(key === 'publisherCategory' ? publisherValues[key].value : publisherValues[key])
-										}/> :
-										null;
-								})
-							}
-						</List>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.aliases"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="aliases"
+								label={intl.formatMessage({id: 'listComponent.aliases'})}
+								value={publisherValues.aliases ? publisherValues.aliases : []}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								Frequency
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="publicationDetails[frequency][currentYear]"
+								label={intl.formatMessage({id: 'listComponent.currentYear'})}
+								value={publisherValues && publisherValues.publicationDetails && publisherValues.publicationDetails.frequency && publisherValues.publicationDetails.frequency.currentYear ?
+									publisherValues.publicationDetails.frequency.currentYear : ''}
+							/>
+							<ListComponent
+								fieldName="publicationDetails[frequency][currentYear]"
+								label={intl.formatMessage({id: 'listComponent.nextYear'})}
+								value={publisherValues && publisherValues.publicationDetails && publisherValues.publicationDetails.frequency && publisherValues.publicationDetails.frequency.nextYear ?
+									publisherValues.publicationDetails.frequency.nextYear : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.classification"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent fieldName="classification"
+									label={intl.formatMessage({id: 'listComponent.classification'})}
+									value={publisherValues.classification && publisherValues.classification.value}
+								/>
+							</Grid>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.notes"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="notes"
+								label={intl.formatMessage({id: 'listComponent.notes'})}
+								value={publisherValues.notes ? publisherValues.notes : ''}
+							/>
+						</Grid>
 					</Grid>
-				</Grid>
+				</>
+
 			);
 		}
 

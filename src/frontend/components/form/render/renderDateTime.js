@@ -27,34 +27,25 @@
  */
 import 'date-fns';
 import React from 'react';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-	MuiPickersUtilsProvider,
-	KeyboardDatePicker
-} from '@material-ui/pickers';
+import {TextField} from '@material-ui/core';
 
 export default function MaterialUIPickers(props) {
-	const {input, className, label, format, views} = props;
+	const {input, className, label, formName, min} = props;
 
 	const component = (
-		<MuiPickersUtilsProvider utils={DateFnsUtils}>
-			<>
-				<KeyboardDatePicker
-					{...input}
-					className={className}
-					margin="normal"
-					id="date-picker-dialog"
-					label={label}
-					format={format}
-					views={views}
-					value={input.value || null}
-					KeyboardButtonProps={{
-						'aria-label': 'change date'
-					}}
-					onChange={value => input.onChange(value)}
-				/>
-			</>
-		</MuiPickersUtilsProvider>
+		<form noValidate name={formName} className={className.dateContainer}>
+			<TextField
+				{...input}
+				id={name}
+				label={label}
+				type="date"
+				inputProps={{min: min}}
+				className={className.dateTextField}
+				InputLabelProps={{
+					shrink: true
+				}}
+			/>
+		</form>
 	);
 	return {
 		...component

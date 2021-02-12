@@ -27,7 +27,7 @@
  */
 
 import React, {useState} from 'react';
-import {Typography, Grid} from '@material-ui/core';
+import {Typography, Grid, Button} from '@material-ui/core';
 import {withRouter} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
 
@@ -35,15 +35,16 @@ import useStyles from '../../styles/formList';
 import ModalLayout from '../ModalLayout';
 import PublisherRegistrationForm from '../form/publisherRegistrationForm/PublisherRegistrationForm';
 import SwitchPublicationForm from '../form/SwitchPublicationForm';
-import ContactForm from '../form/ContactForm';
 
 export default withRouter(props => {
+	const {history} = props;
 	const [dynamicTitle, setDynamicTitle] = useState('');
 	const formListsArray = [
 		{
 			label: <FormattedMessage id="app.home.formButtons.publisherRegistration"/>,
 			title: <FormattedMessage id="app.modal.title.publisherRegistration"/>,
 			name: 'publisherRegistration',
+			path: '/publisherRegistrationForm',
 			component: <PublisherRegistrationForm {...props}/>
 		},
 		{
@@ -51,12 +52,6 @@ export default withRouter(props => {
 			title: <FormattedMessage id={dynamicTitle === '' ? 'app.modal.title.publicationRegistration' : `app.modal.title.publicationRegistration${dynamicTitle}`}/>,
 			name: 'publicationRegistration',
 			component: <SwitchPublicationForm title={dynamicTitle} setTitle={setDynamicTitle} {...props}/>
-		},
-		{
-			label: <FormattedMessage id="app.home.formButtons.contactForm"/>,
-			title: <FormattedMessage id="app.modal.title.contactForm"/>,
-			name: 'contactForm',
-			component: <ContactForm {...props}/>
 		}
 	];
 	const classes = useStyles();
@@ -66,12 +61,23 @@ export default withRouter(props => {
 				<Grid item xs={12}>
 					<Typography variant="h4" align="center"><FormattedMessage id="app.home.formHeading"/></Typography>
 				</Grid>
-
-				{formListsArray.map(item => (
-					<ModalLayout key={item.label} form label={item.label} title={item.title} dynamicTitle={dynamicTitle} setDynamicTitle={setDynamicTitle} name={item.name} variant="outlined" classed={classes.button} color="primary">
-						{item.component}
-					</ModalLayout>
-				))}
+				{formListsArray.map(item =>
+					item.name === 'publisherRegistration' ?
+						(
+							<Button
+								key={item.label}
+								variant="outlined"
+								color="primary"
+								onClick={() => history.push(item.path)}
+							>
+								{item.label}
+							</Button>
+						) : (
+							<ModalLayout key={item.label} form label={item.label} title={item.title} dynamicTitle={dynamicTitle} setDynamicTitle={setDynamicTitle} name={item.name} variant="outlined" classed={classes.button} color="primary">
+								{item.component}
+							</ModalLayout>
+						)
+				)}
 			</Grid>
 		</div>
 	);

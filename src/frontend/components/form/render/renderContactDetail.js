@@ -34,9 +34,11 @@ import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 import {FormattedMessage} from 'react-intl';
+import HelpIcon from '@material-ui/icons/Help';
 
+import PopoverComponent from '../../PopoverComponent';
 import renderTextField from './renderTextField';
-import renderSelect from './renderSelect';
+import renderMultiSelect from './renderMultiSelect';
 import useStyles from '../../../styles/form';
 
 export default connect(state => ({
@@ -133,17 +135,19 @@ export default connect(state => ({
 		<>
 			{data && data.map(list => {
 				switch (list.type) {
-					case 'select':
+					case 'multiSelect':
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field
-									className={`${classes.textField} ${list.width}`}
-									component={renderSelect}
+									className={classes.selectField}
+									component={renderMultiSelect}
 									label={list.label}
+									infoIconComponent={list.instructions && <PopoverComponent icon={<HelpIcon/>} infoText={list.instructions}/>}
 									name={list.name}
 									type={list.type}
 									options={list.options}
-									props={{errors}}
+									creatable={list.creatable}
+									props={{isMulti: list.isMulti ? list.isMulti : false, error}}
 								/>
 							</Grid>
 						);
@@ -151,7 +155,7 @@ export default connect(state => ({
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field
-									className={`${classes.textField} ${list.width}`}
+									className={classes.textField}
 									component={renderTextField}
 									label={list.label}
 									name={list.name}

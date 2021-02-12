@@ -13,7 +13,7 @@ import useFormStyles from '../styles/form';
 import useStyles from '../styles/listComponent';
 import {fieldArray} from '../components/form/publisherRegistrationForm/formFieldVariable';
 import {getFieldArray} from './form/IsbnIsmnRegForm';
-import {classificationCodes, isbnClassificationCodes} from './form/publisherRegistrationForm/formFieldVariable';
+import {classificationCodes, isbnClassificationCodes, publisherCategory} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
 	const classes = useStyles();
@@ -50,6 +50,8 @@ export default function (props) {
 										renderEditPublisherCategory(fieldName)
 									) : fieldName === 'metadataDelivery' ? (
 										renderEditMetadataDelivery(fieldName)
+									) : fieldName === 'classification' ? (
+										getClassificationValue(Number(value), classificationCodes)
 									) : fieldName === 'publishingActivities' ? (
 										renderEditPublishingActivities(fieldName)
 									) : fieldName === 'backgroundProcessingState' ? (
@@ -58,7 +60,11 @@ export default function (props) {
 										<Field name={fieldName} className={formClasses.editForm} component={renderTextField}/>
 									)
 								) : (
-									value
+									fieldName === 'classification' ? (
+										getClassificationValue(Number(value), classificationCodes)
+									) : fieldName === 'publisherCategory' ?
+										getPublisherCategory(value, publisherCategory) :
+										value
 								)}
 							</Grid>
 						</>
@@ -189,27 +195,49 @@ export default function (props) {
 							{obj.length > 0 ?
 								obj.map(item => {
 									const keys = Object.keys(item);
-									return (
-										<Grid key={item} container>
-											{keys.length > 0 && keys.map(k =>
-												(
-													<Grid key={k} container>
-														<Grid item xs={4}>
-															<span className={classes.label}>{intl.formatMessage({id: `listComponent.${k}`})}:</span>
-														</Grid>
-														<Grid item xs={8}>
-															{item[k]}
-														</Grid>
-														<hr/>
-													</Grid>
-												)
-											)}
-										</Grid>
-									);
-								}) :
-								<Grid item xs={4}>
-									<span> No Authors Added</span>
-								</Grid>}
+									return Array.isArray(item) ?
+										renderObject(item) :
+										(
+											<Grid key={item} container>
+												{keys.length > 0 && keys.map(k =>
+													typeof item[k] === 'object' ?
+														renderObject(item[k]) :
+														(
+															<Grid key={k} container>
+																<Grid item xs={4}>
+																	<span className={classes.label}>{intl.formatMessage({id: `listComponent.${k}`})}:</span>
+																</Grid>
+																<Grid item xs={8}>
+																	{item[k]}
+																</Grid>
+																<hr/>
+															</Grid>
+														)
+												)}
+											</Grid>
+										);
+								}) : (
+									<Grid item xs={4}>
+										<span> No Authors Added</span>
+									</Grid>
+								)}
+						</>
+					);
+				}
+
+				if (fieldName === 'issnFormatDetails') {
+					return (
+						<>
+							<Grid item xs={4}>
+								<span className={classes.label}>{label}:</span>
+							</Grid>
+							{obj.map(item => {
+								return (
+									<Grid key={item} item>
+										<Chip label={item.format}/>
+									</Grid>
+								);
+							})}
 						</>
 					);
 				}
@@ -264,14 +292,14 @@ export default function (props) {
 							) : (
 								<ul key={item} style={{borderBottom: '1px dashed', listStyleType: 'none'}}>
 									{Object.keys(item).map(key =>
-										item[key] ? (
+										item[key] === 'string' ? (
 											<li key={key} className={classes.dropDownList}>
 												<span className={classes.label}>
 													<FormattedMessage id={key}/>:
 												</span>
 												<span>{edit ? <Field name={`${item}[${key}]`} className={formClasses.editForm} component={renderTextField}/> : item[key]}</span>
 											</li>
-										) : null
+										) : renderObject(item)
 									)}
 								</ul>
 							)
@@ -539,6 +567,18 @@ export default function (props) {
 	}
 
 	function getClassificationValue(value, array) {
+		const reducedValue = array.reduce((acc, item) => {
+			if (item.value === value) {
+				acc = intl.formatMessage({id: `${item.label.props.id}`});
+				return acc;
+			}
+
+			return acc;
+		}, '');
+		return reducedValue;
+	}
+
+	function getPublisherCategory(value, array) {
 		const reducedValue = array.reduce((acc, item) => {
 			if (item.value === value) {
 				acc = intl.formatMessage({id: `${item.label.props.id}`});
