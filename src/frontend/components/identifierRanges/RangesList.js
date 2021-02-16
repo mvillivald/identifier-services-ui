@@ -190,26 +190,24 @@ export default connect(mapStateToProps, actions)(props => {
 				.reduce((acc, [
 					key,
 					value
-				]) => ({...acc, [key]: formatDate(key, value)}), {});
+				]) => (
+					{...acc, [key]: formatDate(key, value)}),
+				{createdBy: item.created.user});
 		}
 
-		if (rangeType === 'identifier') {
+		if (item !== undefined) {
 			return Object.entries(item)
 				.reduce((acc, [
 					key,
 					value
-				]) => ({...acc, [key]: formatDate(key, value)}), {});
+				]) => (
+					{...acc, [key]: formatDate(key, value)}),
+				{createdBy: item.created.user});
 		}
 
-		return item.created === undefined ?
-			{...item} :
-			{
-				...item,
-				created: moment(item.created.replace('Z', ''), moment.defaultFormat).format('L')
-			};
 		function formatDate(key, value) {
 			if (key === 'created') {
-				return moment(value, moment.defaultFormat).format('L');
+				return moment(value.timestamp, moment.defaultFormat).format('L');
 			}
 
 			return value;

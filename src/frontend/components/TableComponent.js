@@ -166,21 +166,24 @@ export default function (props) {
 									className={classes.tableRow}
 									onClick={() => handleTableRowClick(row.userId ? row.userId : row.id)}
 								>
-									{Object.keys(row).map(key => (key !== 'id' && key !== 'mongoId') && (
-										<TableCell key={row[key]} component="th" scope="row">
-											{headRows.map(h => (
-												h.id === key &&
-													(row[key] === true ?
-														'true' :
-														(
-															row[key] === false ?
-																'false' :
-																row[key]
-														)
-													)
-											))}
-										</TableCell>
-									))}
+									{headRows.reduce((acc, h) => {
+										Object.keys(row).forEach(key => (console.log(key, h.id) || (key !== 'id' && key !== 'mongoId')) && (
+											h.id === key &&
+												acc.push(
+													<TableCell key={row[key]} component="th" scope="row">
+														{(row[key] === true ?
+															'true' :
+															(
+																row[key] === false ?
+																	'false' :
+																	row[key]
+															)
+														)}
+													</TableCell>
+												)
+										));
+										return acc;
+									}, [])}
 								</TableRow>
 							);
 						})}
