@@ -143,10 +143,23 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function listRender(item) {
-		return {
-			...item,
-			created: moment(item.created.replace('Z', ''), moment.defaultFormat).format('L')
-		};
+		if (item !== undefined) {
+			return Object.entries(item)
+				.reduce((acc, [
+					key,
+					value
+				]) => (
+					{...acc, [key]: formatDate(key, value)}),
+				{createdBy: item.created.user});
+		}
+
+		function formatDate(key, value) {
+			if (key === 'created') {
+				return moment(value.timestamp, moment.defaultFormat).format('L');
+			}
+
+			return value;
+		}
 	}
 
 	const component = (
