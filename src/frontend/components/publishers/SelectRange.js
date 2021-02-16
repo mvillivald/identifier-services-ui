@@ -45,7 +45,7 @@ import TableComponent from '../TableComponent';
 import {commonStyles} from '../../styles/app';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIDRList, rangesList, loading, offset, queryDocCount, rangeType, setNewPublisherRangeId, setAssignRange} = props;
+	const {fetchIDRList, rangesList, loading, offset, queryDocCount, rangeType, setNewPublisherRangeId} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -70,12 +70,11 @@ export default connect(mapStateToProps, actions)(props => {
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {
 			setRowSelectedId(selectedId);
-			if (rangeType === 'subRange') {
+			if (rangeType === 'range') {
 				setNewPublisherRangeId(selectedId);
-				setAssignRange(false);
 			}
 		}
-	}, [confirmation, rangeType, selectedId, setAssignRange, setNewPublisherRangeId]);
+	}, [confirmation, rangeType, selectedId, setNewPublisherRangeId]);
 
 	const handleTableRowClick = id => {
 		// TO DO alert Confirm message

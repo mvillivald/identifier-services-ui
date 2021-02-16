@@ -167,7 +167,7 @@ export default function (props) {
 									onClick={() => handleTableRowClick(row.userId ? row.userId : row.id)}
 								>
 									{headRows.reduce((acc, h) => {
-										Object.keys(row).forEach(key => (console.log(key, h.id) || (key !== 'id' && key !== 'mongoId')) && (
+										Object.keys(row).forEach(key => (key !== 'id' && key !== 'mongoId') && (
 											h.id === key &&
 												acc.push(
 													<TableCell key={row[key]} component="th" scope="row">

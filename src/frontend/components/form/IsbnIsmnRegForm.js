@@ -790,25 +790,28 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 						</Grid>
 						<Grid item xs={12} className="select-useType">
-							<form>
-								<Typography variant="body2" class={{margin: '30px 0 10px 0'}}>
-									<FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.label"/>
-									<strong><FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.labelBold"/></strong>
-								</Typography>
-								<FormControlLabel
-									control={
-										<Checkbox
-											color="primary"
-											checked={isbnFromUniversity}
-											onChange={() => setIsbnFromUniversity(!isbnFromUniversity)}
+							{
+								publicationValues && publicationValues.type && publicationValues.type.value === 'dissertation' &&
+									<form>
+										<Typography variant="body2" class={{margin: '30px 0 10px 0'}}>
+											<FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.label"/>
+											<strong><FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.labelBold"/></strong>
+										</Typography>
+										<FormControlLabel
+											control={
+												<Checkbox
+													color="primary"
+													checked={isbnFromUniversity}
+													onChange={() => setIsbnFromUniversity(!isbnFromUniversity)}
+												/>
+											}
+											label={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity'})}
 										/>
-									}
-									label={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity'})}
-								/>
-							</form>
+									</form>
+							}
 						</Grid>
 						<Button
-							disabled={publicationValues && (!publicationValues.isPublic || !publicationValues.type || !isbnFromUniversity)}
+							disabled={enableContinue()}
 							variant="contained"
 							color="primary"
 							className="continue-button"
@@ -866,6 +869,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</form>}
 			</>
 		);
+
+		function enableContinue() {
+			if (publicationValues && publicationValues.type && publicationValues.type.value === 'dissertation') {
+				return publicationValues && (!publicationValues.isPublic || !publicationValues.type || !isbnFromUniversity);
+			}
+
+			return publicationValues && (!publicationValues.isPublic || !publicationValues.type);
+		}
 
 		return {
 			...component,
