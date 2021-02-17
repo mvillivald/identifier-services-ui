@@ -274,6 +274,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				});
 			const publisher = isAuthenticated ? user.publisher : dissertPublisher;
 			const formatAuthors = values.authors.map(item => Object.keys(item).reduce((acc, key) => {
+				if (key === 'role') {
+					return {...acc, [replaceKey(key)]: item[key].map(i => i.value)};
+				}
+
 				return {...acc, [replaceKey(key)]: item[key]};
 			}, {}));
 
@@ -315,6 +319,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				seriesDetails: values.seriesDetails && formatTitle(),
 				formatDetails: formatDetail(),
 				type: values.type.value,
+				publicationTime: moment(values.publicationTime).toISOString(),
 				isPublic: values.isPublic.value,
 				isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : undefined,
 				mapDetails: publicationValues.type.value === 'map' ? map : undefined
