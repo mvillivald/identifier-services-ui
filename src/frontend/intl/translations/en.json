@@ -905,6 +905,9 @@
     "publicationRegistration.form.additionalDetails": "Additional Details",
     "publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.label": "Before you fill in this ISBN request form, ",
     "publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.labelBold": "please check at your department/faculty if you get an ISBN from your university.",
-    "publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity": "I have checked at my department/faculty that I do not get an ISBN"
+    "publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity": "I have checked at my department/faculty that I do not get an ISBN",
+
+    "app.menu.home": "Home",
+    "app.menu.profile": "Profile"
 
 }

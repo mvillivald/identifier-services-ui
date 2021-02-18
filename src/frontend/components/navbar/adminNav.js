@@ -40,6 +40,11 @@ export default function ({userInfo, isAuthenticated}) {
 
 	const obj = [
 		{
+			label: <FormattedMessage id="app.menu.home"/>,
+			roleView: ['admin', 'publisher'],
+			path: 'home'
+		},
+		{
 			label: <FormattedMessage id="app.menu.publishers"/>,
 			roleView: ['admin', 'publisher'],
 			path: 'publishers'
@@ -49,7 +54,7 @@ export default function ({userInfo, isAuthenticated}) {
 			roleView: ['admin', 'publisher'],
 			listItem: [
 				{label: <FormattedMessage id="app.subMenu.ISBN-ISMN"/>, path: 'publications/isbn-ismn', roleView: ['admin', 'publisher']},
-				{label: <FormattedMessage id="app.subMenu.ISSN"/>, path: 'publications/issn', roleView: ['admin', 'publisher']}
+				{label: <FormattedMessage id="app.subMenu.ISSN"/>, path: 'publications/issn', roleView: ['admin']}
 			]
 		},
 		{
@@ -59,7 +64,7 @@ export default function ({userInfo, isAuthenticated}) {
 				{label: <FormattedMessage id="app.subMenu.publishers"/>, path: 'requests/publishers', roleView: ['admin', 'system']},
 				{label: <FormattedMessage id="app.subMenu.publications"/>, roleView: ['admin', 'system', 'publisher'], listItem: [
 					{label: <FormattedMessage id="app.subSubMenu.ISBN-ISMN"/>, path: 'requests/publications/isbn-ismn', roleView: ['admin', 'system', 'publisher']},
-					{label: <FormattedMessage id="app.subSubMenu.ISSN"/>, path: 'requests/publications/issn', roleView: ['admin', 'system']}
+					{label: <FormattedMessage id="app.subSubMenu.ISSN"/>, path: 'requests/publications/issn', roleView: ['admin']}
 				]},
 				{label: <FormattedMessage id="app.subMenu.users"/>, path: 'requests/users', roleView: ['admin', 'system']}
 			]
@@ -106,8 +111,17 @@ export default function ({userInfo, isAuthenticated}) {
 						<div className={classes.adminMenu}>
 							{isAuthenticated ? renderMenuTabs() : (
 								<div className={classes.publicMenu}>
-									<Link exact to="/" activeClassName={classes.active}><div className={classes.menuIcon}><HomeIcon fontSize="default" color="primary"/></div></Link>
-									<Link exact to="/publishers" activeClassName={classes.active}><div className={classes.menuItem}><FormattedMessage id="app.publicMenu.publishers"/></div></Link>
+									<Link exact to="/" activeClassName={classes.active}>
+										<div className={classes.menuIcon}>
+											<HomeIcon fontSize="default" color="primary"/>
+											<FormattedMessage id="app.menu.home"/>
+										</div>
+									</Link>
+									<Link exact to="/publishers" activeClassName={classes.active}>
+										<div className={classes.menuItem}>
+											<FormattedMessage id="app.publicMenu.publishers"/>
+										</div>
+									</Link>
 								</div>
 							)}
 						</div>
@@ -121,20 +135,22 @@ export default function ({userInfo, isAuthenticated}) {
 		const profileTab = userInfo.role === 'publisher' ?
 			(
 				<>
-					<Link exact to={`/publishers/${userInfo.publisher}`} activeClassName={classes.active}>
-						<div className={classes.menuIcon}><AccountBoxIcon fontSize="default" color="primary"/></div>
-					</Link>
+					<div className={classes.publicMenu}>
+						<Link exact to={`/publishers/${userInfo.publisher}`} activeClassName={classes.active}>
+							<div className={classes.menuIcon}>
+								<AccountBoxIcon fontSize="default" color="primary"/>
+								<FormattedMessage id="app.menu.profile"/>
+							</div>
+						</Link>
+					</div>
 					{obj.map(list => list.roleView.includes(userInfo.role) && (
 						<MenuTabs role={userInfo.role} list={list}/>
 					))}
 				</>
 			) : (
-				<>
-					<Link exact to="/" activeClassName={classes.active}><div className={classes.menuIcon}><HomeIcon fontSize="default" color="primary"/></div></Link>
-					{obj.map(list => list.roleView.includes(userInfo.role) && (
-						<MenuTabs key={list.label} role={userInfo.role} list={list}/>
-					))}
-				</>
+				obj.map(list => list.roleView.includes(userInfo.role) && (
+					<MenuTabs key={list.label} role={userInfo.role} list={list}/>
+				))
 			);
 
 		return profileTab;

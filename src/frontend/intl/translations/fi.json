@@ -906,7 +906,10 @@
     "app.menu.statistics": "Statistics",
 
     "publicationRegistration.stepper.label.additionalDetails" : "Additional Details",
-    "publicationRegistration.form.additionalDetails": "Additional Details"
+    "publicationRegistration.form.additionalDetails": "Additional Details",
+    
+    "app.menu.home": "Home",
+    "app.menu.profile": "Profile"
 
     
 }

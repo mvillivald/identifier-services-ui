@@ -27,6 +27,7 @@
  */
 import React from 'react';
 import {connect} from 'react-redux';
+import HomeIcon from '@material-ui/icons/Home';
 import {NavLink} from 'react-router-dom';
 import {Menu, MenuItem, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Link} from '@material-ui/core';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
@@ -51,9 +52,25 @@ export default connect(null, actions)(props => {
 		<>
 			<div className={classes.publicMenu} onClick={handleClick}>
 				{
-					list.path ?
-						<NavLink exact to={`/${list.path}`} activeClassName={classes.active}><div className={classes.menuItem}>{list.label}</div></NavLink> :
-						<Link component="button"><div className={classes.menuItem}>{list.label}</div></Link>
+					list.path ? (
+						list.path === 'home' ?
+							<NavLink exact to="/" activeClassName={classes.active}>
+								<div className={classes.menuItem}>
+									<HomeIcon fontSize="default" color="primary"/>
+									{list.label}
+								</div>
+							</NavLink> :
+							<NavLink exact to={`/${list.path}`} activeClassName={classes.active}>
+								<div className={classes.menuItem}>
+									{list.label}
+								</div>
+							</NavLink>
+					) :	(
+						<Link component="button">
+							<div className={classes.menuItem}>{list.label}
+							</div>
+						</Link>
+					)
 				}
 				{list.listItem && <ArrowDropDown/>}
 			</div>
