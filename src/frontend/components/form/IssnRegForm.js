@@ -70,10 +70,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			isAuthenticated,
 			publicationCreation,
 			publicationCreationRequest,
-			handleClose,
-			setIsCreating,
 			handleSubmit,
-			reset
+			history
 		} = props;
 		const intl = useIntl();
 		const fieldArray = getFieldArray(intl);
@@ -151,9 +149,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (isAuthenticated) {
 				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'issn'});
 				if (result === HttpStatus.CREATED) {
-					handleClose();
-					setIsCreating(true);
-					reset();
+					history.push('/');
 				}
 			} else if (captchaInput.length === 0) {
 				setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.notprovided'})});
@@ -201,8 +197,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (result === true) {
 				const result = await publicationCreationRequest({values: values, subType: 'issn'});
 				if (result === HttpStatus.CREATED) {
-					handleClose();
-					reset();
+					history.push('/');
 				}
 			} else {
 				setMessage({color: 'error', msg: intl.formatMessage({id: 'captcha.wrong.text'})});
