@@ -59,7 +59,7 @@ export default function ({userInfo, isAuthenticated}) {
 		},
 		{
 			label: <FormattedMessage id="app.menu.requests"/>,
-			roleView: ['admin', 'system', 'publisher'],
+			roleView: ['admin', 'system'],
 			listItem: [
 				{label: <FormattedMessage id="app.subMenu.publishers"/>, path: 'requests/publishers', roleView: ['admin', 'system']},
 				{label: <FormattedMessage id="app.subMenu.publications"/>, roleView: ['admin', 'system', 'publisher'], listItem: [
