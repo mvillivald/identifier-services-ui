@@ -28,11 +28,11 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Field, reduxForm, getFormValues} from 'redux-form';
-import {Button, Grid, Radio} from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
 import HttpStatus from 'http-status';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import renderTextField from './render/renderTextField';
 import useStyles from '../../styles/form';
@@ -199,7 +199,7 @@ export default connect(
 		}
 
 		function render(list) {
-			console.log(userValues)
+			console.log(userValues);
 			switch (list.type) {
 				case 'text':
 					return (
