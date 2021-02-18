@@ -28,16 +28,18 @@
 
 import React from 'react';
 import {FormControlLabel, FormControl, RadioGroup, Radio, Typography} from '@material-ui/core';
-
+import {useIntl} from 'react-intl';
 export default function (props) {
 	const {input, label, ...rest} = props;
+	const intl = useIntl();
+
 	const component = (
 		<>
 			<Typography variant="subtitle1">{label}</Typography>
 			<FormControl>
 				<RadioGroup {...input} {...rest}>
-					<FormControlLabel value="admin" control={<Radio color="primary"/>} label="Admin"/>
-					<FormControlLabel value="publisher-admin" control={<Radio color="primary"/>} label="PublisherAdmin"/>
+					<FormControlLabel value="admin" control={<Radio color="primary"/>} label={intl.formatMessage({id: 'userCreation.form.radio.label.admin'})}/>
+					<FormControlLabel value="publisher" control={<Radio color="primary"/>} label={intl.formatMessage({id: 'userCreation.form.radio.label.publisher'})}/>
 				</RadioGroup>
 			</FormControl>
 		</>

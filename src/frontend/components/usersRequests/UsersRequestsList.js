@@ -119,7 +119,7 @@ export default connect(mapStateToProps, actions)(props => {
 				handleChange={handleChange}
 			/>
 			{
-				userInfo.role === 'publisher-admin' &&
+				userInfo.role === 'publisher' &&
 					<ModalLayout
 						form
 						label={intl.formatMessage({id: 'app.modal.title.newUserRequest'})}

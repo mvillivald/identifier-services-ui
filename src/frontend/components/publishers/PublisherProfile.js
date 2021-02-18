@@ -162,7 +162,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<Typography variant="h4">My Information</Typography>
 						</Grid>
 						{publisherDetail}
-						{isAuthenticated && userInfo.role === 'publisher-admin' &&
+						{isAuthenticated && userInfo.role === 'publisher' &&
 							<Grid item xs={12} md={3}>
 								<Button color="primary" variant="outlined" size="large" onClick={handleEditClick}>
 									<EditIcon/> Edit

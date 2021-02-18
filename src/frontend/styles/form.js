@@ -30,8 +30,8 @@ import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	container: {
-		margin: '40px 60px',
-		flexGrow: 1
+		margin: '40px auto',
+		width: 1200
 	},
 	previewContainer: {
 		width: '100%',
@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	subContainer: {
 		flexGrow: 1,
-		padding: '0 20px'
+		padding: '20px'
 	},
 	bodyContainer: {
 		maxHeight: '500px',
@@ -154,10 +154,18 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'row !important',
 		flexWrap: 'nowrap !important'
 	},
+	basicStepperStyle: {
+		position: 'sticky',
+		top: 0,
+		zIndex: 11
+	},
 	smallStepper: {
 		width: '60%',
 		margin: '0 auto',
-		padding: '0 0 10px 0'
+		padding: '0 0 10px 0',
+		position: 'sticky',
+		top: 0,
+		zIndex: 11
 	},
 	addFabBtn: {
 		marginTop: '15px'
@@ -208,8 +216,8 @@ const useStyles = makeStyles(theme => ({
 		alignItems: 'center'
 	},
 	notesContainer: {
-		maxWidth: '900px',
-		padding: '20px',
+		margin: '20px auto',
+		maxWidth: 1200,
 		'& button': {
 			margin: '20px 0'
 		}

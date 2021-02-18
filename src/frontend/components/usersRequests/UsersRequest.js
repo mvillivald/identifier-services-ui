@@ -142,7 +142,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function isEditable(key) {
 		const editableFields = userInfo.role === 'admin' ?
 			['role', 'publisher', 'givenName', 'familyName', 'displayname', 'preferences'] :
-			(userInfo.role === 'publisher-admin' ?
+			(userInfo.role === 'publisher' ?
 				['givenName', 'familyName', 'displayname', 'preferences'] :
 				[]);
 
@@ -339,7 +339,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</div> :
 				<div className={classes.listItem}>
 					{
-						isAuthenticated && (role === 'admin' || role === 'publisher-admin') &&
+						isAuthenticated && (role === 'admin' || role === 'publisher') &&
 							(
 								role !== undefined && role === 'admin' ?
 									(reject ? (

@@ -144,7 +144,7 @@ export const getUniversityPublisher = () => async dispatch => {
 };
 
 // ****************REQUESTS**********************************
-export const publisherCreationRequest = values => async dispatch => {
+export const publisherCreationRequest = values => async () => {
 	const response = await fetch('/requests/publishers', {
 		method: 'POST',
 		headers: {
@@ -153,11 +153,10 @@ export const publisherCreationRequest = values => async dispatch => {
 		credentials: 'same-origin',
 		body: JSON.stringify(values)
 	});
-	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: 'Registration request sent successfully'}));
-	}
 
-	return response.status;
+	if (response.status === HttpStatus.CREATED) {
+		return response.status;
+	}
 };
 
 export const fetchPublishersRequestsList = ({searchText, token, sortStateBy, offset}) => async dispatch => {

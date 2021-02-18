@@ -95,7 +95,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function isEditable(key) {
 		const editableFields = userInfo.role === 'admin' ?
 			['id', 'publisher', 'firstname', 'lastname', 'displayname', 'preferences'] :
-			(userInfo.role === 'publisher-admin' ?
+			(userInfo.role === 'publisher' ?
 				['firstname', 'lastname', 'displayname', 'preferences'] :
 				[]);
 
@@ -210,7 +210,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							>
 								<FormattedMessage id="user.button.label.delete"/>
 							</Button>}
-						{isAuthenticated && (role === 'admin' || role === 'publisher-admin') &&
+						{isAuthenticated && (role === 'admin' || role === 'publisher') &&
 							<Fab
 								color="primary"
 								size="small"

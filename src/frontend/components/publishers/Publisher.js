@@ -116,7 +116,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
 			['lastUpdated', '_id', 'isbnRange', 'ismnRange'] :
-			(userInfo.role === 'publisher-admin' ?
+			(userInfo.role === 'publisher' ?
 				['lastUpdated', '_id', 'request', 'metadataDelivery', 'isbnRange', 'ismnRange'] :
 				[]);
 
@@ -580,7 +580,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</>
 							}
 							{
-								isAuthenticated && userInfo.role === 'publisher-admin' && // Different condition for publisher-Admin
+								isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
 									<Fab
 										color="primary"
 										size="small"
@@ -590,7 +590,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										<EditIcon/>
 									</Fab>
 							}
-							{isAuthenticated && userInfo.role === 'publisher' &&
+							{/* {isAuthenticated && userInfo.role === 'publisher' &&
 								<div className={classes.btnContainer}>
 									<Fab
 										color="primary"
@@ -600,7 +600,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									>
 										<EditIcon/>
 									</Fab>
-								</div>}
+								</div>} */}
 							<Grid container spacing={3} className={classes.listItemSpinner}>
 								{publisherDetail}
 							</Grid>

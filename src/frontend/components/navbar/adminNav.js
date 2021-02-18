@@ -46,32 +46,32 @@ export default function ({userInfo, isAuthenticated}) {
 		},
 		{
 			label: <FormattedMessage id="app.menu.publications"/>,
-			roleView: ['admin', 'publisher-admin', 'publisher'],
+			roleView: ['admin', 'publisher'],
 			listItem: [
-				{label: <FormattedMessage id="app.subMenu.ISBN-ISMN"/>, path: 'publications/isbn-ismn', roleView: ['admin', 'publisher-admin', 'publisher']},
-				{label: <FormattedMessage id="app.subMenu.ISSN"/>, path: 'publications/issn', roleView: ['admin', 'publisher-admin', 'publisher']}
+				{label: <FormattedMessage id="app.subMenu.ISBN-ISMN"/>, path: 'publications/isbn-ismn', roleView: ['admin', 'publisher']},
+				{label: <FormattedMessage id="app.subMenu.ISSN"/>, path: 'publications/issn', roleView: ['admin', 'publisher']}
 			]
 		},
 		{
 			label: <FormattedMessage id="app.menu.requests"/>,
-			roleView: ['admin', 'system', 'publisher-admin', 'publisher'],
+			roleView: ['admin', 'system', 'publisher'],
 			listItem: [
 				{label: <FormattedMessage id="app.subMenu.publishers"/>, path: 'requests/publishers', roleView: ['admin', 'system']},
-				{label: <FormattedMessage id="app.subMenu.publications"/>, roleView: ['admin', 'system', 'publisher-admin', 'publisher'], listItem: [
-					{label: <FormattedMessage id="app.subSubMenu.ISBN-ISMN"/>, path: 'requests/publications/isbn-ismn', roleView: ['admin', 'system', 'publisher-admin', 'publisher']},
+				{label: <FormattedMessage id="app.subMenu.publications"/>, roleView: ['admin', 'system', 'publisher'], listItem: [
+					{label: <FormattedMessage id="app.subSubMenu.ISBN-ISMN"/>, path: 'requests/publications/isbn-ismn', roleView: ['admin', 'system', 'publisher']},
 					{label: <FormattedMessage id="app.subSubMenu.ISSN"/>, path: 'requests/publications/issn', roleView: ['admin', 'system']}
 				]},
-				{label: <FormattedMessage id="app.subMenu.users"/>, path: 'requests/users', roleView: ['admin', 'system', 'publisher-admin']}
+				{label: <FormattedMessage id="app.subMenu.users"/>, path: 'requests/users', roleView: ['admin', 'system']}
 			]
 		},
 		{
 			label: <FormattedMessage id="app.menu.users"/>,
-			roleView: ['admin', 'publisher-admin', 'publisher'],
+			roleView: ['admin'],
 			path: 'users'
 		},
 		{
 			label: <FormattedMessage id="app.menu.statistics"/>,
-			roleView: ['admin', 'publisher-admin', 'publisher'],
+			roleView: ['admin'],
 			path: 'statistics'
 		},
 		{
@@ -118,7 +118,7 @@ export default function ({userInfo, isAuthenticated}) {
 	);
 
 	function renderMenuTabs() {
-		const profileTab = userInfo.role === 'publisher-admin' ?
+		const profileTab = userInfo.role === 'publisher' ?
 			(
 				<>
 					<Link exact to={`/publishers/${userInfo.publisher}`} activeClassName={classes.active}>
@@ -128,9 +128,14 @@ export default function ({userInfo, isAuthenticated}) {
 						<MenuTabs role={userInfo.role} list={list}/>
 					))}
 				</>
-			) : obj.map(list => list.roleView.includes(userInfo.role) && (
-				<MenuTabs key={list.label} role={userInfo.role} list={list}/>
-			));
+			) : (
+				<>
+					<Link exact to="/" activeClassName={classes.active}><div className={classes.menuIcon}><HomeIcon fontSize="default" color="primary"/></div></Link>
+					{obj.map(list => list.roleView.includes(userInfo.role) && (
+						<MenuTabs key={list.label} role={userInfo.role} list={list}/>
+					))}
+				</>
+			);
 
 		return profileTab;
 	}

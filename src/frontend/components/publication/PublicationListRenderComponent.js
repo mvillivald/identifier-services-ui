@@ -105,7 +105,7 @@ export default connect(mapStateToProps)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
-			{(role === 'publisher' || role === 'publisher-admin') && (
+			{(role === 'publisher') && (
 				isbnIsmn ?
 					(
 						<ModalLayout

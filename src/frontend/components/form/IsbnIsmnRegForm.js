@@ -825,7 +825,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Button>
 					</div> :
 					<form className={classes.container} onSubmit={handleSubmit(handlePublicationRegistration)}>
-						<Stepper alternativeLabel activeStep={activeStep} className={classes.test}>
+						<Stepper alternativeLabel activeStep={activeStep} className={classes.basicStepperStyle}>
 							{steps.map(label => (
 								<Step key={label}>
 									<StepLabel className={classes.stepLabel}>

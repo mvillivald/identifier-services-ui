@@ -235,7 +235,7 @@
     "userCreation.form.label.selectRole": "Valitse rooli",
     "userCreation.form.label.selectPublisher": "Valitse kustantaja",
     "userCreation.form.radio.label.admin": "Admin",
-    "userCreation.form.radio.label.publisherAdmin": "Publisher-Admin",
+    "userCreation.form.radio.label.publisher": "Publisher",
 
     "messageTemplate.label.subject": "Aihe",
     "messageTemplate.label.body": "Viesti:",

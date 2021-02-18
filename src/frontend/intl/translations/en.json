@@ -484,7 +484,7 @@
     "userCreation.form.label.selectRole": "Select role",
     "userCreation.form.label.selectPublisher": "Select publisher",
     "userCreation.form.radio.label.admin": "Admin",
-    "userCreation.form.radio.label.publisherAdmin": "Publisher-admin",
+    "userCreation.form.radio.label.publisher": "Publisher",
 
     "messageTemplate.label.subject": "Subject",
     "messageTemplate.label.body": "Body:",

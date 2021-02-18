@@ -69,13 +69,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			postCaptchaInput,
 			publicationRegistration,
 			handleSetPublisher,
-			setPublisherRegForm,
 			publisherValues,
 			isAuthenticated,
-			handleClose,
 			setMessage,
-			setIsCreating,
-			reset
+			history
 		} = props;
 		const classes = useStyles();
 		const intl = useIntl();
@@ -91,12 +88,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (!isAuthenticated) {
 				loadSvgCaptcha();
 			}
-
-			if (publicationRegistration) {
-				setPublisherRegForm(false);
-			}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [isAuthenticated, loadSvgCaptcha]);
 
 		const steps = getSteps();
@@ -135,10 +126,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		const handlePublisherRegistration = async values => {
 			if (isAuthenticated) {
-				publisherCreationRequest(formatPublisher(values));
-				setIsCreating(true);
-				handleClose();
-				reset();
+				const result = await publisherCreationRequest(formatPublisher(values));
+				if (result === HttpStatus.CREATED) {
+					setMessage({color: 'success', msg: 'Registration request sent successfully'});
+					history.push('/');
+				}
 			} else if (captchaInput.length === 0) {
 				setMessage({color: 'error', msg: <FormattedMessage id="publisherRegistration.form.submit.captchaEmptyError"/>});
 			} else if (captchaInput.length > 0) {
@@ -156,11 +148,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (result === true) {
 				const result = await publisherCreationRequest(newPublisher);
 				if (result === HttpStatus.CREATED) {
-					handleClose();
-					reset();
+					setMessage({color: 'success', msg: 'Registration request sent successfully'});
+					history.push('/');
+				} else {
+					setMessage({color: 'error', msg: 'Registration request Failed'});
 				}
 			} else {
-				setMessage({color: 'error', msg: <FormattedMessage id="publisherRegistration.form.submit.captchaVerificationError"/>});
+				setMessage({color: 'error', msg: intl.formatMessage({id: 'publisherRegistration.form.submit.captchaVerificationError'})});
 				loadSvgCaptcha();
 			}
 		}
@@ -193,7 +187,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			) :
 			(
 				<form className={classes.container} onSubmit={handleSubmit(handlePublisherRegistration)}>
-					<Stepper alternativeLabel className={publicationRegistration ? classes.smallStepper : null} activeStep={activeStep}>
+					<Stepper alternativeLabel className={publicationRegistration ? classes.smallStepper : classes.basicStepperStyle} activeStep={activeStep}>
 						{steps.map(label => (
 							<Step key={label}>
 								<StepLabel className={publicationRegistration ? classes.smallFontStepLabel : classes.stepLabel}>
@@ -414,26 +408,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								fieldName="organizationDetails[affiliateOf][address]"
 								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.address ?
-									publisherValues.affiliateOf.address : ''}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfAddress ?
+									publisherValues.affiliateOf.affiliateOfAddress : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[affiliateOf][city]"
 								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.city ?
-									publisherValues.affiliateOf.city : ''}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfCity ?
+									publisherValues.affiliateOf.affiliateOfCity : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[affiliateOf][zip]"
 								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.zip ?
-									publisherValues.affiliateOf.zip : ''}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfZip ?
+									publisherValues.affiliateOf.affiliateOfZip : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[affiliateOf][name]"
 								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.name ?
-									publisherValues.affiliateOf.name : ''}
+								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfName ?
+									publisherValues.affiliateOf.affiliateOfName : ''}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -443,26 +437,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<hr/>
 							{
 								publisherValues && publisherValues.affiliates && publisherValues.affiliates.map(item => (
-									<Grid key={`${item.name}${item.address}`} container>
+									<Grid key={`${item.affiliatesName}${item.affiliatesAddress}`} container>
 										<ListComponent
 											fieldName="organizationDetails[affiliates][address]"
 											label={intl.formatMessage({id: 'listComponent.address'})}
-											value={item.address ? item.address : ''}
+											value={item.affiliatesAddress ? item.affiliatesAddress : ''}
 										/>
 										<ListComponent
 											fieldName="organizationDetails[affiliates][city]"
 											label={intl.formatMessage({id: 'listComponent.city'})}
-											value={item.city ? item.city : ''}
+											value={item.affiliatesCity ? item.affiliatesCity : ''}
 										/>
 										<ListComponent
 											fieldName="organizationDetails[affiliates][zip]"
 											label={intl.formatMessage({id: 'listComponent.zip'})}
-											value={item.zip ? item.zip : ''}
+											value={item.affiliatesZip ? item.affiliatesZip : ''}
 										/>
 										<ListComponent
 											fieldName="organizationDetails[affiliates][name]"
 											label={intl.formatMessage({id: 'listComponent.name'})}
-											value={item.name ? item.name : ''}
+											value={item.affiliatesName ? item.affiliatesName : ''}
 										/>
 									</Grid>
 
@@ -477,26 +471,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								fieldName="organizationDetails[distributorOf][address]"
 								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.address ?
-									publisherValues.distributorOf.address : ''}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfAddress ?
+									publisherValues.distributorOf.distributorOfAddress : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[distributorOf][city]"
 								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.city ?
-									publisherValues.distributorOf.city : ''}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfCity ?
+									publisherValues.distributorOf.distributorOfCity : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[distributorOf][zip]"
 								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.zip ?
-									publisherValues.distributorOf.zip : ''}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfZip ?
+									publisherValues.distributorOf.distributorOfZip : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[distributorOf][name]"
 								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.name ?
-									publisherValues.distributorOf.name : ''}
+								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfName ?
+									publisherValues.distributorOf.distributorOfName : ''}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -507,26 +501,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								fieldName="organizationDetails[distributor][address]"
 								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.address ?
-									publisherValues.distributor.address : ''}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorAddress ?
+									publisherValues.distributor.distributorAddress : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[distributor][city]"
 								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.city ?
-									publisherValues.distributor.city : ''}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorCity ?
+									publisherValues.distributor.distributorCity : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[distributor][zip]"
 								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.zip ?
-									publisherValues.distributor.zip : ''}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorZip ?
+									publisherValues.distributor.distributorZip : ''}
 							/>
 							<ListComponent
 								fieldName="organizationDetails[distributor][name]"
 								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.name ?
-									publisherValues.distributor.name : ''}
+								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorName ?
+									publisherValues.distributor.distributorName : ''}
 							/>
 						</Grid>
 					</Grid>
@@ -568,7 +562,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
 								<ListComponent fieldName="classification"
 									label={intl.formatMessage({id: 'listComponent.classification'})}
-									value={publisherValues.classification && publisherValues.classification.value}
+									value={publisherValues.classification ? publisherValues.classification.map(i => i.value) : []}
 								/>
 							</Grid>
 						</Grid>

@@ -116,7 +116,6 @@ export default connect(
 			publisherOptions
 		} = props;
 		const classes = useStyles();
-		const intl = useIntl();
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
 		const token = cookie[COOKIE_NAME];
@@ -200,6 +199,7 @@ export default connect(
 		}
 
 		function render(list) {
+			console.log(userValues)
 			switch (list.type) {
 				case 'text':
 					return (
@@ -209,13 +209,10 @@ export default connect(
 					);
 
 				case 'radio':
-					if (userInfo.role !== 'publisher-admin') {
+					if (userInfo.role === 'admin') {
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
-								<Field name={list.name} component={renderSimpleRadio} label={list.label}>
-									<Radio value="admin" label={intl.formatMessage({id: 'userCreation.form.radio.label.admin'})}/>
-									<Radio value="publisher-admin" label={intl.formatMessage({id: 'userCreation.form.radio.label.publisherAdmin'})}/>
-								</Field>
+								<Field name={list.name} component={renderSimpleRadio} label={list.label}/>
 							</Grid>
 						);
 					}
@@ -223,7 +220,7 @@ export default connect(
 					break;
 
 				case 'select':
-					if (userValues !== undefined && userValues.role === 'publisher-admin') {
+					if (userValues !== undefined && userValues.role === 'publisher') {
 						return (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
 								<Field

@@ -240,7 +240,7 @@ export const fieldArray = [
 				options: classificationCodes,
 				width: 'full',
 				instructions: getClassificationInstruction(),
-				isMulti: false
+				isMulti: true
 			}
 		]
 	},
