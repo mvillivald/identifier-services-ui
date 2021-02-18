@@ -200,14 +200,9 @@ export default function (props) {
 										(
 											typeof item === 'string' ?
 												(
-													<>
-														<Grid item xs={4}>
-															<span className={classes.label}>{intl.formatMessage({id: 'listComponent.role'})}:</span>
-														</Grid>
-														<Grid key={item} item>
-															<Chip label={item}/>
-														</Grid>
-													</>
+													<Grid key={item} item>
+														<Chip label={item}/>
+													</Grid>
 												) : (
 													<Grid key={item} container>
 														{keys.length > 0 && keys.map(k =>
