@@ -29,6 +29,10 @@
 import {makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
+	mainContainer: {
+		margin: '0 auto',
+		padding: 60
+	},
 	dateContainer: {
 		display: 'flex',
 		flexWrap: 'wrap'

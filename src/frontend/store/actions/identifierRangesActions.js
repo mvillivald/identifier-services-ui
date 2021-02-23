@@ -474,7 +474,7 @@ export const assignIssnRange = (values, token) => async dispatch => {
 	return response.status;
 };
 
-export const fetchRangeStatistics = ({startDate, endDate, token}) => async dispatch => {
+export const fetchIssnRangeStatistics = ({startDate, endDate, token}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = {$and: [{'created.timestamp': {$gte: moment(startDate).toISOString()}}, {'created.timestamp': {$lte: moment(endDate).toISOString()}}]};
 
@@ -487,6 +487,49 @@ export const fetchRangeStatistics = ({startDate, endDate, token}) => async dispa
 			},
 			body: JSON.stringify({
 				query: query
+			})
+		});
+		const result = await response.json();
+		dispatch(success(RANGE_STATISTICS, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchIsbnIsmnMonthlyStatistics = ({startDate, endDate, token}) => async dispatch => {
+	dispatch(setRangeListLoader());
+	const query = {$and: [{'created.timestamp': {$gte: moment(startDate).toISOString()}}, {'created.timestamp': {$lte: moment(endDate).toISOString()}}]};
+
+	try {
+		const response = await fetch(`${API_URL}/ranges/isbn-ismn/queryMonthlyStatistics`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				query: query
+			})
+		});
+		const result = await response.json();
+		dispatch(success(RANGE_STATISTICS, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchIsbnIsmnStatistics = ({startDate, endDate, identifierType, token}) => async dispatch => {
+	dispatch(setRangeListLoader());
+	const quer = {$and: [{'created.timestamp': {$gte: moment(startDate).toISOString()}}, {'created.timestamp': {$lte: moment(endDate).toISOString()}}]};
+	try {
+		const response = await fetch(`${API_URL}/ranges/isbn-ismn/queryIsbnIsmnStatistics`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				query: {quer, identifierType}
 			})
 		});
 		const result = await response.json();

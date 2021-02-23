@@ -47,9 +47,12 @@ import {FormattedMessage} from 'react-intl';
 import XLSX from 'xlsx';
 import useStyles from '../../styles/statistic';
 import * as actions from '../../store/actions';
+import {
+	getMonthlyIssnStatistics
+} from './calculations';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchRangeStatistics, fetchIssnStatistics, rangeStatistics, issnStatistics, exportXLS} = props;
+	const {fetchIssnRangeStatistics, fetchIsbnIsmnStatistics, fetchIsbnIsmnMonthlyStatistics, fetchIssnStatistics, rangeStatistics, issnStatistics, exportXLS} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [publicationType, setPublicationType] = useState(null);
@@ -58,6 +61,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
 	const [fetchedRangeStatistics, setFetchedRangeStatistics] = useState(null);
+	const [identifierType, setIdentifierType] = useState(null);
 
 	useEffect(() => {
 		if (rangeStatistics !== null) {
@@ -70,24 +74,73 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [rangeStatistics]);
 
 	useEffect(() => {
+		if (selectedIsbnIsmnType === 'isbnIdentificationFields') {
+			setIdentifierType('ISBN');
+		}
+
+		if (selectedIsbnIsmnType === 'ismnIdentificationFields') {
+			setIdentifierType('ISMN');
+		}
+	}, [selectedIsbnIsmnType]);
+
+	useEffect(() => {
 		if (publicationType === 'issn') {
 			if (selectedIssnType === 'issn' && startDate !== null && endDate !== null) {
-				fetchRangeStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
+				fetchIssnRangeStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
 				fetchIssnStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
+			}
+		}
+
+		if (publicationType === 'isbn-ismn') {
+			if (selectedIsbnIsmnType === 'monthlyStatistics') {
+				fetchIsbnIsmnMonthlyStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
+			}
+
+			if (selectedIsbnIsmnType === 'isbnIdentificationFields' || selectedIsbnIsmnType === 'ismnIdentificationFields') {
+				fetchIsbnIsmnStatistics({startDate, endDate, identifierType: identifierType, token: cookie[COOKIE_NAME]});
 			}
 		}
 	}, [startDate, endDate]);
 
 	function handleStatistics() {
-		if (fetchedRangeStatistics !== null) {
-			const totalStatistics = fetchedRangeStatistics.map(item => filterDoc(item));
-			if (issnStatistics !== null) {
-				const wbout = XLSX.utils.book_new();
-				const monthlyStatistics = getMonthlyStatistics(issnStatistics);
-				const ws = XLSX.utils.json_to_sheet(totalStatistics);
-				XLSX.utils.sheet_add_json(ws, monthlyStatistics, {origin: {r: totalStatistics.length + 2, c: 1}});
+		if (publicationType === 'issn') {
+			const wbout = XLSX.utils.book_new();
+			if (fetchedRangeStatistics !== null) {
+				const totalStatistics = fetchedRangeStatistics.map(item => filterDoc(item));
+				if (issnStatistics !== null) {
+					const monthlyStatistics = getMonthlyIssnStatistics({startDate, endDate, value: issnStatistics});
+					const ws = XLSX.utils.json_to_sheet(totalStatistics);
+					XLSX.utils.sheet_add_json(ws, monthlyStatistics, {origin: {r: totalStatistics.length + 2, c: 1}});
+					exportXLS(wbout, ws);
+				}
+			}
+		}
+
+		if (publicationType === 'isbn-ismn') {
+			const wbout = XLSX.utils.book_new();
+			if (selectedIsbnIsmnType === 'isbnIdentificationFields') {
+				const newJsonSheet = fetchedRangeStatistics.map(item => {
+					const newDoc = {
+						Etuliite: item.prefix,
+						Kieliryhmä: item.langGroup,
+						Alku: item.rangeStart,
+						Loppu: item.rangeEnd,
+						Vapaana: item.free,
+						Käytetty: item.taken
+					};
+					return newDoc;
+				});
+
+				const headers = ['Etuliite', 'Kieliryhmä',	'Alku',	'Loppu',	'Vapaana',	'Käytetty'];
+				const ws = XLSX.utils.json_to_sheet(newJsonSheet, {header: headers});
 				exportXLS(wbout, ws);
 			}
+
+			// Const colLable = getcolLabel({startDate, endDate});
+			// const titles = getTableTitles();
+			// const ws = XLSX.utils.json_to_sheet(titles, {skipHeader: true});
+			// XLSX.utils.sheet_add_json(ws, [colLable], {skipHeader: true, origin: 'A1'});
+			// exportXLS(wbout, ws);
 		}
 	}
 
@@ -125,82 +178,6 @@ export default connect(mapStateToProps, actions)(props => {
 				key,
 				value
 			]) => ({...acc, [key]: value}), {total: `${Number(doc.rangeEnd) - Number(doc.rangeStart)}`});
-	}
-
-	function getMonthlyStatistics(value) {
-		let yearStart = Number(startDate.slice(0, 4));
-		let monthStart = Number(startDate.slice(5, 7));
-
-		let yearEnd = Number(endDate.slice(0, 4));
-		let monthEnd = Number(endDate.slice(5, 7));
-		let result = [];
-
-		for (yearStart; yearStart <= yearEnd; yearStart++) {
-			result.push(yearStart);
-		}
-
-		const newResult = result.reduce((acc, item, index) => {
-			const length = result.length;
-			if (index === 0 && length > 1) {
-				for (let month = monthStart; month <= 12; month++) {
-					const m = `${month}`.length === 1 ? `${item}-0${month}` : `${item}-${month}`;
-					const monthlyIssn = fetchMonthlyIssn(m);
-					if (monthlyIssn.length > 0) {
-						acc.push(...monthlyIssn);
-					}
-				}
-			} else if (index === result.length - 1) {
-				for (let month = 1; month <= monthEnd; month++) {
-					const m = `${month}`.length === 1 ? `${item}-0${month}` : `${item}-${month}`;
-					const monthlyIssn = fetchMonthlyIssn(m);
-					if (monthlyIssn.length > 0) {
-						acc.push(...monthlyIssn);
-					}
-				}
-			} else {
-				for (let month = 1; month <= 12; month++) {
-					const m = `${month}`.length === 1 ? `${item}-0${month}` : `${item}-${month}`;
-					const monthlyIssn = fetchMonthlyIssn(m);
-
-					if (monthlyIssn.length > 0) {
-						acc.push(...monthlyIssn);
-					}
-				}
-			}
-
-			return acc;
-		}, []);
-
-		function fetchMonthlyIssn(month) {
-			const res = value.reduce((acc, item) => {
-				const timestamp = item.created.timestamp.slice(0, 7);
-				if (timestamp === month) {
-					item.identifier.forEach(k => {
-						if (!acc.includes({month: month})) {
-							if (acc.some(item => item.prefix === k.id.slice(0, 4))) {
-								acc = acc.map(a => {
-									if (a.prefix === k.id.slice(0, 4)) {
-										return {...a, frequency: a.frequency + 1};
-									}
-
-									return a;
-								});
-							} else {
-								acc.push({month, prefix: k.id.slice(0, 4), frequency: 1});
-								return acc;
-							}
-						}
-
-						return acc;
-					});
-				}
-
-				return acc;
-			}, []);
-			return res;
-		}
-
-		return newResult;
 	}
 
 	const elements = (
@@ -328,10 +305,13 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const component = (
-		<Grid item xs={12}>
-			<Typography variant="h5">
-				<FormattedMessage id="statistics.label.heading"/>
-			</Typography>
+		<Grid item className={classes.mainContainer} xs={12}>
+			<div style={{marginBottom: 20}}>
+				<Typography variant="h5">
+					<FormattedMessage id="statistics.label.heading"/>
+				</Typography>
+			</div>
+			{console.log(rangeStatistics)}
 			{elements}
 		</Grid>
 	);
