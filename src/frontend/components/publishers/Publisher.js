@@ -325,12 +325,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							label={intl.formatMessage({id: 'listComponent.publisherRangeId'})}
 							value={formattedPublisherDetail.publisherRangeId ? formattedPublisherDetail.publisherRangeId : ''}
 						/>
-						<ListComponent
-							linkPath={`/publishers/${formattedPublisherDetail.request}`}
+						{userInfo.role === 'admin' && <ListComponent
+							linkPath={`/requests/publishers/${formattedPublisherDetail.request}`}
 							fieldName="request"
 							label={intl.formatMessage({id: 'listComponent.request'})}
 							value={formattedPublisherDetail.request ? formattedPublisherDetail.request : ''}
-						/>
+						/>}
 						<ListComponent
 							edit={isEdit && isEditable}
 							fieldName="metadataDelivery"

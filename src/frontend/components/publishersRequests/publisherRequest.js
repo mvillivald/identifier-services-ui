@@ -393,7 +393,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<ListComponent
 							edit={isEdit && isEditable}
 							linkPath={`/publishers/${formattedPublisherRequest.createdResource}`}
-							fieldName="rejectionReason"
+							fieldName="createdResource"
 							label={intl.formatMessage({id: 'listComponent.createdResource'})}
 							value={formattedPublisherRequest.createdResource ? formattedPublisherRequest.createdResource : ''}
 						/>
