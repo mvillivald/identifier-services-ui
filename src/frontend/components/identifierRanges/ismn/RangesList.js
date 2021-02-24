@@ -40,16 +40,16 @@ import {
 	Typography
 } from '@material-ui/core';
 
-import ModalLayout from '../ModalLayout';
-import * as actions from '../../store/actions';
-import Spinner from '../Spinner';
-import TableComponent from '../TableComponent';
-import {commonStyles} from '../../styles/app';
+import ModalLayout from '../../ModalLayout';
+import * as actions from '../../../store/actions';
+import Spinner from '../../Spinner';
+import TableComponent from '../../TableComponent';
+import {commonStyles} from '../../../styles/app';
 import CreateRange from './CreateRange';
 import Identifier from './Identifier';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIDRList, rangesList, userInfo, loading, offset, queryDocCount} = props;
+	const {fetchIsmnIDRList, rangesList, userInfo, listLoading, offset, queryDocCount} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -60,6 +60,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [updateComponent] = useState(false);
 	const [rangeType, setRangeType] = useState('range');
+	const [creatingNewRange, setCreatingNewRange] = useState(false);
 	const [rangeId, setRangeId] = useState('');
 	const [subRangeId, setSubRangeId] = useState('');
 	const [modal, setModal] = useState(false);
@@ -72,30 +73,14 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchIDRList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
-	}, [updateComponent, activeCheck, cookie, fetchIDRList, inputVal, lastCursor, rangeType]);
+		fetchIsmnIDRList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+	}, [updateComponent, activeCheck, cookie, inputVal, lastCursor, rangeType, fetchIsmnIDRList, creatingNewRange]);
 
 	const handleTableRowClick = id => {
 		setRowSelectedId(id);
 		if (rangeType === 'range') {
-			setRangeType('subRange');
-			setRangeId(id);
-			setSubRangeId('');
-			setInputVal(id);
-			setIdentifierId(null);
-		}
-
-		if (rangeType === 'subRange') {
-			setRangeType('isbnIsmnBatch');
-			setSubRangeId(id);
-			setIdentifierId(null);
-			setInputVal(id);
-		}
-
-		if (rangeType === 'isbnIsmnBatch') {
 			setRangeType('identifier');
 			setIdentifierId(null);
-			setInputVal(id);
 		}
 
 		if (rangeType === 'identifier') {
@@ -116,16 +101,6 @@ export default connect(mapStateToProps, actions)(props => {
 		setInputVal('');
 	};
 
-	const handleOnClickBreadCrumbsSubRange = () => {
-		setRangeType('subRange');
-		setInputVal(rangeId);
-	};
-
-	const handleOnClickBreadCrumbsIsbnIsmnBatch = () => {
-		setRangeType('isbnIsmnBatch');
-		setInputVal(subRangeId);
-	};
-
 	function headRows() {
 		const headers = getHeaders(rangeType);
 		function getHeaders(rangeType) {
@@ -134,20 +109,12 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'range') {
-				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
+				array.unshift('prefix', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
 				return array;
 			}
 
-			if (rangeType === 'subRange') {
-				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed');
-			}
-
-			if (rangeType === 'isbnIsmnBatch') {
-				array.unshift('identifierType', 'identifierCount', 'identifierCanceledCount', 'identifierDeletedCount', 'publisherId', 'publicationId', 'publisherIdentifierRangeId');
-			}
-
 			if (rangeType === 'identifier') {
-				array.unshift('identifier', 'identifierBatchId', 'publisherIdentifierRangeId', 'publicationType');
+				array.unshift('identifier', 'publisherIdentifierRangeId', 'publicationType');
 			}
 
 			return array;
@@ -160,7 +127,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	let data;
-	if ((rangesList === undefined) || (loading)) {
+	if ((rangesList === undefined) || (listLoading)) {
 		data = <Spinner/>;
 	} else if (rangesList.length === 0) {
 		data = <p><FormattedMessage id="app.render.noData"/></p>;
@@ -183,18 +150,6 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function listRender(item) {
-		if (rangeType === 'subRange') {
-			return Object.entries(item)
-				.filter(([key]) => key === 'isbnIsmnRangeId' === false)
-				.filter(([key]) => key === 'publisherId' === false)
-				.reduce((acc, [
-					key,
-					value
-				]) => (
-					{...acc, [key]: formatDate(key, value)}),
-				{createdBy: item.created.user});
-		}
-
 		if (item !== undefined) {
 			return Object.entries(item)
 				.reduce((acc, [
@@ -221,20 +176,12 @@ export default connect(mapStateToProps, actions)(props => {
 					<Button variant="text" onClick={handleOnClickBreadCrumbsRange}>
 						<FormattedMessage id="rangesList.breadCrumbs.label.ranges"/>
 					</Button>
-					{(rangeType === 'isbnIsmnBatch' || rangeType === 'identifier') &&
-						<Button variant="text" onClick={handleOnClickBreadCrumbsSubRange}>
-							<FormattedMessage id="rangesList.breadCrumbs.label.subrange"/>
-						</Button>}
-					{rangeType === 'identifier' &&
-						<Button variant="text" onClick={handleOnClickBreadCrumbsIsbnIsmnBatch}>
-							<FormattedMessage id="rangesList.breadCrumbs.label.isbnIsmnBatch"/>
-						</Button>}
 					<Typography>{rowSelectedId}</Typography>
 				</Breadcrumbs>}
 			<Typography variant="h5">
 				<FormattedMessage id={`rangesList.title.${rangeType}`}/>
 			</Typography>
-			{/* <SearchComponent searchFunction={fetchIDRList} setSearchInputVal={setSearchInputVal}/> */}
+			{/* <SearchComponent searchFunction={fetchIsbnIDRList} setSearchInputVal={setSearchInputVal}/> */}
 			<FormControlLabel
 				control={
 					<Checkbox
@@ -255,13 +202,14 @@ export default connect(mapStateToProps, actions)(props => {
 								isTableRow
 								modal={modal}
 								setModal={setModal}
+								setCreatingNewRange={setCreatingNewRange}
 								color="primary"
-								title={intl.formatMessage({id: 'app.modal.title.identifierRangesIsbn'})}
-								label={intl.formatMessage({id: 'app.modal.title.identifierRangesIsbn'})}
+								title={intl.formatMessage({id: 'app.modal.title.identifierRangesIsmn'})}
+								label={intl.formatMessage({id: 'app.modal.title.identifierRangesIsmn'})}
 								name="rangeCreation"
 								variant="outlined"
 							>
-								<CreateRange {...props}/>
+								<CreateRange {...props} setCreatingNewRange={setCreatingNewRange}/>
 							</ModalLayout>
 						)
 				}
@@ -279,7 +227,7 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		userInfo: state.login.userInfo,
-		loading: state.identifierRanges.rangeListLoading,
+		listLoading: state.identifierRanges.rangeListLoading,
 		rangesList: state.identifierRanges.rangesList,
 		range: state.identifierRanges.range,
 		offset: state.identifierRanges.offset,

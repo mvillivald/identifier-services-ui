@@ -79,24 +79,24 @@ export default function ({userInfo, isAuthenticated}) {
 			roleView: ['admin'],
 			path: 'statistics'
 		},
-		{
-			label: <FormattedMessage id="app.menu.identifierRanges"/>,
-			roleView: ['admin'],
-			// Path: 'ranges'
-			listItem: [
-				{label: <FormattedMessage id="app.subMenu.IRISBNISMN"/>, path: 'ranges', roleView: ['admin']},
-				{label: <FormattedMessage id="app.subMenu.IRISSN"/>, path: 'ranges/issn', roleView: ['admin']}
-			]
-		},
 		// {
 		// 	label: <FormattedMessage id="app.menu.identifierRanges"/>,
 		// 	roleView: ['admin'],
+		// 	// Path: 'ranges'
 		// 	listItem: [
-		// 		{label: <FormattedMessage id="app.subMenu.IRISBN"/>, path: 'ranges/isbn', roleView: ['admin']},
-		// 		{label: <FormattedMessage id="app.subMenu.IRISMN"/>, path: 'ranges/ismn', roleView: ['admin']},
+		// 		{label: <FormattedMessage id="app.subMenu.IRISBNISMN"/>, path: 'ranges', roleView: ['admin']},
 		// 		{label: <FormattedMessage id="app.subMenu.IRISSN"/>, path: 'ranges/issn', roleView: ['admin']}
 		// 	]
 		// },
+		{
+			label: <FormattedMessage id="app.menu.identifierRanges"/>,
+			roleView: ['admin'],
+			listItem: [
+				{label: <FormattedMessage id="app.subMenu.IRISBN"/>, path: 'ranges/isbn', roleView: ['admin']},
+				{label: <FormattedMessage id="app.subMenu.IRISMN"/>, path: 'ranges/ismn', roleView: ['admin']},
+				{label: <FormattedMessage id="app.subMenu.IRISSN"/>, path: 'ranges/issn', roleView: ['admin']}
+			]
+		},
 		{
 			label: <FormattedMessage id="app.menu.messageTemplates"/>,
 			path: 'templates',

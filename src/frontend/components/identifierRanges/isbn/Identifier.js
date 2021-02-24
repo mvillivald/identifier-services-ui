@@ -34,12 +34,12 @@ import {
 import {useCookies} from 'react-cookie';
 import {useIntl} from 'react-intl';
 
-import {commonStyles} from '../../styles/app';
-import * as actions from '../../store/actions';
+import {commonStyles} from '../../../styles/app';
+import * as actions from '../../../store/actions';
 import {connect} from 'react-redux';
-import ModalLayout from '../ModalLayout';
-import Spinner from '../Spinner';
-import ListComponent from '../ListComponent';
+import ModalLayout from '../../ModalLayout';
+import Spinner from '../../Spinner';
+import ListComponent from '../../ListComponent';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {

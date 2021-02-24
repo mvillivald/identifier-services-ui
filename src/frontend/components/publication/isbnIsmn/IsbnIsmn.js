@@ -70,7 +70,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		messageTemplates,
 		messageInfo,
 		match,
-		createIsbnIsmnBatch
+		createIsbnBatch
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -112,11 +112,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	useEffect(() => {
 		if (subRangeId !== null && publisherId !== null) {
-			createIsbnIsmnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+			createIsbnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
 			setSubRangeId(null);
 			setPublisherId(null);
 		}
-	}, [cookie, createIsbnIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
+	}, [cookie, createIsbnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
 
 	useEffect(() => {
 		if (selectedTemplate !== null) {

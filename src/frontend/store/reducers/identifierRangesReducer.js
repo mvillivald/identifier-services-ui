@@ -126,7 +126,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				ismn: action.payload,
-				loading: false
+				rangeListLoading: false
 			};
 		case IDR_ISSN_LIST:
 			return {
@@ -153,7 +153,8 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				error: action.payload,
-				loading: false
+				loading: false,
+				rangeListLoading: false
 			};
 		default:
 			return state;

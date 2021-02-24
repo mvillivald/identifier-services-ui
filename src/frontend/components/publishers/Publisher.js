@@ -67,7 +67,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		createNewRange,
 		handleSubmit,
 		clearFields,
-		fetchIDRList,
+		fetchIsbnIDRList,
 		isAuthenticated,
 		userInfo} = props;
 	const {id} = match.params;
@@ -521,7 +521,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleRange() {
 		setAssignRange(!assignRange);
-		fetchIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
+		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
 	}
 
 	const component = (

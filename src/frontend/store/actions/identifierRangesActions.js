@@ -32,13 +32,13 @@ import {setLoader, setRangeListLoader, success, fail, setMessage} from './common
 import HttpStatus from 'http-status';
 import moment from 'moment';
 
-export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
+export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
 		(
 			rangeType === 'subRange' ?
-				{$or: [{isbnIsmnRangeId: searchText}, {publisherId: searchText}], active: true} :
-				(rangeType === 'isbnIsmnBatch' ?
+				{$or: [{isbnRangeId: searchText}, {publisherId: searchText}], active: true} :
+				(rangeType === 'isbnBatch' ?
 					{publisherIdentifierRangeId: searchText} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
@@ -46,19 +46,19 @@ export const fetchIDRList = ({searchText, token, offset, activeCheck, rangeType}
 		) :
 		(
 			rangeType === 'subRange' ?
-				{$or: [{isbnIsmnRangeId: searchText}, {publisherId: searchText}]} :
-				(rangeType === 'isbnIsmnBatch' ?
+				{$or: [{isbnRangeId: searchText}, {publisherId: searchText}]} :
+				(rangeType === 'isbnBatch' ?
 					{publisherIdentifierRangeId: searchText} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
 						{prefix: searchText}))
 		);
 	const fetchUrl = rangeType === 'range' ?
-		`${API_URL}/ranges/query` :
+		`${API_URL}/ranges/query/isbn` :
 		rangeType === 'subRange' ?
 			`${API_URL}/ranges/query/subRange` :
-			rangeType === 'isbnIsmnBatch' ?
-				`${API_URL}/ranges/query/isbnIsmnBatch` :
+			rangeType === 'isbnBatch' ?
+				`${API_URL}/ranges/query/isbnBatch` :
 				`${API_URL}/ranges/query/identifier`;
 
 	try {
@@ -138,11 +138,11 @@ export const searchIDRList = ({searchField, searchText, token, offset, rangeType
 	dispatch(setRangeListLoader());
 	const query = {[searchField]: searchText};
 	const fetchUrl = rangeType === 'range' ?
-		`${API_URL}/ranges/query` :
+		`${API_URL}/ranges/query/isbn` :
 		rangeType === 'subRange' ?
 			`${API_URL}/ranges/query/subRange` :
-			rangeType === 'isbnIsmnBatch' ?
-				`${API_URL}/ranges/query/isbnIsmnBatch` :
+			rangeType === 'isbnBatch' ?
+				`${API_URL}/ranges/query/isbnBatch` :
 				`${API_URL}/ranges/query/identifier`;
 
 	try {
@@ -161,115 +161,6 @@ export const searchIDRList = ({searchField, searchText, token, offset, rangeType
 		});
 		const result = await response.json();
 		dispatch(success(IDR_LIST, result));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const createIsbnIsmnRange = (values, token) => async dispatch => {
-	const response = await fetch(`${API_URL}/ranges`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		},
-		credentials: 'same-origin',
-		body: JSON.stringify(values)
-	});
-	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: 'ISBNISMN range created successfully'}));
-		return response.status;
-	}
-
-	if (response.status === HttpStatus.CONFLICT) {
-		dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
-		return response.status;
-	}
-
-	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISBNISMN range'}));
-	return response.status;
-};
-
-export const createIsbnIsmnBatch = (values, token) => async dispatch => {
-	try {
-		const response = await fetch(`${API_URL}/ranges/isbnIsmnBatch`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			credentials: 'same-origin',
-			body: JSON.stringify(values)
-		});
-
-		if (response) {
-			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
-			return response;
-		}
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-// ***************ISBN****************************
-
-export const fetchIDRIsbnList = ({searchText, token, offset, activeCheck}) => async dispatch => {
-	dispatch(setRangeListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
-		{prefix: searchText};
-
-	try {
-		const response = await fetch(`${API_URL}/ranges/isbn/query`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				queries: [{
-					query: query
-				}],
-				offset: offset
-			})
-		});
-		const result = await response.json();
-		dispatch(success(IDR_ISBN_LIST, result));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const fetchIDRIsbn = (id, token) => async dispatch => {
-	dispatch(setLoader());
-	try {
-		const response = await fetch(`${API_URL}/ranges/isbn/${id}`, {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			}
-		});
-		const result = await response.json();
-		dispatch(success(IDR_ISBN, result));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const updateIsbnRange = (id, values, token) => async dispatch => {
-	dispatch(setRangeListLoader());
-
-	try {
-		const response = await fetch(`${API_URL}/ranges/isbn/${id}`, {
-			method: 'PUT',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(values)
-		});
-		const result = await response.json();
-		dispatch(success(IDR_ISBN, result.value));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
@@ -295,11 +186,83 @@ export const createIsbnRange = (values, token) => async dispatch => {
 		return response.status;
 	}
 
-	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISbN range'}));
+	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISBN range'}));
 	return response.status;
 };
 
+export const createIsbnBatch = (values, token) => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/ranges/isbnBatch`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+
+		if (response) {
+			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
+			return response;
+		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+// ***************ISBN****************************
+
+export const updateIsbnRange = (id, values, token) => async dispatch => {
+	dispatch(setRangeListLoader());
+
+	try {
+		const response = await fetch(`${API_URL}/ranges/isbn/${id}`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(values)
+		});
+		const result = await response.json();
+		dispatch(success(IDR_ISBN, result.value));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
 // ***************ISMN****************************
+export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
+	dispatch(setRangeListLoader());
+	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
+		{prefix: searchText, active: true} :
+		{prefix: searchText};
+
+	const fetchUrl = rangeType === 'range' ?
+		`${API_URL}/ranges/query/ismn` :
+		`${API_URL}/ranges/query/identifier`;
+
+	try {
+		const response = await fetch(fetchUrl, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: query
+				}],
+				offset: offset
+			})
+		});
+		const result = await response.json();
+		dispatch(success(IDR_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
 
 export const fetchIDRIsmnList = ({searchText, token, offset, activeCheck}) => async dispatch => {
 	dispatch(setRangeListLoader());
@@ -359,11 +322,13 @@ export const updateIsmnRange = (id, values, token) => async dispatch => {
 		const result = await response.json();
 		dispatch(success(IDR_ISMN, result.value));
 	} catch (err) {
+		dispatch(setMessage({color: 'error', msg: err}));
 		dispatch(fail(ERROR, err));
 	}
 };
 
 export const createIsmnRange = (values, token) => async dispatch => {
+	dispatch(setRangeListLoader());
 	const response = await fetch(`${API_URL}/ranges/ismn`, {
 		method: 'POST',
 		headers: {
@@ -375,11 +340,14 @@ export const createIsmnRange = (values, token) => async dispatch => {
 	});
 	if (response.status === HttpStatus.CREATED) {
 		dispatch(setMessage({color: 'success', msg: 'ISMN range created successfully'}));
+		dispatch(success(IDR_ISMN, response));
+		console.log(response);
 		return response.status;
 	}
 
 	if (response.status === HttpStatus.CONFLICT) {
 		dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
+		dispatch(fail(ERROR, 'Range already exists'));
 		return response.status;
 	}
 

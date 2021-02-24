@@ -51,7 +51,7 @@ import ListComponent from '../../ListComponent';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {
-		fetchIDRList,
+		fetchIsbnIDRList,
 		rangesList,
 		rangeLoading,
 		offset,
@@ -94,14 +94,14 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [isbnIsmn.publisher]);
 
 	useEffect(() => {
-		fetchIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
-	}, [updateComponent, isbnIsmn.publisher, fetchIDRList, cookie, lastCursor, activeCheck, rangeType]);
+		fetchIsbnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType]);
 
 	useEffect(() => {
 		if (next && fetchedPublisher !== undefined) {
-			fetchIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			fetchIsbnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
 		}
-	}, [updateComponent, isbnIsmn.publisher, fetchIDRList, cookie, lastCursor, activeCheck, rangeType, fetchedPublisher, next]);
+	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType, fetchedPublisher, next]);
 
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {

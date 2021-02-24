@@ -37,30 +37,33 @@ import {
 	Button
 } from '@material-ui/core';
 
-import * as actions from '../../store/actions';
-import renderTextField from '../form/render/renderTextField';
-import renderSelect from '../form/render/renderSelect';
-import {commonStyles} from '../../styles/app';
-import formStyles from '../../styles/form';
+import * as actions from '../../../store/actions';
+import renderTextField from '../../form/render/renderTextField';
+import renderSelect from '../../form/render/renderSelect';
+import {commonStyles} from '../../../styles/app';
+import formStyles from '../../../styles/form';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'rangeCreation',
 	validate,
+	initialValues: {
+		prefix: '978'
+	},
 	enableReinitialize: true
 })(props => {
-	const {handleSubmit, createIsbnIsmnRange, handleClose} = props;
+	const {handleSubmit, createIsbnRange, handleClose} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const formClasses = formStyles();
 
 	async function handleCreateRange(values) {
-		await createIsbnIsmnRange(values, cookie[COOKIE_NAME]);
+		await createIsbnRange(values, cookie[COOKIE_NAME]);
 		handleClose();
 	}
 
 	const formFields = [
-		{name: 'prefix', type: 'select', option: [{label: '978', value: '978'}]},
+		{name: 'prefix', type: 'text'},
 		{name: 'langGroup', type: 'text'},
 		{name: 'category', type: 'select', option: categoryOption()},
 		{name: 'rangeStart', type: 'text'},

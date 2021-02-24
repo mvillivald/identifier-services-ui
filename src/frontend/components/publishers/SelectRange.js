@@ -45,7 +45,7 @@ import TableComponent from '../TableComponent';
 import {commonStyles} from '../../styles/app';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIDRList, rangesList, loading, offset, queryDocCount, rangeType, setNewPublisherRangeId} = props;
+	const {fetchIsbnIDRList, rangesList, loading, offset, queryDocCount, rangeType, setNewPublisherRangeId} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -64,8 +64,8 @@ export default connect(mapStateToProps, actions)(props => {
 	});
 
 	useEffect(() => {
-		fetchIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
-	}, [updateComponent, activeCheck, cookie, fetchIDRList, lastCursor, rangeType]);
+		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, lastCursor, rangeType]);
 
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {

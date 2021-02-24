@@ -109,16 +109,14 @@ export {
 
 export {
 	fetchIDR,
-	fetchIDRList,
+	fetchIsbnIDRList,
 	searchIDRList,
 	fetchIdentifier,
 	createNewRange,
-	createIsbnIsmnRange,
-	createIsbnIsmnBatch,
+	createIsbnRange,
+	createIsbnBatch,
 	assignIssnRange,
-	fetchIDRIsbnList,
-	fetchIDRIsbn,
-	fetchIDRIsmnList,
+	fetchIsmnIDRList,
 	fetchIDRIsmn,
 	fetchIDRIssnList,
 	fetchIDRIssn,
@@ -126,7 +124,6 @@ export {
 	fetchIsbnIsmnStatistics,
 	fetchIsbnIsmnMonthlyStatistics,
 	createIssnRange,
-	createIsbnRange,
 	createIsmnRange,
 	updateIsbnRange,
 	updateIsmnRange

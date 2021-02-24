@@ -60,9 +60,8 @@ import PublicationIsbnIsmnRequest from './components/publicationRequests/isbnIsm
 import PublicationIsbnIsmnRequestList from './components/publicationRequests/isbnIsmRequest/IsbnIsmnRequestList';
 import IssnRequestList from './components/publicationRequests/issnRequest/IssnRequestList';
 import IssnRequest from './components/publicationRequests/issnRequest/IssnRequest';
-import IDRISNBISMNList from './components/identifierRanges/RangesList';
-import IDRIsbnList from './components/identifierRanges/isbn/IsbnList';
-import IDRIsmnList from './components/identifierRanges/ismn/IsmnList';
+import IDRISNBList from './components/identifierRanges/isbn/RangesList';
+import IDRISMNList from './components/identifierRanges/ismn/RangesList';
 import IDRIssnList from './components/identifierRanges/issn/IssnList';
 import Statistics from './components/statistics';
 import Footer from './components/footer';
@@ -118,11 +117,9 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/requests/publications/isbn-ismn/:id', role: ['publisher', 'admin'], component: PublicationIsbnIsmnRequest},
 		{path: '/requests/publications/issn', role: ['publisher', 'admin'], component: IssnRequestList},
 		{path: '/requests/publications/issn/:id', role: ['publisher', 'admin'], component: IssnRequest},
-		{path: '/ranges', role: ['admin'], component: IDRISNBISMNList},
-		{path: '/ranges/isbn', role: ['admin'], component: IDRIsbnList},
-		{path: '/ranges/isbn/:id', role: ['admin'], component: IDRIsbnList},
-		{path: '/ranges/ismn', role: ['admin'], component: IDRIsmnList},
-		{path: '/ranges/ismn/:id', role: ['admin'], component: IDRIsbnList},
+		{path: '/ranges/isbn', role: ['admin'], component: IDRISNBList},
+		{path: '/ranges/ismn', role: ['admin'], component: IDRISMNList},
+		// {path: '/ranges/ismn/:id', role: ['admin'], component: IDRIsbnList},
 		{path: '/ranges/issn', role: ['admin'], component: IDRIssnList},
 		{path: '/ranges/issn/:id', role: ['admin'], component: IDRIssnList},
 		{path: '/statistics', role: ['admin'], component: Statistics}
