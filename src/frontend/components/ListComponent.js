@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import React from 'react';
-import {Grid, ListItem, ListItemText, Chip, Typography} from '@material-ui/core';
+import {Grid, ListItem, ListItemText, Chip, Typography, Link} from '@material-ui/core';
 import {Field, FieldArray} from 'redux-form';
 import {FormattedMessage, useIntl} from 'react-intl';
 import renderTextField from './form/render/renderTextField';
@@ -17,7 +17,7 @@ import {classificationCodes, isbnClassificationCodes, publisherCategory} from '.
 
 export default function (props) {
 	const classes = useStyles();
-	const {label, value, edit, fieldName, clearFields} = props;
+	const {label, value, edit, linkPath, fieldName, clearFields} = props;
 	const intl = useIntl();
 	const formClasses = useFormStyles();
 
@@ -28,8 +28,9 @@ export default function (props) {
 			case 'string':
 			case 'number':
 				return (
-					fieldName === 'additionalDetails' || fieldName === 'notes' ?
-						(edit ? renderEditAdditionalDetails(fieldName) : value) :
+					(fieldName === 'additionalDetails' || fieldName === 'notes' ||
+						fieldName === 'organizationDetails[affiliate]' || fieldName === 'organizationDetails[distributor]') ?
+						(edit ? renderEditAdditionalDetails(fieldName, label) : value) :
 						<>
 							<Grid item xs={4}>
 								<span className={classes.label}>{label}:</span>
@@ -62,8 +63,10 @@ export default function (props) {
 								) : (
 									fieldName === 'classification' ? (
 										getClassificationValue(Number(value), classificationCodes)
-									) : fieldName === 'publisherCategory' ?
-										getPublisherCategory(value, publisherCategory) :
+									) : fieldName === 'publisherCategory' ? (
+										getPublisherCategory(value, publisherCategory)
+									) : linkPath ?
+										<Link href={linkPath}> {value} </Link> :
 										value
 								)}
 							</Grid>
@@ -612,12 +615,13 @@ export default function (props) {
 		);
 	}
 
-	function renderEditAdditionalDetails(fieldName) {
+	function renderEditAdditionalDetails(fieldName, label) {
 		return (
 			<Field
 				className={`${classes.textArea} ${classes.full}`}
 				component={renderTextArea}
 				name={fieldName}
+				label={label}
 				type="multiline"
 			/>
 		);

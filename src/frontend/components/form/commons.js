@@ -194,7 +194,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 						<Field
 							className={`${classes.textArea} ${classes.full}`}
 							component={renderTextArea}
-							name={fieldName}
+							name={fieldName ? fieldName : list.name}
 							label={list.label}
 							type="multiline"
 						/>
@@ -367,45 +367,6 @@ function getSubFormatDetailsFieldArray(intl) {
 		}
 	];
 	return array;
-}
-
-export function formatAddress(obj) {
-	const result = Object.keys(obj).reduce((acc, key) => {
-		return {...acc, [replaceKey(key)]: obj[key]};
-	}, {});
-	return result;
-}
-
-function replaceKey(key) {
-	switch (key) {
-		case 'affiliateOfAddress':
-		case 'affiliatesAddress':
-		case 'distributorAddress':
-		case 'distributorOfAddress':
-			return 'address';
-		case 'affiliateOfAddressDetails':
-		case 'affiliatesAddressDetails':
-		case 'distributorAddressDetails':
-		case 'distributorOfAddressDetails':
-			return 'addressDetails';
-		case 'affiliateOfCity':
-		case 'affiliatesCity':
-		case 'distributorCity':
-		case 'distributorOfCity':
-			return 'city';
-		case 'affiliateOfName':
-		case 'affiliatesName':
-		case 'distributorName':
-		case 'distributorOfName':
-			return 'name';
-		case 'affiliateOfZip':
-		case 'affiliatesZip':
-		case 'distributorZip':
-		case 'distributorOfZip':
-			return 'zip';
-		default:
-			return null;
-	}
 }
 
 export function formatLabel(label) {

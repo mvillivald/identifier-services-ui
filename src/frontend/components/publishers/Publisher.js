@@ -115,7 +115,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
-			['lastUpdated', '_id', 'isbnRange', 'ismnRange'] :
+			['lastUpdated', '_id', 'isbnRange', 'ismnRange', 'request'] :
 			(userInfo.role === 'publisher' ?
 				['lastUpdated', '_id', 'request', 'metadataDelivery', 'isbnRange', 'ismnRange'] :
 				[]);
@@ -123,7 +123,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
-	const {organizationDetails, _id, publisherRangeId, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
+	const {_id, publisherRangeId, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
 		return {note: Buffer.from(item).toString('base64')};
 	}) : ''};
 	let publisherDetail;
@@ -237,116 +237,20 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							<FormattedMessage id="listComponent.affiliateOf"/>
+							<FormattedMessage id="listComponent.organizationDetails"/>
 						</Typography>
 						<hr/>
 						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[affiliateOf][address]"
-							label={intl.formatMessage({id: 'listComponent.address'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.affiliateOf && formattedPublisherDetail.affiliateOf.address ?
-								formattedPublisherDetail.affiliateOf.address : ''}
+							fieldName="organizationDetails[affiliate]"
+							label={intl.formatMessage({id: 'listComponent.affiliate'})}
+							value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.affiliate ?
+								formattedPublisherDetail.organizationDetails.affiliate : ''}
 						/>
 						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[affiliateOf][city]"
-							label={intl.formatMessage({id: 'listComponent.city'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.affiliateOf && formattedPublisherDetail.affiliateOf.city ?
-								formattedPublisherDetail.affiliateOf.city : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[affiliateOf][zip]"
-							label={intl.formatMessage({id: 'listComponent.zip'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.affiliateOf && formattedPublisherDetail.affiliateOf.zip ?
-								formattedPublisherDetail.affiliateOf.zip : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[affiliateOf][name]"
-							label={intl.formatMessage({id: 'listComponent.name'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.affiliateOf && formattedPublisherDetail.affiliateOf.name ?
-								formattedPublisherDetail.affiliateOf.name : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.affiliates"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[affiliates]"
-							label={intl.formatMessage({id: 'listComponent'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.affiliates ? formattedPublisherDetail.affiliates : []}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.distributorOf"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributorOf][address]"
-							label={intl.formatMessage({id: 'listComponent.address'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributorOf && formattedPublisherDetail.distributorOf.address ?
-								formattedPublisherDetail.distributorOf.address : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributorOf][city]"
-							label={intl.formatMessage({id: 'listComponent.city'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributorOf && formattedPublisherDetail.distributorOf.city ?
-								formattedPublisherDetail.distributorOf.city : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributorOf][zip]"
-							label={intl.formatMessage({id: 'listComponent.zip'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributorOf && formattedPublisherDetail.distributorOf.zip ?
-								formattedPublisherDetail.distributorOf.zip : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributorOf][name]"
-							label={intl.formatMessage({id: 'listComponent.name'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributorOf && formattedPublisherDetail.distributorOf.name ?
-								formattedPublisherDetail.distributorOf.name : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.distributor"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributor][address]"
-							label={intl.formatMessage({id: 'listComponent.address'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributor && formattedPublisherDetail.distributor.address ?
-								formattedPublisherDetail.distributor.address : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributor][city]"
-							label={intl.formatMessage({id: 'listComponent.city'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributor && formattedPublisherDetail.distributor.city ?
-								formattedPublisherDetail.distributor.city : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributor][zip]"
-							label={intl.formatMessage({id: 'listComponent.zip'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributor && formattedPublisherDetail.distributor.zip ?
-								formattedPublisherDetail.distributor.zip : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributor][name]"
-							label={intl.formatMessage({id: 'listComponent.name'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.distributor && formattedPublisherDetail.distributor.name ?
-								formattedPublisherDetail.distributor.name : ''}
+							fieldName="organizationDetails[distributor]"
+							label={intl.formatMessage({id: 'listComponent.distributor'})}
+							value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.distributor ?
+								formattedPublisherDetail.organizationDetails.distributor : ''}
 						/>
 					</Grid>
 				</Grid>
@@ -422,6 +326,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							value={formattedPublisherDetail.publisherRangeId ? formattedPublisherDetail.publisherRangeId : ''}
 						/>
 						<ListComponent
+							linkPath={`/publishers/${formattedPublisherDetail.request}`}
 							fieldName="request"
 							label={intl.formatMessage({id: 'listComponent.request'})}
 							value={formattedPublisherDetail.request ? formattedPublisherDetail.request : ''}

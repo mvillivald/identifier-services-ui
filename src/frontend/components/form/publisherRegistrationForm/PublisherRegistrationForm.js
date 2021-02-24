@@ -33,18 +33,16 @@ import {Button, Grid, Stepper, Step, StepLabel, Typography} from '@material-ui/c
 import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import HttpStatus from 'http-status';
-import HelpIcon from '@material-ui/icons/Help';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import useStyles from '../../../styles/form';
 import ResetCaptchaButton from '../ResetCaptchaButton';
 import ListComponent from '../../ListComponent';
-import PopoverComponent from '../../PopoverComponent';
 import RenderInformation from './RenderInformation';
 import Captcha from '../../Captcha';
 import {fieldArray} from './formFieldVariable';
 import * as actions from '../../../store/actions';
-import {element, fieldArrayElement, formatAddress} from '../commons';
+import {element} from '../commons';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherRegistrationForm',
@@ -78,10 +76,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const intl = useIntl();
 		const [activeStep, setActiveStep] = useState(0);
 		const [captchaInput, setCaptchaInput] = useState('');
-		const [affiliateOf, setAffiliateOf] = useState(false);
-		const [affiliates, setAffiliates] = useState(false);
-		const [distributor, setDistributor] = useState(false);
-		const [distributorOf, setDistributorOf] = useState(false);
 		const [information, setInformation] = useState(true);
 
 		useEffect(() => {
@@ -98,10 +92,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				case 1:
 					return element({array: fieldArray[1].publishingActivities, classes, clearFields});
 				case 2:
-					return orgDetail1({arr: fieldArray[2].affiliate, classes, fieldName: 'affiliates', clearFields});
+					return element({array: fieldArray[2].organizationDetails, classes, clearFields});
 				case 3:
-					return orgDetail2({arr: fieldArray[3].distributor, classes});
-				case 4:
 					return renderPreview(publisherValues);
 				default:
 					return 'Unknown step';
@@ -162,19 +154,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		function formatPublisher(values) {
 			const newPublisherCategory = values.publisherCategory && values.publisherCategory.value;
 			const newClassification = values.classification.map(item => item.value.toString());
-			const organizationDetails = {
-				affiliateOf: values.affiliateOf && formatAddress(values.affiliateOf),
-				affiliates: values.affiliates && values.affiliates.map(item => formatAddress(item)),
-				distributorOf: values.distributorOf && formatAddress(values.distributorOf),
-				distributor: values.distributor && formatAddress(values.distributor)
-			};
 			const publicationDetails = values.publicationDetails;
 			const {affiliateOf, affiliates, distributorOf, distributor, ...rest} = {...values};
 
 			const newPublisher = {
 				...rest,
 				publisherCategory: newPublisherCategory,
-				organizationDetails: organizationDetails && organizationDetails,
 				classification: newClassification,
 				publicationDetails: {...publicationDetails, frequency: {currentYear: Number(publicationDetails.frequency.currentYear), nextYear: Number(publicationDetails.frequency.nextYear)}}
 			};
@@ -246,66 +231,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		function getSteps() {
 			return fieldArray.map(item => Object.keys(item));
-		}
-
-		function organizationalForm({fieldItem, classes, fieldName, clearFields}) {
-			const comp = (
-				<>
-					<div className={classes.formHead}>
-						<Typography variant="h6">
-							{fieldItem.title}
-						</Typography>
-					</div>
-					{fieldItem.title === 'Affiliates' ? fieldArrayElement({data: fieldItem.fields, fieldName, clearFields}) : element({array: fieldItem.fields, classes, clearFields})}
-
-				</>
-			);
-
-			return {
-				...comp
-			};
-		}
-
-		function orgDetail1({arr, classes, fieldName, clearFields}) {
-			const comp = (
-				<>
-					<Button variant={affiliateOf ? 'contained' : 'outlined'} color="primary" onClick={() => setAffiliateOf(!affiliateOf)}>Add {arr[0].title}</Button>&nbsp;
-					<Button variant={affiliates ? 'contained' : 'outlined'} color="primary" onClick={() => setAffiliates(!affiliates)}>Add {arr[1].title}</Button>
-					<PopoverComponent icon={<HelpIcon/>} infoText={getPopoverText()}/>
-					{affiliateOf ? organizationalForm({fieldItem: arr[0], classes, fieldName, clearFields}) : null}
-					{affiliates ? organizationalForm({fieldItem: arr[1], classes, fieldName, clearFields}) : null}
-				</>
-			);
-
-			return {
-				...comp
-			};
-
-			function getPopoverText() {
-				const text = <FormattedMessage id="publisherRegistration.form.orgDetail1.popoverText"/>;
-				return text;
-			}
-		}
-
-		function orgDetail2({arr, classes, fieldName, clearFields}) {
-			const comp = (
-				<>
-					<Button variant={distributorOf ? 'contained' : 'outlined'} color="primary" onClick={() => setDistributorOf(!distributorOf)}>Add {arr[0].title}</Button>&nbsp;
-					<Button variant={distributor ? 'contained' : 'outlined'} color="primary" onClick={() => setDistributor(!distributor)}>Add {arr[1].title}</Button>
-					<PopoverComponent icon={<HelpIcon/>} infoText={getPopoverText()}/>
-					{distributorOf ? organizationalForm({fieldItem: arr[0], classes, fieldName, clearFields}) : null}
-					{distributor ? organizationalForm({fieldItem: arr[1], classes, fieldName, clearFields}) : null}
-				</>
-			);
-
-			return {
-				...comp
-			};
-
-			function getPopoverText() {
-				const text = <FormattedMessage id="publisherRegistration.form.orgDetail2.popoverText"/>;
-				return text;
-			}
 		}
 
 		function renderPreview(publisherValues) {
@@ -402,125 +327,20 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
-								<FormattedMessage id="listComponent.affiliateOf"/>
+								<FormattedMessage id="listComponent.organizationDetails"/>
 							</Typography>
 							<hr/>
 							<ListComponent
-								fieldName="organizationDetails[affiliateOf][address]"
-								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfAddress ?
-									publisherValues.affiliateOf.affiliateOfAddress : ''}
+								fieldName="organizationalDetails[affiliate]"
+								label={intl.formatMessage({id: 'listComponent.affiliate'})}
+								value={publisherValues && publisherValues.organizationDetails && publisherValues.organizationDetails.affiliate ?
+									publisherValues.organizationDetails.affiliate : ''}
 							/>
 							<ListComponent
-								fieldName="organizationDetails[affiliateOf][city]"
-								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfCity ?
-									publisherValues.affiliateOf.affiliateOfCity : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[affiliateOf][zip]"
-								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfZip ?
-									publisherValues.affiliateOf.affiliateOfZip : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[affiliateOf][name]"
-								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={publisherValues && publisherValues.affiliateOf && publisherValues.affiliateOf.affiliateOfName ?
-									publisherValues.affiliateOf.affiliateOfName : ''}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.affiliates"/>
-							</Typography>
-							<hr/>
-							{
-								publisherValues && publisherValues.affiliates && publisherValues.affiliates.map(item => (
-									<Grid key={`${item.affiliatesName}${item.affiliatesAddress}`} container>
-										<ListComponent
-											fieldName="organizationDetails[affiliates][address]"
-											label={intl.formatMessage({id: 'listComponent.address'})}
-											value={item.affiliatesAddress ? item.affiliatesAddress : ''}
-										/>
-										<ListComponent
-											fieldName="organizationDetails[affiliates][city]"
-											label={intl.formatMessage({id: 'listComponent.city'})}
-											value={item.affiliatesCity ? item.affiliatesCity : ''}
-										/>
-										<ListComponent
-											fieldName="organizationDetails[affiliates][zip]"
-											label={intl.formatMessage({id: 'listComponent.zip'})}
-											value={item.affiliatesZip ? item.affiliatesZip : ''}
-										/>
-										<ListComponent
-											fieldName="organizationDetails[affiliates][name]"
-											label={intl.formatMessage({id: 'listComponent.name'})}
-											value={item.affiliatesName ? item.affiliatesName : ''}
-										/>
-									</Grid>
-
-								))
-							}
-						</Grid>
-						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.distributorOf"/>
-							</Typography>
-							<hr/>
-							<ListComponent
-								fieldName="organizationDetails[distributorOf][address]"
-								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfAddress ?
-									publisherValues.distributorOf.distributorOfAddress : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[distributorOf][city]"
-								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfCity ?
-									publisherValues.distributorOf.distributorOfCity : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[distributorOf][zip]"
-								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfZip ?
-									publisherValues.distributorOf.distributorOfZip : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[distributorOf][name]"
-								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={publisherValues && publisherValues.distributorOf && publisherValues.distributorOf.distributorOfName ?
-									publisherValues.distributorOf.distributorOfName : ''}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.distributor"/>
-							</Typography>
-							<hr/>
-							<ListComponent
-								fieldName="organizationDetails[distributor][address]"
-								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorAddress ?
-									publisherValues.distributor.distributorAddress : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[distributor][city]"
-								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorCity ?
-									publisherValues.distributor.distributorCity : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[distributor][zip]"
-								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorZip ?
-									publisherValues.distributor.distributorZip : ''}
-							/>
-							<ListComponent
-								fieldName="organizationDetails[distributor][name]"
-								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={publisherValues && publisherValues.distributor && publisherValues.distributor.distributorName ?
-									publisherValues.distributor.distributorName : ''}
+								fieldName="organizationalDetails[distributor]"
+								label={intl.formatMessage({id: 'listComponent.distributor'})}
+								value={publisherValues && publisherValues.organizationDetails && publisherValues.organizationDetails.distributor ?
+									publisherValues.organizationDetails.distributor : ''}
 							/>
 						</Grid>
 					</Grid>

@@ -140,7 +140,7 @@ export const fieldArray = [
 				name: 'name',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.name"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'aliases',
@@ -153,25 +153,25 @@ export const fieldArray = [
 				name: 'postalAddress[address]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalAddress"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'postalAddress[city]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalCity"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'postalAddress[zip]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalZip"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'phone',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.phone"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'publisherCategory',
@@ -185,31 +185,31 @@ export const fieldArray = [
 				name: 'givenName',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.givenName"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'familyName',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.familyName"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'email',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.email"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'website',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.website"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'language',
 				type: 'select',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.selectLanguage"/>,
-				width: 'half',
+				width: 'full',
 				defaultValue: 'eng',
 				options: [
 					{label: 'English (Default Language)', value: 'eng'},
@@ -225,13 +225,13 @@ export const fieldArray = [
 				name: 'publicationDetails[frequency][currentYear]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.frequency.currentYear"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'publicationDetails[frequency][nextYear]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.frequency.nextYear"/>,
-				width: 'half'
+				width: 'full'
 			},
 			{
 				name: 'classification',
@@ -245,153 +245,19 @@ export const fieldArray = [
 		]
 	},
 	{
-		affiliate: [
+		organizationDetails: [
 			{
-				title: 'AffiliateOf',
-				fields: [
-					{
-						name: 'affiliateOf[affiliateOfName]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfName"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliateOf[affiliateOfAddress]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfAddress"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliateOf[affiliateOfAddressDetails]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfAddressDetails"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliateOf[affiliateOfCity]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfCity"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliateOf[affiliateOfZip]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateOfZip"/>,
-						width: 'half'
-					}
-
-				]
+				name: 'organizationDetails[affiliate]',
+				type: 'textArea',
+				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliate"/>,
+				width: 'full'
 			},
 			{
-				title: 'Affiliates',
-				fields: [
-					{
-						name: 'affiliatesName',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateName"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliatesAddress',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateAddress"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliatesAddressDetails',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateAddressDetails"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliatesCity',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateCity"/>,
-						width: 'half'
-					},
-					{
-						name: 'affiliatesZip',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliateZip"/>,
-						width: 'half'
-					}
-				]
+				name: 'organizationDetails[distributor]',
+				type: 'textArea',
+				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributor"/>,
+				width: 'full'
 			}
-		]
-	},
-	{
-		distributor: [
-			{
-				title: 'DistributorOf',
-				fields: [
-					{
-						name: 'distributorOf[distributorOfName]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfName"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributorOf[distributorOfAddress]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfAddress"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributorOf[distributorOfAddressDetails]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfAddressDetails"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributorOf[distributorOfCity]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfCity"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributorOf[distributorOfZip]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorOfZip"/>,
-						width: 'half'
-					}
-				]
-			},
-			{
-				title: 'Distributor',
-				fields: [
-					{
-						name: 'distributor[distributorName]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorName"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributor[distributorAddress]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorAddress"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributor[distributorAddressDetails]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorAddressDetails"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributor[distributorCity]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorCity"/>,
-						width: 'half'
-					},
-					{
-						name: 'distributor[distributorZip]',
-						type: 'text',
-						label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributorZip"/>,
-						width: 'half'
-					}
-				]
-			}
-
 		]
 	},
 	{
