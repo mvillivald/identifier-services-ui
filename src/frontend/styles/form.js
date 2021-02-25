@@ -88,6 +88,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	textArea: {
 		width: '100%',
+		margin: '10px 0 !important',
 		background: '#f5f3f3'
 	},
 	stepLabel: {
@@ -154,7 +155,8 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'row !important',
 		flexWrap: 'nowrap !important'
 	},
-	basicStepperStyle: {
+	topSticky: {
+		background: theme.palette.secondary.background,
 		position: 'sticky',
 		top: 0,
 		zIndex: 11
@@ -162,10 +164,7 @@ const useStyles = makeStyles(theme => ({
 	smallStepper: {
 		width: '60%',
 		margin: '0 auto',
-		padding: '0 0 10px 0',
-		position: 'sticky',
-		top: 0,
-		zIndex: 11
+		padding: '0 0 10px 0'
 	},
 	addFabBtn: {
 		marginTop: '15px'

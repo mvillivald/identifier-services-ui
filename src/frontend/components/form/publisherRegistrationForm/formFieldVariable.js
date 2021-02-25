@@ -140,44 +140,44 @@ export const fieldArray = [
 				name: 'name',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.name"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'aliases',
 				type: 'arrayString',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.aliases"/>,
-				width: 'full',
+				width: 'half',
 				subName: 'alias'
 			},
 			{
 				name: 'postalAddress[address]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalAddress"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'postalAddress[city]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalCity"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'postalAddress[zip]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalZip"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'phone',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.phone"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'publisherCategory',
 				type: 'multiSelect',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory"/>,
-				width: 'full',
+				width: 'half',
 				options: publisherCategory,
 				isMulti: false
 			},
@@ -185,31 +185,31 @@ export const fieldArray = [
 				name: 'givenName',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.givenName"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'familyName',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.familyName"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'email',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.email"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'website',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.website"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'language',
 				type: 'select',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.selectLanguage"/>,
-				width: 'full',
+				width: 'half',
 				defaultValue: 'eng',
 				options: [
 					{label: 'English (Default Language)', value: 'eng'},
@@ -225,20 +225,20 @@ export const fieldArray = [
 				name: 'publicationDetails[frequency][currentYear]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.frequency.currentYear"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'publicationDetails[frequency][nextYear]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.frequency.nextYear"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'classification',
 				type: 'multiSelect',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.classification"/>,
 				options: classificationCodes,
-				width: 'full',
+				width: 'half',
 				instructions: getClassificationInstruction(),
 				isMulti: true
 			}
@@ -250,13 +250,13 @@ export const fieldArray = [
 				name: 'organizationDetails[affiliate]',
 				type: 'textArea',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.affiliate"/>,
-				width: 'full'
+				width: 'half'
 			},
 			{
 				name: 'organizationDetails[distributor]',
 				type: 'textArea',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.organization.distributor"/>,
-				width: 'full'
+				width: 'half'
 			}
 		]
 	},

@@ -169,7 +169,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}) : ''};
 	let publisherDetail;
 	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading) {
-		console.log(publisher, formattedPublisherDetail)
 		publisherDetail = <Spinner/>;
 	} else {
 		publisherDetail = (
@@ -186,6 +185,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								fieldName="name"
 								label={intl.formatMessage({id: 'listComponent.name'})}
 								value={formattedPublisherDetail.name ? formattedPublisherDetail.name : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable}
+								fieldName="code"
+								label={intl.formatMessage({id: 'listComponent.code'})}
+								value={formattedPublisherDetail.code ? formattedPublisherDetail.code : ''}
 							/>
 							<ListComponent
 								edit={isEdit && isEditable}

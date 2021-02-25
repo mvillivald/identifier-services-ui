@@ -172,17 +172,22 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			) :
 			(
 				<form className={classes.container} onSubmit={handleSubmit(handlePublisherRegistration)}>
-					<Stepper alternativeLabel className={publicationRegistration ? classes.smallStepper : classes.basicStepperStyle} activeStep={activeStep}>
-						{steps.map(label => (
-							<Step key={label}>
-								<StepLabel className={publicationRegistration ? classes.smallFontStepLabel : classes.stepLabel}>
-									<FormattedMessage id={`publisherRegistration.stepper.label.${label}`}/>
-								</StepLabel>
-							</Step>
-						))}
-					</Stepper>
+					<div className={classes.topSticky}>
+						<Typography variant="h5">
+							<FormattedMessage id="app.modal.title.publisherRegistration"/>
+						</Typography>
+						<Stepper alternativeLabel className={publicationRegistration && classes.smallStepper} activeStep={activeStep}>
+							{steps.map(label => (
+								<Step key={label}>
+									<StepLabel className={publicationRegistration ? classes.smallFontStepLabel : classes.stepLabel}>
+										<FormattedMessage id={`publisherRegistration.stepper.label.${label}`}/>
+									</StepLabel>
+								</Step>
+							))}
+						</Stepper>
+					</div>
 					<div className={classes.subContainer}>
-						<Grid container spacing={2} direction="row">
+						<Grid container spacing={2} direction={activeStep === steps.length - 1 ? 'row' : 'column'}>
 							{(getStepContent(activeStep))}
 
 							{(!publicationRegistration &&
@@ -235,7 +240,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		function renderPreview(publisherValues) {
 			return (
-				<>
+				<Grid container item spacing={2} xs={12}>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
 							<Grid item xs={12}>
@@ -398,7 +403,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 						</Grid>
 					</Grid>
-				</>
+				</Grid>
 
 			);
 		}

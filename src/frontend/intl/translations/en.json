@@ -867,6 +867,8 @@
     "app.menu.home": "Home",
     "app.menu.profile": "Profile",
 
-    "listComponent.organizationDetails" : "Organizational Details"
+    "listComponent.organizationDetails" : "Organizational Details",
+    "publicationRegistration.form.publisherBasicInfo.code": "Publisher Code",
+    "listComponent.code": "Publisher Code"
 
 }

@@ -222,7 +222,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				subSeries: values.seriesDetails && values.seriesDetails.subSeries
 			};
 			return (
-				<>
+				<Grid container item spacing={2} xs={12}>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
 							<Typography variant="h6">
@@ -449,24 +449,29 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 						</Grid>
 					</Grid>
-				</>
+				</Grid>
 
 			);
 		}
 
 		const component = (
 			<form className={classes.container} onSubmit={handleSubmit(handlePublicationRegistration)}>
-				<Stepper alternativeLabel activeStep={activeStep} className={classes.basicStepperStyle}>
-					{steps.map(label => (
-						<Step key={label}>
-							<StepLabel className={classes.stepLabel}>
-								{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
-							</StepLabel>
-						</Step>
-					))}
-				</Stepper>
+				<div className={classes.topSticky}>
+					<Typography variant="h5">
+						<FormattedMessage id="app.modal.title.publicationRegistration"/> ISSN
+					</Typography>
+					<Stepper alternativeLabel activeStep={activeStep} className={classes.basicStepperStyle}>
+						{steps.map(label => (
+							<Step key={label}>
+								<StepLabel className={classes.stepLabel}>
+									{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
+								</StepLabel>
+							</Step>
+						))}
+					</Stepper>
+				</div>
 				<div className={classes.subContainer}>
-					<Grid container spacing={2} direction="row">
+					<Grid container spacing={2} direction={activeStep === steps.length - 1 ? 'row' : 'column'}>
 						{(getStepContent(activeStep))}
 
 						{
@@ -824,7 +829,7 @@ function getFieldArray(intl) {
 				{
 					name: 'issnFormatDetails',
 					type: 'multiSelect',
-					width: 'full',
+					width: 'half',
 					isMulti: true,
 					isCreatable: true,
 					instructions: getIssnFormatDetailsInstruction(),

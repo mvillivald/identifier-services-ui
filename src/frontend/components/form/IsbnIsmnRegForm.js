@@ -393,7 +393,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					isbnClassification: publicationValues.isbnClassification.map(item => item.label.toString())
 				} : formatPublicationValues(publicationValues);
 			return (
-				<>
+				<Grid container item spacing={2} xs={12}>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
 							<Grid item xs={12}>
@@ -415,6 +415,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<ListComponent
 									label={intl.formatMessage({id: 'listComponent.name'})}
 									value={formatPublicationValue.publisher && formatPublicationValue.publisher.name ? formatPublicationValue.publisher.name : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.code'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.code ? formatPublicationValue.publisher.code : ''}
 								/>
 								<ListComponent
 									label={intl.formatMessage({id: 'listComponent.address'})}
@@ -661,7 +665,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 						</Grid>
 					</Grid>
-				</>
+				</Grid>
 			);
 		}
 
@@ -697,14 +701,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							name: 'university[name]',
 							type: 'text',
 							label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.universityName'}),
-							width: 'full',
+							width: 'half',
 							disable: publicationValues && typeof publicationValues.selectUniversity === 'object' && true
 						},
 						{
 							name: 'university[city]',
 							type: 'text',
 							label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.city'}),
-							width: 'full',
+							width: 'half',
 							disable: publicationValues && typeof publicationValues.selectUniversity === 'object' && true
 						}
 					]
@@ -729,7 +733,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					name: 'selectUniversity',
 					type: 'selectAutoComplete',
 					label: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.selectUniversity.label'}),
-					width: 'full',
+					width: 'half',
 					placeholder: intl.formatMessage({id: 'publicationRegistration.form.universityInfo.selectUniversity.placeholder'}),
 					disable: checkDisable,
 					options: publisher
@@ -820,17 +824,22 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Button>
 					</div> :
 					<form className={classes.container} onSubmit={handleSubmit(handlePublicationRegistration)}>
-						<Stepper alternativeLabel activeStep={activeStep} className={classes.basicStepperStyle}>
-							{steps.map(label => (
-								<Step key={label}>
-									<StepLabel className={classes.stepLabel}>
-										{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
-									</StepLabel>
-								</Step>
-							))}
-						</Stepper>
+						<div className={classes.topSticky}>
+							<Typography variant="h5">
+								<FormattedMessage id="app.modal.title.publicationRegistration"/> ISBN AND ISMN
+							</Typography>
+							<Stepper alternativeLabel activeStep={activeStep} className={classes.basicStepperStyle}>
+								{steps.map(label => (
+									<Step key={label}>
+										<StepLabel className={classes.stepLabel}>
+											{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
+										</StepLabel>
+									</Step>
+								))}
+							</Stepper>
+						</div>
 						<div className={classes.subContainer}>
-							<Grid container spacing={2} direction="row">
+							<Grid container spacing={2} direction={activeStep === steps.length - 1 ? 'row' : 'column'}>
 								{(getStepContent(activeStep))}
 								{
 									activeStep === steps.length - 1 &&
@@ -930,6 +939,12 @@ export function getFieldArray(intl) {
 					name: 'name',
 					type: 'text',
 					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.name'}),
+					width: 'half'
+				},
+				{
+					name: 'code',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.code'}),
 					width: 'half'
 				},
 				{
@@ -1189,7 +1204,7 @@ export function getFieldArray(intl) {
 				{
 					name: 'selectFormat',
 					type: 'radio',
-					width: 'full',
+					width: 'half',
 					options: [
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.electronic'}), value: 'electronic'},
