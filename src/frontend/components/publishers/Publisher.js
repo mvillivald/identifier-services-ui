@@ -48,6 +48,7 @@ import ListComponent from '../ListComponent';
 import SelectRange from './SelectRange';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {classificationCodes} from '../form/publisherRegistrationForm/formFieldVariable';
+import MessageElement from '../messageElement/MessageElement';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherUpdateForm',
@@ -58,6 +59,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchPublisher,
 		fetchIDR,
 		updatePublisher,
+		fetchAllMessagesList,
 		match,
 		history,
 		publisher,
@@ -66,6 +68,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		range,
 		createNewRange,
 		handleSubmit,
+		sendMessage,
 		clearFields,
 		fetchIsbnIDRList,
 		isAuthenticated,
@@ -79,6 +82,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [assignRange, setAssignRange] = useState(false);
 	const [newPublisherRangeId, setNewPublisherRangeId] = useState(null);
 	const [enableUpdate, setEnableUpdate] = useState(false);
+	const [disableAssign, setDisableAssign] = useState(true);
+	const [sendingMessage, setSendingMessage] = useState(false);
+	const [messageToBeSend, setMessageToBeSend] = useState(null);
+	const [publisherEmail, setPublisherEmail] = useState(null);
 
 	const activeCheck = {
 		checked: true
@@ -88,7 +95,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchPublisher(id, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit]);
+	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit, sendMessage]);
 
 	useEffect(() => {
 		async function run() {
@@ -105,6 +112,20 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		run();
 	}, [cookie, createNewRange, fetchIDR, id, newPublisherRangeId]);
 
+	useEffect(() => {
+		fetchAllMessagesList(cookie[COOKIE_NAME]);
+	}, [cookie, fetchAllMessagesList]);
+
+	useEffect(() => {
+		if (Object.keys(publisher).length > 0) {
+			if (publisher.identifier && publisher.identifier.length > 0) {
+				setDisableAssign(true);
+			} else {
+				setDisableAssign(false);
+			}
+		}
+	}, [publisher]);
+
 	const handleEditClick = () => {
 		setIsEdit(true);
 	};
@@ -112,6 +133,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const handleCancel = () => {
 		setIsEdit(false);
 	};
+
+	function handleBack() {
+		setAssignRange(false);
+		history.push(`/publishers/${id}`);
+	}
+
+	function handleRange() {
+		setAssignRange(!assignRange);
+		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
+	}
+
+	function handleOnClickSendMessage() {
+		setSendingMessage(true);
+	}
+
+	function handleOnClickSend() {
+		sendMessage({...messageToBeSend, sendTo: publisherEmail});
+		setSendingMessage(false);
+		fetchPublisher(id, cookie[COOKIE_NAME]);
+	}
 
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
@@ -128,6 +169,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}) : ''};
 	let publisherDetail;
 	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading) {
+		console.log(publisher, formattedPublisherDetail)
 		publisherDetail = <Spinner/>;
 	} else {
 		publisherDetail = (
@@ -419,83 +461,89 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setAssignRange(false);
 	};
 
-	function handleBack() {
-		setAssignRange(false);
-		history.push(`/publishers/${id}`);
-	}
-
-	function handleRange() {
-		setAssignRange(!assignRange);
-		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
-	}
-
 	const component = (
 		<Grid item xs={12}>
-			{isEdit ?
-				<div className={classes.listItem}>
-					<form>
-						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>
-								<FormattedMessage id="form.button.label.cancel"/>
-							</Button>
-							<Button variant="contained" color="primary" onClick={handleSubmit(handlePublisherUpdate)}>
-								<FormattedMessage id="form.button.label.update"/>
-							</Button>
-						</div>
-						<Grid container spacing={3} className={classes.listItemSpinner}>
-							{publisherDetail}
-						</Grid>
-					</form>
-				</div> :
-				<div className={classes.listItem}>
-					{assignRange ?
-						<>
-							<>
-								{
-									!enableUpdate &&
-										<Button
-											variant="outlined"
-											startIcon={<ArrowBackIosIcon/>}
-											onClick={handleBack}
-										>
-											<FormattedMessage id="form.button.label.back"/>
-										</Button>
-								}
-								<Button disabled={!enableUpdate} variant="outlined" color="primary" onClick={handlePublisherUpdate}>
-									<FormattedMessage id="form.button.label.update"/>
-								</Button>
-							</>
-							<SelectRange rangeType="range" setNewPublisherRangeId={setNewPublisherRangeId} setAssignRange={setAssignRange} {...props}/>
-						</> :
-						<>
-							{
-								isAuthenticated && userInfo.role === 'admin' &&
+			{ sendingMessage ?
+				<MessageElement
+					messageToBeSend={messageToBeSend}
+					setMessageToBeSend={setMessageToBeSend}
+					setSendingMessage={setSendingMessage}
+					publisherEmail={publisherEmail}
+					setPublisherEmail={setPublisherEmail}
+					handleOnClickSend={handleOnClickSend}
+				/> :
+				(
+					isEdit ?
+						<div className={classes.listItem}>
+							<form>
+								<div className={classes.btnContainer}>
+									<Button onClick={handleCancel}>
+										<FormattedMessage id="form.button.label.cancel"/>
+									</Button>
+									<Button variant="contained" color="primary" onClick={handleSubmit(handlePublisherUpdate)}>
+										<FormattedMessage id="form.button.label.update"/>
+									</Button>
+								</div>
+								<Grid container spacing={3} className={classes.listItemSpinner}>
+									{publisherDetail}
+								</Grid>
+							</form>
+						</div> :
+						<div className={classes.listItem}>
+							{assignRange ?
+								<>
 									<>
-										<Button variant="outlined" color="primary" onClick={handleRange}>
-											<FormattedMessage id="publisher.button.label.assignRanges"/>
+										{
+											!enableUpdate &&
+												<Button
+													variant="outlined"
+													startIcon={<ArrowBackIosIcon/>}
+													onClick={handleBack}
+												>
+													<FormattedMessage id="form.button.label.back"/>
+												</Button>
+										}
+										<Button disabled={!enableUpdate} variant="outlined" color="primary" onClick={handlePublisherUpdate}>
+											<FormattedMessage id="form.button.label.update"/>
 										</Button>
-										<Fab
-											color="primary"
-											size="small"
-											title={intl.formatMessage({id: 'user.fab.label.editUser'})}
-											onClick={handleEditClick}
-										>
-											<EditIcon/>
-										</Fab>
 									</>
-							}
-							{
-								isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
-									<Fab
-										color="primary"
-										size="small"
-										title={intl.formatMessage({id: 'user.fab.label.editUser'})}
-										onClick={handleEditClick}
-									>
-										<EditIcon/>
-									</Fab>
-							}
-							{/* {isAuthenticated && userInfo.role === 'publisher' &&
+									<SelectRange rangeType="range" setNewPublisherRangeId={setNewPublisherRangeId} setAssignRange={setAssignRange} {...props}/>
+								</> :
+								<>
+									{
+										isAuthenticated && userInfo.role === 'admin' &&
+											<>
+												<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
+													<FormattedMessage id="publisher.button.label.assignRanges"/>
+												</Button>
+												{
+													publisher.publisherIdentifier && Object.keys(publisher.publisherIdentifier).length > 0 &&
+														<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
+															<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
+														</Button>
+												}
+												<Fab
+													color="primary"
+													size="small"
+													title={intl.formatMessage({id: 'user.fab.label.editUser'})}
+													onClick={handleEditClick}
+												>
+													<EditIcon/>
+												</Fab>
+											</>
+									}
+									{
+										isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
+											<Fab
+												color="primary"
+												size="small"
+												title={intl.formatMessage({id: 'user.fab.label.editUser'})}
+												onClick={handleEditClick}
+											>
+												<EditIcon/>
+											</Fab>
+									}
+									{/* {isAuthenticated && userInfo.role === 'publisher' &&
 								<div className={classes.btnContainer}>
 									<Fab
 										color="primary"
@@ -506,11 +554,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										<EditIcon/>
 									</Fab>
 								</div>} */}
-							<Grid container spacing={3} className={classes.listItemSpinner}>
-								{publisherDetail}
-							</Grid>
-						</>}
-				</div>}
+									<Grid container spacing={3} className={classes.listItemSpinner}>
+										{publisherDetail}
+									</Grid>
+								</>}
+						</div>
+				)}
 		</Grid>
 	);
 	return {

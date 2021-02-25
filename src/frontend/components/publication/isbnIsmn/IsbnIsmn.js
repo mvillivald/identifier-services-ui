@@ -32,7 +32,6 @@ import {
 	Grid,
 	Fab
 } from '@material-ui/core';
-import Select from 'react-select';
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
@@ -45,7 +44,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import PublicationRenderComponent from '../PublicationRenderComponent';
-import RichTextEditor from './RichTextEditor';
+import MessageElement from '../../messageElement/MessageElement';
 import SelectPublicationIdentifierRange from './SelectIsbnIsmnIdentifierRange';
 import {isbnClassificationCodes} from '../../form/publisherRegistrationForm/formFieldVariable';
 
@@ -65,10 +64,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		updatedIsbnIsmn,
 		fetchPublisherOption,
 		fetchAllMessagesList,
-		fetchMessage,
 		publisherOption,
-		messageTemplates,
-		messageInfo,
 		match,
 		createIsbnBatch
 	} = props;
@@ -84,7 +80,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [publisherId, setPublisherId] = useState(null);
 	const [disableAssign, setDisableAssign] = useState(true);
 	const [sendingMessage, setSendingMessage] = useState(false);
-	const [selectedTemplate, setSelectedTemplate] = useState(null);
 	const [messageToBeSend, setMessageToBeSend] = useState(null);
 	const [publisherEmail, setPublisherEmail] = useState(null);
 	const [next, setNext] = useState(false);
@@ -117,12 +112,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setPublisherId(null);
 		}
 	}, [cookie, createIsbnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
-
-	useEffect(() => {
-		if (selectedTemplate !== null) {
-			fetchMessage(selectedTemplate.value, cookie[COOKIE_NAME]);
-		}
-	}, [cookie, fetchMessage, selectedTemplate]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -183,7 +172,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const component = (
 		<Grid item xs={12}>
 			{ sendingMessage ?
-				messageElement() :
+				<MessageElement
+					messageToBeSend={messageToBeSend}
+					setMessageToBeSend={setMessageToBeSend}
+					setSendingMessage={setSendingMessage}
+					publisherEmail={publisherEmail}
+					handleOnClickSend={handleOnClickSend}
+				/> :
 				(
 					isEdit ?
 						<div className={classes.listItem}>
@@ -291,39 +286,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	return {
 		...component
 	};
-
-	function messageElement() {
-		return (
-			<Grid className={classes.listItem}>
-				<Grid item xs={12}>
-					{/* Selectable list of Message Templates */}
-					<Select
-						isMulti={false}
-						options={messageSelectOptions(messageTemplates)}
-						placeholder="Select message template from the list"
-						value={selectedTemplate}
-						onChange={value => setSelectedTemplate(value)}
-					/>
-					{/* Format and Edit Message */}
-					<RichTextEditor messageInfo={messageInfo} setMessageToBeSend={setMessageToBeSend}/>
-				</Grid>
-				<Grid item xs={12}>
-					<Button variant="outlined" color="primary" onClick={() => setSendingMessage(false)}>
-						<FormattedMessage id="publicationRequestRender.button.label.cancel"/>
-					</Button>
-					<Button disabled={messageToBeSend === null || publisherEmail === null} variant="outlined" color="primary" onClick={handleOnClickSend}>
-						<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
-					</Button>
-				</Grid>
-			</Grid>
-		);
-	}
-
-	function messageSelectOptions(templates) {
-		if (templates !== undefined) {
-			return templates.map(item => ({value: item.value, label: item.label}));
-		}
-	}
 }));
 
 function mapStateToProps(state) {

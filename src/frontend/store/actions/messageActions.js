@@ -34,7 +34,6 @@ import HttpStatus from 'http-status';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 
 export const sendMessage = values => async dispatch => {
-	dispatch(setLoader());
 	const response = await fetch('/message', {
 		method: 'POST',
 		headers: {

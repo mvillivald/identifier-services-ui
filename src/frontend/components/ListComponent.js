@@ -66,7 +66,7 @@ export default function (props) {
 									) : fieldName === 'publisherCategory' ? (
 										getPublisherCategory(value, publisherCategory)
 									) : linkPath ?
-										<Link href={linkPath}> {value} </Link> :
+										<Link href={linkPath} color="primary"> {value} </Link> :
 										value
 								)}
 							</Grid>

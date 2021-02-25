@@ -32,7 +32,6 @@ import {
 	Grid,
 	Fab
 } from '@material-ui/core';
-import Select from 'react-select';
 import EditIcon from '@material-ui/icons/Edit';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
@@ -42,11 +41,11 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-import RichTextEditor from '../isbnIsmn/RichTextEditor';
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import PublicationRenderComponent from '../PublicationRenderComponent';
 import SelectPublicationIdentifierRange from './SelectIssnIdentifierRange';
+import MessageElement from './../../messageElement/MessageElement';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'issnUpdateForm',
@@ -63,12 +62,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		updatePublicationIssn,
 		updatedIssn,
 		fetchAllMessagesList,
-		fetchMessage,
-		messageTemplates,
 		match,
 		history,
-		assignIssnRange,
-		messageInfo
+		assignIssnRange
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -79,7 +75,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [assignRange, setAssignRange] = useState(false);
 	const [publisherEmail, setPublisherEmail] = useState(null);
 	const [sendingMessage, setSendingMessage] = useState(false);
-	const [selectedTemplate, setSelectedTemplate] = useState(null);
 	const [messageToBeSend, setMessageToBeSend] = useState(null);
 	const [rangeBlockId, setRangeBlockId] = useState(null);
 	const [next, setNext] = useState(false);
@@ -96,12 +91,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	useEffect(() => {
 		fetchAllMessagesList(cookie[COOKIE_NAME]);
 	}, [cookie, fetchAllMessagesList]);
-
-	useEffect(() => {
-		if (selectedTemplate !== null) {
-			fetchMessage(selectedTemplate.value, cookie[COOKIE_NAME]);
-		}
-	}, [cookie, fetchMessage, selectedTemplate]);
 
 	useEffect(() => {
 		if (Object.keys(issn).length > 0) {
@@ -161,7 +150,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const component = (
 		<Grid item xs={12}>
 			{ sendingMessage ?
-				messageElement() :
+				<MessageElement
+					messageToBeSend={messageToBeSend}
+					setMessageToBeSend={setMessageToBeSend}
+					setSendingMessage={setSendingMessage}
+					publisherEmail={publisherEmail}
+					handleOnClickSend={handleOnClickSend}
+				/> :
 				(
 					isEdit ?
 						<div className={classes.listItem}>
@@ -257,39 +252,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	return {
 		...component
 	};
-
-	function messageElement() {
-		return (
-			<Grid Container className={classes.listItem}>
-				<Grid item xs={12}>
-					{/* Selectable list of Message Templates */}
-					<Select
-						isMulti={false}
-						options={messageSelectOptions(messageTemplates)}
-						placeholder="Select message template from the list"
-						value={selectedTemplate}
-						onChange={value => setSelectedTemplate(value)}
-					/>
-					{/* Format and Edit Message */}
-					<RichTextEditor messageInfo={messageInfo} setMessageToBeSend={setMessageToBeSend}/>
-				</Grid>
-				<Grid item xs={12}>
-					<Button variant="outlined" color="primary" onClick={() => setSendingMessage(false)}>
-						<FormattedMessage id="publicationRequestRender.button.label.cancel"/>
-					</Button>
-					<Button disabled={messageToBeSend === null || publisherEmail === null} variant="outlined" color="primary" onClick={handleOnClickSend}>
-						<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
-					</Button>
-				</Grid>
-			</Grid>
-		);
-	}
-
-	function messageSelectOptions(templates) {
-		if (templates !== undefined) {
-			return templates.map(item => ({value: item.value, label: item.label}));
-		}
-	}
 }));
 
 function mapStateToProps(state) {
