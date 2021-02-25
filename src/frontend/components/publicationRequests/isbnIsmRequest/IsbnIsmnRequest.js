@@ -549,7 +549,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							value={publicationIsbnIsmnRequest.backgroundProcessingState ? publicationIsbnIsmnRequest.backgroundProcessingState : ''}
 						/>
 						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.creator'})}
+							linkPath={`/publications/isbn-ismn/${publicationIsbnIsmnRequest.createdResource}`}
+							label={intl.formatMessage({id: 'listComponent.createdResource'})}
+							value={publicationIsbnIsmnRequest.createdResource ? publicationIsbnIsmnRequest.createdResource : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.created'})}
 							value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}
 						/>
 						<ListComponent

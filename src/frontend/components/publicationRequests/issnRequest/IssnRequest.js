@@ -517,6 +517,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.state'})} value={issnRequest.state ? issnRequest.state : ''}/>
+						<ListComponent
+							linkPath={`/publications/issn/${issnRequest.createdResource}`}
+							label={intl.formatMessage({id: 'listComponent.createdResource'})}
+							value={issnRequest.createdResource ? issnRequest.createdResource : ''}
+						/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.creator'})} value={issnRequest.creator ? issnRequest.creator : ''}/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={issnRequest.associatedRange ? formatValueforAssociatedRange(issnRequest.associatedRange) : ''}/>
 					</Grid>

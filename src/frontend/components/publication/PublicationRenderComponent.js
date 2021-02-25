@@ -365,7 +365,11 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.request'})} value={publication.request ? publication.request : ''}/>
+						<ListComponent
+							linkPath={`/requests/publications/issn/${publication.request}`}
+							label={intl.formatMessage({id: 'listComponent.request'})}
+							value={publication.request ? publication.request : ''}
+						/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 							value={publication.lastUpdated ?
@@ -623,7 +627,11 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.request'})} value={publication.request ? publication.request : ''}/>
+						<ListComponent
+							linkPath={`/requests/publications/isbn-ismn/${publication.request}`}
+							label={intl.formatMessage({id: 'listComponent.request'})}
+							value={publication.request ? publication.request : ''}
+						/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 							value={publication.lastUpdated ?

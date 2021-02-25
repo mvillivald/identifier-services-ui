@@ -233,12 +233,12 @@ const useStyles = makeStyles(theme => ({
 		fontSize: '14px'
 	},
 	typeSelect: {
-		width: 900,
+		maxWidth: 1200,
+		margin: '20px auto',
 		height: 'auto',
 		display: 'flex',
 		flexDirection: 'column',
 		padding: 20,
-		margin: '20px 0',
 		'& .select-useType': {
 			display: 'flex',
 			flexDirection: 'column'
