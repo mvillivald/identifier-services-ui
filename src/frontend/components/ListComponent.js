@@ -174,9 +174,9 @@ export default function (props) {
 				}
 
 				if (fieldName === 'publisherIdentifier') {
-					return (
-						<Chip label={value}/>
-					);
+					return obj.map(item => (
+						<Chip key={item} label={item}/>
+					));
 				}
 
 				if (fieldName === 'authors') {

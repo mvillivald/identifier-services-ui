@@ -28,6 +28,7 @@
 
 import React, {useState, useEffect} from 'react';
 import {
+	Typography,
 	Button,
 	Grid,
 	Fab
@@ -149,12 +150,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	const component = (
 		<Grid item xs={12}>
+			<Typography variant="h5" className={classes.titleTopSticky}>
+				{issn.title ? issn.title : ''}&nbsp;ISSN&nbsp;
+				<FormattedMessage id="listComponent.publicationDetails"/>
+			</Typography>
 			{ sendingMessage ?
 				<MessageElement
 					messageToBeSend={messageToBeSend}
 					setMessageToBeSend={setMessageToBeSend}
 					setSendingMessage={setSendingMessage}
-					publisherEmail={publisherEmail}
+					setPublisherEmail={setPublisherEmail}
 					handleOnClickSend={handleOnClickSend}
 				/> :
 				(

@@ -80,7 +80,11 @@ export default connect(mapStateToProps, actions)(props => {
 		}
 	}
 
-	function getPublisherOptions(option) {
+	function getPublisherOptions(option, email) {
+		if (email) {
+			return [{value: email, label: email}];
+		}
+
 		return option.map(item => ({value: item.email, label: item.label}));
 	}
 
@@ -89,7 +93,7 @@ export default connect(mapStateToProps, actions)(props => {
 			<Grid item xs={12}>
 				<Select
 					isMulti={false}
-					options={getPublisherOptions(publisherOption)}
+					options={getPublisherOptions(publisherOption, publisherEmail)}
 					placeholder="Select Recipient Publisher"
 					value={selectedPublisher}
 					onChange={value => setSelectedPublisher(value)}

@@ -35,9 +35,13 @@ import {
 	Grid,
 	FormControlLabel,
 	Checkbox,
-	Typography
+	Typography,
+	AppBar,
+	Tabs,
+	Tab
 } from '@material-ui/core';
 
+import TabPanel from './TabPanel';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
 import AlertDialogs from '../AlertDialogs';
@@ -45,7 +49,18 @@ import TableComponent from '../TableComponent';
 import {commonStyles} from '../../styles/app';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIsbnIDRList, rangesList, loading, offset, queryDocCount, rangeType, setNewPublisherRangeId} = props;
+	const {
+		fetchIsbnIDRList,
+		fetchIsmnIDRList,
+		rangesList,
+		loading,
+		offset,
+		queryDocCount,
+		rangeType,
+		tabsValue,
+		setTabsValue,
+		setNewPublisherRangeId
+	} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -64,8 +79,14 @@ export default connect(mapStateToProps, actions)(props => {
 	});
 
 	useEffect(() => {
-		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
-	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, lastCursor, rangeType]);
+		if (tabsValue === 'isbn') {
+			fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+		}
+
+		if (tabsValue === 'ismn') {
+			fetchIsmnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+		}
+	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, lastCursor, rangeType, tabsValue, fetchIsmnIDRList]);
 
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {
@@ -105,8 +126,15 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'range') {
-				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
-				return array;
+				if (tabsValue === 'isbn') {
+					array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
+					return array;
+				}
+
+				if (tabsValue === 'ismn') {
+					array.unshift('prefix', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
+					return array;
+				}
 			}
 
 			return array;
@@ -161,25 +189,57 @@ export default connect(mapStateToProps, actions)(props => {
 		}
 	}
 
+	function handleTabsChange(event, newValue) {
+		return setTabsValue(newValue);
+	}
+
+	function a11yProps(value) {
+		return {
+			id: `${value}-tab`,
+			'aria-controls': `tabpanel-${value}`
+		};
+	}
+
 	const component = (
-		<Grid>
-			<Grid item xs={12} className={classes.listComponent}>
-				<Typography variant="h5">
-					<FormattedMessage id={`rangesList.title.${rangeType}`}/>
-				</Typography>
-				<FormControlLabel
-					control={
-						<Checkbox
-							checked={activeCheck.checked}
-							value="checked"
-							color="primary"
-							onChange={handleChange('checked')}
-						/>
-					}
-					label={intl.formatMessage({id: 'rangesList.label.checkbox'})}
-				/>
-				{data}
-			</Grid>
+		<Grid className={classes.rangeListContainer}>
+			<AppBar position="static">
+				<Tabs value={tabsValue} aria-label="tabs to choose isbn/ismn" onChange={handleTabsChange}>
+					<Tab value="isbn" label="ISBN" {...a11yProps('isbn')}/>
+					<Tab value="ismn" label="ISMN" {...a11yProps('ismn')}/>
+				</Tabs>
+			</AppBar>
+			<TabPanel value={tabsValue} index="isbn">
+				<Grid item xs={12} className={classes.listComponent}>
+					<FormControlLabel
+						control={
+							<Checkbox
+								checked={activeCheck.checked}
+								value="checked"
+								color="primary"
+								onChange={handleChange('checked')}
+							/>
+						}
+						label={intl.formatMessage({id: 'rangesList.label.checkbox'})}
+					/>
+					{data}
+				</Grid>
+			</TabPanel>
+			<TabPanel value={tabsValue} index="ismn">
+				<Grid item xs={12} className={classes.listComponent}>
+					<FormControlLabel
+						control={
+							<Checkbox
+								checked={activeCheck.checked}
+								value="checked"
+								color="primary"
+								onChange={handleChange('checked')}
+							/>
+						}
+						label={intl.formatMessage({id: 'rangesList.label.checkbox'})}
+					/>
+					{data}
+				</Grid>
+			</TabPanel>
 			{
 				message &&
 					<AlertDialogs

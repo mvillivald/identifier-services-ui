@@ -61,7 +61,6 @@ export default connect(mapStateToProps, actions)(props => {
 	const [updateComponent] = useState(false);
 	const [rangeType, setRangeType] = useState('range');
 	const [creatingNewRange, setCreatingNewRange] = useState(false);
-	const [rangeId, setRangeId] = useState('');
 	const [subRangeId, setSubRangeId] = useState('');
 	const [modal, setModal] = useState(false);
 	const [identifierModal, setIdentifierModal] = useState(false);
@@ -79,8 +78,17 @@ export default connect(mapStateToProps, actions)(props => {
 	const handleTableRowClick = id => {
 		setRowSelectedId(id);
 		if (rangeType === 'range') {
-			setRangeType('identifier');
+			setRangeType('subRange');
+			setSubRangeId('');
+			setInputVal(id);
 			setIdentifierId(null);
+		}
+
+		if (rangeType === 'subRange') {
+			setRangeType('identifier');
+			setSubRangeId(id);
+			setIdentifierId(null);
+			setInputVal(id);
 		}
 
 		if (rangeType === 'identifier') {
@@ -99,6 +107,11 @@ export default connect(mapStateToProps, actions)(props => {
 	const handleOnClickBreadCrumbsRange = () => {
 		setRangeType('range');
 		setInputVal('');
+	};
+
+	const handleOnClickBreadCrumbsSubRange = () => {
+		setRangeType('subRange');
+		setInputVal(subRangeId);
 	};
 
 	function headRows() {
@@ -176,6 +189,10 @@ export default connect(mapStateToProps, actions)(props => {
 					<Button variant="text" onClick={handleOnClickBreadCrumbsRange}>
 						<FormattedMessage id="rangesList.breadCrumbs.label.ranges"/>
 					</Button>
+					{(rangeType === 'isbnBatch' || rangeType === 'identifier') &&
+						<Button variant="text" onClick={handleOnClickBreadCrumbsSubRange}>
+							<FormattedMessage id="rangesList.breadCrumbs.label.subrange"/>
+						</Button>}
 					<Typography>{rowSelectedId}</Typography>
 				</Breadcrumbs>}
 			<Typography variant="h5">

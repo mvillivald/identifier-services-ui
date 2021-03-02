@@ -112,7 +112,8 @@ export {
 	fetchIsbnIDRList,
 	searchIDRList,
 	fetchIdentifier,
-	createNewRange,
+	createNewIsbnRange,
+	createNewIsmnRange,
 	createIsbnRange,
 	createIsbnBatch,
 	assignIssnRange,
@@ -125,6 +126,5 @@ export {
 	fetchIsbnIsmnMonthlyStatistics,
 	createIssnRange,
 	createIsmnRange,
-	updateIsbnRange,
 	updateIsmnRange
 } from './identifierRangesActions';

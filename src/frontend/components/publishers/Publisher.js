@@ -58,6 +58,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const {
 		fetchPublisher,
 		fetchIDR,
+		fetchIDRIsmn,
 		updatePublisher,
 		fetchAllMessagesList,
 		match,
@@ -66,7 +67,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		publisherUpdated,
 		loading,
 		range,
-		createNewRange,
+		createNewIsbnRange,
+		createNewIsmnRange,
 		handleSubmit,
 		sendMessage,
 		clearFields,
@@ -86,6 +88,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [sendingMessage, setSendingMessage] = useState(false);
 	const [messageToBeSend, setMessageToBeSend] = useState(null);
 	const [publisherEmail, setPublisherEmail] = useState(null);
+	const [tabsValue, setTabsValue] = useState('isbn');
 
 	const activeCheck = {
 		checked: true
@@ -100,21 +103,37 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	useEffect(() => {
 		async function run() {
 			if (newPublisherRangeId !== null) {
-				// TO DO Check for active only
-				const newRange = await createNewRange({id, rangeId: newPublisherRangeId}, cookie[COOKIE_NAME]);
-				if (newRange) {
-					fetchIDR(newRange, cookie[COOKIE_NAME]);
-					setEnableUpdate(true);
+				if (tabsValue === 'isbn') {
+					// TO DO Check for active only
+					const newRange = await createNewIsbnRange({id, rangeId: newPublisherRangeId}, cookie[COOKIE_NAME]);
+					if (newRange) {
+						fetchIDR(newRange, cookie[COOKIE_NAME]);
+						setEnableUpdate(true);
+					}
+				}
+
+				if (tabsValue === 'ismn') {
+					const newRange = await createNewIsmnRange({id, rangeId: newPublisherRangeId}, cookie[COOKIE_NAME]);
+					if (newRange) {
+						fetchIDRIsmn(newRange, cookie[COOKIE_NAME]);
+						setEnableUpdate(true);
+					}
 				}
 			}
 		}
 
 		run();
-	}, [cookie, createNewRange, fetchIDR, id, newPublisherRangeId]);
+	}, [cookie, createNewIsbnRange, createNewIsmnRange, fetchIDR, fetchIDRIsmn, id, newPublisherRangeId, tabsValue]);
 
 	useEffect(() => {
 		fetchAllMessagesList(cookie[COOKIE_NAME]);
 	}, [cookie, fetchAllMessagesList]);
+
+	useEffect(() => {
+		if (publisher) {
+			setPublisherEmail(publisher.email);
+		}
+	}, [publisher]);
 
 	useEffect(() => {
 		if (Object.keys(publisher).length > 0) {
@@ -451,7 +470,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				const newPublisher = {
 					...updateValues,
 					publisherRangeId: publisherRangeId ? [...publisherRangeId, newPublisherRangeId] : [newPublisherRangeId],
-					publisherIdentifier: publisherIdentifier ? [...publisherIdentifier, range.publisherIdentifier] : [range.publisherIdentifier]
+					publisherIdentifier: publisherIdentifier ? formatPublisherIdentifier(publisherIdentifier, range.publisherIdentifier) : [range.publisherIdentifier]
 				};
 				updatePublisher(_id, {...newPublisher}, token);
 			}
@@ -466,8 +485,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setAssignRange(false);
 	};
 
+	function formatPublisherIdentifier(old, newValue) {
+		return old.includes(newValue) ? old : [...old, newValue];
+	}
+
 	const component = (
 		<Grid item xs={12}>
+			<Typography variant="h5" className={classes.titleTopSticky}>
+				{formattedPublisherDetail.name ? formattedPublisherDetail.name : ''}&nbsp;
+				<FormattedMessage id="listComponent.publisherDetails"/>
+			</Typography>
 			{ sendingMessage ?
 				<MessageElement
 					messageToBeSend={messageToBeSend}
@@ -512,7 +539,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											<FormattedMessage id="form.button.label.update"/>
 										</Button>
 									</>
-									<SelectRange rangeType="range" setNewPublisherRangeId={setNewPublisherRangeId} setAssignRange={setAssignRange} {...props}/>
+									<SelectRange
+										rangeType="range"
+										setNewPublisherRangeId={setNewPublisherRangeId}
+										setAssignRange={setAssignRange}
+										tabsValue={tabsValue}
+										setTabsValue={setTabsValue}
+										{...props}
+									/>
 								</> :
 								<>
 									{

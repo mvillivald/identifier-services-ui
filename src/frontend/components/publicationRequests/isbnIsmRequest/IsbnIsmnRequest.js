@@ -585,6 +585,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	const component = (
 		<Grid item xs={12}>
+			<Typography variant="h5" className={classes.titleTopSticky}>
+				{publicationIsbnIsmnRequest.title ? publicationIsbnIsmnRequest.title : ''}&nbsp;ISBN-ISMN&nbsp;
+				<FormattedMessage id="listComponent.publicationRequestDetails"/>
+			</Typography>
 			{
 				isEdit ?
 					<div className={classes.listItem}>

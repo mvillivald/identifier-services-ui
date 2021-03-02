@@ -56,7 +56,7 @@ export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeT
 	const fetchUrl = rangeType === 'range' ?
 		`${API_URL}/ranges/query/isbn` :
 		rangeType === 'subRange' ?
-			`${API_URL}/ranges/query/subRange` :
+			`${API_URL}/ranges/query/isbn/subRange` :
 			rangeType === 'isbnBatch' ?
 				`${API_URL}/ranges/query/isbnBatch` :
 				`${API_URL}/ranges/query/identifier`;
@@ -85,7 +85,7 @@ export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeT
 export const fetchIDR = (id, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
-		const response = await fetch(`${API_URL}/ranges/subRange/${id}`, {
+		const response = await fetch(`${API_URL}/ranges/isbn/subRange/${id}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -102,7 +102,7 @@ export const fetchIDR = (id, token) => async dispatch => {
 export const fetchIdentifier = (id, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
-		const response = await fetch(`${API_URL}/ranges/identifier/${id}`, {
+		const response = await fetch(`${API_URL}/ranges/isbn/identifier/${id}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -116,9 +116,9 @@ export const fetchIdentifier = (id, token) => async dispatch => {
 	}
 };
 
-export const createNewRange = (values, token) => async dispatch => {
+export const createNewIsbnRange = (values, token) => async dispatch => {
 	try {
-		const response = await fetch(`${API_URL}/ranges/subRange`, {
+		const response = await fetch(`${API_URL}/ranges/isbn/subRange`, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ export const searchIDRList = ({searchField, searchText, token, offset, rangeType
 	const fetchUrl = rangeType === 'range' ?
 		`${API_URL}/ranges/query/isbn` :
 		rangeType === 'subRange' ?
-			`${API_URL}/ranges/query/subRange` :
+			`${API_URL}/ranges/query/isbn/subRange` :
 			rangeType === 'isbnBatch' ?
 				`${API_URL}/ranges/query/isbnBatch` :
 				`${API_URL}/ranges/query/identifier`;
@@ -211,37 +211,34 @@ export const createIsbnBatch = (values, token) => async dispatch => {
 	}
 };
 
-// ***************ISBN****************************
-
-export const updateIsbnRange = (id, values, token) => async dispatch => {
-	dispatch(setRangeListLoader());
-
-	try {
-		const response = await fetch(`${API_URL}/ranges/isbn/${id}`, {
-			method: 'PUT',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(values)
-		});
-		const result = await response.json();
-		dispatch(success(IDR_ISBN, result.value));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
 // ***************ISMN****************************
 export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
-		{prefix: searchText, active: true} :
-		{prefix: searchText};
+		(
+			rangeType === 'subRange' ?
+				{$or: [{ismnRangeId: searchText}, {publisherId: searchText}], active: true} :
+				(rangeType === 'ismnBatch' ?
+					{publisherIdentifierRangeId: searchText} :
+					(rangeType === 'identifier' ?
+						{identifierBatchId: searchText} :
+						{prefix: searchText, active: true}))
+		) :
+		(
+			rangeType === 'subRange' ?
+				{$or: [{ismnRangeId: searchText}, {publisherId: searchText}]} :
+				(rangeType === 'ismnBatch' ?
+					{publisherIdentifierRangeId: searchText} :
+					(rangeType === 'identifier' ?
+						{identifierBatchId: searchText} :
+						{prefix: searchText}))
+		);
 
 	const fetchUrl = rangeType === 'range' ?
 		`${API_URL}/ranges/query/ismn` :
-		`${API_URL}/ranges/query/identifier`;
+		rangeType === 'subRange' ?
+			`${API_URL}/ranges/query/ismn/subRange` :
+			`${API_URL}/ranges/query/identifier`;
 
 	try {
 		const response = await fetch(fetchUrl, {
@@ -293,7 +290,7 @@ export const fetchIDRIsmnList = ({searchText, token, offset, activeCheck}) => as
 export const fetchIDRIsmn = (id, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
-		const response = await fetch(`${API_URL}/ranges/ismn/${id}`, {
+		const response = await fetch(`${API_URL}/ranges/ismn/subRange/${id}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -301,7 +298,24 @@ export const fetchIDRIsmn = (id, token) => async dispatch => {
 			}
 		});
 		const result = await response.json();
-		dispatch(success(IDR_ISMN, result));
+		dispatch(success(IDR, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const createNewIsmnRange = (values, token) => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/ranges/ismn/subRange`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(values)
+		});
+		const result = await response.json();
+		return result;
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

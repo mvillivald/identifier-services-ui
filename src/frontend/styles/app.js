@@ -181,9 +181,16 @@ export const commonStyles = makeStyles({
 			color: '#00224f'
 		}
 	},
-
 	bodyContainer: {
 		marginBottom: 40
+	},
+	titleTopSticky: {
+		background: theme.palette.secondary.background,
+		position: 'sticky',
+		top: 0,
+		margin: '10px 60px',
+		padding: 20,
+		zIndex: 11
 	},
 	listSearch: {
 		margin: '0 auto',
@@ -263,6 +270,9 @@ export const commonStyles = makeStyles({
 	formControl: {
 		margin: theme.spacing(1),
 		width: '100%'
+	},
+	rangeListContainer: {
+		marginTop: 20
 	}
 
 });
