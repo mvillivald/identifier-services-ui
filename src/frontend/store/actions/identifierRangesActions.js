@@ -27,7 +27,7 @@
  */
 /* global API_URL */
 import fetch from 'node-fetch';
-import {ERROR, IDENTIFIER, IDR, IDR_LIST, IDR_ISBN_LIST, IDR_ISBN, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN, RANGE_STATISTICS} from './types';
+import {ERROR, IDENTIFIER, IDR, IDR_LIST, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN, RANGE_STATISTICS} from './types';
 import {setLoader, setRangeListLoader, success, fail, setMessage} from './commonAction';
 import HttpStatus from 'http-status';
 import moment from 'moment';
@@ -102,7 +102,7 @@ export const fetchIDR = (id, token) => async dispatch => {
 export const fetchIdentifier = (id, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
-		const response = await fetch(`${API_URL}/ranges/isbn/identifier/${id}`, {
+		const response = await fetch(`${API_URL}/ranges/identifier/${id}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -238,7 +238,9 @@ export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeT
 		`${API_URL}/ranges/query/ismn` :
 		rangeType === 'subRange' ?
 			`${API_URL}/ranges/query/ismn/subRange` :
-			`${API_URL}/ranges/query/identifier`;
+			rangeType === 'ismnBatch' ?
+				`${API_URL}/ranges/query/ismnBatch` :
+				`${API_URL}/ranges/query/identifier`;
 
 	try {
 		const response = await fetch(fetchUrl, {
@@ -367,6 +369,27 @@ export const createIsmnRange = (values, token) => async dispatch => {
 
 	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISMN range'}));
 	return response.status;
+};
+
+export const createIsmnBatch = (values, token) => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/ranges/ismnBatch`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+
+		if (response) {
+			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
+			return response;
+		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };
 // ***************ISSN****************************
 

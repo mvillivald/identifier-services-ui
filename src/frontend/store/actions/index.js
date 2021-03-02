@@ -116,6 +116,7 @@ export {
 	createNewIsmnRange,
 	createIsbnRange,
 	createIsbnBatch,
+	createIsmnBatch,
 	assignIssnRange,
 	fetchIsmnIDRList,
 	fetchIDRIsmn,

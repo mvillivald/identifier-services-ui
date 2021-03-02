@@ -61,6 +61,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [updateComponent] = useState(false);
 	const [rangeType, setRangeType] = useState('range');
 	const [creatingNewRange, setCreatingNewRange] = useState(false);
+	const [rangeId, setRangeId] = useState('');
 	const [subRangeId, setSubRangeId] = useState('');
 	const [modal, setModal] = useState(false);
 	const [identifierModal, setIdentifierModal] = useState(false);
@@ -79,14 +80,21 @@ export default connect(mapStateToProps, actions)(props => {
 		setRowSelectedId(id);
 		if (rangeType === 'range') {
 			setRangeType('subRange');
+			setRangeId(id);
 			setSubRangeId('');
 			setInputVal(id);
 			setIdentifierId(null);
 		}
 
 		if (rangeType === 'subRange') {
-			setRangeType('identifier');
+			setRangeType('ismnBatch');
 			setSubRangeId(id);
+			setIdentifierId(null);
+			setInputVal(id);
+		}
+
+		if (rangeType === 'ismnBatch') {
+			setRangeType('identifier');
 			setIdentifierId(null);
 			setInputVal(id);
 		}
@@ -111,6 +119,11 @@ export default connect(mapStateToProps, actions)(props => {
 
 	const handleOnClickBreadCrumbsSubRange = () => {
 		setRangeType('subRange');
+		setInputVal(rangeId);
+	};
+
+	const handleOnClickBreadCrumbsIsmnBatch = () => {
+		setRangeType('isbnBatch');
 		setInputVal(subRangeId);
 	};
 
@@ -124,6 +137,14 @@ export default connect(mapStateToProps, actions)(props => {
 			if (rangeType === 'range') {
 				array.unshift('prefix', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
 				return array;
+			}
+
+			if (rangeType === 'subRange') {
+				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed');
+			}
+
+			if (rangeType === 'ismnBatch') {
+				array.unshift('identifierType', 'identifierCount', 'identifierCanceledCount', 'identifierDeletedCount', 'publisherId', 'publicationId', 'publisherIdentifierRangeId');
 			}
 
 			if (rangeType === 'identifier') {
@@ -163,6 +184,18 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function listRender(item) {
+		if (rangeType === 'subRange') {
+			return Object.entries(item)
+				.filter(([key]) => key === 'isbnRangeId' === false)
+				.filter(([key]) => key === 'publisherId' === false)
+				.reduce((acc, [
+					key,
+					value
+				]) => (
+					{...acc, [key]: formatDate(key, value)}),
+				{createdBy: item.created.user});
+		}
+
 		if (item !== undefined) {
 			return Object.entries(item)
 				.reduce((acc, [
@@ -189,9 +222,13 @@ export default connect(mapStateToProps, actions)(props => {
 					<Button variant="text" onClick={handleOnClickBreadCrumbsRange}>
 						<FormattedMessage id="rangesList.breadCrumbs.label.ranges"/>
 					</Button>
-					{(rangeType === 'isbnBatch' || rangeType === 'identifier') &&
+					{(rangeType === 'ismnBatch' || rangeType === 'identifier') &&
 						<Button variant="text" onClick={handleOnClickBreadCrumbsSubRange}>
 							<FormattedMessage id="rangesList.breadCrumbs.label.subrange"/>
+						</Button>}
+					{rangeType === 'identifier' &&
+						<Button variant="text" onClick={handleOnClickBreadCrumbsIsmnBatch}>
+							<FormattedMessage id="rangesList.breadCrumbs.label.ismnBatch"/>
 						</Button>}
 					<Typography>{rowSelectedId}</Typography>
 				</Breadcrumbs>}

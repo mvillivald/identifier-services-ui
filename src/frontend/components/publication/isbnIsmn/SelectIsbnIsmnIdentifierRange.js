@@ -52,6 +52,7 @@ import ListComponent from '../../ListComponent';
 export default connect(mapStateToProps, actions)(props => {
 	const {
 		fetchIsbnIDRList,
+		fetchIsmnIDRList,
 		rangesList,
 		rangeLoading,
 		offset,
@@ -88,20 +89,41 @@ export default connect(mapStateToProps, actions)(props => {
 	const [selectedPublisher, setSelectedPublisher] = useState(null);
 	const [publisher, setPublisher] = useState(null);
 	const [renderingPublisherProperties, setRenderingPublisherProperties] = useState(false);
+	const [publicationType, setPublicationType] = useState(null);
 
 	useEffect(() => {
 		setPublisher(isbnIsmn.publisher);
 	}, [isbnIsmn.publisher]);
 
 	useEffect(() => {
-		fetchIsbnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
-	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType]);
+		if (isbnIsmn.type === 'music') {
+			setPublicationType('ismn');
+		} else {
+			setPublicationType('isbn');
+		}
+	}, [isbnIsmn.type]);
+
+	useEffect(() => {
+		if (publicationType === 'isbn') {
+			fetchIsbnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+		}
+
+		if (publicationType === 'ismn') {
+			fetchIsmnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+		}
+	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType, publicationType, fetchIsmnIDRList]);
 
 	useEffect(() => {
 		if (next && fetchedPublisher !== undefined) {
-			fetchIsbnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			if (publicationType === 'isbn') {
+				fetchIsbnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			}
+
+			if (publicationType === 'ismn') {
+				fetchIsmnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			}
 		}
-	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType, fetchedPublisher, next]);
+	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType, fetchedPublisher, next, publicationType, fetchIsmnIDRList]);
 
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {
@@ -159,7 +181,7 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'subRange') {
-				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed');
+				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'closed');
 			}
 
 			return array;

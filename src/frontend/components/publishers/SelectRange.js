@@ -35,7 +35,6 @@ import {
 	Grid,
 	FormControlLabel,
 	Checkbox,
-	Typography,
 	AppBar,
 	Tabs,
 	Tab

@@ -67,7 +67,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchAllMessagesList,
 		publisherOption,
 		match,
-		createIsbnBatch
+		createIsbnBatch,
+		createIsmnBatch
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -108,11 +109,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	useEffect(() => {
 		if (subRangeId !== null && publisherId !== null) {
-			createIsbnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+			if (isbnIsmn.type === 'music') {
+				createIsmnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+			} else {
+				createIsbnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+			}
+
 			setSubRangeId(null);
 			setPublisherId(null);
 		}
-	}, [cookie, createIsbnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
+	}, [cookie, createIsbnBatch, createIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);
