@@ -873,7 +873,8 @@
     "listComponent.publisherRequestDetails": "Publisher Request details",
     "listComponent.publicationRequestDetails": "Publication Request details",
     "publicationList.issn.headRows.publicationType": "Publication Type",
-    "publicationList.issn.headRows.email": "Email"
-
+    "publicationList.issn.headRows.email": "Email",
+    "publicationList.isbnismn.headRows.publisher" : "Publisher",
+    "publicationList.isbnismn.headRows.Identifier" : "Identifier"
 
 }

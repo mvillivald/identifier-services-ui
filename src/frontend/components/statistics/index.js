@@ -96,11 +96,13 @@ export default connect(mapStateToProps, actions)(props => {
 				fetchIsbnIsmnMonthlyStatistics({startDate, endDate, token: cookie[COOKIE_NAME]});
 			}
 
-			if (selectedIsbnIsmnType === 'isbnIdentificationFields' || selectedIsbnIsmnType === 'ismnIdentificationFields') {
-				fetchIsbnIsmnStatistics({startDate, endDate, identifierType: identifierType, token: cookie[COOKIE_NAME]});
+			if ((selectedIsbnIsmnType === 'isbnIdentificationFields' ||
+			selectedIsbnIsmnType === 'ismnIdentificationFields') &&
+			identifierType !== null) {
+				fetchIsbnIsmnStatistics({identifierType: identifierType, token: cookie[COOKIE_NAME]});
 			}
 		}
-	}, [startDate, endDate]);
+	}, [startDate, endDate, identifierType]);
 
 	function handleStatistics() {
 		if (publicationType === 'issn') {
@@ -131,7 +133,24 @@ export default connect(mapStateToProps, actions)(props => {
 					return newDoc;
 				});
 
-				const headers = ['Etuliite', 'Kieliryhmä',	'Alku',	'Loppu',	'Vapaana',	'Käytetty'];
+				const headers = ['Etuliite', 'Kieliryhmä', 'Alku',	'Loppu', 'Vapaana',	'Käytetty'];
+				const ws = XLSX.utils.json_to_sheet(newJsonSheet, {header: headers});
+				exportXLS(wbout, ws);
+			}
+
+			if (selectedIsbnIsmnType === 'ismnIdentificationFields') {
+				const newJsonSheet = fetchedRangeStatistics.map(item => {
+					const newDoc = {
+						Etuliite: item.prefix,
+						Alku: item.rangeStart,
+						Loppu: item.rangeEnd,
+						Vapaana: item.free,
+						Käytetty: item.taken
+					};
+					return newDoc;
+				});
+
+				const headers = ['Etuliite', 'Alku', 'Loppu', 'Vapaana', 'Käytetty'];
 				const ws = XLSX.utils.json_to_sheet(newJsonSheet, {header: headers});
 				exportXLS(wbout, ws);
 			}
@@ -142,6 +161,10 @@ export default connect(mapStateToProps, actions)(props => {
 			// XLSX.utils.sheet_add_json(ws, [colLable], {skipHeader: true, origin: 'A1'});
 			// exportXLS(wbout, ws);
 		}
+
+		setSelectedIssnType(null);
+		setStartDate(null);
+		setEndDate(null);
 	}
 
 	const classes = useStyles();

@@ -357,7 +357,6 @@ export const createIsmnRange = (values, token) => async dispatch => {
 	if (response.status === HttpStatus.CREATED) {
 		dispatch(setMessage({color: 'success', msg: 'ISMN range created successfully'}));
 		dispatch(success(IDR_ISMN, response));
-		console.log(response);
 		return response.status;
 	}
 
@@ -523,22 +522,23 @@ export const fetchIsbnIsmnMonthlyStatistics = ({startDate, endDate, token}) => a
 	}
 };
 
-export const fetchIsbnIsmnStatistics = ({startDate, endDate, identifierType, token}) => async dispatch => {
+export const fetchIsbnIsmnStatistics = ({identifierType, token}) => async dispatch => {
 	dispatch(setRangeListLoader());
-	const quer = {$and: [{'created.timestamp': {$gte: moment(startDate).toISOString()}}, {'created.timestamp': {$lte: moment(endDate).toISOString()}}]};
 	try {
-		const response = await fetch(`${API_URL}/ranges/isbn-ismn/queryIsbnIsmnStatistics`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				query: {quer, identifierType}
-			})
-		});
-		const result = await response.json();
-		dispatch(success(RANGE_STATISTICS, result));
+		if (identifierType !== null) {
+			const response = await fetch(`${API_URL}/ranges/isbn-ismn/queryIsbnIsmnStatistics`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					query: identifierType
+				})
+			});
+			const result = await response.json();
+			dispatch(success(RANGE_STATISTICS, result));
+		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
