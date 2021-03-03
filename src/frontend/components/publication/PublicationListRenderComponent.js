@@ -26,25 +26,19 @@
  *
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Typography} from '@material-ui/core';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
-import useModalStyles from '../../styles/formList';
 import Spinner from '../Spinner';
 import TableComponent from '../TableComponent';
 import IsbnIsmn from './isbnIsmn/IsbnIsmn';
 import Issn from './issn/Issn';
-import ModalLayout from '../ModalLayout';
-import IsbnIsmnRegForm from '../form/IsbnIsmnRegForm';
-import IssnRegForm from '../form/IssnRegForm';
 
 export default connect(mapStateToProps)(props => {
-	const intl = useIntl();
 	const classes = commonStyles();
-	const modalClasses = useModalStyles();
 
 	const {
 		loading,
