@@ -307,12 +307,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Typography>
 						<hr/>
 						<ListComponent
+							edit={isEdit && isEditable}
 							fieldName="organizationDetails[affiliate]"
 							label={intl.formatMessage({id: 'listComponent.affiliate'})}
 							value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.affiliate ?
 								formattedPublisherDetail.organizationDetails.affiliate : ''}
 						/>
 						<ListComponent
+							edit={isEdit && isEditable}
 							fieldName="organizationDetails[distributor]"
 							label={intl.formatMessage({id: 'listComponent.distributor'})}
 							value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.distributor ?

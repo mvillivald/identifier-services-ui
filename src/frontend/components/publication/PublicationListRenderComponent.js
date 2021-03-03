@@ -26,7 +26,7 @@
  *
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Typography} from '@material-ui/core';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -58,9 +58,7 @@ export default connect(mapStateToProps)(props => {
 		isbnIsmn,
 		issn,
 		handleTableRowClick,
-		rowSelectedId,
-		setIsCreating,
-		role
+		rowSelectedId
 	} = props;
 
 	const [page, setPage] = useState(1);
@@ -92,6 +90,10 @@ export default connect(mapStateToProps)(props => {
 		const {id} = item;
 		const keys = headRows.map(k => k.id);
 		const result = keys.reduce((acc, key) => {
+			if (key === 'identifier' && item[key] !== undefined) {
+				return {...acc, [key]: item[key][0].id};
+			}
+
 			return {...acc, [key]: item[key]};
 		}, {});
 		return {
@@ -105,37 +107,6 @@ export default connect(mapStateToProps)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
-			{(role === 'publisher') && (
-				isbnIsmn ?
-					(
-						<ModalLayout
-							form
-							label={intl.formatMessage({id: 'app.modal.label.publicationIsbnIsmn.create'})}
-							title={intl.formatMessage({id: 'app.modal.title.publicationIsbnIsmn.create'})}
-							name="newIsbnIsmn"
-							variant="outlined"
-							classed={modalClasses.button}
-							color="primary"
-						>
-							<IsbnIsmnRegForm setIsCreating={setIsCreating} {...props}/>
-						</ModalLayout>
-					) : (
-						issn ?
-							(
-								<ModalLayout
-									form
-									label={intl.formatMessage({id: 'app.modal.label.publicationIssn.create'})}
-									title={intl.formatMessage({id: 'app.modal.title.publicationIssn.create'})}
-									name="newIssn"
-									variant="outlined"
-									classed={modalClasses.button}
-									color="primary"
-								>
-									<IssnRegForm setIsCreating={setIsCreating} {...props}/>
-								</ModalLayout>
-							) : null
-					)
-			)}
 			{usersData}
 			{issn ?	<Issn {...props}/> : (
 				isbnIsmn ?	<IsbnIsmn {...props}/> : null

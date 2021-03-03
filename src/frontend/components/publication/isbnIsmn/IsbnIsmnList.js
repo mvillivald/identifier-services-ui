@@ -60,7 +60,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const headRows = [
 		{id: 'title', label: <FormattedMessage id="publicationList.isbnismn.headRows.title"/>},
 		{id: 'publicationTime', label: <FormattedMessage id="publicationList.isbnismn.headRows.publicationTime"/>},
-		{id: 'state', label: <FormattedMessage id="publicationList.isbnismn.headRows.state"/>}
+		{id: 'publisher', label: <FormattedMessage id="publicationList.isbnismn.headRows.publisher"/>},
+		{id: 'identifier', label: <FormattedMessage id="publicationList.isbnismn.headRows.identifier"/>}
 	];
 
 	return (
