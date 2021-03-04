@@ -28,6 +28,7 @@
 
 export {
 	fetchPublisher,
+	fetchAllPublishers,
 	fetchPublisherOption,
 	updatePublisher,
 	searchPublisher,

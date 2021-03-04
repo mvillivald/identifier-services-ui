@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react-hooks/exhaustive-deps */
 /**
  *
@@ -52,7 +53,17 @@ import {
 } from './calculations';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIssnRangeStatistics, fetchIsbnIsmnStatistics, fetchIsbnIsmnMonthlyStatistics, fetchIssnStatistics, rangeStatistics, issnStatistics, exportXLS} = props;
+	const {
+		fetchIssnRangeStatistics,
+		fetchIsbnIsmnStatistics,
+		fetchIsbnIsmnMonthlyStatistics,
+		fetchIssnStatistics,
+		fetchAllPublishers,
+		rangeStatistics,
+		issnStatistics,
+		allPublishers,
+		exportXLS
+	} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [publicationType, setPublicationType] = useState(null);
@@ -74,11 +85,11 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [rangeStatistics]);
 
 	useEffect(() => {
-		if (selectedIsbnIsmnType === 'isbnIdentificationFields') {
+		if (selectedIsbnIsmnType === 'isbnIdentificationFields' || selectedIsbnIsmnType === 'allIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers') {
 			setIdentifierType('ISBN');
 		}
 
-		if (selectedIsbnIsmnType === 'ismnIdentificationFields') {
+		if (selectedIsbnIsmnType === 'ismnIdentificationFields' || selectedIsbnIsmnType === 'allIsmnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers') {
 			setIdentifierType('ISMN');
 		}
 	}, [selectedIsbnIsmnType]);
@@ -101,8 +112,20 @@ export default connect(mapStateToProps, actions)(props => {
 			identifierType !== null) {
 				fetchIsbnIsmnStatistics({identifierType: identifierType, token: cookie[COOKIE_NAME]});
 			}
+
+			if ((selectedIsbnIsmnType === 'allIsbnPublishers' || selectedIsbnIsmnType === 'allIsmnPublishers') && identifierType !== null) {
+				fetchAllPublishers({identifierType, token: cookie[COOKIE_NAME]});
+			}
+
+			if (selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers') {
+				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'T'}]}});
+			}
+
+			if (selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
+				fetchAllPublishers({identifierType, type: {publisherType: 'A'}});
+			}
 		}
-	}, [startDate, endDate, identifierType]);
+	}, [startDate, endDate, identifierType, selectedIsbnIsmnType]);
 
 	function handleStatistics() {
 		if (publicationType === 'issn') {
@@ -155,11 +178,63 @@ export default connect(mapStateToProps, actions)(props => {
 				exportXLS(wbout, ws);
 			}
 
-			// Const colLable = getcolLabel({startDate, endDate});
-			// const titles = getTableTitles();
-			// const ws = XLSX.utils.json_to_sheet(titles, {skipHeader: true});
-			// XLSX.utils.sheet_add_json(ws, [colLable], {skipHeader: true, origin: 'A1'});
-			// exportXLS(wbout, ws);
+			if (selectedIsbnIsmnType === 'allIsbnPublishers' || selectedIsbnIsmnType === 'allIsmnPublishers' ||
+			selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers' ||
+			selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
+				const newJsonSheet = allPublishers.map(publisher => ({
+					Registrant_Status_Code: publisher.activity ? (publisher.activity.active === true ? 'A' : 'I') : '',
+					Registrant_Prefix_Type: publisher.publisherType ? publisher.publisherType : '',
+					Registrant_Prefix_Or_ISBN: publisher.publisherIdentifier ? publisher.publisherIdentifier[0] : '',
+					Registrant_Name: publisher.name ? publisher.name : '',
+					ISO_Country_Code: 'FI',
+					Address_Line_1: publisher.postalAddress && publisher.postalAddress.address ? publisher.postalAddress.address : '',
+					Address_Line_2: publisher.postalAddress && publisher.postalAddress.city ? (publisher.postalAddress.zip ? `${publisher.postalAddress.zip} ${publisher.postalAddress.city}` : '') : '',
+					Address_Line_3: '',
+					Address_Line_4: '',
+					Admin_Contact_Name: publisher.givenName ? (publisher.familyName ? publisher.givenName : `${publisher.givenName} ${publisher.familyName}`) : '',
+					Admin_Phone: publisher.phone ? publisher.phone : '',
+					Admin_Fax: '',
+					Admin_Email: publisher.email ? publisher.email : '',
+					Alternate_Contact_Type: '',
+					Alternate_Contact_Name: '',
+					Alternate_Phone: '',
+					Alternate_Fax: '',
+					Alternate_Email: '',
+					SAN: '',
+					GLN: '',
+					Website_URL: publisher.website ? publisher.website : '',
+					Registrant_ID: '',
+					ISNI: ''
+				}));
+				const headers = [
+					'Registrant_Status_Code',
+					'Registrant_Prefix_Type',
+					'Registrant_Prefix_Or_ISBN',
+					'Registrant_Name',
+					'ISO_Country_Code',
+					'Address_Line_1',
+					'Address_Line_2',
+					'Address_Line_3',
+					'Address_Line_4',
+					'Admin_Contact_Name',
+					'Admin_Phone',
+					'Admin_Fax',
+					'Admin_Email',
+					'Alternate_Contact_Type',
+					'Alternate_Contact_Name',
+					'Alternate_Phone',
+					'Alternate_Fax',
+					'Alternate_Email',
+					'SAN',
+					'GLN',
+					'Website_URL',
+					'Registrant_ID',
+					'ISNI'
+				];
+
+				const ws = XLSX.utils.json_to_sheet(newJsonSheet, {header: headers});
+				exportXLS(wbout, ws);
+			}
 		}
 
 		setSelectedIssnType(null);
@@ -234,9 +309,10 @@ export default connect(mapStateToProps, actions)(props => {
 			{label: 'ISBN Identification Fields', value: 'isbnIdentificationFields'},
 			{label: 'ISMN Identification Fields', value: 'ismnIdentificationFields'},
 			{label: 'All ISBN Publishers', value: 'allIsbnPublishers'},
+			{label: 'All ISMN Publishers', value: 'allIsmnPublishers'},
 			{label: 'International Registry ISBN Publishers', value: 'internationalRegistryIsbnPublishers'},
 			{label: 'Self-published ISBN', value: 'selfPublishedIsbn'},
-			{label: 'International Registry ISBN Publishers', value: 'internationalRegistryIsbnPublishers'},
+			{label: 'International Registry ISMN Publishers', value: 'internationalRegistryIsmnPublishers'},
 			{label: 'Self-published ISMN', value: 'selfPublishedIsmn'}
 		];
 		return (
@@ -348,6 +424,7 @@ function mapStateToProps(state) {
 	return ({
 		listLoading: state.identifierRanges.rangeListLoading,
 		issnStatistics: state.publication.issnStatistics,
+		allPublishers: state.publisher.publishersList,
 		rangeStatistics: state.identifierRanges.statistics
 	});
 }

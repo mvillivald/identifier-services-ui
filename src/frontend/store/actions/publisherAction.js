@@ -29,7 +29,7 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
-import {PUBLISHER, UPDATE_PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
+import {PUBLISHER, PUBLISHERS_LIST, UPDATE_PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
 import {setLoader, setListLoader, setMessage, success, fail, setSearchListLoader} from './commonAction';
 import HttpStatus from 'http-status';
 
@@ -219,6 +219,29 @@ export const updatePublisherRequest = (id, values, token) => async dispatch => {
 		} else {
 			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
 		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchAllPublishers = ({identifierType, type, token}) => async dispatch => {
+	dispatch(setListLoader());
+	try {
+		const query = type ?
+			{query: {identifierType: identifierType.toLowerCase(), type}} :
+			{query: {identifierType: identifierType.toLowerCase()}};
+		const properties = {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(query)
+		};
+		const response = await fetch(`${API_URL}/publishers/query/all`, properties);
+		const result = await response.json();
+		dispatch(success(PUBLISHERS_LIST, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
