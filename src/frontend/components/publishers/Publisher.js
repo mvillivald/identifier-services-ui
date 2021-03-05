@@ -168,7 +168,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	function handleOnClickSend() {
-		sendMessage({...messageToBeSend, sendTo: publisherEmail});
+		sendMessage({...messageToBeSend, sendTo: publisherEmail}, cookie[COOKIE_NAME]);
 		setSendingMessage(false);
 		fetchPublisher(id, cookie[COOKIE_NAME]);
 	}

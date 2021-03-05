@@ -33,10 +33,11 @@ import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 
-export const sendMessage = values => async dispatch => {
+export const sendMessage = (values, token) => async dispatch => {
 	const response = await fetch('/message', {
 		method: 'POST',
 		headers: {
+			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(values)

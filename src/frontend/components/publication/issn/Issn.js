@@ -131,7 +131,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleOnClickSend() {
 		setSendingMessage(false);
-		sendMessage({...messageToBeSend, sendTo: publisherEmail});
+		sendMessage({...messageToBeSend, sendTo: publisherEmail}, cookie[COOKIE_NAME]);
 	}
 
 	function handleRange() {

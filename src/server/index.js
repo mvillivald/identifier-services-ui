@@ -63,32 +63,40 @@ process.on('SIGINT', () => {
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.post('/message', (req, res) => {
-	const {body} = req;
+	const {body, headers} = req;
+	const token = headers.authorization;
 	async function main() {
-		const parseUrl = parse(SMTP_URL, true);
-		const emailcontent = `
-			<h3>Contact Details</h3>
-			<ul>
-				<li>Name: ${body.name}</li>
-				<li>Email: ${body.email}</li>
-			</ul>
-			<h3>Message</h3>
-			<p>${body.description ? body.description : body.body}</p>
-		`;
+		// const parseUrl = parse(SMTP_URL, true);
+		// const emailcontent = `
+		// 	<p>${body.description ? body.description : body.body}</p>
+		// `;
 
-		let transporter = nodemailer.createTransport({
-			host: parseUrl.hostname,
-			port: parseUrl.port,
-			secure: false
-		});
+		// let transporter = nodemailer.createTransport({
+		// 	host: parseUrl.hostname,
+		// 	port: parseUrl.port,
+		// 	secure: false
+		// });
 
-		await transporter.sendMail({
-			from: ADMINISTRATORS_EMAIL,
-			to: body.sendTo ? body.sendTo : body.email,
-			replyTo: ADMINISTRATORS_EMAIL,
-			subject: body.subject,
-			html: emailcontent
+		// await transporter.sendMail({
+		// 	from: ADMINISTRATORS_EMAIL,
+		// 	to: body.sendTo ? body.sendTo : body.email,
+		// 	replyTo: ADMINISTRATORS_EMAIL,
+		// 	subject: body.subject,
+		// 	html: emailcontent
+		// });
+		const response = await fetch(`${API_URL}/messages/`, {
+			method: 'POST',
+			headers: {
+				Authorization: token,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				subject: body.subject,
+				email: body.sendTo ? body.sendTo : body.email,
+				body: body.description ? body.description : body.body
+			})
 		});
+		console.log(response);
 		res.send('Message Sent');
 	}
 
@@ -102,7 +110,7 @@ app.get('/captcha', (req, res) => {
 	captcha = svgCaptcha.createMathExpr({
 		mathMin: 1,
 		mathMax: 9,
-		mathOperator: '+-',
+		mathOperator: '+',
 		noise: 0
 	});
 	captcha.id = uuidv4();
