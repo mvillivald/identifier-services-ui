@@ -28,7 +28,15 @@
 
 /* global API_URL */
 /* eslint no-undef: "error" */
-import {FETCH_MESSAGE, FETCH_MESSAGES_LIST, FETCH_ALL_MESSAGES_LIST, ERROR} from './types';
+import {
+	FETCH_MESSAGE,
+	FETCH_MESSAGES_LIST,
+	FETCH_ALL_MESSAGES_LIST,
+	FETCH_TEMPLATE,
+	FETCH_TEMPLATES_LIST,
+	FETCH_ALL_TEMPLATES_LIST,
+	ERROR
+} from './types';
 import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
@@ -65,7 +73,7 @@ export const createMessageTemplate = (values, token) => async dispatch => {
 export const fetchMessagesList = (token, offset) => async dispatch => {
 	dispatch(setLoader());
 	try {
-		const response = await fetch(`${API_URL}/templates/query`, {
+		const response = await fetch(`${API_URL}/messages/query`, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -83,10 +91,31 @@ export const fetchMessagesList = (token, offset) => async dispatch => {
 	}
 };
 
-export const fetchAllMessagesList = token => async dispatch => {
+export const fetchTemplatesList = (token, offset) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/templates/query`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({queries: [{
+				query: {}
+			}],
+			offset: offset})
+		});
+		const result = await response.json();
+		dispatch(success(FETCH_TEMPLATES_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchAllMessagessList = token => async dispatch => {
 	dispatch(setListLoader());
 	try {
-		const response = await fetch(`${API_URL}/templates/query/all`, {
+		const response = await fetch(`${API_URL}/messages/query/all`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`
@@ -99,7 +128,39 @@ export const fetchAllMessagesList = token => async dispatch => {
 	}
 };
 
+export const fetchAllTemplatesList = token => async dispatch => {
+	dispatch(setListLoader());
+	try {
+		const response = await fetch(`${API_URL}/templates/query/all`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+		const result = await response.json();
+		dispatch(success(FETCH_ALL_TEMPLATES_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
 export const fetchMessage = (id, token) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/messages/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+		const result = await response.json();
+		dispatch(success(FETCH_MESSAGE, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchMessageTemplate = (id, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
 		const response = await fetch(`${API_URL}/templates/${id}`, {
@@ -109,7 +170,7 @@ export const fetchMessage = (id, token) => async dispatch => {
 			}
 		});
 		const result = await response.json();
-		dispatch(success(FETCH_MESSAGE, result));
+		dispatch(success(FETCH_TEMPLATE, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
@@ -128,7 +189,7 @@ export const updateMessageTemplate = (id, values, token) => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		const result = await response.json();
-		dispatch(success(FETCH_MESSAGE, result.value));
+		dispatch(success(FETCH_TEMPLATE, result.value));
 		if (response.status === HttpStatus.OK) {
 			dispatch(setMessage({color: 'success', msg: 'Message Updated successfully'}));
 		}

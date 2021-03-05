@@ -41,7 +41,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const {
 		messageTemplates,
 		messageInfo,
-		fetchMessage,
+		fetchMessageTemplate,
 		fetchPublisherOption,
 		publisherOption,
 		messageToBeSend,
@@ -60,9 +60,9 @@ export default connect(mapStateToProps, actions)(props => {
 
 	useEffect(() => {
 		if (selectedTemplate !== null) {
-			fetchMessage(selectedTemplate.value, cookie[COOKIE_NAME]);
+			fetchMessageTemplate(selectedTemplate.value, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchMessage, selectedTemplate]);
+	}, [cookie, fetchMessageTemplate, selectedTemplate]);
 
 	useEffect(() => {
 		fetchPublisherOption(cookie[COOKIE_NAME]);
@@ -130,7 +130,7 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		publisherOption: state.publisher.publisherOptions,
-		messageTemplates: state.contact.messagesList,
-		messageInfo: state.contact.messageInfo
+		messageTemplates: state.message.messagesList,
+		messageInfo: state.message.messageInfo
 	});
 }

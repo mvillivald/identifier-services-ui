@@ -474,7 +474,7 @@
     "messageTemplate.label.language": "Language:",
 
     "messageList.text.nodata": "No users available",
-    "messageList.list.heading": "Message templates",
+    "messageTemplateList.list.heading": "Message templates",
 
     "publication.isbnismn.edit.label": "Edit isbnIsmn detail",
     "publicationList.isbnismn.headRows.title": "Title",
@@ -875,6 +875,12 @@
     "publicationList.issn.headRows.publicationType": "Publication Type",
     "publicationList.issn.headRows.email": "Email",
     "publicationList.isbnismn.headRows.publisher" : "Publisher",
-    "publicationList.isbnismn.headRows.Identifier" : "Identifier"
+    "publicationList.isbnismn.headRows.Identifier" : "Identifier",
+
+    "message.label.email" : "Email",
+    "message.label.subject" : "Subject",
+    "message.label.body" : "Body",
+    "messageList.list.heading" : "Message List",
+    "app.menu.messages": "Messages"
 
 }

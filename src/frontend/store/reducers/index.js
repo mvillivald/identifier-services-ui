@@ -30,7 +30,7 @@ import {reducer as forms} from 'redux-form';
 import publisherReducer from './publisher';
 import authReducer from './authReducer';
 import localeReducer from './localeReducer';
-import contact from './messageReducer';
+import message from './messageReducer';
 import common from './commonReducer';
 import userReducer from './userReducer';
 import publicationReducer from './publicationReducer';
@@ -43,7 +43,7 @@ export default combineReducers({
 	publication: publicationReducer,
 	identifierRanges: identifierRangesReducer,
 	login: authReducer,
-	contact: contact,
+	message: message,
 	common: common,
 	users: userReducer
 });

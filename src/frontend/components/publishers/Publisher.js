@@ -60,7 +60,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchIDR,
 		fetchIDRIsmn,
 		updatePublisher,
-		fetchAllMessagesList,
+		fetchAllTemplatesList,
 		match,
 		history,
 		publisher,
@@ -126,8 +126,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, createNewIsbnRange, createNewIsmnRange, fetchIDR, fetchIDRIsmn, id, newPublisherRangeId, tabsValue]);
 
 	useEffect(() => {
-		fetchAllMessagesList(cookie[COOKIE_NAME]);
-	}, [cookie, fetchAllMessagesList]);
+		fetchAllTemplatesList(cookie[COOKIE_NAME]);
+	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
 		if (publisher) {

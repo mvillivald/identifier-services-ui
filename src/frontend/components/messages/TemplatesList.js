@@ -33,7 +33,7 @@ import {Grid, Typography} from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
-import Message from './Message';
+import Template from './Template';
 import useModalStyles from '../../styles/formList';
 import ModalLayout from '../ModalLayout';
 import TableComponent from '../TableComponent';
@@ -45,7 +45,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const intl = useIntl();
 	const modalClasses = useModalStyles();
-	const {loading, fetchMessagesList, messagesList, totalMessages, queryDocCount, offset} = props;
+	const {loading, fetchTemplatesList, messagesList, totalMessages, queryDocCount, offset} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [page, setPage] = useState(1);
@@ -56,8 +56,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchMessagesList(cookie[COOKIE_NAME], lastCursor);
-	}, [lastCursor, cursors, fetchMessagesList, cookie]);
+		console.log(lastCursor);
+		fetchTemplatesList(cookie[COOKIE_NAME], lastCursor);
+	}, [lastCursor, cursors, fetchTemplatesList, cookie]);
 
 	const handleTableRowClick = id => {
 		setTemplateId(id);
@@ -108,7 +109,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid item xs={12} className={classes.listSearch}>
 			<Typography variant="h5">
-				<FormattedMessage id="messageList.list.heading"/>
+				<FormattedMessage id="messageTemplateList.list.heading"/>
 			</Typography>
 			<ModalLayout
 				form
@@ -122,7 +123,7 @@ export default connect(mapStateToProps, actions)(props => {
 				<TemplateCreationForm {...props}/>
 			</ModalLayout>
 			{messageData}
-			<Message id={templateId} modal={modal} setModal={setModal}/>
+			<Template id={templateId} modal={modal} setModal={setModal}/>
 		</Grid>
 	);
 	return {
@@ -132,10 +133,10 @@ export default connect(mapStateToProps, actions)(props => {
 
 function mapStateToProps(state) {
 	return ({
-		loading: state.contact.listLoading,
-		messagesList: state.contact.messagesList,
-		totalMessages: state.contact.totalMessages,
-		offset: state.contact.offset,
-		queryDocCount: state.contact.queryDocCount
+		loading: state.message.listLoading,
+		messagesList: state.message.messagesList,
+		totalMessages: state.message.totalMessages,
+		offset: state.message.offset,
+		queryDocCount: state.message.queryDocCount
 	});
 }

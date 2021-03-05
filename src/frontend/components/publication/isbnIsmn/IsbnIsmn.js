@@ -64,7 +64,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		updatePublicationIsbnIsmn,
 		updatedIsbnIsmn,
 		fetchPublisherOption,
-		fetchAllMessagesList,
+		fetchAllTemplatesList,
 		publisherOption,
 		match,
 		createIsbnBatch,
@@ -94,8 +94,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, fetchIsbnIsmn, fetchPublisherOption, id, updatedIsbnIsmn, isEdit]);
 
 	useEffect(() => {
-		fetchAllMessagesList(cookie[COOKIE_NAME]);
-	}, [cookie, fetchAllMessagesList]);
+		fetchAllTemplatesList(cookie[COOKIE_NAME]);
+	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
 		if (Object.keys(isbnIsmn).length > 0) {
@@ -306,9 +306,9 @@ function mapStateToProps(state) {
 		publisherOption: state.publisher.publisherOptions,
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,
 		userInfo: state.login.userInfo,
-		messageListLoading: state.contact.listLoading,
-		messageTemplates: state.contact.messagesList,
-		messageInfo: state.contact.messageInfo
+		messageListLoading: state.message.listLoading,
+		messageTemplates: state.message.messagesList,
+		messageInfo: state.message.messageInfo
 	});
 
 	function formatInitialValues(values) {

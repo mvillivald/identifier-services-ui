@@ -98,9 +98,12 @@ export default function ({userInfo, isAuthenticated}) {
 			]
 		},
 		{
-			label: <FormattedMessage id="app.menu.messageTemplates"/>,
-			path: 'templates',
-			roleView: ['admin']
+			label: <FormattedMessage id="app.menu.messages"/>,
+			roleView: ['admin'],
+			listItem: [
+				{label: <FormattedMessage id="app.menu.messageTemplates"/>, path: 'templates', roleView: ['admin']},
+				{label: <FormattedMessage id="app.menu.messages"/>, path: 'messages', roleView: ['admin']}
+			]
 		}
 	];
 	const nav = (

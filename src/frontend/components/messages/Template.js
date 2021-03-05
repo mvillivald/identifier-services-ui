@@ -53,7 +53,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'messageTemplate',
 	enableReinitialize: true
 })(props => {
-	const {id, fetchMessage, messageInfo, handleSubmit, updateMessageTemplate} = props;
+	const {id, fetchMessageTemplate, messageInfo, handleSubmit, updateMessageTemplate} = props;
 	const classes = commonStyles();
 	const formClasses = useFormStyles();
 	/* global COOKIE_NAME */
@@ -63,9 +63,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	useEffect(() => {
 		const token = cookie[COOKIE_NAME];
 		if (id !== null) {
-			fetchMessage(id, token);
+			fetchMessageTemplate(id, token);
 		}
-	}, [cookie, fetchMessage, isEdit, id]);
+	}, [cookie, fetchMessageTemplate, isEdit, id]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -184,8 +184,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 function mapStateToProps(state) {
 	return ({
-		loading: state.contact.loading,
-		messageInfo: state.contact.messageInfo,
-		initialValues: {...state.contact.messageInfo, body: state.contact.messageInfo && Buffer.from(state.contact.messageInfo.body, 'base64').toString('utf8')}
+		loading: state.message.loading,
+		messageInfo: state.message.messageInfo,
+		initialValues: {...state.message.messageInfo, body: state.message.messageInfo && Buffer.from(state.message.messageInfo.body, 'base64').toString('utf8')}
 	});
 }

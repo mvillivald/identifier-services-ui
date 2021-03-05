@@ -244,7 +244,7 @@
     "messageTemplate.label.language": "Kieli:",
 
     "messageList.text.nodata": "No Users Available",
-    "messageList.list.heading": "Käytettävissä olevat viestipohjat",
+    "messageTemplateList.list.heading": "Käytettävissä olevat viestipohjat",
 
     "publication.isbnismn.edit.label": "Muokkaa julkaisun tietoja",
     "publicationList.isbnismn.headRows.title": "Nimeke",

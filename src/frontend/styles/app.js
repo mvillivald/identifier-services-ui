@@ -141,10 +141,11 @@ const theme = createMuiTheme({
 		MuiTableCell: {
 			root: {
 				fontSize: '0.7rem',
+				margin: '0 10px',
 				padding: '16px 0'
 			},
 			body: {
-				width: 200
+				width: 300
 			},
 			head: {
 				width: 200

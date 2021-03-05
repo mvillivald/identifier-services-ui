@@ -62,7 +62,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		clearFields,
 		updatePublicationIssn,
 		updatedIssn,
-		fetchAllMessagesList,
+		fetchAllTemplatesList,
 		match,
 		history,
 		assignIssnRange
@@ -90,8 +90,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, fetchIssn, id, updatedIssn]);
 
 	useEffect(() => {
-		fetchAllMessagesList(cookie[COOKIE_NAME]);
-	}, [cookie, fetchAllMessagesList]);
+		fetchAllTemplatesList(cookie[COOKIE_NAME]);
+	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
 		if (Object.keys(issn).length > 0) {
@@ -265,8 +265,8 @@ function mapStateToProps(state) {
 		initialValues: state.publication.issn,
 		userInfo: state.login.userInfo,
 		updatedIssn: state.publication.updatedIssn,
-		messageListLoading: state.contact.listLoading,
-		messageTemplates: state.contact.messagesList,
-		messageInfo: state.contact.messageInfo
+		messageListLoading: state.message.listLoading,
+		messageTemplates: state.message.messagesList,
+		messageInfo: state.message.messageInfo
 	});
 }

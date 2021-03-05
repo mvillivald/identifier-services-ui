@@ -53,7 +53,9 @@ import IssnList from './components/publication/issn/IssnList';
 import Issn from './components/publication/issn/Issn';
 import UsersRequestsList from './components/usersRequests/UsersRequestsList';
 import UsersRequest from './components/usersRequests/UsersRequest';
-import MessagesList from './components/messageTemplates/MessagesList';
+import TemplatesList from './components/messages/TemplatesList';
+import MessagesList from './components/messages/MessagesList';
+import Message from './components/messages/Message';
 import PublishersRequestsList from './components/publishersRequests/PublishersRequestsList';
 import PublishersRequest from './components/publishersRequests/publisherRequest';
 import PublicationIsbnIsmnRequest from './components/publicationRequests/isbnIsmRequest/IsbnIsmnRequest';
@@ -109,8 +111,10 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/publications/issn/:id', role: ['admin', 'publisher', 'system'], component: Issn},
 		{path: '/requests/users', role: ['admin', 'publisher'], component: UsersRequestsList},
 		{path: '/requests/users/:id', role: ['admin', 'publisher'], component: UsersRequest},
-		{path: '/templates', role: ['admin'], component: MessagesList},
-		{path: '/templates/:id', role: ['admin'], component: MessagesList},
+		{path: '/templates', role: ['admin'], component: TemplatesList},
+		{path: '/templates/:id', role: ['admin'], component: TemplatesList},
+		{path: '/messages', role: ['admin'], component: MessagesList},
+		{path: '/messages/:id', role: ['admin'], component: Message},
 		{path: '/requests/publishers', role: ['publisher', 'admin'], component: PublishersRequestsList},
 		{path: '/requests/publishers/:id', role: ['system', 'admin'], component: PublishersRequest},
 		{path: '/requests/publications/isbn-ismn', role: ['publisher', 'admin'], component: PublicationIsbnIsmnRequestList},
@@ -202,7 +206,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 function mapStateToProps(state) {
 	return {
 		lang: state.locale.lang,
-		responseMessage: state.contact.responseMessage,
+		responseMessage: state.message.responseMessage,
 		isAuthenticated: state.login.isAuthenticated,
 		userInfo: state.login.userInfo
 	};

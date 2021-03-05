@@ -26,7 +26,17 @@
  *
  */
 
-import {SNACKBAR_MESSAGE, LIST_LOADER, LOADER, FETCH_MESSAGE, FETCH_MESSAGES_LIST, FETCH_ALL_MESSAGES_LIST} from '../actions/types';
+import {
+	SNACKBAR_MESSAGE,
+	LIST_LOADER,
+	LOADER,
+	FETCH_MESSAGE,
+	FETCH_MESSAGES_LIST,
+	FETCH_ALL_MESSAGES_LIST,
+	FETCH_TEMPLATE,
+	FETCH_TEMPLATES_LIST,
+	FETCH_ALL_TEMPLATES_LIST
+} from '../actions/types';
 
 const initialState = {
 	messagesList: [],
@@ -73,6 +83,27 @@ export default function (state = initialState, action) {
 				listLoading: false
 			};
 		case FETCH_ALL_MESSAGES_LIST:
+			return {
+				...state,
+				listLoading: false,
+				messagesList: action.payload
+			};
+		case FETCH_TEMPLATE:
+			return {
+				...state,
+				messageInfo: action.payload,
+				loading: false
+			};
+		case FETCH_TEMPLATES_LIST:
+			return {
+				...state,
+				messagesList: action.payload.results,
+				offset: action.payload.offset,
+				totalMessages: action.payload.totalDoc,
+				queryDocCount: action.payload.queryDocCount,
+				listLoading: false
+			};
+		case FETCH_ALL_TEMPLATES_LIST:
 			return {
 				...state,
 				listLoading: false,
