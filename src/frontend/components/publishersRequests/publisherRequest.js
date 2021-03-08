@@ -367,93 +367,100 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 						</Grid>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.status"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="state"
-							label={intl.formatMessage({id: 'listComponent.state'})}
-							value={formattedPublisherRequest.state ? formattedPublisherRequest.state : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="backgroundProcessingState"
-							label={intl.formatMessage({id: 'listComponent.backgroundProcessingState'})}
-							value={formattedPublisherRequest.backgroundProcessingState ? formattedPublisherRequest.backgroundProcessingState : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="rejectionReason"
-							label={intl.formatMessage({id: 'listComponent.rejectionReason'})}
-							value={formattedPublisherRequest.rejectionReason ? formattedPublisherRequest.rejectionReason : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							linkPath={`/publishers/${formattedPublisherRequest.createdResource}`}
-							fieldName="createdResource"
-							label={intl.formatMessage({id: 'listComponent.createdResource'})}
-							value={formattedPublisherRequest.createdResource ? formattedPublisherRequest.createdResource : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.creationDetails"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.timestamp'})}
-							value={formattedPublisherRequest.created ?
-								(formattedPublisherRequest.created.timestamp ?
-									formattedPublisherRequest.created.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.user'})}
-							value={formattedPublisherRequest.created ?
-								(formattedPublisherRequest.created.user ?
-									formattedPublisherRequest.created.user :
-									''
-								) : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.lastUpdated"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.timestamp'})}
-							value={formattedPublisherRequest.lastUpdated ?
-								(formattedPublisherRequest.lastUpdated.timestamp ?
-									formattedPublisherRequest.lastUpdated.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.user'})}
-							value={formattedPublisherRequest.lastUpdated ?
-								(formattedPublisherRequest.lastUpdated.user ?
-									formattedPublisherRequest.lastUpdated.user :
-									''
-								) : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.notes"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="notes"
-							label={intl.formatMessage({id: 'listComponent.notes'})}
-							value={formattedPublisherRequest.notes ? formattedPublisherRequest.notes : ''}
-						/>
-					</Grid>
+					{
+						userInfo.role === 'admin' &&
+							<>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.status"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										edit={isEdit && isEditable}
+										fieldName="state"
+										label={intl.formatMessage({id: 'listComponent.state'})}
+										value={formattedPublisherRequest.state ? formattedPublisherRequest.state : ''}
+									/>
+									{
+										formattedPublisherRequest.state && formattedPublisherRequest.state === 'rejected' &&
+											<ListComponent
+												edit={isEdit && isEditable} fieldName="rejectionReason"
+												label={intl.formatMessage({id: 'listComponent.rejectionReason'})}
+												value={formattedPublisherRequest.rejectionReason ? formattedPublisherRequest.rejectionReason : ''}
+											/>
+									}
+									<ListComponent
+										edit={isEdit && isEditable}
+										fieldName="backgroundProcessingState"
+										label={intl.formatMessage({id: 'listComponent.backgroundProcessingState'})}
+										value={formattedPublisherRequest.backgroundProcessingState ? formattedPublisherRequest.backgroundProcessingState : ''}
+									/>
+									<ListComponent
+										edit={isEdit && isEditable}
+										linkPath={`/publishers/${formattedPublisherRequest.createdResource}`}
+										fieldName="createdResource"
+										label={intl.formatMessage({id: 'listComponent.createdResource'})}
+										value={formattedPublisherRequest.createdResource ? formattedPublisherRequest.createdResource : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.creationDetails"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.timestamp'})}
+										value={formattedPublisherRequest.created ?
+											(formattedPublisherRequest.created.timestamp ?
+												formattedPublisherRequest.created.timestamp :
+												''
+											) : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.user'})}
+										value={formattedPublisherRequest.created ?
+											(formattedPublisherRequest.created.user ?
+												formattedPublisherRequest.created.user :
+												''
+											) : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.lastUpdated"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.timestamp'})}
+										value={formattedPublisherRequest.lastUpdated ?
+											(formattedPublisherRequest.lastUpdated.timestamp ?
+												formattedPublisherRequest.lastUpdated.timestamp :
+												''
+											) : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.user'})}
+										value={formattedPublisherRequest.lastUpdated ?
+											(formattedPublisherRequest.lastUpdated.user ?
+												formattedPublisherRequest.lastUpdated.user :
+												''
+											) : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.notes"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										edit={isEdit && isEditable}
+										fieldName="notes"
+										label={intl.formatMessage({id: 'listComponent.notes'})}
+										value={formattedPublisherRequest.notes ? formattedPublisherRequest.notes : ''}
+									/>
+								</Grid>
+							</>
+					}
 				</Grid>
 			</>
 		);

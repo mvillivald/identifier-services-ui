@@ -66,24 +66,24 @@ app.post('/message', (req, res) => {
 	const {body, headers} = req;
 	const token = headers.authorization;
 	async function main() {
-		// const parseUrl = parse(SMTP_URL, true);
-		// const emailcontent = `
-		// 	<p>${body.description ? body.description : body.body}</p>
-		// `;
+		const parseUrl = parse(SMTP_URL, true);
+		const emailcontent = `
+			<p>${body.description ? body.description : body.body}</p>
+		`;
 
-		// let transporter = nodemailer.createTransport({
-		// 	host: parseUrl.hostname,
-		// 	port: parseUrl.port,
-		// 	secure: false
-		// });
+		let transporter = nodemailer.createTransport({
+			host: parseUrl.hostname,
+			port: parseUrl.port,
+			secure: false
+		});
 
-		// await transporter.sendMail({
-		// 	from: ADMINISTRATORS_EMAIL,
-		// 	to: body.sendTo ? body.sendTo : body.email,
-		// 	replyTo: ADMINISTRATORS_EMAIL,
-		// 	subject: body.subject,
-		// 	html: emailcontent
-		// });
+		await transporter.sendMail({
+			from: ADMINISTRATORS_EMAIL,
+			to: body.sendTo ? body.sendTo : body.email,
+			replyTo: ADMINISTRATORS_EMAIL,
+			subject: body.subject,
+			html: emailcontent
+		});
 		const response = await fetch(`${API_URL}/messages/`, {
 			method: 'POST',
 			headers: {

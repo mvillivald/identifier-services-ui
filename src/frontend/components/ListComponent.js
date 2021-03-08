@@ -28,7 +28,7 @@ export default function (props) {
 			case 'string':
 			case 'number':
 				return (
-					(fieldName === 'additionalDetails' || fieldName === 'notes' ||
+					(fieldName === 'additionalDetails' || fieldName === 'notes' || fieldName === 'rejectionReason' ||
 						fieldName === 'organizationDetails[affiliate]' || fieldName === 'organizationDetails[distributor]') ?
 						(edit ? renderEditAdditionalDetails(fieldName, label) : value) :
 						<>

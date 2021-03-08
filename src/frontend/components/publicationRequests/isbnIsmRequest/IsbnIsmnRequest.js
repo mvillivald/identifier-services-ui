@@ -375,16 +375,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							value={publicationIsbnIsmnRequest.authors ? publicationIsbnIsmnRequest.authors : []}
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.additionalDetails"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="additionalDetails"
-							value={publicationIsbnIsmnRequest.additionalDetails ? publicationIsbnIsmnRequest.additionalDetails : ''}
-						/>
-					</Grid>
+					{
+						userInfo.role === 'admin' &&
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.additionalDetails"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable} fieldName="additionalDetails"
+									value={publicationIsbnIsmnRequest.additionalDetails ? publicationIsbnIsmnRequest.additionalDetails : ''}
+								/>
+							</Grid>
+					}
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
@@ -533,51 +536,62 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								) : ''}
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.otherReference"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="state"
-							label={intl.formatMessage({id: 'listComponent.state'})}
-							value={publicationIsbnIsmnRequest.state ? publicationIsbnIsmnRequest.state : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="backgroundProcessingState"
-							label={intl.formatMessage({id: 'listComponent.backgroundProcessingState'})}
-							value={publicationIsbnIsmnRequest.backgroundProcessingState ? publicationIsbnIsmnRequest.backgroundProcessingState : ''}
-						/>
-						<ListComponent
-							linkPath={`/publications/isbn-ismn/${publicationIsbnIsmnRequest.createdResource}`}
-							label={intl.formatMessage({id: 'listComponent.createdResource'})}
-							value={publicationIsbnIsmnRequest.createdResource ? publicationIsbnIsmnRequest.createdResource : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.created'})}
-							value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.associatedRange'})}
-							value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
-							value={publicationIsbnIsmnRequest.lastUpdated ?
-								(publicationIsbnIsmnRequest.lastUpdated.timestamp ?
-									publicationIsbnIsmnRequest.lastUpdated.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
-							value={publicationIsbnIsmnRequest.lastUpdated ?
-								(publicationIsbnIsmnRequest.lastUpdated.user ?
-									publicationIsbnIsmnRequest.lastUpdated.user :
-									''
-								) : ''}
-						/>
-					</Grid>
+					{
+						userInfo.role === 'admin' &&
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.otherReference"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable} fieldName="state"
+									label={intl.formatMessage({id: 'listComponent.state'})}
+									value={publicationIsbnIsmnRequest.state ? publicationIsbnIsmnRequest.state : ''}
+								/>
+								{
+									publicationIsbnIsmnRequest.state && publicationIsbnIsmnRequest.state === 'rejected' &&
+										<ListComponent
+											edit={isEdit && isEditable} fieldName="rejectionReason"
+											label={intl.formatMessage({id: 'listComponent.rejectionReason'})}
+											value={publicationIsbnIsmnRequest.rejectionReason ? publicationIsbnIsmnRequest.rejectionReason : ''}
+										/>
+								}
+								<ListComponent
+									edit={isEdit && isEditable} fieldName="backgroundProcessingState"
+									label={intl.formatMessage({id: 'listComponent.backgroundProcessingState'})}
+									value={publicationIsbnIsmnRequest.backgroundProcessingState ? publicationIsbnIsmnRequest.backgroundProcessingState : ''}
+								/>
+								<ListComponent
+									linkPath={`/publications/isbn-ismn/${publicationIsbnIsmnRequest.createdResource}`}
+									label={intl.formatMessage({id: 'listComponent.createdResource'})}
+									value={publicationIsbnIsmnRequest.createdResource ? publicationIsbnIsmnRequest.createdResource : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.created'})}
+									value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.associatedRange'})}
+									value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
+									value={publicationIsbnIsmnRequest.lastUpdated ?
+										(publicationIsbnIsmnRequest.lastUpdated.timestamp ?
+											publicationIsbnIsmnRequest.lastUpdated.timestamp :
+											''
+										) : ''}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
+									value={publicationIsbnIsmnRequest.lastUpdated ?
+										(publicationIsbnIsmnRequest.lastUpdated.user ?
+											publicationIsbnIsmnRequest.lastUpdated.user :
+											''
+										) : ''}
+								/>
+							</Grid>
+					}
 				</Grid>
 			</>
 		);

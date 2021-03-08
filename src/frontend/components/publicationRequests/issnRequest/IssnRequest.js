@@ -350,16 +350,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								) : ''}
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.additionalDetails"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="additionalDetails"
-							value={issnRequest.additionalDetails ? issnRequest.additionalDetails : ''}
-						/>
-					</Grid>
+					{
+						userInfo.role === 'admin' &&
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.additionalDetails"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable} fieldName="additionalDetails"
+									value={issnRequest.additionalDetails ? issnRequest.additionalDetails : ''}
+								/>
+							</Grid>
+					}
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
@@ -511,64 +514,77 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								) : ''}
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.otherReference"/>
-						</Typography>
-						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.state'})} value={issnRequest.state ? issnRequest.state : ''}/>
-						<ListComponent
-							linkPath={`/publications/issn/${issnRequest.createdResource}`}
-							label={intl.formatMessage({id: 'listComponent.createdResource'})}
-							value={issnRequest.createdResource ? issnRequest.createdResource : ''}
-						/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.creator'})} value={issnRequest.creator ? issnRequest.creator : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={issnRequest.associatedRange ? formatValueforAssociatedRange(issnRequest.associatedRange) : ''}/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.creationDetails"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.timestamp'})}
-							value={issnRequest.created ?
-								(issnRequest.created.timestamp ?
-									issnRequest.created.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.user'})}
-							value={issnRequest.created ?
-								(issnRequest.created.user ?
-									issnRequest.created.user :
-									''
-								) : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.lastUpdated"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
-							value={issnRequest.lastUpdated ?
-								(issnRequest.lastUpdated.timestamp ?
-									issnRequest.lastUpdated.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
-							value={issnRequest.lastUpdated ?
-								(issnRequest.lastUpdated.user ?
-									issnRequest.lastUpdated.user :
-									''
-								) : ''}
-						/>
-					</Grid>
+					{
+						userInfo.role === 'admin' &&
+							<>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.otherReference"/>
+									</Typography>
+									<hr/>
+									<ListComponent label={intl.formatMessage({id: 'listComponent.state'})} value={issnRequest.state ? issnRequest.state : ''}/>
+									{
+										issnRequest.state && issnRequest.state === 'rejected' &&
+											<ListComponent
+												edit={isEdit && isEditable} fieldName="rejectionReason"
+												label={intl.formatMessage({id: 'listComponent.rejectionReason'})}
+												value={issnRequest.rejectionReason ? issnRequest.rejectionReason : ''}
+											/>
+									}
+									<ListComponent
+										linkPath={`/publications/issn/${issnRequest.createdResource}`}
+										label={intl.formatMessage({id: 'listComponent.createdResource'})}
+										value={issnRequest.createdResource ? issnRequest.createdResource : ''}
+									/>
+									<ListComponent label={intl.formatMessage({id: 'listComponent.creator'})} value={issnRequest.creator ? issnRequest.creator : ''}/>
+									<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={issnRequest.associatedRange ? formatValueforAssociatedRange(issnRequest.associatedRange) : ''}/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.creationDetails"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.timestamp'})}
+										value={issnRequest.created ?
+											(issnRequest.created.timestamp ?
+												issnRequest.created.timestamp :
+												''
+											) : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.user'})}
+										value={issnRequest.created ?
+											(issnRequest.created.user ?
+												issnRequest.created.user :
+												''
+											) : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.lastUpdated"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
+										value={issnRequest.lastUpdated ?
+											(issnRequest.lastUpdated.timestamp ?
+												issnRequest.lastUpdated.timestamp :
+												''
+											) : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
+										value={issnRequest.lastUpdated ?
+											(issnRequest.lastUpdated.user ?
+												issnRequest.lastUpdated.user :
+												''
+											) : ''}
+									/>
+								</Grid>
+							</>
+					}
 				</Grid>
 			</>
 		);

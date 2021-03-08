@@ -327,6 +327,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				if (values.selectFormat === 'electronic') {
 					const formatDetails = {
 						...values.formatDetails,
+						run: values.formatDetails.run && Number(values.formatDetails.run),
 						format: 'electronic',
 						fileFormat: reFormat(values.formatDetails.fileFormat)
 					};
@@ -336,6 +337,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				if (values.selectFormat === 'printed') {
 					const formatDetails = {
 						...values.formatDetails,
+						run: values.formatDetails.run && Number(values.formatDetails.run),
 						printFormat: reFormat(values.formatDetails.printFormat),
 						format: 'printed'
 					};
@@ -345,6 +347,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				if (values.selectFormat === 'both') {
 					const formatDetails = {
 						...values.formatDetails,
+						run: values.formatDetails.run && Number(values.formatDetails.run),
 						format: 'printed-and-electronic',
 						fileFormat: reFormat(values.formatDetails.fileFormat),
 						printFormat: reFormat(values.formatDetails.printFormat)
