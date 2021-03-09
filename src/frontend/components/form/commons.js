@@ -42,6 +42,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							label={list.label}
 							name={list.name}
 							min={list.min}
+							type="month"
 							formName={list.formName}
 						/>
 					</Grid>
@@ -253,6 +254,7 @@ function getSubFormatDetailsFieldArray(intl) {
 			electronic: [
 				{
 					isMulti: true,
+					isCreatable: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
@@ -272,6 +274,7 @@ function getSubFormatDetailsFieldArray(intl) {
 			printed: [
 				{
 					isMulti: true,
+					isCreatable: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'multiSelect',
@@ -314,9 +317,11 @@ function getSubFormatDetailsFieldArray(intl) {
 			both: [
 				{
 					isMulti: true,
+					isCreatable: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
+					instructions: getMultipleSelectInstruction(),
 					width: 'full',
 					options: [
 						{label: '', value: ''},
@@ -328,9 +333,11 @@ function getSubFormatDetailsFieldArray(intl) {
 				},
 				{
 					isMulti: true,
+					isCreatable: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'multiSelect',
+					instructions: getMultipleSelectInstruction(),
 					width: 'full',
 					options: [
 						{label: '', value: ''},
@@ -360,7 +367,7 @@ function getSubFormatDetailsFieldArray(intl) {
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
-					type: 'numeric',
+					type: 'text',
 					width: 'half'
 				}
 			]
@@ -390,7 +397,8 @@ export function getMultipleSelectInstruction() {
 	return (
 		<>
 			<Typography>
-				<FormattedMessage id="form.multipleSelectInstruction"/>
+				<FormattedMessage id="form.multipleSelectInstruction"/> <br/>
+				<FormattedMessage id="form.createableSelectInstruction"/>
 			</Typography>
 		</>
 	);
@@ -404,5 +412,18 @@ export function getCreateableSelectInstruction() {
 			</Typography>
 		</>
 	);
+}
+
+export function formatLanguage(lang) {
+	switch (lang) {
+		case 'en':
+			return 'eng';
+		case 'fi':
+			return 'fin';
+		case 'sw':
+			return 'swe';
+		default:
+			return 'fin';
+	}
 }
 

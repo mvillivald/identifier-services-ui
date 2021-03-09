@@ -156,15 +156,15 @@ export const fieldArray = [
 				width: 'half'
 			},
 			{
-				name: 'postalAddress[city]',
-				type: 'text',
-				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalCity"/>,
-				width: 'half'
-			},
-			{
 				name: 'postalAddress[zip]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalZip"/>,
+				width: 'half'
+			},
+			{
+				name: 'postalAddress[city]',
+				type: 'text',
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalCity"/>,
 				width: 'half'
 			},
 			{
@@ -208,14 +208,8 @@ export const fieldArray = [
 			{
 				name: 'language',
 				type: 'select',
-				label: <FormattedMessage id="publisherRegistration.form.basicInformation.selectLanguage"/>,
-				width: 'half',
-				defaultValue: 'eng',
-				options: [
-					{label: 'English (Default Language)', value: 'eng'},
-					{label: 'Suomi', value: 'fin'},
-					{label: 'Svenska', value: 'swe'}
-				]
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.language"/>,
+				width: 'half'
 			}
 		]
 	},

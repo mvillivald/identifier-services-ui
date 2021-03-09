@@ -42,17 +42,10 @@ import RenderInformation from './RenderInformation';
 import Captcha from '../../Captcha';
 import {fieldArray} from './formFieldVariable';
 import * as actions from '../../../store/actions';
-import {element} from '../commons';
+import {element, formatLanguage} from '../commons';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherRegistrationForm',
-	initialValues: {
-		language: 'eng',
-		postalAddress:
-			{
-				public: false
-			}
-	},
 	validate
 })(
 	props => {
@@ -311,16 +304,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										publisherValues.postalAddress.address : ''}
 								/>
 								<ListComponent
-									fieldName="postalAddress[city]"
-									label={intl.formatMessage({id: 'listComponent.city'})}
-									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.city ?
-										publisherValues.postalAddress.city : ''}
-								/>
-								<ListComponent
 									fieldName="postalAddress[zip]"
 									label={intl.formatMessage({id: 'listComponent.zip'})}
 									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.zip ?
 										publisherValues.postalAddress.zip : ''}
+								/>
+								<ListComponent
+									fieldName="postalAddress[city]"
+									label={intl.formatMessage({id: 'listComponent.city'})}
+									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.city ?
+										publisherValues.postalAddress.city : ''}
 								/>
 								<ListComponent
 									fieldName="postalAddress[public]"
@@ -425,6 +418,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 function mapStateToProps(state) {
 	return ({
 		captcha: state.common.captcha,
+		initialValues: {
+			language: formatLanguage(state.locale.lang),
+			postalAddress:
+				{
+					public: false
+				}
+		},
 		isAuthenticated: state.login.isAuthenticated,
 		publisherValues: getFormValues('publisherRegistrationForm')(state)
 	});

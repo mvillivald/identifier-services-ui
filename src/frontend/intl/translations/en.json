@@ -96,7 +96,7 @@
     "publisherRegistration.form.basicInformation.postalAddress" : "Address*",
     "publisherRegistration.form.basicInformation.postalCity" : "City*",
     "publisherRegistration.form.basicInformation.postalZip" : "Zip*",
-    "publisherRegistration.form.basicInformation.phone" : "Phone",
+    "publisherRegistration.form.basicInformation.phone" : "Phone*",
     "publisherRegistration.form.basicInformation.publisherEmail" : "Publisher email*",
     "publisherRegistration.form.basicInformation.website" : "Website",
     "publisherRegistration.form.basicInformation.selectLanguage" : "Select language",
@@ -160,7 +160,6 @@
     "publicationRegistration.form.publisherBasicInfo.email": "Primary contact email*",
     "publicationRegistration.form.publisherBasicInfo.givenName": "Primary contact name",
     "publicationRegistration.form.publisherBasicInfo.familyName": "Primary contact family name",
-    "publicationRegistration.form.publisherBasicInfo.selectLanguage.label": "Select language",
 
     "publicationRegistration.form.publishingActivities.thisYear": "Publication estimate this year*",
     "publicationRegistration.form.publishingActivities.nextYear": "Publication estimate next year*",
@@ -193,7 +192,7 @@
     "publicationRegistration.form.basicInformation.classification.fiction": "Fiction",
     "publicationRegistration.form.basicInformation.classification.cartoon": "Cartoon",
     "publicationRegistration.form.basicInformation.classification.childrenBook": "Children Book",
-    "publicationRegistration.form.basicInformation.manufacturer": "Additional Details",
+    "publicationRegistration.form.basicInformation.manufacturer": "Manufacturer",
     "publicationRegistration.form.basicInformation.additionalDetails": "Printing house or other manufacturer",
     "publicationRegistration.form.basicInformation.city": "City*",
 
@@ -257,7 +256,6 @@
     "publicationRegistration.form.formatDetails.printed.manufacturer": "Printing house or other manufacturer",
     "publicationRegistration.form.formatDetails.printed.city": "City",
     "publicationRegistration.form.formatDetails.printed.run": "Run",
-    "publicationRegistration.form.formatDetails.printed.edition": "Edition",
 
     "login.loginForm.title": "Login",
     "login.normal.login": "Normal Login",
@@ -737,7 +735,7 @@
     "listComponent.phone" : "Phone",
     "listComponent.publisherEmail" : "Publisher email",
     "listComponent.website" : "Website",
-    "listComponent.language" : "Selectlanguage",  
+    "listComponent.language" : "Publisher language",  
 
     "listComponent.currentYear" : "Publication estimate this year",
     "listComponent.nextYear" : "Publication estimate next year",
@@ -869,18 +867,24 @@
 
     "listComponent.organizationDetails" : "Organizational Details",
     "publicationRegistration.form.publisherBasicInfo.code": "Publisher Code",
+    "publicationRegistration.form.formatDetails.printed.edition": "Add the edition?  for example reissue, 2. expanded version etc.",
     "listComponent.code": "Publisher Code",
     "listComponent.publisherRequestDetails": "Publisher Request details",
     "listComponent.publicationRequestDetails": "Publication Request details",
     "publicationList.issn.headRows.publicationType": "Publication Type",
     "publicationList.issn.headRows.email": "Email",
     "publicationList.isbnismn.headRows.publisher" : "Publisher",
-    "publicationList.isbnismn.headRows.Identifier" : "Identifier",
+    "publicationList.isbnismn.headRows.identifier" : "Identifier",
 
     "message.label.email" : "Email",
     "message.label.subject" : "Subject",
     "message.label.body" : "Body",
     "messageList.list.heading" : "Message List",
-    "app.menu.messages": "Messages"
+    "app.menu.messages": "Messages",
+    "message.label.message":  "Message",
+
+    "publicationRegistration.form.publisherBasicInfo.publisherLanguage": "Publisher language",
+
+    "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author" 
 
 }

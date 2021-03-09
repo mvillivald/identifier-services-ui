@@ -42,18 +42,10 @@ import useStyles from '../../styles/form';
 import Captcha from '../Captcha';
 import ListComponent from '../ListComponent';
 import {element as publisherElement, fieldArrayElement} from './commons';
-import {getMultipleSelectInstruction, getCreateableSelectInstruction} from './commons';
+import {getMultipleSelectInstruction, getCreateableSelectInstruction, formatLanguage} from './commons';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'issnRegForm',
-	initialValues: {
-		language: 'eng',
-		publisherLanguage: 'eng',
-		postalAddress:
-			{
-				public: false
-			}
-	},
 	validate
 })(
 	props => {
@@ -73,6 +65,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			handleSubmit,
 			history
 		} = props;
+
 		const intl = useIntl();
 		const fieldArray = getFieldArray(intl);
 		const classes = useStyles();
@@ -256,21 +249,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										'')}
 							/>
 							<ListComponent
-								fieldName="publisher[postalAddress][city]"
-								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={formatValues.publisher && formatValues.publisher.postalAddress && formatValues.publisher.postalAddress ?
-									formatValues.publisher.postalAddress.city && formatValues.publisher.postalAddress.city :
-									(formatValues.publisher && formatValues.publisher.city ?
-										formatValues.publisher.city :
-										'')}
-							/>
-							<ListComponent
 								fieldName="publisher[postalAddress][zip]"
 								label={intl.formatMessage({id: 'listComponent.zip'})}
 								value={formatValues.publisher && formatValues.publisher.postalAddress && formatValues.publisher.postalAddress ?
 									formatValues.publisher.postalAddress.zip && formatValues.publisher.postalAddress.zip :
 									(formatValues.publisher && formatValues.publisher.zip ?
 										formatValues.publisher.zip :
+										'')}
+							/>
+							<ListComponent
+								fieldName="publisher[postalAddress][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={formatValues.publisher && formatValues.publisher.postalAddress && formatValues.publisher.postalAddress ?
+									formatValues.publisher.postalAddress.city && formatValues.publisher.postalAddress.city :
+									(formatValues.publisher && formatValues.publisher.city ?
+										formatValues.publisher.city :
 										'')}
 							/>
 							<ListComponent
@@ -563,6 +556,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 function mapStateToProps(state) {
 	return ({
+		language: state.locale.lang,
+		initialValues: {
+			language: 'fin',
+			publisherLanguage: formatLanguage(state.locale.lang),
+			postalAddress:
+				{
+					public: false
+				}
+		},
 		captcha: state.common.captcha,
 		user: state.login.userInfo,
 		isAuthenticated: state.login.isAuthenticated,
@@ -587,15 +589,15 @@ function getFieldArray(intl) {
 					width: 'half'
 				},
 				{
-					name: 'postalAddress[city]',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.city'}),
-					width: 'half'
-				},
-				{
 					name: 'postalAddress[zip]',
 					type: 'text',
 					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.zip'}),
+					width: 'half'
+				},
+				{
+					name: 'postalAddress[city]',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.city'}),
 					width: 'half'
 				},
 				{
@@ -624,15 +626,10 @@ function getFieldArray(intl) {
 				},
 				{
 					name: 'publisherLanguage',
-					type: 'select',
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.selectLanguage.label'}),
-					width: 'half',
-					defaultValue: 'eng',
-					options: [
-						{label: 'English (Default Language)', value: 'eng'},
-						{label: 'Suomi', value: 'fin'},
-						{label: 'Svenska', value: 'swe'}
-					]
+					type: 'text',
+					disable: true,
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherLanguage'}),
+					width: 'half'
 				}
 			]
 		},
@@ -657,14 +654,14 @@ function getFieldArray(intl) {
 					width: 'half',
 					defaultValue: 'eng',
 					options: [
-						{label: 'English (Default Language)', value: 'eng'},
+						{label: 'Suomi', value: 'fin'},
+						{label: 'Svenska', value: 'swe'},
+						{label: 'English ', value: 'eng'},
+						{label: 'Sami', value: 'smi'},
 						{label: 'French', value: 'fre'},
 						{label: 'Germany', value: 'ger'},
 						{label: 'Russain', value: 'rus'},
-						{label: 'Sami', value: 'smi'},
-						{label: 'Suomi', value: 'fin'},
 						{label: 'Spanish', value: 'esp'},
-						{label: 'Svenska', value: 'swe'},
 						{label: 'Other', value: 'other'},
 						{label: 'Bilingual', value: 'bilingual'}
 

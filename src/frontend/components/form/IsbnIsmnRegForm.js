@@ -36,22 +36,19 @@ import {useCookies} from 'react-cookie';
 import {FormattedMessage, useIntl} from 'react-intl';
 import HttpStatus from 'http-status';
 import moment from 'moment';
+import PopoverComponent from '../PopoverComponent';
+import HelpIcon from '@material-ui/icons/Help';
 
 import * as actions from '../../store/actions';
 import useStyles from '../../styles/form';
 import ResetCaptchaButton from './ResetCaptchaButton';
 import Captcha from '../Captcha';
-import {element, fieldArrayElement, getMultipleSelectInstruction} from './commons';
+import {element, fieldArrayElement, getMultipleSelectInstruction, formatLanguage} from './commons';
 import ListComponent from '../ListComponent';
 import renderSelectAutoComplete from './render/renderSelectAutoComplete';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'isbnIsmnRegForm',
-	initialValues: {
-		language: 'eng',
-		publisherLanguage: 'eng',
-		insertUniversity: false
-	},
 	validate
 })(
 	props => {
@@ -315,7 +312,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				seriesDetails: values.seriesDetails && formatTitle(),
 				formatDetails: formatDetail(),
 				type: values.type.value,
-				publicationTime: moment(values.publicationTime).toISOString(),
+				publicationTime: moment(values.publicationTime.toLocaleString()).toISOString(),
 				isPublic: values.isPublic.value,
 				isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : undefined,
 				mapDetails: publicationValues.type.value === 'map' ? map : undefined
@@ -388,7 +385,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		function renderPreview(publicationValues) {
 			publicationValues = {
 				...publicationValues,
-				publicationTime: publicationValues.publicationTime.toLocaleString()
+				publicationTime: publicationValues.publicationTime
 			};
 			const formatPublicationValue = publicationValues.isbnClassification ?
 				{
@@ -407,7 +404,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<ListComponent label={intl.formatMessage({id: 'listComponent.title'})} value={formatPublicationValue.title ? formatPublicationValue.title : ''}/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatPublicationValue.subTitle ? formatPublicationValue.subTitle : ''}/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.language'})} value={formatPublicationValue.language ? formatPublicationValue.language : ''}/>
-								<ListComponent label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={formatPublicationValue.publicationTime ? formatPublicationValue.publicationTime : ''}/>
+								<ListComponent label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={formatPublicationValue.publicationTime ? moment(formatPublicationValue.publicationTime).format('YYYY/MM') : ''}/>
 							</Grid>
 							<Grid item xs={12}>
 								<Typography variant="h6">
@@ -432,19 +429,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											'')}
 								/>
 								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.city'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
-										formatPublicationValue.publisher.postalAddress.city && formatPublicationValue.publisher.postalAddress.city :
-										(formatPublicationValue.publisher && formatPublicationValue.publisher.city ?
-											formatPublicationValue.publisher.city :
-											'')}
-								/>
-								<ListComponent
 									label={intl.formatMessage({id: 'listComponent.zip'})}
 									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
 										formatPublicationValue.publisher.postalAddress.zip && formatPublicationValue.publisher.postalAddress.zip :
 										(formatPublicationValue.publisher && formatPublicationValue.publisher.zip ?
 											formatPublicationValue.publisher.zip :
+											'')}
+								/>
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.city'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+										formatPublicationValue.publisher.postalAddress.city && formatPublicationValue.publisher.postalAddress.city :
+										(formatPublicationValue.publisher && formatPublicationValue.publisher.city ?
+											formatPublicationValue.publisher.city :
 											'')}
 								/>
 								<ListComponent
@@ -907,7 +904,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<Grid key={item.title} container spacing={2} direction="row">
 							<div className={classes.formHead}>
 								<Typography>
-									{item.title}
+									{item.title} &nbsp; {item.title === 'Author Details' && <PopoverComponent icon={<HelpIcon/>} infoText={intl.formatMessage({id: 'form.instructionAddAuthor'})}/>}
 								</Typography>
 							</div>
 							{item.title === 'Author Details' ? fieldArrayElement({data: item.fields, fieldName: 'authors', clearFields, formName}) : element({array: item.fields, publicationIsbnValues: publicationValues, classes, clearFields})}
@@ -928,6 +925,11 @@ function mapStateToProps(state) {
 	return ({
 		captcha: state.common.captcha,
 		user: state.login.userInfo,
+		initialValues: {
+			language: 'fin',
+			publisherLanguage: formatLanguage(state.locale.lang),
+			insertUniversity: false
+		},
 		isAuthenticated: state.login.isAuthenticated,
 		universityPublisher: state.publisher.universityPublisher,
 		publicationValues: getFormValues('isbnIsmnRegForm')(state)
@@ -957,15 +959,15 @@ export function getFieldArray(intl) {
 					width: 'half'
 				},
 				{
-					name: 'postalAddress[city]',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.city'}),
-					width: 'half'
-				},
-				{
 					name: 'postalAddress[zip]',
 					type: 'text',
 					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.zip'}),
+					width: 'half'
+				},
+				{
+					name: 'postalAddress[city]',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.city'}),
 					width: 'half'
 				},
 				{
@@ -995,14 +997,9 @@ export function getFieldArray(intl) {
 				{
 					name: 'publisherLanguage',
 					type: 'select',
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.selectLanguage.label'}),
-					width: 'half',
-					defaultValue: 'eng',
-					options: [
-						{label: 'English (Default Language)', value: 'eng'},
-						{label: 'Suomi', value: 'fin'},
-						{label: 'Svenska', value: 'swe'}
-					]
+					disabled: true,
+					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherLanguage'}),
+					width: 'half'
 				}
 			]
 		},
@@ -1117,14 +1114,14 @@ export function getFieldArray(intl) {
 					width: 'half',
 					defaultValue: 'eng',
 					options: [
-						{label: 'English (Default Language)', value: 'eng'},
+						{label: 'Suomi', value: 'fin'},
+						{label: 'Svenska', value: 'swe'},
+						{label: 'English ', value: 'eng'},
+						{label: 'Sami', value: 'smi'},
 						{label: 'French', value: 'fre'},
 						{label: 'Germany', value: 'ger'},
 						{label: 'Russain', value: 'rus'},
-						{label: 'Sami', value: 'smi'},
-						{label: 'Suomi', value: 'fin'},
 						{label: 'Spanish', value: 'esp'},
-						{label: 'Svenska', value: 'swe'},
 						{label: 'Other', value: 'other'},
 						{label: 'Bilingual', value: 'bilingual'}
 					]
@@ -1134,7 +1131,7 @@ export function getFieldArray(intl) {
 					type: 'dateTime',
 					width: 'half',
 					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.publicationTime'}),
-					min: moment(Date.now()).format('YYYY-MM-DD'),
+					min: moment(Date.now()).format('YYYY-MM'),
 					formName: 'isbnIsmnRegForm'
 				}
 			]

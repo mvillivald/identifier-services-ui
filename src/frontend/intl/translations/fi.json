@@ -510,7 +510,7 @@
     "listComponent.phone" : "Puhelinnumero",
     "listComponent.publisherEmail" : "Sähköposti",
     "listComponent.website" : "Verkkosivu",
-    "listComponent.language" : "Kieli",
+    "listComponent.language" : "Publisher Kieli",
 
     "listComponent.currentYear" : "Arviolta kuinka monta julkaisua kustannatte kuluvana vuonna?",
     "listComponent.nextYear" : "Arvionne kustannusmäärästä ensi vuoden osalta?",
@@ -683,7 +683,7 @@
     "publisherRegistration.form.basicInformation.postalAddress" : "Lähiosoite*",
     "publisherRegistration.form.basicInformation.postalCity" : "Postitoimipakka*",
     "publisherRegistration.form.basicInformation.postalZip" : "Postinumero*",
-    "publisherRegistration.form.basicInformation.phone" : "Puhelinnumero",
+    "publisherRegistration.form.basicInformation.phone" : "Puhelinnumero*",
     "publisherRegistration.form.basicInformation.publisherEmail" : "Sähköpostiosoite*",
     "publisherRegistration.form.basicInformation.website" : "WWW-osoite",
     "publisherRegistration.form.basicInformation.selectLanguage" : "Valitse kieli",
@@ -777,7 +777,7 @@
     "publicationRegistration.form.basicInformation.classification.fiction": "Tietokirjallisuus",
     "publicationRegistration.form.basicInformation.classification.cartoon": "Sarjakuva",
     "publicationRegistration.form.basicInformation.classification.childrenBook": "Lastenkirja",
-    "publicationRegistration.form.basicInformation.manufacturer": "Lisätietoja",
+    "publicationRegistration.form.basicInformation.manufacturer": "Kirjapaino",
     "publicationRegistration.form.basicInformation.additionalDetails": "Kirjapaino",
     "publicationRegistration.form.basicInformation.city": "Postitoimipaikka*",
 
@@ -840,7 +840,6 @@
     "publicationRegistration.form.formatDetails.printed.manufacturer": "Kirjapaino",
     "publicationRegistration.form.formatDetails.printed.city": "Painopaikka",
     "publicationRegistration.form.formatDetails.printed.run": "Painosmäärä",
-    "publicationRegistration.form.formatDetails.printed.edition": "Painos",
 
     "login.normal.button.logout": "Kirjaudu ulos",
 
@@ -868,13 +867,24 @@
     
     "listComponent.organizationDetails" : "Organizational Details",
     "publicationRegistration.form.publisherBasicInfo.code": "Publisher Code",
+    "publicationRegistration.form.formatDetails.printed.edition": "Add the edition?  for example reissue, 2. expanded version etc.",
     "listComponent.code": "Publisher Code",
     "listComponent.publisherRequestDetails": "Publisher Request details",
     "listComponent.publicationRequestDetails": "Publication Request details",
     "publicationList.issn.headRows.publicationType": "Publication Type",
     "publicationList.issn.headRows.email": "Email",
     "publicationList.isbnismn.headRows.publisher" : "Publisher",
-    "publicationList.isbnismn.headRows.Identifier" : "Identifier"
+    "publicationList.isbnismn.headRows.identifier" : "Identifier",
 
+    "message.label.email" : "Email",
+    "message.label.subject" : "Subject",
+    "message.label.body" : "Body",
+    "messageList.list.heading" : "Message List",
+    "app.menu.messages": "Messages",
+    "message.label.message":  "Message",
+
+    "publicationRegistration.form.publisherBasicInfo.publisherLanguage": "Publisher language",
     
+    "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author" 
+
 }

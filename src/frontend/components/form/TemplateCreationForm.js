@@ -61,7 +61,7 @@ const fieldArray = [
 		width: 'half',
 		defaultValue: 'eng',
 		options: [
-			{label: 'English (Default Language)', value: 'eng'},
+			{label: 'English ', value: 'eng'},
 			{label: 'Suomi', value: 'fin'},
 			{label: 'Svenska', value: 'swe'}
 		]
