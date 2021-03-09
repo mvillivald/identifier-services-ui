@@ -57,7 +57,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [isCreating, setIsCreating] = useState(false);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	useEffect(() => {
-		fetchUsersRequestsList({searchText: inputVal, sortStateBy: sortStateBy, token: cookie[COOKIE_NAME], offset: lastCursor});
+		fetchUsersRequestsList({searchText: inputVal, sortStateBy: sortStateBy, token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
 	}, [lastCursor, cursors, inputVal, sortStateBy, fetchUsersRequestsList, cookie, isCreating]);
 

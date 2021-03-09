@@ -49,7 +49,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchMessagesList(cookie[COOKIE_NAME], lastCursor);
+		fetchMessagesList(cookie[COOKIE_NAME], lastCursor, sort: {'lastUpdated.timestamp': -1});
 	}, [lastCursor, cursors, fetchMessagesList, cookie]);
 
 	const handleTableRowClick = id => {

@@ -70,7 +70,7 @@ export const createMessageTemplate = (values, token) => async dispatch => {
 	}
 };
 
-export const fetchMessagesList = (token, offset) => async dispatch => {
+export const fetchMessagesList = (token, offset, sort) => async dispatch => {
 	dispatch(setLoader());
 	try {
 		const response = await fetch(`${API_URL}/messages/query`, {
@@ -82,7 +82,8 @@ export const fetchMessagesList = (token, offset) => async dispatch => {
 			body: JSON.stringify({queries: [{
 				query: {}
 			}],
-			offset: offset})
+			offset: offset,
+			sort: sort})
 		});
 		const result = await response.json();
 		dispatch(success(FETCH_MESSAGES_LIST, result));

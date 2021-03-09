@@ -729,7 +729,7 @@
     "listComponent.phone" : "Phone",
     "listComponent.publisherEmail" : "Publisher email",
     "listComponent.website" : "Website",
-    "listComponent.language" : "Publisher language",  
+    "listComponent.language" : "Language",  
 
     "listComponent.currentYear" : "Publication estimate this year",
     "listComponent.nextYear" : "Publication estimate next year",
@@ -878,6 +878,7 @@
 
     "publicationRegistration.form.publisherBasicInfo.publisherLanguage": "Publisher language",
     "listComponent.contactPerson": "Primary contact name",
+    "listComponent.created": "Created Date",
 
 
     "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author" 

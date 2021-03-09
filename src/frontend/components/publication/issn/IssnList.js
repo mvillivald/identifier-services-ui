@@ -45,7 +45,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [isCreating, setIsCreating] = useState(false);
 
 	useEffect(() => {
-		fetchIssnList({token: cookie[COOKIE_NAME], offset: lastCursor});
+		fetchIssnList({token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
 	}, [lastCursor, cursors, fetchIssnList, cookie, isCreating]);
 

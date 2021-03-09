@@ -508,7 +508,7 @@
     "listComponent.phone" : "Puhelinnumero",
     "listComponent.publisherEmail" : "Sähköposti",
     "listComponent.website" : "Verkkosivu",
-    "listComponent.language" : "Publisher Kieli",
+    "listComponent.language" : "Kieli",
 
     "listComponent.currentYear" : "Arviolta kuinka monta julkaisua kustannatte kuluvana vuonna?",
     "listComponent.nextYear" : "Arvionne kustannusmäärästä ensi vuoden osalta?",
@@ -880,6 +880,7 @@
 
     "publicationRegistration.form.publisherBasicInfo.publisherLanguage": "Publisher language",
     "listComponent.contactPerson": "Primary contact name",
+    "listComponent.created": "Created Date",
     
     "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author" 
 

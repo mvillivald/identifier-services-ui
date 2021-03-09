@@ -91,7 +91,7 @@ export const fetchPublisherOption = token => async dispatch => {
 	}
 };
 
-export const searchPublisher = ({searchText, token, offset, activeCheck}) => async dispatch => {
+export const searchPublisher = ({searchText, token, offset, activeCheck, sort}) => async dispatch => {
 	dispatch(setSearchListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}} :
 		{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}]};
@@ -108,7 +108,8 @@ export const searchPublisher = ({searchText, token, offset, activeCheck}) => asy
 				queries: [{
 					query: query
 				}],
-				offset: offset
+				offset: offset,
+				sort: sort
 			})
 		};
 

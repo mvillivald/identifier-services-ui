@@ -45,7 +45,7 @@ const translations = {
 
 const cache = createIntlCache();
 
-export const fetchUsersList = (token, offset) => async dispatch => {
+export const fetchUsersList = (token, offset, sort) => async dispatch => {
 	dispatch(setListLoader());
 	try {
 		const response = await fetch(`${API_URL}/users/query`, {
@@ -58,7 +58,8 @@ export const fetchUsersList = (token, offset) => async dispatch => {
 				queries: [{
 					query: {}
 				}],
-				offset: offset
+				offset: offset,
+				sort: sort
 			})
 		});
 		const result = await response.json();
@@ -176,7 +177,7 @@ export const fetchUserRequest = (id, token) => async dispatch => {
 	}
 };
 
-export const fetchUsersRequestsList = ({searchText, sortStateBy, token, offset}) => async dispatch => {
+export const fetchUsersRequestsList = ({searchText, sortStateBy, token, offset, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	try {
 		const properties = {
@@ -190,7 +191,8 @@ export const fetchUsersRequestsList = ({searchText, sortStateBy, token, offset})
 				queries: [{
 					query: {state: sortStateBy, $or: [{publisher: searchText}, {givenName: searchText}]}
 				}],
-				offset: offset
+				offset: offset,
+				sort: sort
 			})
 		};
 		const response = await fetch(`${API_URL}/requests/users/query`, properties);

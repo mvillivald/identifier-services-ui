@@ -52,7 +52,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchIssnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor});
+		fetchIssnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
 	}, [cookie, fetchIssnRequestsList, inputVal, sortStateBy, lastCursor]);
 
 	const handleTableRowClick = id => {

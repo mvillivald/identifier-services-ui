@@ -55,7 +55,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [isCreating, setIsCreating] = useState(false);
 
 	useEffect(() => {
-		fetchUsersList(cookie[COOKIE_NAME], lastCursor);
+		fetchUsersList(cookie[COOKIE_NAME], lastCursor, {'lastUpdated.timestamp': -1});
 		setIsCreating(false);
 	}, [lastCursor, cursors, fetchUsersList, cookie, isCreating]);
 
