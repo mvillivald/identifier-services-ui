@@ -182,15 +182,9 @@ export const fieldArray = [
 				isMulti: false
 			},
 			{
-				name: 'givenName',
+				name: 'contactPerson',
 				type: 'text',
-				label: <FormattedMessage id="publisherRegistration.form.basicInformation.givenName"/>,
-				width: 'half'
-			},
-			{
-				name: 'familyName',
-				type: 'text',
-				label: <FormattedMessage id="publisherRegistration.form.basicInformation.familyName"/>,
+				label: <FormattedMessage id="publisherRegistration.form.basicInformation.contactPerson"/>,
 				width: 'half'
 			},
 			{
@@ -207,7 +201,8 @@ export const fieldArray = [
 			},
 			{
 				name: 'language',
-				type: 'select',
+				type: 'text',
+				disable: true,
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.language"/>,
 				width: 'half'
 			}

@@ -191,7 +191,7 @@ export default connect(mapStateToProps, actions)(props => {
 					Address_Line_2: publisher.postalAddress && publisher.postalAddress.city ? (publisher.postalAddress.zip ? `${publisher.postalAddress.zip} ${publisher.postalAddress.city}` : '') : '',
 					Address_Line_3: '',
 					Address_Line_4: '',
-					Admin_Contact_Name: publisher.givenName ? (publisher.familyName ? publisher.givenName : `${publisher.givenName} ${publisher.familyName}`) : '',
+					Admin_Contact_Name: publisher.contactPerson ? publisher.contactPerson : '',
 					Admin_Phone: publisher.phone ? publisher.phone : '',
 					Admin_Fax: '',
 					Admin_Email: publisher.email ? publisher.email : '',

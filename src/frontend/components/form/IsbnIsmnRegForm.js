@@ -238,8 +238,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		function formatPublicationValues(values) {
 			const dissertPublisher = !isAuthenticated && (publicationValues.type.value === 'dissertation' ?
 				{
-					givenName: values.givenName,
-					familyName: values.familyName,
+					contactPerson: values.contactPerson,
 					address: values.address,
 					zip: values.zip,
 					city: values.city,
@@ -298,8 +297,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				insertUniversity,
 				university,
 				place,
-				givenName,
-				familyName,
+				contactPerson,
 				address,
 				zip,
 				city,
@@ -449,12 +447,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={formatPublicationValue.publisher && formatPublicationValue.publisher.phone ? formatPublicationValue.publisher.phone : ''}
 								/>
 								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.givenName'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.givenName ? formatPublicationValue.publisher.givenName : ''}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.familyName'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.familyName ? formatPublicationValue.publisher.familyName : ''}
+									label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+									value={formatPublicationValue.publisher && formatPublicationValue.publisher.contactPerson ? formatPublicationValue.publisher.contactPerson : ''}
 								/>
 								<ListComponent
 									label={intl.formatMessage({id: 'listComponent.email'})}
@@ -977,15 +971,9 @@ export function getFieldArray(intl) {
 					width: 'half'
 				},
 				{
-					name: 'givenName',
+					name: 'contactPerson',
 					type: 'text',
-					label: <FormattedMessage id="publicationRegistration.form.basicInformation.givenName"/>,
-					width: 'half'
-				},
-				{
-					name: 'familyName',
-					type: 'text',
-					label: <FormattedMessage id="publicationRegistration.form.basicInformation.familyName"/>,
+					label: <FormattedMessage id="publicationRegistration.form.basicInformation.contactPerson"/>,
 					width: 'half'
 				},
 				{
@@ -996,7 +984,7 @@ export function getFieldArray(intl) {
 				},
 				{
 					name: 'publisherLanguage',
-					type: 'select',
+					type: 'text',
 					disabled: true,
 					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherLanguage'}),
 					width: 'half'
@@ -1044,15 +1032,9 @@ export function getFieldArray(intl) {
 		{
 			contactInfo: [
 				{
-					name: 'givenName',
+					name: 'contactPerson',
 					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.givenName'}),
-					width: 'half'
-				},
-				{
-					name: 'familyName',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.familyName'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.contactInfo.contactPerson'}),
 					width: 'half'
 				},
 				{

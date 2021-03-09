@@ -275,8 +275,7 @@
     "publicationRender.label.publicationType": "Julkaisun tyyppi",
     "publicationRender.label.authors": "Tekijät",
     "publicationRender.label.publicationTime": "Julkaisuaika",
-    "publicationRender.label.givenName": "Etunimi",
-    "publicationRender.label.familyName": "Sukunimi",
+    "publicationRender.label.contactPerson": "Yhteyshenkilön nimi",
     "publicationRender.label.role": "Rooli",
     "publicationRender.label.seriesDetails": "Sarjan tiedot",
     "publicationRender.label.volume": "Numero",
@@ -341,8 +340,7 @@
     "publicationRequest.label.publisherDetails": "Kustantajan tiedot",
     
     "publisherRender.label.lastUpdated": "Viimeksi päivitetty",
-    "publisherRender.label.givenName": "Etunimi",
-    "publisherRender.label.familyName": "Viimeksi päivitetty",
+    "publisherRender.label.contactPerson": "Yhteyshenkilön nimi",
     "publisherRender.label.country": "Maa",
     "publisherRender.label.timestamp": "Sukunimi",
     "publisherRender.label.user": "käyttäjä",
@@ -686,9 +684,8 @@
     "publisherRegistration.form.basicInformation.phone" : "Puhelinnumero*",
     "publisherRegistration.form.basicInformation.publisherEmail" : "Sähköpostiosoite*",
     "publisherRegistration.form.basicInformation.website" : "WWW-osoite",
-    "publisherRegistration.form.basicInformation.selectLanguage" : "Valitse kieli",
-    "publisherRegistration.form.basicInformation.givenName": "Yhteyshenkilön etunimi",
-    "publisherRegistration.form.basicInformation.familyName": "Yhteyshenkilön sukunimi",
+    "publisherRegistration.form.basicInformation.language" : "Kieli",
+    "publisherRegistration.form.basicInformation.contactPerson": "Yhteyshenkilön nimi*",
     "publisherRegistration.form.basicInformation.email": "Yhteyshenkilön sähköpostiosoite*",
 
     "publisherRegistration.form.publishingActivities.frequency.currentYear" : "Kuinka monta julkaisua kustannatte kuluvana vuonna?*",
@@ -742,7 +739,7 @@
     "publicationRegistration.form.publisherBasicInfo.zip": "Postinumero*",
     "publicationRegistration.form.publisherBasicInfo.phone": "Puhelinnumero*",
     "publicationRegistration.form.publisherBasicInfo.email": "Sähköpostiosoite*",
-    "publicationRegistration.form.publisherBasicInfo.givenName": "Yhteyshenkilön nimi",
+    "publicationRegistration.form.publisherBasicInfo.contactPerson": "Yhteyshenkilön nimi",
     "publicationRegistration.form.publisherBasicInfo.familyName": "Yhteyshenkilön sukunimi",
     "publicationRegistration.form.publisherBasicInfo.selectLanguage.label": "Valitse kieli",
 
@@ -756,8 +753,7 @@
     "publicationRegistration.form.publishingActivities.occasional": "Satunnaista",
     "publicationRegistration.form.publishingActivities.continuous": "Jatkuvaa",
 
-    "publicationRegistration.form.contactInfo.givenName": "Etunimi*",
-    "publicationRegistration.form.contactInfo.familyName": "Sukunimi*",
+    "publicationRegistration.form.contactInfo.contactPerson": "Yhteyshenkilön nimi*",
     "publicationRegistration.form.contactInfo.address": "Lähiosoite*",
     "publicationRegistration.form.contactInfo.zip": "Postinumero*",
     "publicationRegistration.form.contactInfo.city": "Postitoimipaikka*",
@@ -767,8 +763,7 @@
 
     "publicationRegistration.form.basicInformation.title": "Nimeke*",
     "publicationRegistration.form.basicInformation.subtitle": "Alanimeke",
-    "publicationRegistration.form.basicInformation.familyName": "Sukunimi",
-    "publicationRegistration.form.basicInformation.givenName": "Etunimi",
+    "publicationRegistration.form.basicInformation.contactPerson": "Yhteyshenkilön nimi",
     "publicationRegistration.form.basicInformation.email": "Sähköposti",
     "publicationRegistration.form.basicInformation.language.title": "Valitse kieli*",
     "publicationRegistration.form.basicInformation.publicationTime": "Julkaisuaika*",
@@ -849,7 +844,7 @@
     "publicationRequestRender.button.label.sendMessage": "Lähetä viesti",
     "publicationRequest.label.firstYear": "Ilmestynyt alkaen (vuosi)",
     "publicationRequest.label.selectFormat": "Valitse julkaisumuoto",
-    "publicationRequest.label.givenName": "Etunimi",
+    "publicationRequest.label.contactPerson": "Yhteyshenkilön nimi",
     "publisherRender.label.publisherCategory": "Kustantajan tyyppi",
 
     "user.label.identifier": "Identifier",
@@ -884,6 +879,7 @@
     "message.label.message":  "Message",
 
     "publicationRegistration.form.publisherBasicInfo.publisherLanguage": "Publisher language",
+    "listComponent.contactPerson": "Primary contact name",
     
     "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author" 
 

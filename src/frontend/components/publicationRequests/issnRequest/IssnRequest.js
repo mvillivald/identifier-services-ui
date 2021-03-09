@@ -267,15 +267,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						/>
 						<ListComponent
 							edit={isEdit && isEditable}
-							fieldName="publisher[givenName]"
-							label={intl.formatMessage({id: 'listComponent.givenName'})}
-							value={issnRequest.publisher && issnRequest.publisher.givenName ? issnRequest.publisher.givenName : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="publisher[familyName]"
-							label={intl.formatMessage({id: 'listComponent.familyName'})}
-							value={issnRequest.publisher && issnRequest.publisher.familyName ? issnRequest.publisher.familyName : ''}
+							fieldName="publisher[contactPerson]"
+							label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+							value={issnRequest.publisher && issnRequest.publisher.contactPerson ? issnRequest.publisher.contactPerson : ''}
 						/>
 						<ListComponent
 							edit={isEdit && isEditable}

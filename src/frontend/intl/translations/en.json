@@ -99,9 +99,8 @@
     "publisherRegistration.form.basicInformation.phone" : "Phone*",
     "publisherRegistration.form.basicInformation.publisherEmail" : "Publisher email*",
     "publisherRegistration.form.basicInformation.website" : "Website",
-    "publisherRegistration.form.basicInformation.selectLanguage" : "Select language",
-    "publisherRegistration.form.basicInformation.givenName": "Primary contact name",
-    "publisherRegistration.form.basicInformation.familyName": "Primary contact family name",
+    "publisherRegistration.form.basicInformation.language" : "Publisher's language",
+    "publisherRegistration.form.basicInformation.contactPerson": "Primary contact name*",
     "publisherRegistration.form.basicInformation.email": "Primary contact email*",
 
     "publisherRegistration.form.publishingActivities.frequency.currentYear" : "Publication estimate this year*",
@@ -158,8 +157,7 @@
     "publicationRegistration.form.publisherBasicInfo.zip": "Zip*",
     "publicationRegistration.form.publisherBasicInfo.phone": "Phone*",
     "publicationRegistration.form.publisherBasicInfo.email": "Primary contact email*",
-    "publicationRegistration.form.publisherBasicInfo.givenName": "Primary contact name",
-    "publicationRegistration.form.publisherBasicInfo.familyName": "Primary contact family name",
+    "publicationRegistration.form.publisherBasicInfo.contactPerson": "Primary contact name*",
 
     "publicationRegistration.form.publishingActivities.thisYear": "Publication estimate this year*",
     "publicationRegistration.form.publishingActivities.nextYear": "Publication estimate next year*",
@@ -171,8 +169,7 @@
     "publicationRegistration.form.publishingActivities.occasional": "Occasional",
     "publicationRegistration.form.publishingActivities.continuous": "Continuous",
 
-    "publicationRegistration.form.contactInfo.givenName": "First name*",
-    "publicationRegistration.form.contactInfo.familyName": "Last name*",
+    "publicationRegistration.form.contactInfo.contactPerson": "Primary contact name*",
     "publicationRegistration.form.contactInfo.address": "Address*",
     "publicationRegistration.form.contactInfo.zip": "Postcode/zip*",
     "publicationRegistration.form.contactInfo.city": "City*",
@@ -182,8 +179,7 @@
 
     "publicationRegistration.form.basicInformation.title": "Title*",
     "publicationRegistration.form.basicInformation.subtitle": "Sub-Title",
-    "publicationRegistration.form.basicInformation.familyName": "Family Name",
-    "publicationRegistration.form.basicInformation.givenName": "Given name",
+    "publicationRegistration.form.basicInformation.contactPerson": "Primary contact name*",
     "publicationRegistration.form.basicInformation.email": "Email*",
     "publicationRegistration.form.basicInformation.language.title": "Select Language*",
     "publicationRegistration.form.basicInformation.publicationTime": "Publication time*",
@@ -502,8 +498,7 @@
     "publicationRender.label.publicationType": "Publication type",
     "publicationRender.label.authors": "Authors",
     "publicationRender.label.publicationTime": "Publication time",
-    "publicationRender.label.givenName": "Given name",
-    "publicationRender.label.familyName": "Family name",
+    "publicationRender.label.contactPerson": "Primary contact name",
     "publicationRender.label.role": "Role",
     "publicationRender.label.seriesDetails": "Series details",
     "publicationRender.label.volume": "Volume",
@@ -568,8 +563,7 @@
     "publicationRequest.label.publisherDetails": "Publisher details",
        
     "publisherRender.label.lastUpdated": "Last updated",
-    "publisherRender.label.givenName": "Given name",
-    "publisherRender.label.familyName": "Last updated",
+    "publisherRender.label.contactPerson": "Primary contact name",
     "publisherRender.label.country": "Country",
     "publisherRender.label.timestamp": "Family name",
     "publisherRender.label.user": "User",
@@ -841,8 +835,7 @@
 
     "publicationRequest.label.firstYear": "First Year",
     "publicationRequest.label.selectFormat": "Select Format",
-    "publicationRequest.label.givenName": "Given Name",
-    "publicationRequest.label.familyName": "Family Name",
+    "publicationRequest.label.contactPerson": "Primary contact name",
 
     "publisherRender.label.publisherCategory": "Publisher Category",
 
@@ -884,6 +877,8 @@
     "message.label.message":  "Message",
 
     "publicationRegistration.form.publisherBasicInfo.publisherLanguage": "Publisher language",
+    "listComponent.contactPerson": "Primary contact name",
+
 
     "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author" 
 

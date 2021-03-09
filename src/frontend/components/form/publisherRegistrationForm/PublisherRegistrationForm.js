@@ -267,14 +267,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publisherValues.email ? publisherValues.email : ''}
 								/>
 								<ListComponent
-									fieldName="givenName"
-									label={intl.formatMessage({id: 'listComponent.givenName'})}
-									value={publisherValues.givenName ? publisherValues.givenName : ''}
-								/>
-								<ListComponent
-									fieldName="familyName"
-									label={intl.formatMessage({id: 'listComponent.familyName'})}
-									value={publisherValues.familyName ? publisherValues.familyName : ''}
+									fieldName="contactPerson"
+									label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+									value={publisherValues.contactPerson ? publisherValues.contactPerson : ''}
 								/>
 								<ListComponent
 									fieldName="publisherType"

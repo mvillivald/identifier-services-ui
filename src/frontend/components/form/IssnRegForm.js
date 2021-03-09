@@ -272,14 +272,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								value={formatValues.publisher && formatValues.publisher.phone ? formatValues.publisher.phone : ''}
 							/>
 							<ListComponent
-								fieldName="publisher[givenName]"
-								label={intl.formatMessage({id: 'listComponent.givenName'})}
-								value={formatValues.publisher && formatValues.publisher.givenName ? formatValues.publisher.givenName : ''}
-							/>
-							<ListComponent
-								fieldName="publisher[familyName]"
-								label={intl.formatMessage({id: 'listComponent.familyName'})}
-								value={formatValues.publisher && formatValues.publisher.familyName ? formatValues.publisher.familyName : ''}
+								fieldName="publisher[contactPerson]"
+								label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+								value={formatValues.publisher && formatValues.publisher.contactPerson ? formatValues.publisher.contactPerson : ''}
 							/>
 							<ListComponent
 								fieldName="publisher[email]"
@@ -607,15 +602,9 @@ function getFieldArray(intl) {
 					width: 'half'
 				},
 				{
-					name: 'givenName',
+					name: 'contactPerson',
 					type: 'text',
-					label: <FormattedMessage id="publisherRegistration.form.basicInformation.givenName"/>,
-					width: 'half'
-				},
-				{
-					name: 'familyName',
-					type: 'text',
-					label: <FormattedMessage id="publisherRegistration.form.basicInformation.familyName"/>,
+					label: <FormattedMessage id="publisherRegistration.form.basicInformation.contactPerson"/>,
 					width: 'half'
 				},
 				{
