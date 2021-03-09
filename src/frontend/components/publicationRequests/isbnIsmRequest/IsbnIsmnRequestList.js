@@ -47,7 +47,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [inputVal, setSearchInputVal] = useState('');
 	const [page, setPage] = React.useState(1);
 	const [cursors] = useState([]);
-	const [sortStateBy, setSortStateBy] = useState('');
+	const [sortStateBy, setSortStateBy] = useState('new');
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 

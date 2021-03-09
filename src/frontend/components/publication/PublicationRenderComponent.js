@@ -371,6 +371,7 @@ export default connect(mapStateToProps, actions)(props => {
 							value={publication.request ? publication.request : ''}
 						/>
 						<ListComponent
+							fieldName="timestamp"
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 							value={publication.lastUpdated ?
 								(publication.lastUpdated.timestamp ?
@@ -633,6 +634,7 @@ export default connect(mapStateToProps, actions)(props => {
 							value={publication.request ? publication.request : ''}
 						/>
 						<ListComponent
+							fieldName="timestamp"
 							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 							value={publication.lastUpdated ?
 								(publication.lastUpdated.timestamp ?

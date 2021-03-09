@@ -403,6 +403,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Typography>
 									<hr/>
 									<ListComponent
+										fieldName="timestamp"
 										label={intl.formatMessage({id: 'listComponent.timestamp'})}
 										value={formattedPublisherRequest.created ?
 											(formattedPublisherRequest.created.timestamp ?
@@ -425,6 +426,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Typography>
 									<hr/>
 									<ListComponent
+										fieldName="timestamp"
 										label={intl.formatMessage({id: 'listComponent.timestamp'})}
 										value={formattedPublisherRequest.lastUpdated ?
 											(formattedPublisherRequest.lastUpdated.timestamp ?

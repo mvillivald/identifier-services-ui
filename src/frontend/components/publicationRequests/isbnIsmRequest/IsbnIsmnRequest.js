@@ -569,6 +569,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}
 								/>
 								<ListComponent
+									fieldName="timestamp"
 									label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 									value={publicationIsbnIsmnRequest.lastUpdated ?
 										(publicationIsbnIsmnRequest.lastUpdated.timestamp ?

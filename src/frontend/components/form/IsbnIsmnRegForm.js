@@ -642,6 +642,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								value={formatPublicationValue.creator ? formatPublicationValue.creator : ''}
 							/>
 							<ListComponent
+								fieldName="timestamp"
 								label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 								value={formatPublicationValue.lastUpdated ?
 									(formatPublicationValue.lastUpdated.timestamp ?

@@ -539,6 +539,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Typography>
 									<hr/>
 									<ListComponent
+										fieldName="timestamp"
 										label={intl.formatMessage({id: 'listComponent.timestamp'})}
 										value={issnRequest.created ?
 											(issnRequest.created.timestamp ?
@@ -561,6 +562,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Typography>
 									<hr/>
 									<ListComponent
+										fieldName="timestamp"
 										label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
 										value={issnRequest.lastUpdated ?
 											(issnRequest.lastUpdated.timestamp ?

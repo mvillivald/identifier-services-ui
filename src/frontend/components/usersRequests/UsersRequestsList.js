@@ -50,7 +50,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
 	const [inputVal, setSearchInputVal] = useState('');
-	const [sortStateBy, setSortStateBy] = useState('');
+	const [sortStateBy, setSortStateBy] = useState('new');
 	const [page, setPage] = useState(1);
 	const [cursors] = useState([]);
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);

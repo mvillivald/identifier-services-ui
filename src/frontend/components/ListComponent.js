@@ -3,6 +3,8 @@ import React from 'react';
 import {Grid, ListItem, ListItemText, Chip, Typography, Link} from '@material-ui/core';
 import {Field, FieldArray} from 'redux-form';
 import {FormattedMessage, useIntl} from 'react-intl';
+import moment from 'moment';
+
 import renderTextField from './form/render/renderTextField';
 import renderSelect from './form/render/renderSelect';
 import renderMultiSelect from './form/render/renderMultiSelect';
@@ -65,6 +67,8 @@ export default function (props) {
 										getClassificationValue(Number(value), classificationCodes)
 									) : fieldName === 'publisherCategory' ? (
 										getPublisherCategory(value, publisherCategory)
+									) : fieldName === 'timestamp' ? (
+										moment(Number(value)).format('L')
 									) : linkPath ?
 										<Link href={linkPath} color="primary"> {value} </Link> :
 										value

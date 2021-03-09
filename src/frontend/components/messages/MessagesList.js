@@ -58,7 +58,7 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
-		{id: 'sn', label: 'S.N'},
+		{id: 'empty', label: ''},
 		{id: 'email', label: intl.formatMessage({id: 'message.label.email'})},
 		{id: 'subject', label: intl.formatMessage({id: 'message.label.subject'})},
 		{id: 'body', label: intl.formatMessage({id: 'message.label.body'})}
@@ -72,7 +72,7 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		messageData = (
 			<TableComponent
-				data={messagesList.map((item, index) => usersDataRender(item, index))}
+				data={messagesList.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
@@ -87,11 +87,11 @@ export default connect(mapStateToProps, actions)(props => {
 		);
 	}
 
-	function usersDataRender(item, index) {
+	function usersDataRender(item) {
 		const {id, email, subject, body} = item;
 		return {
 			id: id,
-			sn: index + 1,
+			empty: '',
 			email: email,
 			subject: subject,
 			body: `${Buffer.from(body).toString('base64').slice(0, 20)}... `
