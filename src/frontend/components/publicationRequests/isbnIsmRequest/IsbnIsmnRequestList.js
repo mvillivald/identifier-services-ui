@@ -67,6 +67,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const headRows = [
 		{id: 'state', label: <FormattedMessage id="publicationList.isbnismn.headRows.state"/>},
 		{id: 'title', label: <FormattedMessage id="publicationList.isbnismn.headRows.title"/>},
+		{id: 'publisher', label: <FormattedMessage id="publicationList.isbnismn.headRows.publisher"/>},
+		{id: 'additionalDetails', label: <FormattedMessage id="publicationList.isbnismn.headRows.additionalDetails"/>},
 		{id: 'language', label: <FormattedMessage id="publicationList.isbnismn.headRows.language"/>}
 	];
 
@@ -79,7 +81,7 @@ export default connect(mapStateToProps, actions)(props => {
 		publicationIsbnIsmnRequestData = (
 			<TableComponent
 				data={publicationIsbnIsmnRequestList
-					.map(item => publicationIsbnIsmnRequestRender(item.id, item.state, item.title, item.language))}
+					.map(item => publicationIsbnIsmnRequestRender({id: item.id, state: item.state, title: item.title, language: item.language, publisher: item.publisher, additionalDetails: item.additionalDetails ? item.additionalDetails : ''}))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
@@ -93,11 +95,13 @@ export default connect(mapStateToProps, actions)(props => {
 		);
 	}
 
-	function publicationIsbnIsmnRequestRender(id, state, title, language) {
+	function publicationIsbnIsmnRequestRender({id, state, title, language, publisher, additionalDetails}) {
 		return {
 			id: id,
 			state: state,
 			title: title,
+			publisher: publisher.name ? publisher.name : (publisher.university ? publisher.university.name : ''),
+			additionalDetails: `${additionalDetails.slice(0, 20)}...`,
 			language: language
 		};
 	}

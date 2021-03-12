@@ -68,7 +68,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		publisherOption,
 		match,
 		createIsbnBatch,
-		createIsmnBatch
+		createIsmnBatch,
+		fetchMarc,
+		fetchedMarc
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -155,6 +157,18 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleOnClickSendMessage() {
 		setSendingMessage(true);
+	}
+
+	function handleOnClickShowMarc() {
+		fetchMarc(isbnIsmn.metadataReference.id, cookie[COOKIE_NAME]);
+	}
+
+	function handleOnClickPrint() {
+		console.log('this is pring')
+	}
+
+	function handleOnClickSaveMarc() {
+		console.log('save marc')
 	}
 
 	function handleOnClickSend() {
@@ -257,18 +271,46 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<div className={classes.listItem}>
 								{role !== undefined && role === 'admin' &&
 									<div className={classes.btnContainer}>
-										<Grid item xs={12}>
+										<Grid container item xs={12}>
 											{
 												(subRangeId === null || subRangeId === undefined) &&
-													<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
-														<FormattedMessage id="publicationRequestRender.button.label.assignRanges"/>
-													</Button>
+													<Grid item xs={2}>
+														<Button disabled={disableAssign} className={classes.buttons} variant="outlined" color="primary" onClick={handleRange}>
+															<FormattedMessage id="publicationRender.button.label.assignRanges"/>
+														</Button>
+													</Grid>
 											}
 											{
 												isbnIsmn.associatedRange && Object.keys(isbnIsmn.associatedRange).length > 0 &&
-													<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
-														<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
-													</Button>
+													<Grid item xs={2}>
+														<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
+															<FormattedMessage id="button.label.sendMessage"/>
+														</Button>
+													</Grid>
+											}
+											{
+												isbnIsmn.metadataReference && isbnIsmn.metadataReference.state === 'processed' &&
+													<Grid item xs={2}>
+														<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickShowMarc}>
+															<FormattedMessage id="publicationRender.button.label.showMarc"/>
+														</Button>
+													</Grid>
+											}
+											{
+												isbnIsmn.metadataReference && isbnIsmn.metadataReference.state === 'processed' &&
+													<Grid item xs={2}>
+														<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickSaveMarc}>
+															<FormattedMessage id="publicationRender.button.label.saveMarc"/>
+														</Button>
+													</Grid>
+											}
+											{
+												isbnIsmn &&
+													<Grid item xs={2}>
+														<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
+															<FormattedMessage id="button.label.print"/>
+														</Button>
+													</Grid>
 											}
 										</Grid>
 										<Fab
@@ -302,6 +344,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 function mapStateToProps(state) {
 	return ({
 		isbnIsmn: state.publication.isbnIsmn,
+		fetchedMarc: state.publication.fetchedMarc,
 		initialValues: formatInitialValues(state.publication.isbnIsmn),
 		publisherOption: state.publisher.publisherOptions,
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,

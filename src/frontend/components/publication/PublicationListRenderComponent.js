@@ -31,6 +31,7 @@ import {connect} from 'react-redux';
 import {Grid, Typography} from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
 
+import SearchComponent from '../SearchComponent';
 import {commonStyles} from '../../styles/app';
 import Spinner from '../Spinner';
 import TableComponent from '../TableComponent';
@@ -52,6 +53,8 @@ export default connect(mapStateToProps)(props => {
 		isbnIsmn,
 		issn,
 		handleTableRowClick,
+		setSearchInputVal,
+		fetchIsbnIsmnList,
 		rowSelectedId
 	} = props;
 
@@ -101,6 +104,7 @@ export default connect(mapStateToProps)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
+			<SearchComponent offset={offset} searchFunction={fetchIsbnIsmnList} setSearchInputVal={setSearchInputVal}/>
 			{usersData}
 			{issn ?	<Issn {...props}/> : (
 				isbnIsmn ?	<IsbnIsmn {...props}/> : null

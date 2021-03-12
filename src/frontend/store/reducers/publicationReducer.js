@@ -40,7 +40,8 @@ import {
 	PUBLICATION_ISBN_ISMN_REQUEST,
 	ISSN_REQUESTS_LIST,
 	ISSN_REQUEST,
-	ISSN_STATISTICS
+	ISSN_STATISTICS,
+	FETCH_MARC
 } from '../actions/types';
 
 const initialState = {
@@ -64,6 +65,7 @@ const initialState = {
 	listLoading: false,
 	loading: false,
 	issnStatistics: null,
+	fetchedMarc: null,
 	error: {}
 };
 
@@ -156,6 +158,12 @@ export default function (state = initialState, action) {
 				...state,
 				issnStatistics: action.payload,
 				listLoading: false
+			};
+		case FETCH_MARC:
+			return {
+				...state,
+				fetchedMarc: action.payload,
+				loading: false
 			};
 		case ERROR:
 			return {

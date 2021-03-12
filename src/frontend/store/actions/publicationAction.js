@@ -40,14 +40,18 @@ import {
 	PUBLICATION_ISBN_ISMN_REQUEST,
 	ISSN_REQUESTS_LIST,
 	ISSN_REQUEST,
-	ISSN_STATISTICS
+	ISSN_STATISTICS,
+	FETCH_MARC
 } from './types';
 import moment from 'moment';
+import base64 from 'base-64';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, success, fail, setMessage} from './commonAction';
 
-export const fetchIsbnIsmnList = ({token, offset, sort}) => async dispatch => {
+export const fetchIsbnIsmnList = ({searchText, token, offset, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
+	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
+		{$or: [{title: searchText}, {'identifier.id': searchText}]};
 	try {
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
 			method: 'POST',
@@ -57,7 +61,7 @@ export const fetchIsbnIsmnList = ({token, offset, sort}) => async dispatch => {
 			},
 			body: JSON.stringify({
 				queries: [{
-					query: {}
+					query: query
 				}],
 				offset: offset,
 				sort: sort
@@ -232,6 +236,7 @@ export const publicationCreationRequest = ({values, subType}) => async dispatch 
 
 export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortStateBy, offset, sort}) => async dispatch => {
 	dispatch(setListLoader());
+	const query = {$or: [{title: searchText}, {additionalDetails: searchText}]};
 	try {
 		const response = await fetch(`${API_URL}/requests/publications/isbn-ismn/query`, {
 			method: 'POST',
@@ -241,7 +246,7 @@ export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortSta
 			},
 			body: JSON.stringify({
 				queries: [{
-					query: {state: sortStateBy, title: searchText}
+					query: {...query, state: sortStateBy}
 				}],
 				offset: offset,
 				sort: sort
@@ -357,6 +362,24 @@ export const updateIssnRequest = (id, values, token) => async dispatch => {
 		} else {
 			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
 		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchMarc = (id, token) => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/marc/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		});
+		console.log(response)
+		// const result = await response.json();
+		// dispatch(success(FETCH_MARC, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

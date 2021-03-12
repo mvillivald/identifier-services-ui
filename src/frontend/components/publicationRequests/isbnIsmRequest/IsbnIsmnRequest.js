@@ -397,10 +397,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 						</Grid>
 						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.publicationType'})}
-							value={publicationIsbnIsmnRequest.publicationType ? publicationIsbnIsmnRequest.publicationType : ''}
-						/>
-						<ListComponent
 							edit={isEdit && isEditable} fieldName="isPublic"
 							label={intl.formatMessage({id: 'listComponent.isPublic'})}
 							value={publicationIsbnIsmnRequest.isPublic ? publicationIsbnIsmnRequest.isPublic : ''}
@@ -409,10 +405,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							label={intl.formatMessage({id: 'listComponent.type'})}
 							value={publicationIsbnIsmnRequest.type ? publicationIsbnIsmnRequest.type : ''}
 						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.identifier'})}
-							value={publicationIsbnIsmnRequest.identifier ? publicationIsbnIsmnRequest.identifier : ''}
-						/>
+						{
+							publicationIsbnIsmnRequest.type === 'map' &&
+								<ListComponent
+									label={intl.formatMessage({id: 'listComponent.scale'})}
+									value={publicationIsbnIsmnRequest.scale ? publicationIsbnIsmnRequest.scale : ''}
+								/>
+						}
 					</Grid>
 
 					<Grid item xs={12}>

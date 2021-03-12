@@ -274,6 +274,10 @@ export const commonStyles = makeStyles({
 	},
 	rangeListContainer: {
 		marginTop: 20
+	},
+	buttons: {
+		width: '95%',
+		margin: '0 auto'
 	}
 
 });

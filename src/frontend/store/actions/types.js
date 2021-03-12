@@ -99,3 +99,4 @@ export const ISSN_STATISTICS = 'ISSN_STATISTICS';
 export const SET_FORM_NAME = 'SET_FORM_NAME';
 
 export const GET_NOTIFICATION = 'GET_NOTIFICATION';
+export const FETCH_MARC = 'FETCH_MARC';

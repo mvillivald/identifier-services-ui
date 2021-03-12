@@ -44,11 +44,12 @@ export default connect(mapStateToProps, actions)(props => {
 	const [isbnIsmnId, setIsbnIsmnId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
+	const [inputVal, setSearchInputVal] = (location.state === undefined || location.state === null) ? useState('') : useState(location.state.searchText);
 
 	useEffect(() => {
-		fetchIsbnIsmnList({token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
+		fetchIsbnIsmnList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
-	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating, modal]);
+	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating, modal, inputVal]);
 
 	const handleTableRowClick = id => {
 		setIsbnIsmnId(id);
@@ -77,6 +78,7 @@ export default connect(mapStateToProps, actions)(props => {
 			id={isbnIsmnId}
 			setModal={setModal}
 			setIsCreating={setIsCreating}
+			setSearchInputVal={setSearchInputVal}
 			{...props}
 		/>
 	);

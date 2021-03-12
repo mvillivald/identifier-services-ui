@@ -108,7 +108,8 @@ export {
 	fetchIssnRequestsList,
 	fetchIssnRequest,
 	fetchIssnStatistics,
-	updateIssnRequest
+	updateIssnRequest,
+	fetchMarc
 } from './publicationAction';
 
 export {
