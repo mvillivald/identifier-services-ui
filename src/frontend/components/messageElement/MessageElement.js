@@ -41,13 +41,14 @@ export default connect(mapStateToProps, actions)(props => {
 	const {
 		messageTemplates,
 		messageInfo,
+		fetchAllTemplatesList,
 		fetchMessageTemplate,
 		fetchPublisherOption,
 		publisherOption,
 		messageToBeSend,
 		setMessageToBeSend,
-		setSendingMessage,
 		handleOnClickSend,
+		handleCancelSendMessage,
 		publisherEmail,
 		setPublisherEmail
 	} = props;
@@ -67,6 +68,10 @@ export default connect(mapStateToProps, actions)(props => {
 	useEffect(() => {
 		fetchPublisherOption(cookie[COOKIE_NAME]);
 	}, [cookie, fetchPublisherOption]);
+
+	useEffect(() => {
+		fetchAllTemplatesList(cookie[COOKIE_NAME]);
+	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
 		if (selectedPublisher) {
@@ -112,11 +117,11 @@ export default connect(mapStateToProps, actions)(props => {
 				<RichTextEditor messageInfo={messageInfo} setMessageToBeSend={setMessageToBeSend}/>
 			</Grid>
 			<Grid item xs={12}>
-				<Button variant="outlined" color="primary" onClick={() => setSendingMessage(false)}>
-					<FormattedMessage id="publicationRequestRender.button.label.cancel"/>
+				<Button variant="outlined" color="primary" onClick={handleCancelSendMessage}>
+					<FormattedMessage id="button.label.cancel"/>
 				</Button>
 				<Button disabled={messageToBeSend === null || publisherEmail === null} variant="outlined" color="primary" onClick={handleOnClickSend}>
-					<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
+					<FormattedMessage id="button.label.sendMessage"/>
 				</Button>
 			</Grid>
 		</Grid>

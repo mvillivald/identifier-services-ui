@@ -126,10 +126,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, createNewIsbnRange, createNewIsmnRange, fetchIDR, fetchIDRIsmn, id, newPublisherRangeId, tabsValue]);
 
 	useEffect(() => {
-		fetchAllTemplatesList(cookie[COOKIE_NAME]);
-	}, [cookie, fetchAllTemplatesList]);
-
-	useEffect(() => {
 		if (publisher) {
 			setPublisherEmail(publisher.email);
 		}
@@ -161,6 +157,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function handleRange() {
 		setAssignRange(!assignRange);
 		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
+	}
+
+	function handleCancelSendMessage() {
+		setMessageToBeSend(null);
+		setSendingMessage(false);
+		fetchPublisher(id, cookie[COOKIE_NAME]);
 	}
 
 	function handleOnClickSendMessage() {
@@ -496,10 +498,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				<MessageElement
 					messageToBeSend={messageToBeSend}
 					setMessageToBeSend={setMessageToBeSend}
-					setSendingMessage={setSendingMessage}
 					publisherEmail={publisherEmail}
 					setPublisherEmail={setPublisherEmail}
 					handleOnClickSend={handleOnClickSend}
+					handleCancelSendMessage={handleCancelSendMessage}
 				/> :
 				(
 					isEdit ?
@@ -555,7 +557,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												{
 													publisher.publisherIdentifier && Object.keys(publisher.publisherIdentifier).length > 0 &&
 														<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
-															<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
+															<FormattedMessage id="button.label.sendMessage"/>
 														</Button>
 												}
 												<Fab

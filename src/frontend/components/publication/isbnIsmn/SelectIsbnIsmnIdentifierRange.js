@@ -224,7 +224,9 @@ export default connect(mapStateToProps, actions)(props => {
 												(
 													<ListComponent label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={formattedFetchedPublisher[key]}/>
 												) :
-												null;
+												(key === 'publisherIdentifier' ?
+													<ListComponent label={intl.formatMessage({id: `publisherRender.label.${key}`})} value={arrToStringConcat(formattedFetchedPublisher[key])}/> :
+													null);
 										})
 									}
 								</List>
@@ -248,6 +250,15 @@ export default connect(mapStateToProps, actions)(props => {
 				queryDocCount={queryDocCount}
 			/>
 		);
+	}
+
+	function arrToStringConcat(aliases) {
+		let result = aliases[0];
+		for (let i = 1; i < aliases.length; i++) {
+			result = `${result},  ${aliases[i]}`;
+		}
+
+		return result;
 	}
 
 	function listRender(item) {

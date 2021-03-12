@@ -149,7 +149,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 									props={{className: classes.radioDirectionRow, publicationValues: publicationIsbnValues, clearFields: clearFields}}
 								/>
 							</Grid>
-							{publicationIsbnValues && publicationIsbnValues.selectFormat && subElementFormatDetails({value: publicationIsbnValues.selectFormat, classes, intl})}
+							{publicationIsbnValues && publicationIsbnValues.selectFormat && subElementFormatDetails({value: publicationIsbnValues.selectFormat, type: publicationIsbnValues.type.value, classes, intl})}
 						</>
 					);
 				}
@@ -234,13 +234,13 @@ function getUrl() {
 	];
 }
 
-function subElementFormatDetails({value, classes, intl}) {
+function subElementFormatDetails({value, classes, intl, type}) {
 	const array = getSubFormatDetailsFieldArray(intl);
 	switch (value) {
 		case 'electronic':
 			return element({array: array[0].electronic, fieldName: 'electronic', classes});
 		case 'printed':
-			return element({array: array[1].printed, fieldName: 'printed', classes});
+			return element({array: type === 'dissertation' ? array[1].printed.slice(0, 3) : array[1].printed, fieldName: 'printed', classes});
 		case 'both':
 			return element({array: array[2].both, fieldName: 'both', classes});
 		default:

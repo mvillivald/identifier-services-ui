@@ -521,10 +521,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								/>
 							</Grid>
 							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.publicationType'})}
-								value={formatPublicationValue.publicationType ? formatPublicationValue.publicationType : ''}
-							/>
-							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.isPublic'})}
 								value={formatPublicationValue.isPublic ? formatPublicationValue.isPublic : ''}
 							/>
@@ -532,10 +528,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								label={intl.formatMessage({id: 'listComponent.type'})}
 								value={formatPublicationValue.type ? formatPublicationValue.type : ''}
 							/>
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.identifier'})}
-								value={formatPublicationValue.identifier ? formatPublicationValue.identifier : ''}
-							/>
+							{
+								formatPublicationValue.type === 'map' &&
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.scale'})}
+										value={formatPublicationValue.scale ? formatPublicationValue.scale : ''}
+									/>
+							}
 						</Grid>
 
 						<Grid item xs={12}>

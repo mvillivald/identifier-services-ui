@@ -67,7 +67,10 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
+		{id: 'empty', label: ''},
 		{id: 'name', label: intl.formatMessage({id: 'publisherList.headRows.name'})},
+		{id: 'aliases', label: intl.formatMessage({id: 'publisherList.headRows.aliases'})},
+		{id: 'email', label: intl.formatMessage({id: 'publisherList.headRows.email'})},
 		{id: 'phone', label: intl.formatMessage({id: 'publisherList.headRows.phone'})}
 	];
 	let publishersData;
@@ -78,7 +81,7 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		publishersData = (
 			<TableComponent
-				data={searchedPublishers.map(item => searchResultRender(item.id, item.name, item.phone))}
+				data={searchedPublishers.map(item => searchResultRender({id: item.id, name: item.name, phone: item.phone, aliases: item.aliases, email: item.email}))}
 				handleTableRowClick={handleTableRowClick}
 				headRows={headRows}
 				rowSelectedId={rowSelectedId}
@@ -93,12 +96,24 @@ export default connect(mapStateToProps, actions)(props => {
 		);
 	}
 
-	function searchResultRender(id, name, phone) {
+	function searchResultRender({id, name, phone, aliases, email}) {
 		return {
 			id: id,
+			empty: '',
 			name: name,
+			aliases: aliases ? aliasesArrToString(aliases) : '',
+			email: email,
 			phone: phone
 		};
+	}
+
+	function aliasesArrToString(aliases) {
+		let result = aliases[0];
+		for (let i = 1; i < aliases.length; i++) {
+			result = `${result},  ${aliases[i]}`;
+		}
+
+		return result;
 	}
 
 	const component = (
