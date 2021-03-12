@@ -257,11 +257,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publisherValues.publisherCategory ? publisherValues.publisherCategory.value : ''}
 								/>
 								<ListComponent
-									fieldName="language"
-									label={intl.formatMessage({id: 'listComponent.language'})}
-									value={publisherValues.language ? publisherValues.language : ''}
-								/>
-								<ListComponent
 									fieldName="email"
 									label={intl.formatMessage({id: 'listComponent.email'})}
 									value={publisherValues.email ? publisherValues.email : ''}

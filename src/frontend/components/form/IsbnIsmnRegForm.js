@@ -401,7 +401,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<hr/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.title'})} value={formatPublicationValue.title ? formatPublicationValue.title : ''}/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatPublicationValue.subTitle ? formatPublicationValue.subTitle : ''}/>
-								<ListComponent label={intl.formatMessage({id: 'listComponent.language'})} value={formatPublicationValue.language ? formatPublicationValue.language : ''}/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={formatPublicationValue.publicationTime ? moment(formatPublicationValue.publicationTime).format('YYYY/MM') : ''}/>
 							</Grid>
 							<Grid item xs={12}>
@@ -920,7 +919,7 @@ function mapStateToProps(state) {
 		captcha: state.common.captcha,
 		user: state.login.userInfo,
 		initialValues: {
-			language: 'fin',
+			language: formatLanguage(state.locale.lang),
 			publisherLanguage: formatLanguage(state.locale.lang),
 			insertUniversity: false
 		},
@@ -980,13 +979,6 @@ export function getFieldArray(intl) {
 					name: 'email',
 					type: 'text',
 					label: <FormattedMessage id="publicationRegistration.form.basicInformation.email"/>,
-					width: 'half'
-				},
-				{
-					name: 'publisherLanguage',
-					type: 'text',
-					disabled: true,
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherLanguage'}),
 					width: 'half'
 				}
 			]

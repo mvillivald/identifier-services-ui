@@ -198,13 +198,6 @@ export const fieldArray = [
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.website"/>,
 				width: 'half'
-			},
-			{
-				name: 'language',
-				type: 'text',
-				disable: true,
-				label: <FormattedMessage id="publisherRegistration.form.basicInformation.language"/>,
-				width: 'half'
 			}
 		]
 	},

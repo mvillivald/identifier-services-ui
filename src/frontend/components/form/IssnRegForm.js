@@ -224,7 +224,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<hr/>
 							<ListComponent fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={formatValues.title ? formatValues.title : ''}/>
 							<ListComponent fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatValues.subTitle ? formatValues.subTitle : ''}/>
-							<ListComponent fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={formatValues.language ? formatValues.language : ''}/>
 							<ListComponent fieldName="manufacturer" label={intl.formatMessage({id: 'listComponent.manufacturer'})} value={formatValues.manufacturer ? formatValues.manufacturer : ''}/>
 							<ListComponent fieldName="city" label={intl.formatMessage({id: 'listComponent.city'})} value={formatValues.city ? formatValues.city : ''}/>
 						</Grid>
@@ -553,7 +552,7 @@ function mapStateToProps(state) {
 	return ({
 		language: state.locale.lang,
 		initialValues: {
-			language: 'fin',
+			language: formatLanguage(state.locale.lang),
 			publisherLanguage: formatLanguage(state.locale.lang),
 			postalAddress:
 				{
@@ -611,13 +610,6 @@ function getFieldArray(intl) {
 					name: 'email',
 					type: 'text',
 					label: <FormattedMessage id="publisherRegistration.form.basicInformation.email"/>,
-					width: 'half'
-				},
-				{
-					name: 'publisherLanguage',
-					type: 'text',
-					disable: true,
-					label: intl.formatMessage({id: 'publicationRegistration.form.publisherBasicInfo.publisherLanguage'}),
 					width: 'half'
 				}
 			]
