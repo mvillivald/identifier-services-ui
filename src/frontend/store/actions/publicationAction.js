@@ -40,11 +40,9 @@ import {
 	PUBLICATION_ISBN_ISMN_REQUEST,
 	ISSN_REQUESTS_LIST,
 	ISSN_REQUEST,
-	ISSN_STATISTICS,
-	FETCH_MARC
+	ISSN_STATISTICS
 } from './types';
 import moment from 'moment';
-import base64 from 'base-64';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, success, fail, setMessage} from './commonAction';
 
@@ -377,8 +375,8 @@ export const fetchMarc = (id, token) => async dispatch => {
 				'Content-Type': 'application/json'
 			}
 		});
-		console.log(response)
-		// const result = await response.json();
+		console.log(response);
+		// Const result = await response.json();
 		// dispatch(success(FETCH_MARC, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));

@@ -60,7 +60,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchIDR,
 		fetchIDRIsmn,
 		updatePublisher,
-		fetchAllTemplatesList,
 		match,
 		history,
 		publisher,

@@ -69,8 +69,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		match,
 		createIsbnBatch,
 		createIsmnBatch,
-		fetchMarc,
-		fetchedMarc
+		fetchMarc
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -164,11 +163,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	function handleOnClickPrint() {
-		console.log('this is pring')
+		console.log('this is pring');
 	}
 
 	function handleOnClickSaveMarc() {
-		console.log('save marc')
+		console.log('save marc');
 	}
 
 	function handleOnClickSend() {
