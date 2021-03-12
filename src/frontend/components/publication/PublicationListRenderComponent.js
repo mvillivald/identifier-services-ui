@@ -26,10 +26,11 @@
  *
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Typography} from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
+import {useCookies} from 'react-cookie';
 
 import SearchComponent from '../SearchComponent';
 import {commonStyles} from '../../styles/app';
@@ -55,20 +56,39 @@ export default connect(mapStateToProps)(props => {
 		handleTableRowClick,
 		setSearchInputVal,
 		fetchIsbnIsmnList,
+		fetchAllPublishers,
+		publishersList,
 		rowSelectedId
 	} = props;
 
+	/* global COOKIE_NAME */
+	const [cookie] = useCookies(COOKIE_NAME);
 	const [page, setPage] = useState(1);
+	const [publications, setPublications] = useState(null);
+
+	useEffect(() => {
+		fetchAllPublishers({token: cookie[COOKIE_NAME]});
+	}, [cookie, fetchAllPublishers]);
+
+	useEffect(() => {
+		if (publicationList !== undefined || publicationList !== null || publicationList.length !== 0) {
+			const newPublication = publicationList.map(item => {
+				const publisher = publishersList.find(i => i._id === item.publisher);
+				return {...item, publisher: publisher === undefined ? '' : publisher.name};
+			});
+			setPublications(newPublication);
+		}
+	}, [cookie, publicationList, publishersList]);
 
 	let usersData;
 	if (loading) {
 		usersData = <Spinner/>;
-	} else if (publicationList === undefined || publicationList === null || publicationList.length === 0) {
+	} else if (publications === null) {
 		usersData = <p><FormattedMessage id="publicationListRender.heading.noPublication"/></p>;
 	} else {
 		usersData = (
 			<TableComponent
-				data={publicationList.map(item => usersDataRender(item))}
+				data={publications.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
@@ -118,6 +138,7 @@ export default connect(mapStateToProps)(props => {
 
 function mapStateToProps(state) {
 	return ({
-		loading: state.publication.listLoading
+		loading: state.publication.listLoading,
+		publishersList: state.publisher.publishersList
 	});
 }

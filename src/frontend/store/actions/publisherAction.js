@@ -46,6 +46,7 @@ export const fetchPublisher = (id, token) => async dispatch => {
 		});
 		const result = await response.json();
 		dispatch(success(PUBLISHER, result));
+		return result;
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
@@ -231,7 +232,10 @@ export const fetchAllPublishers = ({identifierType, type, token}) => async dispa
 	try {
 		const query = type ?
 			{query: {identifierType: identifierType.toLowerCase(), type}} :
-			{query: {identifierType: identifierType.toLowerCase()}};
+			(identifierType ?
+				{query: {identifierType: identifierType.toLowerCase()}} :
+				{query: {}}
+			);
 		const properties = {
 			method: 'POST',
 			headers: {
