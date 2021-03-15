@@ -250,6 +250,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				} :
 				{
 					name: values.name,
+					contactPerson: values.contactPerson,
 					postalAddress: values.postalAddress,
 					email: values.email,
 					phone: values.phone && values.phone,
