@@ -27,13 +27,13 @@
  */
 
 import React, {useEffect} from 'react';
-
+import stringTemplate from 'string-template-js';
 import {useQuill} from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
 
 export default function (props) {
 	const theme = 'snow';
-	const {messageInfo, setMessageToBeSend} = props;
+	const {messageInfo, setMessageToBeSend, args} = props;
 	const modules = {
 		toolbar: [
 			['bold', 'italic', 'underline', 'strike'],
@@ -75,11 +75,20 @@ export default function (props) {
 	const {quill, quillRef} = useQuill({theme, modules, formats, placeholder});
 	useEffect(() => {
 		if (quill !== undefined & messageInfo !== null) {
+			const body = Buffer.from(messageInfo.body, 'base64').toString('utf8');
+			const identifierArgs = args && args.identifier && args.identifier.map(item => (`<p key={item.id}>${item.type}---${item.id}<p>`));
+			const newMessageBody = args ?
+				stringTemplate.replace(body, {identifier: identifierArgs}) :
+				stringTemplate.replace(body);
 			quill.clipboard.dangerouslyPasteHTML(
-				`<span>${Buffer.from(messageInfo.body, 'base64').toString('utf8')}</span>`
+				`
+					<div>
+						<span>${newMessageBody}</span>
+					</div>
+				`
 			);
 		}
-	}, [messageInfo, quill]);
+	}, [args, messageInfo, quill]);
 
 	useEffect(() => {
 		if (quill) {

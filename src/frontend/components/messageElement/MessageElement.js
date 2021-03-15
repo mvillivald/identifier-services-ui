@@ -50,6 +50,7 @@ export default connect(mapStateToProps, actions)(props => {
 		handleOnClickSend,
 		handleCancelSendMessage,
 		publisherEmail,
+		publication,
 		setPublisherEmail
 	} = props;
 	const classes = useStyles();
@@ -114,7 +115,7 @@ export default connect(mapStateToProps, actions)(props => {
 					onChange={value => setSelectedTemplate(value)}
 				/>
 				{/* Format and Edit Message */}
-				<RichTextEditor messageInfo={messageInfo} setMessageToBeSend={setMessageToBeSend}/>
+				<RichTextEditor messageInfo={messageInfo} args={{identifier: publication.identifier && publication.identifier}} setMessageToBeSend={setMessageToBeSend}/>
 			</Grid>
 			<Grid item xs={12}>
 				<Button variant="outlined" color="primary" onClick={handleCancelSendMessage}>

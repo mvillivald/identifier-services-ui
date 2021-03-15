@@ -197,6 +197,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			</Typography>
 			{ sendingMessage ?
 				<MessageElement
+					publication={isbnIsmn}
 					messageToBeSend={messageToBeSend}
 					setMessageToBeSend={setMessageToBeSend}
 					setSendingMessage={setSendingMessage}
