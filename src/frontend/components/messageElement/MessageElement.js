@@ -61,10 +61,11 @@ export default connect(mapStateToProps, actions)(props => {
 	const [selectedPublisher, setSelectedPublisher] = useState(null);
 
 	useEffect(() => {
+		setMessageToBeSend(null);
 		if (selectedTemplate !== null) {
 			fetchMessageTemplate(selectedTemplate.value, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchMessageTemplate, selectedTemplate]);
+	}, [cookie, fetchMessageTemplate, selectedTemplate, setMessageToBeSend]);
 
 	useEffect(() => {
 		fetchPublisherOption(cookie[COOKIE_NAME]);
@@ -115,7 +116,14 @@ export default connect(mapStateToProps, actions)(props => {
 					onChange={value => setSelectedTemplate(value)}
 				/>
 				{/* Format and Edit Message */}
-				<RichTextEditor messageInfo={messageInfo} args={{identifier: publication.identifier && publication.identifier}} setMessageToBeSend={setMessageToBeSend}/>
+				<RichTextEditor
+					messageInfo={messageInfo}
+					args={{
+						identifier: publication && publication.identifier && publication.identifier,
+						type: publication && publication.type === 'music' ? 'ISMN' : 'ISBN'
+					}}
+					setMessageToBeSend={setMessageToBeSend}
+				/>
 			</Grid>
 			<Grid item xs={12}>
 				<Button variant="outlined" color="primary" onClick={handleCancelSendMessage}>

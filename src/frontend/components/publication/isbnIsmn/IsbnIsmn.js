@@ -175,6 +175,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		sendMessage({...messageToBeSend, sendTo: publisherEmail}, cookie[COOKIE_NAME]);
 	}
 
+	function handleCancelSendMessage() {
+		setMessageToBeSend(null);
+		setSendingMessage(false);
+		fetchIsbnIsmn({id: id, token: cookie[COOKIE_NAME]});
+		fetchPublisherOption({token: cookie[COOKIE_NAME]});
+	}
+
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
 			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
@@ -203,6 +210,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					setSendingMessage={setSendingMessage}
 					setPublisherEmail={setPublisherEmail}
 					handleOnClickSend={handleOnClickSend}
+					handleCancelSendMessage={handleCancelSendMessage}
 				/> :
 				(
 					isEdit ?

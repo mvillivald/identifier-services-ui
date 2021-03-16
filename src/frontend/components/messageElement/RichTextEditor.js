@@ -76,16 +76,16 @@ export default function (props) {
 	useEffect(() => {
 		if (quill !== undefined & messageInfo !== null) {
 			const body = Buffer.from(messageInfo.body, 'base64').toString('utf8');
-			const identifierArgs = args && args.identifier && args.identifier.map(item => (`<p key={item.id}>${item.type}---${item.id}<p>`));
+			const identifierArgs = args && args.identifier && args.identifier.map(item =>
+				(
+					`<span key={item.id}>${args.type} ${item.id}(${item.type})<span>`
+				)
+			);
 			const newMessageBody = args ?
 				stringTemplate.replace(body, {identifier: identifierArgs}) :
 				stringTemplate.replace(body);
 			quill.clipboard.dangerouslyPasteHTML(
-				`
-					<div>
-						<span>${newMessageBody}</span>
-					</div>
-				`
+				`<span>${newMessageBody}</span>`
 			);
 		}
 	}, [args, messageInfo, quill]);
