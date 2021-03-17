@@ -31,7 +31,10 @@ import {Grid, Button} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
 import Select from 'react-select';
+import {useQuill} from 'react-quilljs';
 import {FormattedMessage} from 'react-intl';
+import stringTemplate from 'string-template-js';
+import 'quill/dist/quill.snow.css';
 
 import RichTextEditor from './RichTextEditor';
 import * as actions from '../../store/actions';
@@ -45,31 +48,90 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchMessageTemplate,
 		fetchPublisherOption,
 		publisherOption,
-		messageToBeSend,
-		setMessageToBeSend,
-		handleOnClickSend,
-		handleCancelSendMessage,
 		publisherEmail,
-		publication,
-		setPublisherEmail
+		fetchIsbnIsmn,
+		fetchIssn,
+		isbnIsmn,
+		issn,
+		sendMessage,
+		location,
+		history
 	} = props;
+	const {state} = location;
 	const classes = useStyles();
 
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [selectedTemplate, setSelectedTemplate] = useState(null);
 	const [selectedPublisher, setSelectedPublisher] = useState(null);
+	const [recipientEmail, setRecipientEmail] = useState(null);
+
+	const [messageToBeSend, setMessageToBeSend] = useState(null);
+	const {type, id} = state;
+
+	const theme = 'snow';
+
+	const modules = {
+		toolbar: [
+			['bold', 'italic', 'underline', 'strike'],
+			[{align: []}],
+
+			[{list: 'ordered'}, {list: 'bullet'}],
+			[{indent: '-1'}, {indent: '+1'}],
+
+			[{size: ['small', false, 'large', 'huge']}],
+			[{header: [1, 2, 3, 4, 5, 6, false]}],
+			['link'],
+			[{color: []}, {background: []}],
+
+			['clean']
+		],
+		clipboard: {
+			matchVisual: false
+		}
+	};
+
+	const placeholder = 'Compose an epic...';
+
+	const formats = [
+		'bold',
+		'italic',
+		'underline',
+		'strike',
+		'align',
+		'list',
+		'indent',
+		'size',
+		'header',
+		'link',
+		'color',
+		'background',
+		'clean'
+	];
+
+	const {quill, quillRef} = useQuill({theme, modules, formats, placeholder});
 
 	useEffect(() => {
-		setMessageToBeSend(null);
 		if (selectedTemplate !== null) {
 			fetchMessageTemplate(selectedTemplate.value, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchMessageTemplate, selectedTemplate, setMessageToBeSend]);
+	}, [cookie, fetchMessageTemplate, selectedTemplate]);
 
 	useEffect(() => {
-		fetchPublisherOption(cookie[COOKIE_NAME]);
-	}, [cookie, fetchPublisherOption]);
+		if (type === 'publisher') {
+			fetchPublisherOption(cookie[COOKIE_NAME]);
+		}
+
+		if (type === 'isbn-ismn') {
+			fetchPublisherOption(cookie[COOKIE_NAME]);
+			fetchIsbnIsmn({id: id, token: cookie[COOKIE_NAME]});
+		}
+
+		if (type === 'issn') {
+			fetchPublisherOption(cookie[COOKIE_NAME]);
+			fetchIssn({id: id, token: cookie[COOKIE_NAME]});
+		}
+	}, [cookie, fetchIsbnIsmn, fetchIssn, fetchPublisherOption, id, type]);
 
 	useEffect(() => {
 		fetchAllTemplatesList(cookie[COOKIE_NAME]);
@@ -77,9 +139,45 @@ export default connect(mapStateToProps, actions)(props => {
 
 	useEffect(() => {
 		if (selectedPublisher) {
-			setPublisherEmail(selectedPublisher.value);
+			setRecipientEmail(selectedPublisher.value);
 		}
-	}, [selectedPublisher, setPublisherEmail]);
+	}, [selectedPublisher]);
+
+	useEffect(() => {
+		if (quill !== undefined && messageInfo !== null) {
+			quill.clipboard.dangerouslyPasteHTML('');
+			const body = Buffer.from(messageInfo.body, 'base64').toString('utf8');
+			if (type === 'isbn-ismn') {
+				const publicationType = isbnIsmn && isbnIsmn.type === 'music' ? 'ISMN' : 'ISBN';
+				const identifierArgs = isbnIsmn && isbnIsmn.identifier && isbnIsmn.identifier.map(item =>
+					(
+						`<span>${publicationType} ${item.id}(${item.type})</span>`
+					)
+				);
+				const newMessageBody = stringTemplate.replace(body, {identifier: identifierArgs});
+				return quill.clipboard.dangerouslyPasteHTML(
+					`<span>${newMessageBody}</span>`
+				);
+			}
+
+			if (type === 'issn') {
+				const publicationType = 'ISSN';
+				const identifierArgs = issn && issn.identifier && issn.identifier.map(item =>
+					(
+						`<span>${publicationType} ${item.id}(${item.type})</span>`
+					)
+				);
+				const newMessageBody = stringTemplate.replace(body, {identifier: identifierArgs});
+				return quill.clipboard.dangerouslyPasteHTML(
+					`<span>${newMessageBody}</span>`
+				);
+			}
+
+			return quill.clipboard.dangerouslyPasteHTML(
+				`<span>${body}</span>`
+			);
+		}
+	}, [isbnIsmn, issn, messageInfo, type]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function messageSelectOptions(templates) {
 		if (templates !== undefined) {
@@ -95,8 +193,29 @@ export default connect(mapStateToProps, actions)(props => {
 		return option.map(item => ({value: item.email, label: item.label}));
 	}
 
+	function handleCancel() {
+		if (quill !== undefined) {
+			quill.clipboard.dangerouslyPasteHTML('');
+		}
+
+		history.push(state.prevPath);
+	}
+
+	function handleOnClickSend() {
+		const div = document.createElement('div');
+		div.innerHTML = messageToBeSend.body;
+		const tooltipElement = div.getElementsByClassName('ql-tooltip ql-hidden')[0];
+		div.removeChild(tooltipElement);
+		if (recipientEmail !== null) {
+			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail}, cookie[COOKIE_NAME]);
+			history.push(state.prevPath);
+		}
+
+		actions.setMessage({color: 'error', msg: 'recipient not defined'});
+	}
+
 	const component = (
-		<Grid className={classes.listItem}>
+		<Grid container item className={classes.listItem} xs={12}>
 			<Grid item xs={12}>
 				<Select
 					isMulti={false}
@@ -118,15 +237,14 @@ export default connect(mapStateToProps, actions)(props => {
 				{/* Format and Edit Message */}
 				<RichTextEditor
 					messageInfo={messageInfo}
-					args={{
-						identifier: publication && publication.identifier && publication.identifier,
-						type: publication && publication.type === 'music' ? 'ISMN' : 'ISBN'
-					}}
+					selectedTemplate={selectedTemplate}
+					quill={quill}
+					quillRef={quillRef}
 					setMessageToBeSend={setMessageToBeSend}
 				/>
 			</Grid>
 			<Grid item xs={12}>
-				<Button variant="outlined" color="primary" onClick={handleCancelSendMessage}>
+				<Button variant="outlined" color="primary" onClick={handleCancel}>
 					<FormattedMessage id="button.label.cancel"/>
 				</Button>
 				<Button disabled={messageToBeSend === null || publisherEmail === null} variant="outlined" color="primary" onClick={handleOnClickSend}>
@@ -144,6 +262,8 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		publisherOption: state.publisher.publisherOptions,
+		isbnIsmn: state.publication.isbnIsmn,
+		issn: state.publication.issn,
 		messageTemplates: state.message.messagesList,
 		messageInfo: state.message.messageInfo
 	});

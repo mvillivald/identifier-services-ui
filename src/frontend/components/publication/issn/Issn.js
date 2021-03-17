@@ -46,7 +46,6 @@ import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import PublicationRenderComponent from '../PublicationRenderComponent';
 import SelectPublicationIdentifierRange from './SelectIssnIdentifierRange';
-import MessageElement from './../../messageElement/MessageElement';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'issnUpdateForm',
@@ -58,14 +57,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		userInfo,
 		fetchIssn,
 		handleSubmit,
-		sendMessage,
 		clearFields,
 		updatePublicationIssn,
 		updatedIssn,
-		fetchAllTemplatesList,
 		match,
 		history,
-		assignIssnRange
+		assignIssnRange,
+		fetchMarc
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -74,9 +72,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [isEdit, setIsEdit] = useState(false);
 	const [disableAssign, setDisableAssign] = useState(true);
 	const [assignRange, setAssignRange] = useState(false);
-	const [publisherEmail, setPublisherEmail] = useState(null);
-	const [sendingMessage, setSendingMessage] = useState(false);
-	const [messageToBeSend, setMessageToBeSend] = useState(null);
 	const [rangeBlockId, setRangeBlockId] = useState(null);
 	const [next, setNext] = useState(false);
 
@@ -88,10 +83,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			fetchIssn({id: id, token: cookie[COOKIE_NAME]});
 		}
 	}, [cookie, fetchIssn, id, updatedIssn]);
-
-	useEffect(() => {
-		fetchAllTemplatesList(cookie[COOKIE_NAME]);
-	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
 		if (Object.keys(issn).length > 0) {
@@ -126,16 +117,24 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	};
 
 	function handleOnClickSendMessage() {
-		setSendingMessage(true);
-	}
-
-	function handleOnClickSend() {
-		setSendingMessage(false);
-		sendMessage({...messageToBeSend, sendTo: publisherEmail}, cookie[COOKIE_NAME]);
+		const path = Buffer.from(`publication=${id}`).toString('base64');
+		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publications/issn/${id}`, type: 'issn', id: id}});
 	}
 
 	function handleRange() {
 		setAssignRange(!assignRange);
+	}
+
+	function handleOnClickShowMarc() {
+		fetchMarc(issn.metadataReference.id, cookie[COOKIE_NAME]);
+	}
+
+	function handleOnClickPrint() {
+		console.log('this is pring');
+	}
+
+	function handleOnClickSaveMarc() {
+		console.log('save marc');
 	}
 
 	function isEditable(key) {
@@ -154,14 +153,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{issn.title ? issn.title : ''}&nbsp;ISSN&nbsp;
 				<FormattedMessage id="listComponent.publicationDetails"/>
 			</Typography>
-			{ sendingMessage ?
-				<MessageElement
-					messageToBeSend={messageToBeSend}
-					setMessageToBeSend={setMessageToBeSend}
-					setSendingMessage={setSendingMessage}
-					setPublisherEmail={setPublisherEmail}
-					handleOnClickSend={handleOnClickSend}
-				/> :
+			{
 				(
 					isEdit ?
 						<div className={classes.listItem}>
@@ -178,7 +170,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									<PublicationRenderComponent
 										issn
 										publication={issn}
-										setPublisherEmail={setPublisherEmail}
 										isEdit={isEdit}
 										clearFields={clearFields}
 										isEditable={isEditable}
@@ -220,14 +211,38 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											<Grid item xs={12}>
 												{
 													<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
-														<FormattedMessage id="publicationRequestRender.button.label.assignRanges"/>
+														<FormattedMessage id="publicationRender.button.label.assignRanges"/>
 													</Button>
 												}
 												{
 													issn.associatedRange && Object.keys(issn.associatedRange).length > 0 &&
 														<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
-															<FormattedMessage id="publicationRequestRender.button.label.sendMessage"/>
+															<FormattedMessage id="button.label.sendMessage"/>
 														</Button>
+												}
+												{
+													issn.metadataReference && issn.metadataReference.state === 'processed' &&
+														<Grid item xs={2}>
+															<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickShowMarc}>
+																<FormattedMessage id="publicationRender.button.label.showMarc"/>
+															</Button>
+														</Grid>
+												}
+												{
+													issn.metadataReference && issn.metadataReference.state === 'processed' &&
+														<Grid item xs={2}>
+															<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickSaveMarc}>
+																<FormattedMessage id="publicationRender.button.label.saveMarc"/>
+															</Button>
+														</Grid>
+												}
+												{
+													issn &&
+														<Grid item xs={2}>
+															<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
+																<FormattedMessage id="button.label.print"/>
+															</Button>
+														</Grid>
 												}
 											</Grid>
 											<Fab
@@ -243,7 +258,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										<PublicationRenderComponent
 											issn
 											publication={issn}
-											setPublisherEmail={setPublisherEmail}
 											isEdit={isEdit}
 											clearFields={clearFields}
 											isEditable={isEditable}
@@ -251,7 +265,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Grid>
 								</div>
 						)
-				)}
+				)
+			}
 		</Grid>
 	);
 	return {
@@ -266,7 +281,6 @@ function mapStateToProps(state) {
 		userInfo: state.login.userInfo,
 		updatedIssn: state.publication.updatedIssn,
 		messageListLoading: state.message.listLoading,
-		messageTemplates: state.message.messagesList,
 		messageInfo: state.message.messageInfo
 	});
 }

@@ -66,6 +66,7 @@ import IDRISNBList from './components/identifierRanges/isbn/RangesList';
 import IDRISMNList from './components/identifierRanges/ismn/RangesList';
 import IDRIssnList from './components/identifierRanges/issn/IssnList';
 import Statistics from './components/statistics';
+import MessageElement from './components/messageElement/MessageElement';
 import Footer from './components/footer';
 import PrivateRoute from './components/PrivateRoutes';
 import theme from './styles/app';
@@ -126,8 +127,8 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		// {path: '/ranges/ismn/:id', role: ['admin'], component: IDRIsbnList},
 		{path: '/ranges/issn', role: ['admin'], component: IDRIssnList},
 		{path: '/ranges/issn/:id', role: ['admin'], component: IDRIssnList},
-		{path: '/statistics', role: ['admin'], component: Statistics}
-
+		{path: '/statistics', role: ['admin'], component: Statistics},
+		{path: '/sendMessage/:id', role: ['admin'], component: MessageElement}
 	];
 
 	const routes = (

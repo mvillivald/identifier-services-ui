@@ -48,7 +48,6 @@ import ListComponent from '../ListComponent';
 import SelectRange from './SelectRange';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {classificationCodes} from '../form/publisherRegistrationForm/formFieldVariable';
-import MessageElement from '../messageElement/MessageElement';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherUpdateForm',
@@ -84,9 +83,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [newPublisherRangeId, setNewPublisherRangeId] = useState(null);
 	const [enableUpdate, setEnableUpdate] = useState(false);
 	const [disableAssign, setDisableAssign] = useState(true);
-	const [sendingMessage, setSendingMessage] = useState(false);
-	const [messageToBeSend, setMessageToBeSend] = useState(null);
-	const [publisherEmail, setPublisherEmail] = useState(null);
 	const [tabsValue, setTabsValue] = useState('isbn');
 
 	const activeCheck = {
@@ -125,12 +121,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, createNewIsbnRange, createNewIsmnRange, fetchIDR, fetchIDRIsmn, id, newPublisherRangeId, tabsValue]);
 
 	useEffect(() => {
-		if (publisher) {
-			setPublisherEmail(publisher.email);
-		}
-	}, [publisher]);
-
-	useEffect(() => {
 		if (Object.keys(publisher).length > 0) {
 			if (publisher.identifier && publisher.identifier.length > 0) {
 				setDisableAssign(true);
@@ -158,20 +148,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
 	}
 
-	function handleCancelSendMessage() {
-		setMessageToBeSend(null);
-		setSendingMessage(false);
-		fetchPublisher(id, cookie[COOKIE_NAME]);
-	}
-
 	function handleOnClickSendMessage() {
-		setSendingMessage(true);
-	}
-
-	function handleOnClickSend() {
-		sendMessage({...messageToBeSend, sendTo: publisherEmail}, cookie[COOKIE_NAME]);
-		setSendingMessage(false);
-		fetchPublisher(id, cookie[COOKIE_NAME]);
+		const path = Buffer.from(`publisher=${id}`).toString('base64');
+		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publishers/${id}`, type: 'publisher'}});
 	}
 
 	function isEditable(key) {
@@ -493,15 +472,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{formattedPublisherDetail.name ? formattedPublisherDetail.name : ''}&nbsp;
 				<FormattedMessage id="listComponent.publisherDetails"/>
 			</Typography>
-			{ sendingMessage ?
-				<MessageElement
-					messageToBeSend={messageToBeSend}
-					setMessageToBeSend={setMessageToBeSend}
-					publisherEmail={publisherEmail}
-					setPublisherEmail={setPublisherEmail}
-					handleOnClickSend={handleOnClickSend}
-					handleCancelSendMessage={handleCancelSendMessage}
-				/> :
+			{
 				(
 					isEdit ?
 						<div className={classes.listItem}>
@@ -596,7 +567,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Grid>
 								</>}
 						</div>
-				)}
+				)
+			}
 		</Grid>
 	);
 	return {

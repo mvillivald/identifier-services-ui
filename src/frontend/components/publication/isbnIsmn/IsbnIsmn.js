@@ -45,7 +45,6 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import PublicationRenderComponent from '../PublicationRenderComponent';
-import MessageElement from '../../messageElement/MessageElement';
 import SelectPublicationIdentifierRange from './SelectIsbnIsmnIdentifierRange';
 import {isbnClassificationCodes} from '../../form/publisherRegistrationForm/formFieldVariable';
 
@@ -59,13 +58,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		userInfo,
 		fetchIsbnIsmn,
 		handleSubmit,
-		sendMessage,
 		clearFields,
 		updatePublicationIsbnIsmn,
 		updatedIsbnIsmn,
 		fetchPublisherOption,
-		fetchAllTemplatesList,
 		publisherOption,
+		history,
 		match,
 		createIsbnBatch,
 		createIsmnBatch,
@@ -82,9 +80,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [subRangeId, setSubRangeId] = useState(null);
 	const [publisherId, setPublisherId] = useState(null);
 	const [disableAssign, setDisableAssign] = useState(true);
-	const [sendingMessage, setSendingMessage] = useState(false);
-	const [messageToBeSend, setMessageToBeSend] = useState(null);
-	const [publisherEmail, setPublisherEmail] = useState(null);
 	const [next, setNext] = useState(false);
 
 	useEffect(() => {
@@ -93,10 +88,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			fetchPublisherOption({token: cookie[COOKIE_NAME]});
 		}
 	}, [cookie, fetchIsbnIsmn, fetchPublisherOption, id, updatedIsbnIsmn, isEdit]);
-
-	useEffect(() => {
-		fetchAllTemplatesList(cookie[COOKIE_NAME]);
-	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
 		if (Object.keys(isbnIsmn).length > 0) {
@@ -155,7 +146,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	function handleOnClickSendMessage() {
-		setSendingMessage(true);
+		const path = Buffer.from(`publication=${id}`).toString('base64');
+		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publications/isbn-ismn/${id}`, type: 'isbn-ismn', id: id}});
 	}
 
 	function handleOnClickShowMarc() {
@@ -163,23 +155,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	function handleOnClickPrint() {
-		console.log('this is pring');
+		console.log('this is print');
 	}
 
 	function handleOnClickSaveMarc() {
 		console.log('save marc');
-	}
-
-	function handleOnClickSend() {
-		setSendingMessage(false);
-		sendMessage({...messageToBeSend, sendTo: publisherEmail}, cookie[COOKIE_NAME]);
-	}
-
-	function handleCancelSendMessage() {
-		setMessageToBeSend(null);
-		setSendingMessage(false);
-		fetchIsbnIsmn({id: id, token: cookie[COOKIE_NAME]});
-		fetchPublisherOption({token: cookie[COOKIE_NAME]});
 	}
 
 	function isEditable(key) {
@@ -202,16 +182,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				{isbnIsmn.title ? isbnIsmn.title : ''}&nbsp;ISBN-ISMN&nbsp;
 				<FormattedMessage id="listComponent.publicationDetails"/>
 			</Typography>
-			{ sendingMessage ?
-				<MessageElement
-					publication={isbnIsmn}
-					messageToBeSend={messageToBeSend}
-					setMessageToBeSend={setMessageToBeSend}
-					setSendingMessage={setSendingMessage}
-					setPublisherEmail={setPublisherEmail}
-					handleOnClickSend={handleOnClickSend}
-					handleCancelSendMessage={handleCancelSendMessage}
-				/> :
+			{
 				(
 					isEdit ?
 						<div className={classes.listItem}>
@@ -228,7 +199,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									<PublicationRenderComponent
 										isbnIsmn
 										publication={isbnIsmn}
-										setPublisherEmail={setPublisherEmail}
 										isEdit={isEdit}
 										clearFields={clearFields} isEditable={isEditable}
 									/>
@@ -334,14 +304,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									<PublicationRenderComponent
 										isbnIsmn
 										publication={isbnIsmn}
-										setPublisherEmail={setPublisherEmail}
 										isEdit={isEdit} clearFields={clearFields}
 										isEditable={isEditable}
 									/>
 								</Grid>
 							</div>
 						)
-				)}
+				)
+			}
 		</Grid>
 	);
 	return {
@@ -358,7 +328,6 @@ function mapStateToProps(state) {
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,
 		userInfo: state.login.userInfo,
 		messageListLoading: state.message.listLoading,
-		messageTemplates: state.message.messagesList,
 		messageInfo: state.message.messageInfo
 	});
 

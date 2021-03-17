@@ -49,8 +49,7 @@ export default connect(mapStateToProps, actions)(props => {
 		clearFields,
 		fetchPublisher,
 		fetchedPublisher,
-		publisherLoading,
-		setPublisherEmail
+		publisherLoading
 	} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
@@ -68,9 +67,8 @@ export default connect(mapStateToProps, actions)(props => {
 	useEffect(() => {
 		if (Object.keys(fetchedPublisher).length > 0) {
 			setPublisherName(fetchedPublisher.name);
-			setPublisherEmail(fetchedPublisher.email);
 		}
-	}, [fetchedPublisher, setPublisherEmail]);
+	}, [fetchedPublisher]);
 
 	function formatValueforAssociatedRange(value) {
 		return value.map(item => item.subRange ? item.subRange : item.block);

@@ -27,79 +27,19 @@
  */
 
 import React, {useEffect} from 'react';
-import stringTemplate from 'string-template-js';
-import {useQuill} from 'react-quilljs';
-import 'quill/dist/quill.snow.css';
 
 export default function (props) {
-	const theme = 'snow';
-	const {messageInfo, setMessageToBeSend, args} = props;
-	const modules = {
-		toolbar: [
-			['bold', 'italic', 'underline', 'strike'],
-			[{align: []}],
-
-			[{list: 'ordered'}, {list: 'bullet'}],
-			[{indent: '-1'}, {indent: '+1'}],
-
-			[{size: ['small', false, 'large', 'huge']}],
-			[{header: [1, 2, 3, 4, 5, 6, false]}],
-			['link'],
-			[{color: []}, {background: []}],
-
-			['clean']
-		],
-		clipboard: {
-			matchVisual: false
-		}
-	};
-
-	const placeholder = 'Compose an epic...';
-
-	const formats = [
-		'bold',
-		'italic',
-		'underline',
-		'strike',
-		'align',
-		'list',
-		'indent',
-		'size',
-		'header',
-		'link',
-		'color',
-		'background',
-		'clean'
-	];
-
-	const {quill, quillRef} = useQuill({theme, modules, formats, placeholder});
-	useEffect(() => {
-		if (quill !== undefined & messageInfo !== null) {
-			const body = Buffer.from(messageInfo.body, 'base64').toString('utf8');
-			const identifierArgs = args && args.identifier && args.identifier.map(item =>
-				(
-					`<span key={item.id}>${args.type} ${item.id}(${item.type})<span>`
-				)
-			);
-			const newMessageBody = args ?
-				stringTemplate.replace(body, {identifier: identifierArgs}) :
-				stringTemplate.replace(body);
-			quill.clipboard.dangerouslyPasteHTML(
-				`<span>${newMessageBody}</span>`
-			);
-		}
-	}, [args, messageInfo, quill]);
+	const {messageInfo, setMessageToBeSend, quill, quillRef} = props;
 
 	useEffect(() => {
 		if (quill) {
 			quill.on('text-change', () => {
-				const text = quill.getText();
 				if (messageInfo !== null) {
-					setMessageToBeSend({...messageInfo, body: text});
+					setMessageToBeSend({...messageInfo, body: quillRef.current.innerHTML});
 				}
 			});
 		}
-	}, [messageInfo, quill, setMessageToBeSend]);
+	}, [messageInfo, quill, quillRef, setMessageToBeSend]);
 
 	const component = (
 		<div style={{width: '100%', minHeight: 400, border: '1px solid lightgray'}}>
