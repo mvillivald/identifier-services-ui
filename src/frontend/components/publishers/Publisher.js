@@ -154,13 +154,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	function isEditable(key) {
-		const nonEditableFields = userInfo.role === 'admin' ?
-			['lastUpdated', '_id', 'isbnRange', 'ismnRange', 'request'] :
-			(userInfo.role === 'publisher' ?
-				['lastUpdated', '_id', 'request', 'metadataDelivery', 'isbnRange', 'ismnRange'] :
-				[]);
+		console.log(key);
+		const nonEditableFields = ['lastUpdated', '_id', 'isbnRange', 'ismnRange', 'request'];
+		const publisherEditableFields = ['phone', 'language', 'contactPerson'];
 
-		return isEdit && !nonEditableFields.includes(key);
+		const result = isEdit && userInfo.role === 'admin' ?
+			!nonEditableFields.includes(key) :
+			(userInfo.role === 'publisher' ?
+				publisherEditableFields.includes(key) :
+				false);
+		console.log(result);
+		return result;
 	}
 
 	const {_id, publisherRangeId, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
@@ -170,273 +174,375 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading) {
 		publisherDetail = <Spinner/>;
 	} else {
-		publisherDetail = (
-			<>
-				<Grid container item xs={6} md={6} spacing={2}>
-					<Grid item xs={12}>
+		publisherDetail = (userInfo.role === 'admin' || userInfo.role === 'publisher') ?
+			(
+				<>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.basicInformations"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable('name')}
+									fieldName="name"
+									label={intl.formatMessage({id: 'listComponent.name'})}
+									value={formattedPublisherDetail.name ? formattedPublisherDetail.name : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('code')}
+									fieldName="code"
+									label={intl.formatMessage({id: 'listComponent.code'})}
+									value={formattedPublisherDetail.code ? formattedPublisherDetail.code : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('phone')}
+									fieldName="phone"
+									label={intl.formatMessage({id: 'listComponent.phone'})}
+									value={formattedPublisherDetail.phone ? formattedPublisherDetail.phone : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('language')}
+									fieldName="language"
+									label={intl.formatMessage({id: 'listComponent.language'})}
+									value={formattedPublisherDetail.language ? formattedPublisherDetail.language : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('email')}
+									fieldName="email"
+									label={intl.formatMessage({id: 'listComponent.email'})}
+									value={formattedPublisherDetail.email ? formattedPublisherDetail.email : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('contactPerson')}
+									fieldName="contactPerson"
+									label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+									value={formattedPublisherDetail.contactPerson ? formattedPublisherDetail.contactPerson : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('publisherCategory')}
+									fieldName="publisherCategory"
+									label={intl.formatMessage({id: 'listComponent.publisherCategory'})}
+									value={formattedPublisherDetail.publisherCategory ? formattedPublisherDetail.publisherCategory : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('publisherType')}
+									fieldName="publisherType"
+									label={intl.formatMessage({id: 'listComponent.publisherType'})}
+									value={formattedPublisherDetail.publisherType ? formattedPublisherDetail.publisherType : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('creator')}
+									fieldName="creator"
+									label={intl.formatMessage({id: 'listComponent.creator'})}
+									value={formattedPublisherDetail.creator ? formattedPublisherDetail.creator : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('website')}
+									fieldName="website"
+									label={intl.formatMessage({id: 'listComponent.website'})}
+									value={formattedPublisherDetail.website ? formattedPublisherDetail.website : ''}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.postalAddress"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[address]')}
+									fieldName="postalAddress[address]"
+									label={intl.formatMessage({id: 'listComponent.address'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.address ?
+										formattedPublisherDetail.postalAddress.address : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[city]')}
+									fieldName="postalAddress[city]"
+									label={intl.formatMessage({id: 'listComponent.city'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.city ?
+										formattedPublisherDetail.postalAddress.city : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[zip]')}
+									fieldName="postalAddress[zip]"
+									label={intl.formatMessage({id: 'listComponent.zip'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.zip ?
+										formattedPublisherDetail.postalAddress.zip : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[public]')}
+									fieldName="postalAddress[public]"
+									label={intl.formatMessage({id: 'listComponent.public'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.public ?
+										formattedPublisherDetail.postalAddress.public : ''}
+								/>
+							</Grid>
+						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
-								<FormattedMessage id="listComponent.basicInformations"/>
+								<FormattedMessage id="listComponent.organizationDetails"/>
 							</Typography>
 							<hr/>
 							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="name"
-								label={intl.formatMessage({id: 'listComponent.name'})}
-								value={formattedPublisherDetail.name ? formattedPublisherDetail.name : ''}
+								edit={isEdit && isEditable('organizationDetails[affiliate]')}
+								fieldName="organizationDetails[affiliate]"
+								label={intl.formatMessage({id: 'listComponent.affiliate'})}
+								value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.affiliate ?
+									formattedPublisherDetail.organizationDetails.affiliate : ''}
 							/>
 							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="code"
-								label={intl.formatMessage({id: 'listComponent.code'})}
-								value={formattedPublisherDetail.code ? formattedPublisherDetail.code : ''}
+								edit={isEdit && isEditable('organizationDetails[distributor]')}
+								fieldName="organizationDetails[distributor]"
+								label={intl.formatMessage({id: 'listComponent.distributor'})}
+								value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.distributor ?
+									formattedPublisherDetail.organizationDetails.distributor : ''}
 							/>
+						</Grid>
+					</Grid>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.aliases"/>
+							</Typography>
+							<hr/>
 							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="phone"
-								label={intl.formatMessage({id: 'listComponent.phone'})}
-								value={formattedPublisherDetail.phone ? formattedPublisherDetail.phone : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="language"
-								label={intl.formatMessage({id: 'listComponent.language'})}
-								value={formattedPublisherDetail.language ? formattedPublisherDetail.language : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="email"
-								label={intl.formatMessage({id: 'listComponent.email'})}
-								value={formattedPublisherDetail.email ? formattedPublisherDetail.email : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="contactPerson"
-								label={intl.formatMessage({id: 'listComponent.contactPerson'})}
-								value={formattedPublisherDetail.contactPerson ? formattedPublisherDetail.contactPerson : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="publisherCategory"
-								label={intl.formatMessage({id: 'listComponent.publisherCategory'})}
-								value={formattedPublisherDetail.publisherCategory ? formattedPublisherDetail.publisherCategory : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="publisherType"
-								label={intl.formatMessage({id: 'listComponent.publisherType'})}
-								value={formattedPublisherDetail.publisherType ? formattedPublisherDetail.publisherType : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="creator"
-								label={intl.formatMessage({id: 'listComponent.creator'})}
-								value={formattedPublisherDetail.creator ? formattedPublisherDetail.creator : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="website"
-								label={intl.formatMessage({id: 'listComponent.website'})}
-								value={formattedPublisherDetail.website ? formattedPublisherDetail.website : ''}
+								edit={isEdit && isEditable('')}
+								fieldName="aliases"
+								clearFields={clearFields}
+								label={intl.formatMessage({id: 'listComponent.aliases'})}
+								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : []}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
-								<FormattedMessage id="listComponent.postalAddress"/>
+								Frequency
 							</Typography>
 							<hr/>
 							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="postalAddress[address]"
-								label={intl.formatMessage({id: 'listComponent.address'})}
-								value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.address ?
-									formattedPublisherDetail.postalAddress.address : ''}
+								edit={isEdit && isEditable('publicationDetails[frequency][currentYear]')}
+								fieldName="publicationDetails[frequency][currentYear]"
+								label={intl.formatMessage({id: 'listComponent.currentYear'})}
+								value={formattedPublisherDetail && formattedPublisherDetail.publicationDetails && formattedPublisherDetail.publicationDetails.frequency && formattedPublisherDetail.publicationDetails.frequency.currentYear ?
+									formattedPublisherDetail.publicationDetails.frequency.currentYear : ''}
 							/>
 							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="postalAddress[city]"
-								label={intl.formatMessage({id: 'listComponent.city'})}
-								value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.city ?
-									formattedPublisherDetail.postalAddress.city : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="postalAddress[zip]"
-								label={intl.formatMessage({id: 'listComponent.zip'})}
-								value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.zip ?
-									formattedPublisherDetail.postalAddress.zip : ''}
-							/>
-							<ListComponent
-								edit={isEdit && isEditable}
-								fieldName="postalAddress[public]"
-								label={intl.formatMessage({id: 'listComponent.public'})}
-								value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.public ?
-									formattedPublisherDetail.postalAddress.public : ''}
+								edit={isEdit && isEditable('publicationDetails[frequency][currentYear]')}
+								fieldName="publicationDetails[frequency][currentYear]"
+								label={intl.formatMessage({id: 'listComponent.nextYear'})}
+								value={formattedPublisherDetail && formattedPublisherDetail.publicationDetails && formattedPublisherDetail.publicationDetails.frequency && formattedPublisherDetail.publicationDetails.frequency.nextYear ?
+									formattedPublisherDetail.publicationDetails.frequency.nextYear : ''}
 							/>
 						</Grid>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.organizationDetails"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[affiliate]"
-							label={intl.formatMessage({id: 'listComponent.affiliate'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.affiliate ?
-								formattedPublisherDetail.organizationDetails.affiliate : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="organizationDetails[distributor]"
-							label={intl.formatMessage({id: 'listComponent.distributor'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.organizationDetails && formattedPublisherDetail.organizationDetails.distributor ?
-								formattedPublisherDetail.organizationDetails.distributor : ''}
-						/>
-					</Grid>
-				</Grid>
-				<Grid container item xs={6} md={6} spacing={2}>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.aliases"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="aliases"
-							clearFields={clearFields}
-							label={intl.formatMessage({id: 'listComponent.aliases'})}
-							value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : []}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							Frequency
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="publicationDetails[frequency][currentYear]"
-							label={intl.formatMessage({id: 'listComponent.currentYear'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.publicationDetails && formattedPublisherDetail.publicationDetails.frequency && formattedPublisherDetail.publicationDetails.frequency.currentYear ?
-								formattedPublisherDetail.publicationDetails.frequency.currentYear : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="publicationDetails[frequency][currentYear]"
-							label={intl.formatMessage({id: 'listComponent.nextYear'})}
-							value={formattedPublisherDetail && formattedPublisherDetail.publicationDetails && formattedPublisherDetail.publicationDetails.frequency && formattedPublisherDetail.publicationDetails.frequency.nextYear ?
-								formattedPublisherDetail.publicationDetails.frequency.nextYear : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.classification"/>
-						</Typography>
-						<hr/>
-						<Grid container style={{display: 'flex', flexDirection: 'column'}}>
-							<ListComponent
-								edit={isEdit && isEditable} fieldName="classification"
-								clearFields={clearFields}
-								label={intl.formatMessage({id: 'listComponent.classification'})}
-								value={formattedPublisherDetail.classification ? formattedPublisherDetail.classification : []}
-							/>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.classification"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent
+									edit={isEdit && isEditable('classification')} fieldName="classification"
+									clearFields={clearFields}
+									label={intl.formatMessage({id: 'listComponent.classification'})}
+									value={formattedPublisherDetail.classification ? formattedPublisherDetail.classification : []}
+								/>
+							</Grid>
 						</Grid>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.publisherIdentifier"/>
-						</Typography>
-						<hr/>
-						<Grid container style={{display: 'flex', flexDirection: 'column'}}>
-							<ListComponent
-								edit={isEdit && isEditable} fieldName="publisherIdentifier"
-								clearFields={clearFields}
-								value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
-							/>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.publisherIdentifier"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent
+									edit={isEdit && isEditable('publisherIdentifier')} fieldName="publisherIdentifier"
+									clearFields={clearFields}
+									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
+								/>
+							</Grid>
 						</Grid>
+						{userInfo.role === 'admin' &&
+							<>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.otherReference"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										fieldName="publisherRangeId"
+										label={intl.formatMessage({id: 'listComponent.publisherRangeId'})}
+										value={formattedPublisherDetail.publisherRangeId ? formattedPublisherDetail.publisherRangeId : ''}
+									/>
+									{userInfo.role === 'admin' && <ListComponent
+										linkPath={`/requests/publishers/${formattedPublisherDetail.request}`}
+										fieldName="request"
+										label={intl.formatMessage({id: 'listComponent.request'})}
+										value={formattedPublisherDetail.request ? formattedPublisherDetail.request : ''}
+									/>}
+									<ListComponent
+										edit={isEdit && isEditable('metadataDelivery')}
+										fieldName="metadataDelivery"
+										label={intl.formatMessage({id: 'listComponent.metadataDelivery'})}
+										value={formattedPublisherDetail.metadataDelivery ? formattedPublisherDetail.metadataDelivery : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.activity"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										edit={isEdit && isEditable('active')}
+										fieldName="active"
+										label={intl.formatMessage({id: 'listComponent.active'})}
+										value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.active ? formattedPublisherDetail.activity.active : ''}
+									/>
+									<ListComponent
+										edit={isEdit && isEditable('yearInactivated')}
+										fieldName="yearInactivated"
+										label={intl.formatMessage({id: 'listComponent.yearInactivated'})}
+										value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.yearInactivated ? formattedPublisherDetail.activity.yearInactivated : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.lastUpdated"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										fieldName="timestamp"
+										label={intl.formatMessage({id: 'listComponent.timestamp'})}
+										value={formattedPublisherDetail.lastUpdated ?
+											(formattedPublisherDetail.lastUpdated.timestamp ?
+												formattedPublisherDetail.lastUpdated.timestamp :
+												''
+											) : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.user'})}
+										value={formattedPublisherDetail.lastUpdated ?
+											(formattedPublisherDetail.lastUpdated.user ?
+												formattedPublisherDetail.lastUpdated.user :
+												''
+											) : ''}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.additionalDetails"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										edit={isEdit && isEditable('additionalDetails')}
+										fieldName="additionalDetails"
+										label={intl.formatMessage({id: 'listComponent.additionalDetails'})}
+										value={formattedPublisherDetail.additionalDetails ? formattedPublisherDetail.additionalDetails : ''}
+									/>
+								</Grid>
+							</>}
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.otherReference"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							fieldName="publisherRangeId"
-							label={intl.formatMessage({id: 'listComponent.publisherRangeId'})}
-							value={formattedPublisherDetail.publisherRangeId ? formattedPublisherDetail.publisherRangeId : ''}
-						/>
-						{userInfo.role === 'admin' && <ListComponent
-							linkPath={`/requests/publishers/${formattedPublisherDetail.request}`}
-							fieldName="request"
-							label={intl.formatMessage({id: 'listComponent.request'})}
-							value={formattedPublisherDetail.request ? formattedPublisherDetail.request : ''}
-						/>}
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="metadataDelivery"
-							label={intl.formatMessage({id: 'listComponent.metadataDelivery'})}
-							value={formattedPublisherDetail.metadataDelivery ? formattedPublisherDetail.metadataDelivery : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.activity"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="active"
-							label={intl.formatMessage({id: 'listComponent.active'})}
-							value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.active ? formattedPublisherDetail.activity.active : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="yearInactivated"
-							label={intl.formatMessage({id: 'listComponent.yearInactivated'})}
-							value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.yearInactivated ? formattedPublisherDetail.activity.yearInactivated : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.lastUpdated"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							fieldName="timestamp"
-							label={intl.formatMessage({id: 'listComponent.timestamp'})}
-							value={formattedPublisherDetail.lastUpdated ?
-								(formattedPublisherDetail.lastUpdated.timestamp ?
-									formattedPublisherDetail.lastUpdated.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.user'})}
-							value={formattedPublisherDetail.lastUpdated ?
-								(formattedPublisherDetail.lastUpdated.user ?
-									formattedPublisherDetail.lastUpdated.user :
-									''
-								) : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.additionalDetails"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable}
-							fieldName="additionalDetails"
-							label={intl.formatMessage({id: 'listComponent.additionalDetails'})}
-							value={formattedPublisherDetail.additionalDetails ? formattedPublisherDetail.additionalDetails : ''}
-						/>
-					</Grid>
-				</Grid>
-			</>
+				</>
 
-		);
+			) : (
+				<>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.basicInformations"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable('name')}
+									fieldName="name"
+									label={intl.formatMessage({id: 'listComponent.name'})}
+									value={formattedPublisherDetail.name ? formattedPublisherDetail.name : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('code')}
+									fieldName="code"
+									label={intl.formatMessage({id: 'listComponent.code'})}
+									value={formattedPublisherDetail.code ? formattedPublisherDetail.code : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('phone')}
+									fieldName="phone"
+									label={intl.formatMessage({id: 'listComponent.phone'})}
+									value={formattedPublisherDetail.phone ? formattedPublisherDetail.phone : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('email')}
+									fieldName="email"
+									label={intl.formatMessage({id: 'listComponent.email'})}
+									value={formattedPublisherDetail.email ? formattedPublisherDetail.email : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('website')}
+									fieldName="website"
+									label={intl.formatMessage({id: 'listComponent.website'})}
+									value={formattedPublisherDetail.website ? formattedPublisherDetail.website : ''}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography variant="h6">
+									<FormattedMessage id="listComponent.postalAddress"/>
+								</Typography>
+								<hr/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[address]')}
+									fieldName="postalAddress[address]"
+									label={intl.formatMessage({id: 'listComponent.address'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.address ?
+										formattedPublisherDetail.postalAddress.address : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[city]')}
+									fieldName="postalAddress[city]"
+									label={intl.formatMessage({id: 'listComponent.city'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.city ?
+										formattedPublisherDetail.postalAddress.city : ''}
+								/>
+								<ListComponent
+									edit={isEdit && isEditable('postalAddress[zip]')}
+									fieldName="postalAddress[zip]"
+									label={intl.formatMessage({id: 'listComponent.zip'})}
+									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.zip ?
+										formattedPublisherDetail.postalAddress.zip : ''}
+								/>
+							</Grid>
+						</Grid>
+					</Grid>
+					<Grid container item xs={6} md={6} spacing={2}>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.aliases"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								edit={isEdit && isEditable('aliases')}
+								fieldName="aliases"
+								clearFields={clearFields}
+								label={intl.formatMessage({id: 'listComponent.aliases'})}
+								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : []}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.publisherIdentifier"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent
+									edit={isEdit && isEditable('publisherIdentifier')} fieldName="publisherIdentifier"
+									clearFields={clearFields}
+									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
+								/>
+							</Grid>
+						</Grid>
+					</Grid>
+				</>
+			);
 	}
 
 	const handlePublisherUpdate = values => {

@@ -70,7 +70,6 @@ import MessageElement from './components/messageElement/MessageElement';
 import Footer from './components/footer';
 import PrivateRoute from './components/PrivateRoutes';
 import theme from './styles/app';
-import Tooltips from './components/Tooltips';
 import enMessages from './intl/translations/en.json';
 import fiMessages from './intl/translations/fi.json';
 import svMessages from './intl/translations/sv.json';
@@ -184,11 +183,6 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 						<AdminNav userInfo={userInfo} isAuthenticated={isAuthenticatedState}/>
 					</Grid>
 					<Grid container item xs={12} className={classes.bodyContainer}>
-						{
-							isAuthenticatedState ? (userInfo.role === 'publisher') &&
-								<Tooltips label="contact form" title="contactForm"/> :
-								null
-						}
 						<Switch>
 							{routes}
 						</Switch>
