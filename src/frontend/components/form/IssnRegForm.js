@@ -155,6 +155,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		function formatPublicationValues(values) {
 			const publisher = isAuthenticated ? user.publisher : {
 				name: values.name,
+				contactPerson: values.contactPerson,
 				postalAddress: values.postalAddress,
 				publisherEmail: values.email,
 				phone: values.phone,

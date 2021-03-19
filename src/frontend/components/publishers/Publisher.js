@@ -572,6 +572,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return old.includes(newValue) ? old : [...old, newValue];
 	}
 
+	function handleOnClickPrint() {
+		console.log('print');
+	}
+
 	const component = (
 		<Grid item xs={12}>
 			<Typography variant="h5" className={classes.titleTopSticky}>
@@ -626,16 +630,40 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<>
 									{
 										isAuthenticated && userInfo.role === 'admin' &&
-											<>
-												<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
-													<FormattedMessage id="publisher.button.label.assignRanges"/>
-												</Button>
+											<Grid container item xs={12}>
+												<Grid item xs={2}>
+													<Button disabled={disableAssign} className={classes.buttons} variant="outlined" color="primary" onClick={handleRange}>
+														<FormattedMessage id="publisher.button.label.assignRanges"/>
+													</Button>
+												</Grid>
 												{
 													publisher.publisherIdentifier && Object.keys(publisher.publisherIdentifier).length > 0 &&
-														<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
-															<FormattedMessage id="button.label.sendMessage"/>
-														</Button>
+														<Grid item xs={2}>
+															<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
+																<FormattedMessage id="button.label.sendMessage"/>
+															</Button>
+														</Grid>
 												}
+												<Grid item xs={2}>
+													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
+														<FormattedMessage id="button.label.print"/>
+													</Button>
+												</Grid>
+												<Grid item xs={2}>
+													<Fab
+														color="primary"
+														size="small"
+														title={intl.formatMessage({id: 'user.fab.label.editUser'})}
+														onClick={handleEditClick}
+													>
+														<EditIcon/>
+													</Fab>
+												</Grid>
+											</Grid>
+									}
+									{
+										isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
+											<Grid item xs={2}>
 												<Fab
 													color="primary"
 													size="small"
@@ -644,18 +672,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												>
 													<EditIcon/>
 												</Fab>
-											</>
-									}
-									{
-										isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
-											<Fab
-												color="primary"
-												size="small"
-												title={intl.formatMessage({id: 'user.fab.label.editUser'})}
-												onClick={handleEditClick}
-											>
-												<EditIcon/>
-											</Fab>
+											</Grid>
 									}
 									{/* {isAuthenticated && userInfo.role === 'publisher' &&
 								<div className={classes.btnContainer}>

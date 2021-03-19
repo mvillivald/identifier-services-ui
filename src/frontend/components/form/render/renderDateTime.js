@@ -30,7 +30,7 @@ import React from 'react';
 import {TextField} from '@material-ui/core';
 
 export default function MaterialUIPickers(props) {
-	const {input, className, label, formName, min, type} = props;
+	const {input, className, label, formName, min, type, pattern} = props;
 
 	const component = (
 		<form noValidate name={formName} className={className.dateContainer}>
@@ -39,7 +39,7 @@ export default function MaterialUIPickers(props) {
 				id={name}
 				label={label}
 				type={type ? type : 'date'}
-				inputProps={{min: min}}
+				inputProps={{min: min, pattern: pattern}}
 				className={className.dateTextField}
 				InputLabelProps={{
 					shrink: true

@@ -83,7 +83,7 @@ export default connect(mapStateToProps)(props => {
 	let usersData;
 	if (loading) {
 		usersData = <Spinner/>;
-	} else if (publications === null) {
+	} else if (publications === null || publications.length === 0) {
 		usersData = <p><FormattedMessage id="publicationListRender.heading.noPublication"/></p>;
 	} else {
 		usersData = (

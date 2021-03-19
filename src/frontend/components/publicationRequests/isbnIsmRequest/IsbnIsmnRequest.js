@@ -348,14 +348,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							fieldName="publisher[publicationDetails][previouslyPublished]"
 							label={intl.formatMessage({id: 'listComponent.previouslyPublished'})}
 							value={publicationIsbnIsmnRequest.publisher && publicationIsbnIsmnRequest.publisher.publicationDetails && publicationIsbnIsmnRequest.publisher.publicationDetails.previouslyPublished ?
-								publicationIsbnIsmnRequest.publisher.publicationDetails.frequency.previouslyPublished : ''}
+								publicationIsbnIsmnRequest.publisher.publicationDetails.previouslyPublished : ''}
 						/>
 						<ListComponent
 							edit={isEdit && isEditable}
 							fieldName="publisher[publicationDetails][publishingActivities]"
 							label={intl.formatMessage({id: 'listComponent.publishingActivities'})}
-							value={publicationIsbnIsmnRequest.publisher && publicationIsbnIsmnRequest.publisher.publicationDetails && publicationIsbnIsmnRequest.publisher.publicationDetails.frequency.publishingActivities ?
-								publicationIsbnIsmnRequest.publisher.publicationDetails.frequency.publishingActivities : ''}
+							value={publicationIsbnIsmnRequest.publisher && publicationIsbnIsmnRequest.publisher.publicationDetails && publicationIsbnIsmnRequest.publisher.publicationDetails.publishingActivities ?
+								publicationIsbnIsmnRequest.publisher.publicationDetails.publishingActivities : ''}
 						/>
 					</Grid>
 					<Grid item xs={12}>
@@ -560,12 +560,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publicationIsbnIsmnRequest.createdResource ? publicationIsbnIsmnRequest.createdResource : ''}
 								/>
 								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.created'})}
+									label={intl.formatMessage({id: 'listComponent.creator'})}
 									value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}
 								/>
 								<ListComponent
 									label={intl.formatMessage({id: 'listComponent.associatedRange'})}
 									value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}
+								/>
+								<ListComponent
+									fieldName="timestamp"
+									label={intl.formatMessage({id: 'listComponent.created'})}
+									value={publicationIsbnIsmnRequest.created ?
+										(publicationIsbnIsmnRequest.created.timestamp ?
+											publicationIsbnIsmnRequest.created.timestamp :
+											''
+										) : ''}
 								/>
 								<ListComponent
 									fieldName="timestamp"

@@ -482,6 +482,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									formatPublicationValue.publisher.publicationDetails.frequency.previouslyPublished : ''}
 							/>
 							<ListComponent
+								fieldName="publishingActivities"
 								label={intl.formatMessage({id: 'listComponent.publishingActivities'})}
 								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency.publishingActivities ?
 									formatPublicationValue.publisher.publicationDetails.frequency.publishingActivities : ''}
@@ -1107,6 +1108,7 @@ export function getFieldArray(intl) {
 					width: 'half',
 					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.publicationTime'}),
 					min: moment(Date.now()).format('YYYY-MM'),
+					pattern: '[0-9]{4}-[0-9]{2}',
 					formName: 'isbnIsmnRegForm'
 				}
 			]

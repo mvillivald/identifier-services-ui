@@ -42,6 +42,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							label={list.label}
 							name={list.name}
 							min={list.min}
+							pattern={list.pattern}
 							type="month"
 							formName={list.formName}
 						/>
