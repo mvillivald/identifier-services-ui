@@ -39,7 +39,7 @@ export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeT
 			rangeType === 'subRange' ?
 				{$or: [{isbnRangeId: searchText}, {publisherId: searchText}], active: true} :
 				(rangeType === 'isbnBatch' ?
-					{publisherIdentifierRangeId: searchText} :
+					{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
 						{prefix: searchText, active: true}))
@@ -48,7 +48,7 @@ export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeT
 			rangeType === 'subRange' ?
 				{$or: [{isbnRangeId: searchText}, {publisherId: searchText}]} :
 				(rangeType === 'isbnBatch' ?
-					{publisherIdentifierRangeId: searchText} :
+					{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
 						{prefix: searchText}))
@@ -219,7 +219,7 @@ export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeT
 			rangeType === 'subRange' ?
 				{$or: [{ismnRangeId: searchText}, {publisherId: searchText}], active: true} :
 				(rangeType === 'ismnBatch' ?
-					{publisherIdentifierRangeId: searchText} :
+					{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
 						{prefix: searchText, active: true}))
@@ -228,7 +228,7 @@ export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeT
 			rangeType === 'subRange' ?
 				{$or: [{ismnRangeId: searchText}, {publisherId: searchText}]} :
 				(rangeType === 'ismnBatch' ?
-					{publisherIdentifierRangeId: searchText} :
+					{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
 						{prefix: searchText}))
