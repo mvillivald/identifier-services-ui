@@ -251,7 +251,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</Typography>
 							<hr/>
 							<ListComponent edit={isEdit && isEditable} fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={publicationIsbnIsmnRequest.title ? publicationIsbnIsmnRequest.title : ''}/>
-							<ListComponent edit={isEdit && isEditable} fieldName="subTitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publicationIsbnIsmnRequest.subTitle ? publicationIsbnIsmnRequest.subTitle : ''}/>
+							<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publicationIsbnIsmnRequest.subtitle ? publicationIsbnIsmnRequest.subtitle : ''}/>
 							<ListComponent edit={isEdit && isEditable} fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={publicationIsbnIsmnRequest.language ? publicationIsbnIsmnRequest.language : ''}/>
 							<ListComponent edit={isEdit && isEditable} fieldName="publicationTime" label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={publicationIsbnIsmnRequest.publicationTime ? publicationIsbnIsmnRequest.publicationTime : ''}/>
 						</Grid>

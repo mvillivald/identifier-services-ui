@@ -42,7 +42,7 @@ import useStyles from '../../styles/form';
 import Captcha from '../Captcha';
 import ListComponent from '../ListComponent';
 import {element as publisherElement, fieldArrayElement} from './commons';
-import {getMultipleSelectInstruction, getCreateableSelectInstruction, formatLanguage} from './commons';
+import {getMultipleSelectInstruction, getCreateableSelectInstruction, getUrlInstruction, formatLanguage} from './commons';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'issnRegForm',
@@ -86,13 +86,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 0:
 						return publisherElement({array: fieldArray[1].basicInformation, classes, clearFields});
 					case 1:
-						return withFormTitle({arr: fieldArray[2].Time, publicationValues, clearFields});
+						return publisherElement({array: fieldArray[2].formatDetails, fieldName: 'formatDetails', publicationIssnValues: publicationValues, classes, clearFields, intl});
 					case 2:
-						return withFormTitle({arr: fieldArray[3].PreviousPublication, publicationValues, clearFields});
+						return withFormTitle({arr: fieldArray[3].Time, publicationValues, clearFields});
 					case 3:
-						return withFormTitle({arr: fieldArray[4].SeriesDetails, publicationValues, clearFields});
+						return withFormTitle({arr: fieldArray[4].PreviousPublication, publicationValues, clearFields});
 					case 4:
-						return publisherElement({array: fieldArray[5].formatDetails, publicationIssnValues: publicationValues, classes, clearFields, intl});
+						return withFormTitle({arr: fieldArray[5].SeriesDetails, publicationValues, clearFields});
 					case 5:
 						return renderAdditionalInformation();
 					case 6:
@@ -109,13 +109,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					case 1:
 						return publisherElement({array: fieldArray[1].basicInformation, classes, clearFields});
 					case 2:
-						return withFormTitle({arr: fieldArray[2].Time, publicationValues, clearFields});
+						return publisherElement({array: fieldArray[2].formatDetails, fieldName: 'formatDetails', publicationIssnValues: publicationValues, classes, clearFields, intl});
 					case 3:
-						return withFormTitle({arr: fieldArray[3].PreviousPublication, publicationValues, clearFields});
+						return withFormTitle({arr: fieldArray[3].Time, publicationValues, clearFields});
 					case 4:
-						return withFormTitle({arr: fieldArray[4].SeriesDetails, publicationValues, clearFields});
+						return withFormTitle({arr: fieldArray[4].PreviousPublication, publicationValues, clearFields});
 					case 5:
-						return publisherElement({array: fieldArray[5].formatDetails, publicationIssnValues: publicationValues, classes, clearFields, intl});
+						return withFormTitle({arr: fieldArray[5].SeriesDetails, publicationValues, clearFields});
 					case 6:
 						return renderAdditionalInformation();
 					case 7:
@@ -180,7 +180,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			function reFormat(value) {
 				const {issnFormatDetails, formatDetails} = value;
 				return issnFormatDetails.reduce((acc, item) => {
-					const data = item.value === 'online' ? {format: item.value, url: formatDetails.url} : {format: item.value};
+					const data = item.value === 'online' ? {format: item.value, url: `https://${formatDetails.url}`} : {format: item.value};
 					acc.push(data);
 					return acc;
 				}, []);
@@ -658,6 +658,38 @@ function getFieldArray(intl) {
 			]
 		},
 		{
+			formatDetails: [
+				{
+					name: 'issnFormatDetails',
+					type: 'multiSelect',
+					width: 'half',
+					isMulti: true,
+					isCreatable: true,
+					instructions: getMultipleSelectInstruction(),
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails'}),
+					options: [
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.online'}), value: 'online'},
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cdRom'}), value: 'CD-ROM'}
+					]
+				},
+				{
+					label: 'URL',
+					name: 'formatDetails[url]',
+					type: 'text',
+					width: 'half',
+					instructions: getUrlInstruction()
+				},
+				{
+					name: 'manufacturer',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.manufacturer'}),
+					width: 'half'
+				}
+
+			]
+		},
+		{
 			Time: [
 				{
 					title: 'Time Details',
@@ -677,7 +709,9 @@ function getFieldArray(intl) {
 						{
 							name: 'frequency',
 							type: 'multiSelect',
+							isCreatable: true,
 							width: 'half',
+							instructions: getCreateableSelectInstruction(),
 							label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency'}),
 							options: [
 								{label: '', value: ''},
@@ -688,6 +722,7 @@ function getFieldArray(intl) {
 								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.biyearly'}), value: 'bi-yearly'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.quarterly'}), value: 'quarterly'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.bimonthly'}), value: 'bi-monthly'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.sixtimesayear'}), value: '"six-times/year"'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.continuously'}), value: 'continuously'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.Time.frequency.irregular'}), value: 'irregular'}
 
@@ -745,23 +780,6 @@ function getFieldArray(intl) {
 							width: 'half'
 						}
 					]
-				},
-				{
-					title: 'Other Medium',
-					fields: [
-						{
-							name: 'otherMedium[title]',
-							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.title'}),
-							width: 'half'
-						},
-						{
-							name: 'otherMedium[identifier]',
-							type: 'text',
-							label: intl.formatMessage({id: 'publicationRegistration.form.PreviousPublication.identifier'}),
-							width: 'half'
-						}
-					]
 				}
 			]
 		},
@@ -804,30 +822,6 @@ function getFieldArray(intl) {
 			]
 		},
 		{
-			formatDetails: [
-				{
-					name: 'issnFormatDetails',
-					type: 'multiSelect',
-					width: 'half',
-					isMulti: true,
-					isCreatable: true,
-					instructions: getIssnFormatDetailsInstruction(),
-					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails'}),
-					options: [
-						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.online'}), value: 'online'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cdRom'}), value: 'CD-ROM'}
-					]
-				},
-				{
-					name: 'manufacturer',
-					type: 'text',
-					label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.manufacturer'}),
-					width: 'half'
-				}
-			]
-		},
-		{
 			additionalDetails: 'additionalDetails'
 		},
 		{
@@ -836,13 +830,4 @@ function getFieldArray(intl) {
 	];
 
 	return fields;
-}
-
-function getIssnFormatDetailsInstruction() {
-	return (
-		<>
-			{getMultipleSelectInstruction()}
-			{getCreateableSelectInstruction()}
-		</>
-	);
 }

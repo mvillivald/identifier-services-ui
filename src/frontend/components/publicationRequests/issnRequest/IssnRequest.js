@@ -212,7 +212,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={issnRequest.title ? issnRequest.title : ''}/>
-						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={issnRequest.subTitle ? issnRequest.subTitle : ''}/>
+						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={issnRequest.subtitle ? issnRequest.subtitle : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={issnRequest.language ? issnRequest.language : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="manufacturer" label={intl.formatMessage({id: 'listComponent.manufacturer'})} value={issnRequest.manufacturer ? issnRequest.manufacturer : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="city" label={intl.formatMessage({id: 'listComponent.city'})} value={issnRequest.city ? issnRequest.city : ''}/>
@@ -275,7 +275,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							edit={isEdit && isEditable}
 							fieldName="publisher[email]"
 							label={intl.formatMessage({id: 'listComponent.email'})}
-							value={issnRequest.publisher && issnRequest.publisher.email ? issnRequest.publisher.email : ''}
+							value={issnRequest.publisher && issnRequest.publisher.publisherEmail ? issnRequest.publisher.publisherEmail : ''}
 						/>
 						<ListComponent
 							edit={isEdit && isEditable}

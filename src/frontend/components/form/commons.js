@@ -78,12 +78,6 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 								options={list.options}
 								props={{isMulti: list.isMulti ? list.isMulti : false, creatable: list.isCreatable ? list.isCreatable : false}}
 							/>
-							{
-								publicationIssnValues && publicationIssnValues.issnFormatDetails &&
-								(publicationIssnValues.issnFormatDetails.some(item => item.value === 'online')) ?
-									element({array: getUrl(), classes, clearFields}) :
-									null
-							}
 						</Grid>
 					</Grid>
 				);
@@ -124,6 +118,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							label={list.label}
 							name={list.name}
 							type={list.type}
+							infoIconComponent={list.instructions && <PopoverComponent icon={<HelpIcon/>} infoText={list.instructions}/>}
 							disabled={list.disable}
 						/>
 					</Grid>
@@ -222,17 +217,6 @@ export function fieldArrayElement({data, fieldName, clearFields, formName, publi
 	return {
 		...comp
 	};
-}
-
-function getUrl() {
-	return [
-		{
-			label: 'URL*',
-			name: 'formatDetails[url]',
-			type: 'text',
-			width: 'half'
-		}
-	];
 }
 
 function subElementFormatDetails({value, classes, intl, type}) {
@@ -410,6 +394,16 @@ export function getCreateableSelectInstruction() {
 		<>
 			<Typography>
 				<FormattedMessage id="form.createableSelectInstruction"/>
+			</Typography>
+		</>
+	);
+}
+
+export function getUrlInstruction() {
+	return (
+		<>
+			<Typography>
+				<FormattedMessage id="form.urlInstruction"/>
 			</Typography>
 		</>
 	);

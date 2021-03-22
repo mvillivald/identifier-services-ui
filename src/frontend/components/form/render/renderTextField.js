@@ -33,7 +33,7 @@ import ErrorIcons from '@material-ui/icons/ErrorOutline';
 import useStyles from '../../../styles/error';
 
 export default function (props) {
-	const {input, label, className, type, meta, disabled, errors, ...custom} = props;
+	const {input, label, className, infoIconComponent, type, meta, disabled, errors, ...custom} = props;
 	const {touched, error} = meta;
 	const classes = useStyles();
 	const component = (
@@ -58,10 +58,10 @@ export default function (props) {
 				<Typography variant="caption" color="error" className={classes.errors}><ErrorIcons fontSize="inherit"/>{errors}</Typography>
 			)}
 		</>
+		{infoIconComponent && infoIconComponent}
 	</InputAdornment>
 				}}
 			/>
-
 		</>
 	);
 

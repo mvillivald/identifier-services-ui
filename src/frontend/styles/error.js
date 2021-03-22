@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 	errors: {
 		position: 'absolute',
 		padding: 0,
-		right: 0
+		right: 24
 	},
 	selectErrors: {
 		padding: 0,
