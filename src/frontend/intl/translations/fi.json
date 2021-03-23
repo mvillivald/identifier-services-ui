@@ -885,8 +885,10 @@
     "button.label.print": "Print",
     "button.label.sendMessage": "Send message",
     "button.label.cancel": "Cancel",
+    "button.label.proceedings": "Proceedings",
     
     "form.instructionAddAuthor": "Fill required(*) fields and click on add button to add author",
+    "form.urlInstruction": "eg. www.kansallikirjsto.fi",
     "app.home.instructionCompletingFormHeading": "Instructions for completing the forms",
     "publicationList.isbnismn.headRows.additionalDetails": "Additional Information",
 

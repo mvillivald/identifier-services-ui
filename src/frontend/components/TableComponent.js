@@ -131,7 +131,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function (props) {
-	const {data, headRows, handleTableRowClick, rowSelectedId} = props;
+	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings} = props;
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
 	const [orderBy, setOrderBy] = React.useState(headRows[0].id);
@@ -164,7 +164,7 @@ export default function (props) {
 									selected={row.userId ? row.userId === rowSelectedId : row.id === rowSelectedId}
 									classes={{selected: classes.selected}}
 									className={classes.tableRow}
-									onClick={() => handleTableRowClick(row.userId ? row.userId : row.id)}
+									onClick={() => handleTableRowClick && handleTableRowClick(row.userId ? row.userId : (proceedings ? {type: row.type, id: row.id} : row.id))}
 								>
 									{headRows.reduce((acc, h) => {
 										Object.keys(row).forEach(key => (key !== 'id' && key !== 'mongoId') && (

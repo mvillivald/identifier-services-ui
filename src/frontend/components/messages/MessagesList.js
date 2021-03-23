@@ -94,7 +94,7 @@ export default connect(mapStateToProps, actions)(props => {
 			empty: '',
 			email: email,
 			subject: subject,
-			body: `${Buffer.from(body).toString('base64').slice(0, 20)}... `
+			body: `${Buffer.from(body, 'base64').toString('utf8').slice(0, 20)}... `
 		};
 	}
 

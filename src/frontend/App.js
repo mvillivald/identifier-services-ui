@@ -45,6 +45,7 @@ import NewUserPasswordResetForm from './components/form/NewUserPasswordResetForm
 import Publisher from './components/publishers/Publisher';
 import PublishersList from './components/publishers/PublishersList';
 import PublisherProfile from './components/publishers/PublisherProfile';
+import Proceedings from './components/publishers/Proceedings';
 import User from './components/users/User';
 import UsersList from './components/users/UsersList';
 import IsbnIsmnList from './components/publication/isbnIsmn/IsbnIsmnList';
@@ -92,6 +93,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/', component: Home},
 		{path: '/publishers', component: PublishersList},
 		{path: '/publishers/:id', component: Publisher},
+		{path: '/publishers/proceedings/:id', component: Proceedings},
 		{path: '/users/passwordReset/:token', component: NewUserPasswordResetForm},
 		{path: '/publishers/profile/:id', component: PublisherProfile}
 	];

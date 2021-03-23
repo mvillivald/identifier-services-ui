@@ -208,17 +208,21 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<div className={classes.listItem}>
 									{role !== undefined && role === 'admin' &&
 										<div className={classes.btnContainer}>
-											<Grid item xs={12}>
+											<Grid container item xs={12}>
 												{
-													<Button disabled={disableAssign} variant="outlined" color="primary" onClick={handleRange}>
-														<FormattedMessage id="publicationRender.button.label.assignRanges"/>
-													</Button>
+													<Grid item xs={2}>
+														<Button disabled={disableAssign} className={classes.buttons} variant="outlined" color="primary" onClick={handleRange}>
+															<FormattedMessage id="publicationRender.button.label.assignRanges"/>
+														</Button>
+													</Grid>
 												}
 												{
 													issn.associatedRange && Object.keys(issn.associatedRange).length > 0 &&
-														<Button variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
-															<FormattedMessage id="button.label.sendMessage"/>
-														</Button>
+														<Grid item xs={2}>
+															<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickSendMessage}>
+																<FormattedMessage id="button.label.sendMessage"/>
+															</Button>
+														</Grid>
 												}
 												{
 													issn.metadataReference && issn.metadataReference.state === 'processed' &&

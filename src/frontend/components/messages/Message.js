@@ -36,6 +36,8 @@ import {
 import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
+import {useQuill} from 'react-quilljs';
+import 'quill/dist/quill.snow.css';
 
 import {commonStyles} from '../../styles/app';
 import * as actions from '../../store/actions';
@@ -47,6 +49,19 @@ export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
+
+	const theme = 'snow';
+
+	const {quill, quillRef} = useQuill({theme});
+
+	useEffect(() => {
+		if (quill !== undefined && messageInfo !== null) {
+			quill.clipboard.dangerouslyPasteHTML(
+				`<span>${Buffer.from(messageInfo.body, 'base64').toString('utf8')}}</span>`
+			);
+			quill.enable(false);
+		}
+	}, [messageInfo]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		const token = cookie[COOKIE_NAME];
@@ -65,28 +80,26 @@ export default connect(mapStateToProps, actions)(props => {
 					<ListItem>
 						<ListItemText>
 							<Grid container>
-								<Grid item xs={4}>
+								<Grid item xs={1}>
 									<strong>
 										<FormattedMessage id="message.label.email"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={8}>{messageInfo.email}</Grid>
+								<Grid item xs={11}>{messageInfo.email}</Grid>
 							</Grid>
 							<Grid container>
-								<Grid item xs={4}>
+								<Grid item xs={1}>
 									<strong>
 										<FormattedMessage id="message.label.subject"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={8}>{messageInfo.subject}</Grid>
+								<Grid item xs={11}>{messageInfo.subject}</Grid>
 							</Grid>
 							<Grid container>
-								<Grid item xs={4}>
-									<strong>
-										<FormattedMessage id="message.label.message"/>
-									</strong>
-								</Grid>
-								<Grid item xs={8}>{Buffer.from(messageInfo.body, 'base64').toString('utf8')}</Grid>
+								<div style={{width: '100%', minHeight: 400, border: '1px solid lightgray'}}>
+									<div ref={quillRef}/>
+								</div>
+								{/* <Grid item xs={8}>{Buffer.from(messageInfo.body, 'base64').toString('utf8')}</Grid> */}
 							</Grid>
 						</ListItemText>
 					</ListItem>
@@ -96,7 +109,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const component = (
-		<div className={classes.listItem}>
+		<div style={{width: '100%', margin: '60px'}}>
 			<Grid container spacing={3} className={classes.listItemSpinner}>
 				{messageDetail}
 			</Grid>

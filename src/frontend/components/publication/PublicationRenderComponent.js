@@ -625,7 +625,8 @@ export default connect(mapStateToProps, actions)(props => {
 							References
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
+						{publication.publicationType === 'isbn-ismn' &&
+							<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>}
 						<ListComponent
 							linkPath={`/requests/publications/isbn-ismn/${publication.request}`}
 							label={intl.formatMessage({id: 'listComponent.request'})}

@@ -31,12 +31,14 @@ import {Grid, Button} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import {useQuill} from 'react-quilljs';
 import {FormattedMessage} from 'react-intl';
 import stringTemplate from 'string-template-js';
 import 'quill/dist/quill.snow.css';
 
 import RichTextEditor from './RichTextEditor';
+import {modules, formats} from './style';
 import * as actions from '../../store/actions';
 import useStyles from '../../styles/messageElement';
 
@@ -69,45 +71,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const [messageToBeSend, setMessageToBeSend] = useState(null);
 	const {type, id} = state;
 
-	const theme = 'snow';
-
-	const modules = {
-		toolbar: [
-			['bold', 'italic', 'underline', 'strike'],
-			[{align: []}],
-
-			[{list: 'ordered'}, {list: 'bullet'}],
-			[{indent: '-1'}, {indent: '+1'}],
-
-			[{size: ['small', false, 'large', 'huge']}],
-			[{header: [1, 2, 3, 4, 5, 6, false]}],
-			['link'],
-			[{color: []}, {background: []}],
-
-			['clean']
-		],
-		clipboard: {
-			matchVisual: false
-		}
-	};
-
 	const placeholder = 'Compose an epic...';
 
-	const formats = [
-		'bold',
-		'italic',
-		'underline',
-		'strike',
-		'align',
-		'list',
-		'indent',
-		'size',
-		'header',
-		'link',
-		'color',
-		'background',
-		'clean'
-	];
+	const theme = 'snow';
 
 	const {quill, quillRef} = useQuill({theme, modules, formats, placeholder});
 
@@ -217,7 +183,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid container item className={classes.listItem} xs={12}>
 			<Grid item xs={12}>
-				<Select
+				<CreatableSelect
 					isMulti={false}
 					options={getPublisherOptions(publisherOption, publisherEmail)}
 					placeholder="Select Recipient Publisher"

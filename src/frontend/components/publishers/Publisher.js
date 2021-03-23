@@ -154,7 +154,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	function isEditable(key) {
-		console.log(key);
 		const nonEditableFields = ['lastUpdated', '_id', 'isbnRange', 'ismnRange', 'request'];
 		const publisherEditableFields = ['phone', 'language', 'contactPerson'];
 
@@ -163,7 +162,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			(userInfo.role === 'publisher' ?
 				publisherEditableFields.includes(key) :
 				false);
-		console.log(result);
 		return result;
 	}
 
@@ -576,6 +574,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		console.log('print');
 	}
 
+	function handleOnClickProceedings() {
+		history.push(`/publishers/proceedings/${id}`);
+	}
+
 	const component = (
 		<Grid item xs={12}>
 			<Typography variant="h5" className={classes.titleTopSticky}>
@@ -645,6 +647,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 														</Grid>
 												}
 												<Grid item xs={2}>
+													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickProceedings}>
+														<FormattedMessage id="button.label.proceedings"/>
+													</Button>
+												</Grid>
+												<Grid item xs={2}>
 													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
 														<FormattedMessage id="button.label.print"/>
 													</Button>
@@ -661,6 +668,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												</Grid>
 											</Grid>
 									}
+									{isAuthenticated && userInfo.role === 'publisher' &&
+										<Grid container item xs={12}>
+											<Grid item xs={2}>
+												<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickProceedings}>
+													<FormattedMessage id="button.label.proceedings"/>
+												</Button>
+											</Grid>
+											<Grid item xs={2}>
+												<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
+													<FormattedMessage id="button.label.print"/>
+												</Button>
+											</Grid>
+										</Grid>}
 									{
 										isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
 											<Grid item xs={2}>

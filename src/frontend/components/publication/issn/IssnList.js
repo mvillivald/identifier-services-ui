@@ -55,10 +55,11 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
+		{id: 'empty', label: ''},
+		{id: 'title', label: <FormattedMessage id="publicationList.issn.headRows.title"/>},
 		{id: 'publicationType', label: <FormattedMessage id="publicationList.issn.headRows.publicationType"/>},
 		{id: 'type', label: <FormattedMessage id="publicationList.issn.headRows.type"/>},
-		{id: 'email', label: <FormattedMessage id="publicationList.issn.headRows.email"/>},
-		{id: 'title', label: <FormattedMessage id="publicationList.issn.headRows.title"/>}
+		{id: 'email', label: <FormattedMessage id="publicationList.issn.headRows.email"/>}
 	];
 
 	return (
@@ -68,7 +69,7 @@ export default connect(mapStateToProps, actions)(props => {
 			handleTableRowClick={handleTableRowClick}
 			rowSelectedId={rowSelectedId}
 			cursors={cursors}
-			publicationList={issnList}
+			publicationList={issnList.map(item => dataRender(item))}
 			setLastCursor={setLastCursor}
 			modal={modal}
 			setModal={setModal}
@@ -77,6 +78,13 @@ export default connect(mapStateToProps, actions)(props => {
 		/>
 	);
 });
+
+function dataRender(item) {
+	return {
+		empty: '',
+		...item
+	};
+}
 
 function mapStateToProps(state) {
 	return ({

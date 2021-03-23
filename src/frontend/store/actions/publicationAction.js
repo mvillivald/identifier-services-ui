@@ -72,6 +72,54 @@ export const fetchIsbnIsmnList = ({searchText, token, offset, activeCheck, sort}
 	}
 };
 
+export const fetchProceedingsList = ({searchText, token, offset, sort}) => async dispatch => {
+	dispatch(setListLoader());
+	const query = {publisher: searchText};
+	try {
+		const responseIsbnIsmn = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: query
+				}],
+				offset: offset,
+				sort: sort
+			})
+		});
+		const resultIsbnIsmn = await responseIsbnIsmn.json();
+
+		const responseIssn = await fetch(`${API_URL}/publications/issn/query`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: query
+				}],
+				offset: offset,
+				sort: sort
+			})
+		});
+		const resultIssn = await responseIssn.json();
+
+		const result = {
+			results: [...resultIsbnIsmn.results, ...resultIssn.results],
+			totalDoc: (resultIsbnIsmn.totalDoc === undefined ? 0 : resultIsbnIsmn.totalDoc) + (resultIssn.totalDoc === undefined ? 0 : resultIssn.totalDoc),
+			queryDocCount: (resultIsbnIsmn.queryDocCount === undefined ? 0 : resultIsbnIsmn.queryDocCount) + (resultIssn.queryDocCount === undefined ? 0 : resultIssn.queryDocCount)
+		};
+
+		dispatch(success(ISBN_ISMN_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
 export const fetchIssnList = ({token, offset, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	try {
