@@ -27,11 +27,12 @@
  *
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
 	Button,
 	Grid,
 	Typography,
+	RootRef,
 	Fab
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
@@ -48,6 +49,7 @@ import ListComponent from '../ListComponent';
 import SelectRange from './SelectRange';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {classificationCodes} from '../form/publisherRegistrationForm/formFieldVariable';
+import PrintElement from '../Print';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherUpdateForm',
@@ -88,6 +90,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const activeCheck = {
 		checked: true
 	};
+
+	const componentRef = useRef();
 
 	useEffect(() => {
 		if (id !== null) {
@@ -570,10 +574,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return old.includes(newValue) ? old : [...old, newValue];
 	}
 
-	function handleOnClickPrint() {
-		console.log('print');
-	}
-
 	function handleOnClickProceedings() {
 		history.push(`/publishers/proceedings/${id}`);
 	}
@@ -652,9 +652,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 													</Button>
 												</Grid>
 												<Grid item xs={2}>
-													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
-														<FormattedMessage id="button.label.print"/>
-													</Button>
+													<PrintElement componentRef={componentRef}/>
 												</Grid>
 												<Grid item xs={2}>
 													<Fab
@@ -676,9 +674,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												</Button>
 											</Grid>
 											<Grid item xs={2}>
-												<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
-													<FormattedMessage id="button.label.print"/>
-												</Button>
+												<PrintElement componentRef={componentRef}/>
 											</Grid>
 										</Grid>}
 									{
@@ -705,9 +701,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										<EditIcon/>
 									</Fab>
 								</div>} */}
-									<Grid container spacing={3} className={classes.listItemSpinner}>
-										{publisherDetail}
-									</Grid>
+									<RootRef rootRef={componentRef}>
+										<Grid container spacing={3} className={classes.listItemSpinner}>
+											{publisherDetail}
+										</Grid>
+									</RootRef>
 								</>}
 						</div>
 				)
