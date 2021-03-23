@@ -26,11 +26,12 @@
  *
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
 	Typography,
 	Button,
 	Grid,
+	RootRef,
 	Fab
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
@@ -46,6 +47,7 @@ import {commonStyles} from '../../../styles/app';
 import * as actions from '../../../store/actions';
 import PublicationRenderComponent from '../PublicationRenderComponent';
 import SelectPublicationIdentifierRange from './SelectIssnIdentifierRange';
+import PrintElement from '../../Print';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'issnUpdateForm',
@@ -67,6 +69,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
+	const componentRef = useRef();
 	const classes = commonStyles();
 	const {role} = userInfo;
 	const [isEdit, setIsEdit] = useState(false);
@@ -127,10 +130,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleOnClickShowMarc() {
 		fetchMarc(issn.metadataReference.id, cookie[COOKIE_NAME]);
-	}
-
-	function handleOnClickPrint() {
-		console.log('this is pring');
 	}
 
 	function handleOnClickSaveMarc() {
@@ -243,9 +242,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												{
 													issn &&
 														<Grid item xs={2}>
-															<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickPrint}>
-																<FormattedMessage id="button.label.print"/>
-															</Button>
+															<PrintElement componentRef={componentRef}/>
 														</Grid>
 												}
 											</Grid>
@@ -258,15 +255,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												<EditIcon/>
 											</Fab>
 										</div>}
-									<Grid container spacing={3} className={classes.listItemSpinner}>
-										<PublicationRenderComponent
-											issn
-											publication={issn}
-											isEdit={isEdit}
-											clearFields={clearFields}
-											isEditable={isEditable}
-										/>
-									</Grid>
+									<RootRef rootRef={componentRef}>
+										<Grid container spacing={3} className={classes.listItemSpinner}>
+											<PublicationRenderComponent
+												issn
+												publication={issn}
+												isEdit={isEdit}
+												clearFields={clearFields}
+												isEditable={isEditable}
+											/>
+										</Grid>
+									</RootRef>
 								</div>
 						)
 				)
