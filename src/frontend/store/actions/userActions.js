@@ -255,14 +255,17 @@ export const updateUser = (id, values, token) => async dispatch => {
 	}
 };
 
-export const deleteUser = (id, token) => async dispatch => {
+export const deleteUser = (id, values, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
 		const response = await fetch(`${API_URL}/users/${id}`, {
 			method: 'DELETE',
 			headers: {
-				Authorization: `Bearer ${token}`
-			}
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
 		});
 
 		if (response.status === HttpStatus.OK) {

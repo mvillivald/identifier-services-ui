@@ -33,17 +33,17 @@ import {
 	List,
 	Fab
 } from '@material-ui/core';
+import {connect} from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import {validate} from '@natlibfi/identifier-services-commons';
 import {reduxForm} from 'redux-form';
 import {useCookies} from 'react-cookie';
 import {FormattedMessage, useIntl} from 'react-intl';
-import HttpStatus from 'http-status';
 
 import {commonStyles} from '../../styles/app';
 import * as actions from '../../store/actions';
-import {connect} from 'react-redux';
-import {validate} from '@natlibfi/identifier-services-commons';
+import AlertDialogs from '../AlertDialogs';
 import Spinner from '../Spinner';
 import CustomColor from '../../styles/app';
 import ListComponent from '../ListComponent';
@@ -53,12 +53,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, deleteUser, setModal, setIsCreating, match} = props;
+	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, deleteUser, match} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
 	const intl = useIntl();
 	const {role} = userInfo;
 	const [isEdit, setIsEdit] = useState(false);
+	const [openAlert, setOpenAlert] = useState(false);
+	const [message, setMessage] = useState(null);
+	const [confirmation, setConfirmation] = useState(false);
+
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 
@@ -69,17 +73,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		}
 	}, [cookie, fetchUser, id, userUpdated]);
 
+	useEffect(() => {
+		if (confirmation) {
+			deleteUser(id, user, cookie[COOKIE_NAME]);
+		}
+	}, [confirmation, cookie, deleteUser, id, user]);
+
 	const handleEditClick = () => {
 		setIsEdit(true);
 	};
 
-	async function handleDeleteUser() {
-		const response = await deleteUser(id, cookie[COOKIE_NAME]);
-		if (response === HttpStatus.OK) {
-			setIsCreating(true);
-		}
+	function handleDeleteUser() {
+		setMessage('Please confirm to delete');
+	}
 
-		setModal(false);
+	function handleOnAgree() {
+		setConfirmation(true);
+	}
+
+	function handleOnCancel() {
+		setConfirmation(false);
 	}
 
 	const handleCancel = () => {
@@ -154,7 +167,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<List>
 								{
 									Object.keys(user).map(key => {
-										return typeof user[key] === 'string' ?
+										return (typeof user[key] === 'string' || typeof user[key] === 'boolean') ?
 											(
 												<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
 											) :
@@ -200,30 +213,48 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</form>
 				</div> :
 				<div className={classes.listItem}>
-					<div className={classes.usersBtnContainer}>
-						{isAuthenticated && role === 'admin' &&
-							<Button
-								variant="contained"
-								style={CustomColor.palette.red}
-								startIcon={<DeleteForeverIcon/>}
-								onClick={handleDeleteUser}
-							>
-								<FormattedMessage id="user.button.label.delete"/>
-							</Button>}
-						{isAuthenticated && (role === 'admin' || role === 'publisher') &&
-							<Fab
-								color="primary"
-								size="small"
-								title={intl.formatMessage({id: 'user.fab.label.editUser'})}
-								onClick={handleEditClick}
-							>
-								<EditIcon/>
-							</Fab>}
-					</div>
+					<Grid container item xs={12}>
+						<Grid item xs={2}>
+							{isAuthenticated && role === 'admin' &&
+								<Button
+									className={classes.buttons}
+									variant="contained"
+									style={CustomColor.palette.red}
+									startIcon={<DeleteForeverIcon/>}
+									onClick={handleDeleteUser}
+								>
+									<FormattedMessage id="user.button.label.delete"/>
+								</Button>}
+						</Grid>
+						<Grid item xs={2}>
+							{isAuthenticated && (role === 'admin' || role === 'publisher') &&
+								<Fab
+									color="primary"
+									size="small"
+									title={intl.formatMessage({id: 'user.fab.label.editUser'})}
+									onClick={handleEditClick}
+								>
+									<EditIcon/>
+								</Fab>}
+						</Grid>
+					</Grid>
+					{/* <div className={classes.usersBtnContainer}> */}
+					{/* </div> */}
 					<Grid container spacing={3} className={classes.listItemSpinner}>
 						{userDetail}
 					</Grid>
 				</div>}
+			{
+				message &&
+					<AlertDialogs
+						openAlert={openAlert}
+						setOpenAlert={setOpenAlert}
+						message={message}
+						setMessage={setMessage}
+						handleOnAgree={handleOnAgree}
+						handleOnCancel={handleOnCancel}
+					/>
+			}
 		</Grid>
 	);
 	return {
