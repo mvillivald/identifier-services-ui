@@ -401,7 +401,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								</Typography>
 								<hr/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.title'})} value={formatPublicationValue.title ? formatPublicationValue.title : ''}/>
-								<ListComponent label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatPublicationValue.subTitle ? formatPublicationValue.subTitle : ''}/>
+								<ListComponent label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatPublicationValue.subtitle ? formatPublicationValue.subtitle : ''}/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={formatPublicationValue.publicationTime ? moment(formatPublicationValue.publicationTime).format('YYYY/MM') : ''}/>
 							</Grid>
 							<Grid item xs={12}>

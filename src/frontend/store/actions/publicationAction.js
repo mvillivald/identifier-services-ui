@@ -164,6 +164,7 @@ export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch =
 	dispatch(setLoader());
 	try {
 		delete values.backgroundProcessingState;
+		const newValues = values.metadataReference ? {...values, metadataReference: {...values.metadataReference, state: 'pending'}} : values;
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/${id}`, {
 			method: 'PUT',
 			headers: {
@@ -171,7 +172,7 @@ export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch =
 				'Content-Type': 'application/json'
 			},
 			credentials: 'same-origin',
-			body: JSON.stringify(values)
+			body: JSON.stringify(newValues)
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
@@ -189,6 +190,7 @@ export const updatePublicationIssn = (id, values, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
 		delete values.backgroundProcessingState;
+		const newValues = values.metadataReference ? {...values, metadataReference: {...values.metadataReference, state: 'pending'}} : values;
 		const response = await fetch(`${API_URL}/publications/issn/${id}`, {
 			method: 'PUT',
 			headers: {
@@ -196,7 +198,7 @@ export const updatePublicationIssn = (id, values, token) => async dispatch => {
 				'Content-Type': 'application/json'
 			},
 			credentials: 'same-origin',
-			body: JSON.stringify(values)
+			body: JSON.stringify(newValues)
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();

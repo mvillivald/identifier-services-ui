@@ -38,7 +38,6 @@ import {commonStyles} from '../styles/app';
 export default function (props) {
 	const {componentRef} = props;
 	const classes = commonStyles();
-	console.log(componentRef);
 	const handlePrint = useReactToPrint({
 		content: () => componentRef.current
 	});

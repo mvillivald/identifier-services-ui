@@ -676,9 +676,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											<Grid item xs={2}>
 												<PrintElement componentRef={componentRef}/>
 											</Grid>
-										</Grid>}
-									{
-										isAuthenticated && userInfo.role === 'publisher' && // Different condition for publisher
 											<Grid item xs={2}>
 												<Fab
 													color="primary"
@@ -689,7 +686,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 													<EditIcon/>
 												</Fab>
 											</Grid>
-									}
+										</Grid>}
 									{/* {isAuthenticated && userInfo.role === 'publisher' &&
 								<div className={classes.btnContainer}>
 									<Fab

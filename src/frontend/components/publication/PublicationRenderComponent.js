@@ -100,7 +100,7 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={publication.title ? publication.title : ''}/>
-						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publication.subTitle ? publication.subTitle : ''}/>
+						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publication.subtitle ? publication.subtitle : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={publication.language ? publication.language : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="manufacturer" label={intl.formatMessage({id: 'listComponent.manufacturer'})} value={publication.manufacturer ? publication.manufacturer : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="city" label={intl.formatMessage({id: 'listComponent.city'})} value={publication.city ? publication.city : ''}/>
@@ -177,75 +177,93 @@ export default connect(mapStateToProps, actions)(props => {
 							Format Details
 						</Typography>
 						<hr/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.selectFormat'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.format ?
-									publication.formatDetails.format :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.fileFormat'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.fileFormat ?
-									publication.formatDetails.fileFormat :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.printFormat'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.printFormat ?
-									publication.formatDetails.printFormat :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][manufacturer]"
-							label={intl.formatMessage({id: 'listComponent.manufacturer'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.manufacturer ?
-									publication.formatDetails.manufacturer :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][city]"
-							label={intl.formatMessage({id: 'listComponent.city'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.city ?
-									publication.formatDetails.city :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][run]"
-							label={intl.formatMessage({id: 'listComponent.run'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.run ?
-									publication.formatDetails.run :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][edition]"
-							label={intl.formatMessage({id: 'listComponent.edition'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.edition ?
-									publication.formatDetails.edition :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][identifier]"
-							label={intl.formatMessage({id: 'listComponent.identifier'})}
-							value={publication.formatDetails ?
-								(publication.formatDetails.identifier ?
-									publication.formatDetails.identifier :
-									''
-								) : ''}
-						/>
+						{
+							issn ?
+								publication.formatDetails && publication.formatDetails.map(item => (
+									<Grid key={item._id} item xs={12}>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.selectFormat'})}
+											value={item.format ? item.format : ''}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.website'})}
+											value={item.url ? item.url : ''}
+										/>
+									</Grid>
+								))	: (
+									<>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.selectFormat'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.format ?
+													publication.formatDetails.format :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.fileFormat'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.fileFormat ?
+													publication.formatDetails.fileFormat :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.printFormat'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.printFormat ?
+													publication.formatDetails.printFormat :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][manufacturer]"
+											label={intl.formatMessage({id: 'listComponent.manufacturer'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.manufacturer ?
+													publication.formatDetails.manufacturer :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][city]"
+											label={intl.formatMessage({id: 'listComponent.city'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.city ?
+													publication.formatDetails.city :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][run]"
+											label={intl.formatMessage({id: 'listComponent.run'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.run ?
+													publication.formatDetails.run :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][edition]"
+											label={intl.formatMessage({id: 'listComponent.edition'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.edition ?
+													publication.formatDetails.edition :
+													''
+												) : ''}
+										/>
+										<ListComponent
+											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][identifier]"
+											label={intl.formatMessage({id: 'listComponent.identifier'})}
+											value={publication.formatDetails ?
+												(publication.formatDetails.identifier ?
+													publication.formatDetails.identifier :
+													''
+												) : ''}
+										/>
+									</>
+								)
+						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -401,7 +419,7 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={publication.title ? publication.title : ''}/>
-						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publication.subTitle ? publication.subTitle : ''}/>
+						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publication.subtitle ? publication.subtitle : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={publication.language ? publication.language : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="publicationTime" label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={publication.publicationTime ? publication.publicationTime : ''}/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.publisherName'})} value={(publication.publisher && publisherName !== null) ? publisherName : ''}/>

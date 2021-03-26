@@ -224,7 +224,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</Typography>
 							<hr/>
 							<ListComponent fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={formatValues.title ? formatValues.title : ''}/>
-							<ListComponent fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatValues.subTitle ? formatValues.subTitle : ''}/>
+							<ListComponent fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatValues.subtitle ? formatValues.subtitle : ''}/>
 							<ListComponent fieldName="manufacturer" label={intl.formatMessage({id: 'listComponent.manufacturer'})} value={formatValues.manufacturer ? formatValues.manufacturer : ''}/>
 							<ListComponent fieldName="city" label={intl.formatMessage({id: 'listComponent.city'})} value={formatValues.city ? formatValues.city : ''}/>
 						</Grid>
