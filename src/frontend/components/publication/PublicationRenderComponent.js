@@ -178,99 +178,19 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						{
-							issn ?
-								publication.formatDetails && publication.formatDetails.map(item => (
-									<Grid key={item._id} item xs={12}>
-										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.selectFormat'})}
-											value={item.format ? item.format : ''}
-										/>
-										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.website'})}
-											value={item.url ? item.url : ''}
-										/>
-									</Grid>
-								))	: (
-									<>
-										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.selectFormat'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.format ?
-													publication.formatDetails.format :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.fileFormat'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.fileFormat ?
-													publication.formatDetails.fileFormat :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.printFormat'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.printFormat ?
-													publication.formatDetails.printFormat :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][manufacturer]"
-											label={intl.formatMessage({id: 'listComponent.manufacturer'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.manufacturer ?
-													publication.formatDetails.manufacturer :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][city]"
-											label={intl.formatMessage({id: 'listComponent.city'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.city ?
-													publication.formatDetails.city :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][run]"
-											label={intl.formatMessage({id: 'listComponent.run'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.run ?
-													publication.formatDetails.run :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][edition]"
-											label={intl.formatMessage({id: 'listComponent.edition'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.edition ?
-													publication.formatDetails.edition :
-													''
-												) : ''}
-										/>
-										<ListComponent
-											edit={isEdit && isEditable} fieldName="seriesDetails[formatDetails][identifier]"
-											label={intl.formatMessage({id: 'listComponent.identifier'})}
-											value={publication.formatDetails ?
-												(publication.formatDetails.identifier ?
-													publication.formatDetails.identifier :
-													''
-												) : ''}
-										/>
-									</>
-								)
+							publication.formatDetails && publication.formatDetails.map(item => (
+								<Grid key={item._id} item xs={12}>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.selectFormat'})}
+										value={item.format ? item.format : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.website'})}
+										value={item.url ? item.url : ''}
+									/>
+								</Grid>
+							))
 						}
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							Additional Details
-						</Typography>
-						<hr/>
-						<ListComponent edit={isEdit && isEditable} fieldName="additionalDetails" label={intl.formatMessage({id: 'listComponent.additionalDetails'})} value={publication.additionalDetails ? publication.additionalDetails : ''}/>
 					</Grid>
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
@@ -546,6 +466,13 @@ export default connect(mapStateToProps, actions)(props => {
 									''
 								) : ''}
 						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							Additional Details
+						</Typography>
+						<hr/>
+						<ListComponent edit={isEdit && isEditable} fieldName="additionalDetails" label={intl.formatMessage({id: 'listComponent.additionalDetails'})} value={publication.additionalDetails ? publication.additionalDetails : ''}/>
 					</Grid>
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
