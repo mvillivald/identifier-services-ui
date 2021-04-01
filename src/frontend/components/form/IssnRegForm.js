@@ -670,7 +670,7 @@ function getFieldArray(intl) {
 					options: [
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed'}), value: 'printed'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.online'}), value: 'online'},
-						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cdRom'}), value: 'CD-ROM'}
+						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cdRom'}), value: 'cd'}
 					]
 				},
 				{

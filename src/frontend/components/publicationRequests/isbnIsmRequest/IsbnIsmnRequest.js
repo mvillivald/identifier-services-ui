@@ -479,16 +479,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.fileFormat'})}
 							value={publicationIsbnIsmnRequest.formatDetails ?
-								(publicationIsbnIsmnRequest.formatDetails.fileFormat ?
-									publicationIsbnIsmnRequest.formatDetails.fileFormat :
+								(publicationIsbnIsmnRequest.formatDetails.fileFormat && publicationIsbnIsmnRequest.formatDetails.fileFormat.format ?
+									publicationIsbnIsmnRequest.formatDetails.fileFormat.format :
 									''
 								) : ''}
 						/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.printFormat'})}
 							value={publicationIsbnIsmnRequest.formatDetails ?
-								(publicationIsbnIsmnRequest.formatDetails.printFormat ?
-									publicationIsbnIsmnRequest.formatDetails.printFormat :
+								(publicationIsbnIsmnRequest.formatDetails.printFormat && publicationIsbnIsmnRequest.formatDetails.printFormat.format ?
+									publicationIsbnIsmnRequest.formatDetails.printFormat.format :
 									''
 								) : ''}
 						/>

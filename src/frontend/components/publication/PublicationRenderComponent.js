@@ -31,6 +31,7 @@ import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
 import {
 	Grid,
+	Link,
 	Typography
 } from '@material-ui/core';
 import {useIntl} from 'react-intl';
@@ -111,6 +112,7 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.publisherName'})} value={(publication.publisher && publisherName !== null) ? publisherName : ''}/>
+						<Link href={`/publishers/${publication.publisher}`} color="primary" underline="always"> publisherDetails </Link>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -187,6 +189,11 @@ export default connect(mapStateToProps, actions)(props => {
 									<ListComponent
 										label={intl.formatMessage({id: 'listComponent.website'})}
 										value={item.url ? item.url : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.id'})}
+										value={item.metadata && item.metadata && item.metadata.id ? item.metadata.id : ''}
+
 									/>
 								</Grid>
 							))
@@ -279,14 +286,6 @@ export default connect(mapStateToProps, actions)(props => {
 								) : ''}
 						/>
 						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.id'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.id ?
-									publication.metadataReference.id :
-									''
-								) : ''}
-						/>
-						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.status'})}
 							value={publication.metadataReference ?
 								(publication.metadataReference.status ?
@@ -343,6 +342,7 @@ export default connect(mapStateToProps, actions)(props => {
 						<ListComponent edit={isEdit && isEditable} fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={publication.language ? publication.language : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="publicationTime" label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={publication.publicationTime ? publication.publicationTime : ''}/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.publisherName'})} value={(publication.publisher && publisherName !== null) ? publisherName : ''}/>
+						<Link href={`/publishers/${publication.publisher}`} color="primary" underline="always"> publisherDetails </Link>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -409,18 +409,28 @@ export default connect(mapStateToProps, actions)(props => {
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.fileFormat'})}
 							value={publication.formatDetails ?
-								(publication.formatDetails.fileFormat ?
-									publication.formatDetails.fileFormat :
+								(publication.formatDetails.fileFormat && publication.formatDetails.fileFormat.format ?
+									publication.formatDetails.fileFormat.format :
 									''
 								) : ''}
 						/>
 						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.id'})}
+							value={publication.formatDetails && publication.formatDetails.fileFormat && publication.formatDetails.fileFormat.metadata && publication.formatDetails.fileFormat.metadata.id ?
+								publication.formatDetails.fileFormat.metadata.id : ''}
+						/>
+						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.printFormat'})}
 							value={publication.formatDetails ?
-								(publication.formatDetails.printFormat ?
-									publication.formatDetails.printFormat :
+								(publication.formatDetails.printFormat && publication.formatDetails.printFormat.format ?
+									publication.formatDetails.printFormat.format :
 									''
 								) : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.id'})}
+							value={publication.formatDetails && publication.formatDetails.printFormat && publication.formatDetails.printFormat.metadata && publication.formatDetails.printFormat.metadata.id ?
+								publication.formatDetails.printFormat.metadata.id : ''}
 						/>
 						<ListComponent
 							edit={isEdit && isEditable} fieldName="formatDetails[manufacturer]"
@@ -467,13 +477,6 @@ export default connect(mapStateToProps, actions)(props => {
 								) : ''}
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							Additional Details
-						</Typography>
-						<hr/>
-						<ListComponent edit={isEdit && isEditable} fieldName="additionalDetails" label={intl.formatMessage({id: 'listComponent.additionalDetails'})} value={publication.additionalDetails ? publication.additionalDetails : ''}/>
-					</Grid>
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
@@ -518,37 +521,6 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Metadata References
-						</Typography>
-						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="metadataReference[state]"
-							label={intl.formatMessage({id: 'listComponent.state'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.state ?
-									publication.metadataReference.state :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.id'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.id ?
-									publication.metadataReference.id :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.status'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.status ?
-									publication.metadataReference.status :
-									''
-								) : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
 							Identifier
 						</Typography>
 						<hr/>
@@ -567,11 +539,40 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
+							Metadata References
+						</Typography>
+						<hr/>
+						<ListComponent
+							edit={isEdit && isEditable} fieldName="metadataReference[state]"
+							label={intl.formatMessage({id: 'listComponent.state'})}
+							value={publication.metadataReference ?
+								(publication.metadataReference.state ?
+									publication.metadataReference.state :
+									''
+								) : ''}
+						/>
+						<ListComponent
+							label={intl.formatMessage({id: 'listComponent.status'})}
+							value={publication.metadataReference ?
+								(publication.metadataReference.status ?
+									publication.metadataReference.status :
+									''
+								) : ''}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							Additional Details
+						</Typography>
+						<hr/>
+						<ListComponent edit={isEdit && isEditable} fieldName="additionalDetails" label={intl.formatMessage({id: 'listComponent.additionalDetails'})} value={publication.additionalDetails ? publication.additionalDetails : ''}/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
 							References
 						</Typography>
 						<hr/>
-						{publication.publicationType === 'isbn-ismn' &&
-							<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>}
+						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
 						<ListComponent
 							linkPath={`/requests/publications/isbn-ismn/${publication.request}`}
 							label={intl.formatMessage({id: 'listComponent.request'})}

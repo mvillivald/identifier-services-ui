@@ -164,7 +164,7 @@ export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch =
 	dispatch(setLoader());
 	try {
 		delete values.backgroundProcessingState;
-		const newValues = values.metadataReference ? {...values, metadataReference: {...values.metadataReference, state: 'pending'}} : values;
+		const newValues = {...values, metadataReference: {state: 'pending', update: true}};
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/${id}`, {
 			method: 'PUT',
 			headers: {
@@ -190,7 +190,7 @@ export const updatePublicationIssn = (id, values, token) => async dispatch => {
 	dispatch(setLoader());
 	try {
 		delete values.backgroundProcessingState;
-		const newValues = values.metadataReference ? {...values, metadataReference: {...values.metadataReference, state: 'pending'}} : values;
+		const newValues = {...values, metadataReference: {state: 'pending', update: true}};
 		const response = await fetch(`${API_URL}/publications/issn/${id}`, {
 			method: 'PUT',
 			headers: {

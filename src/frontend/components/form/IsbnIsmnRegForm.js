@@ -325,7 +325,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						...values.formatDetails,
 						run: values.formatDetails.run && Number(values.formatDetails.run),
 						format: 'electronic',
-						fileFormat: reFormat(values.formatDetails.fileFormat)
+						fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
 					};
 					return formatDetails;
 				}
@@ -334,7 +334,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					const formatDetails = {
 						...values.formatDetails,
 						run: values.formatDetails.run && Number(values.formatDetails.run),
-						printFormat: reFormat(values.formatDetails.printFormat),
+						printFormat: {format: reFormat(values.formatDetails.printFormat)},
 						format: 'printed'
 					};
 					return formatDetails;
@@ -345,8 +345,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						...values.formatDetails,
 						run: values.formatDetails.run && Number(values.formatDetails.run),
 						format: 'printed-and-electronic',
-						fileFormat: reFormat(values.formatDetails.fileFormat),
-						printFormat: reFormat(values.formatDetails.printFormat)
+						fileFormat: {format: reFormat(values.formatDetails.fileFormat)},
+						printFormat: {format: reFormat(values.formatDetails.printFormat)}
 					};
 					return formatDetails;
 				}
@@ -598,16 +598,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.fileFormat'})}
 								value={formatPublicationValue.formatDetails ?
-									(formatPublicationValue.formatDetails.fileFormat ?
-										formatPublicationValue.formatDetails.fileFormat :
+									(formatPublicationValue.formatDetails.fileFormat && formatPublicationValue.formatDetails.fileFormat.format ?
+										formatPublicationValue.formatDetails.fileFormat.format :
 										''
 									) : ''}
 							/>
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.printFormat'})}
 								value={formatPublicationValue.formatDetails ?
-									(formatPublicationValue.formatDetails.printFormat ?
-										formatPublicationValue.formatDetails.printFormat :
+									(formatPublicationValue.formatDetails.printFormat && formatPublicationValue.formatDetails.printFormat.format ?
+										formatPublicationValue.formatDetails.printFormat.format :
 										''
 									) : ''}
 							/>
