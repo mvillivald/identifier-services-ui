@@ -84,6 +84,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [publisherId, setPublisherId] = useState(null);
 	const [disableAssign, setDisableAssign] = useState(true);
 	const [next, setNext] = useState(false);
+	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
 		if (id !== null) {
@@ -161,6 +162,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		console.log('save marc');
 	}
 
+	const handleTableRowClick = id => {
+		setRowSelectedId(id);
+	};
+
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
 			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format'] :
@@ -174,6 +179,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	function handleRange() {
 		setAssignRange(!assignRange);
 	}
+
+	const headRows = [
+		{id: 'format', label: <FormattedMessage id="publication.metadataReference.headRows.format"/>},
+		{id: 'state', label: <FormattedMessage id="publication.metadataReference.headRows.state"/>},
+		{id: 'status', label: <FormattedMessage id="publication.metadataReference.headRows.status"/>},
+		{id: 'identifier', label: <FormattedMessage id="publication.metadataReference.headRows.identifier"/>}
+	];
 
 	const component = (
 		<Grid item xs={12}>
@@ -200,6 +212,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										publication={isbnIsmn}
 										isEdit={isEdit}
 										clearFields={clearFields} isEditable={isEditable}
+										handleTableRowClick={handleTableRowClick}
+										rowSelectedId={rowSelectedId}
+										headRows={headRows}
 									/>
 								</Grid>
 							</form>
@@ -304,6 +319,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											publication={isbnIsmn}
 											isEdit={isEdit} clearFields={clearFields}
 											isEditable={isEditable}
+											handleTableRowClick={handleTableRowClick}
+											rowSelectedId={rowSelectedId}
+											headRows={headRows}
 										/>
 									</Grid>
 								</RootRef>

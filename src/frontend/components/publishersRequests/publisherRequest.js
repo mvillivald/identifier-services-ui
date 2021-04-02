@@ -137,9 +137,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
-			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format', 'createdResource'] :
+			['lastUpdated', '_id', 'associatedRange', 'identifier', 'request', 'associatedRange', 'type', 'format', 'createdResource'] :
 			(userInfo.role === 'publisher' ?
-				['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange', 'type', 'format', 'createdResource', 'state', 'backgroundProcessingState'] :
+				['lastUpdated', '_id', 'associatedRange', 'identifier', 'request', 'associatedRange', 'type', 'format', 'createdResource', 'state', 'backgroundProcessingState'] :
 				[]);
 
 		return isEdit && !nonEditableFields.includes(key);

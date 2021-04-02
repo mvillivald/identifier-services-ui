@@ -131,7 +131,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function (props) {
-	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings} = props;
+	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings, page} = props;
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
 	const [orderBy, setOrderBy] = React.useState(headRows[0].id);
@@ -188,14 +188,15 @@ export default function (props) {
 							);
 						})}
 				</TableBody>
-				<TableFooter>
-					<TableRow>
-						<TablePaginationActions
-							colSpan={headRows.length}
-							{...props}
-						/>
-					</TableRow>
-				</TableFooter>
+				{page &&
+					<TableFooter>
+						<TableRow>
+							<TablePaginationActions
+								colSpan={headRows.length}
+								{...props}
+							/>
+						</TableRow>
+					</TableFooter>}
 			</Table>
 		</Paper>
 	);

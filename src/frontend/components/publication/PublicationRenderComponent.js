@@ -37,6 +37,7 @@ import {
 import {useIntl} from 'react-intl';
 
 import ListComponent from '../ListComponent';
+import TableComponent from '../TableComponent';
 import Spinner from '../Spinner';
 import * as actions from '../../store/actions';
 
@@ -50,6 +51,9 @@ export default connect(mapStateToProps, actions)(props => {
 		clearFields,
 		fetchPublisher,
 		fetchedPublisher,
+		rowSelectedId,
+		handleTableRowClick,
+		headRows,
 		publisherLoading
 	} = props;
 	const intl = useIntl();
@@ -186,15 +190,11 @@ export default connect(mapStateToProps, actions)(props => {
 										label={intl.formatMessage({id: 'listComponent.selectFormat'})}
 										value={item.format ? item.format : ''}
 									/>
-									<ListComponent
-										label={intl.formatMessage({id: 'listComponent.website'})}
-										value={item.url ? item.url : ''}
-									/>
-									<ListComponent
-										label={intl.formatMessage({id: 'listComponent.id'})}
-										value={item.metadata && item.metadata && item.metadata.id ? item.metadata.id : ''}
-
-									/>
+									{item.url &&
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.website'})}
+											value={item.url ? item.url : ''}
+										/>}
 								</Grid>
 							))
 						}
@@ -276,23 +276,15 @@ export default connect(mapStateToProps, actions)(props => {
 							Metadata References
 						</Typography>
 						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="metadataReference[state]"
-							label={intl.formatMessage({id: 'listComponent.state'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.state ?
-									publication.metadataReference.state :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.status'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.status ?
-									publication.metadataReference.status :
-									''
-								) : ''}
-						/>
+						{
+							publication.metadataReference &&
+								<TableComponent
+									data={publication.metadataReference.map(item => tableUserData(item))}
+									handleTableRowClick={handleTableRowClick}
+									rowSelectedId={rowSelectedId}
+									headRows={headRows}
+								/>
+						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -326,6 +318,29 @@ export default connect(mapStateToProps, actions)(props => {
 				</Grid>
 			</>
 		);
+	}
+
+	function tableUserData(item) {
+		const keys = headRows.map(k => k.id);
+		const result = keys.reduce((acc, key) => {
+			if (key === 'id') {
+				return {...acc, format: item.format};
+			}
+
+			if (key === 'identifier') {
+				return {...acc, identifier: item.id};
+			}
+
+			return {...acc, [key]: item[key]};
+		}, {});
+
+		return {
+			format: result.format,
+			state: result.state,
+			status: result.status,
+			identifier: result.identifier ? result.identifier : '',
+			id: result.format
+		};
 	}
 
 	function isbnIsmnElements(publication) {
@@ -413,11 +428,6 @@ export default connect(mapStateToProps, actions)(props => {
 									publication.formatDetails.fileFormat.format :
 									''
 								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.id'})}
-							value={publication.formatDetails && publication.formatDetails.fileFormat && publication.formatDetails.fileFormat.metadata && publication.formatDetails.fileFormat.metadata.id ?
-								publication.formatDetails.fileFormat.metadata.id : ''}
 						/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.printFormat'})}
@@ -542,23 +552,15 @@ export default connect(mapStateToProps, actions)(props => {
 							Metadata References
 						</Typography>
 						<hr/>
-						<ListComponent
-							edit={isEdit && isEditable} fieldName="metadataReference[state]"
-							label={intl.formatMessage({id: 'listComponent.state'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.state ?
-									publication.metadataReference.state :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.status'})}
-							value={publication.metadataReference ?
-								(publication.metadataReference.status ?
-									publication.metadataReference.status :
-									''
-								) : ''}
-						/>
+						{
+							publication.metadataReference &&
+								<TableComponent
+									data={publication.metadataReference.map(item => tableUserData(item))}
+									handleTableRowClick={handleTableRowClick}
+									rowSelectedId={rowSelectedId}
+									headRows={headRows}
+								/>
+						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">

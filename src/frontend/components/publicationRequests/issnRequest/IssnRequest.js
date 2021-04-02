@@ -185,9 +185,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function isEditable(key) {
 		const nonEditableFields = userInfo.role === 'admin' ?
-			['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange'] :
+			['lastUpdated', '_id', 'associatedRange', 'identifier', 'request', 'associatedRange'] :
 			(userInfo.role === 'publisher' ?
-				['lastUpdated', '_id', 'associatedRange', 'identifier', 'metadataReference', 'request', 'associatedRange'] :
+				['lastUpdated', '_id', 'associatedRange', 'identifier', 'request', 'associatedRange'] :
 				[]);
 
 		return isEdit && !nonEditableFields.includes(key);
@@ -482,28 +482,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							value={issnRequest.formatDetails ?
 								(issnRequest.formatDetails.identifier ?
 									issnRequest.formatDetails.identifier :
-									''
-								) : ''}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.metadataReference"/>
-						</Typography>
-						<hr/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.state'})}
-							value={issnRequest.metadataReference ?
-								(issnRequest.metadataReference.state ?
-									issnRequest.metadataReference.state :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.id'})}
-							value={issnRequest.metadataReference ?
-								(issnRequest.metadataReference.id ?
-									issnRequest.metadataReference.id :
 									''
 								) : ''}
 						/>
