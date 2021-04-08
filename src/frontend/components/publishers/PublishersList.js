@@ -101,19 +101,10 @@ export default connect(mapStateToProps, actions)(props => {
 			id: id,
 			empty: '',
 			name: name,
-			aliases: aliases ? aliasesArrToString(aliases) : '',
+			aliases: aliases ? aliases : '',
 			email: email,
 			phone: phone
 		};
-	}
-
-	function aliasesArrToString(aliases) {
-		let result = aliases[0];
-		for (let i = 1; i < aliases.length; i++) {
-			result = `${result},  ${aliases[i]}`;
-		}
-
-		return result;
 	}
 
 	const component = (

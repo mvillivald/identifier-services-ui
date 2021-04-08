@@ -317,15 +317,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
-						<Typography variant="h6">
-							<FormattedMessage id="listComponent.aliases"/>
-						</Typography>
-						<hr/>
 						<ListComponent
 							edit={isEdit && isEditable}
 							fieldName="aliases"
 							label={intl.formatMessage({id: 'listComponent.aliases'})}
-							value={formattedPublisherRequest.aliases ? formattedPublisherRequest.aliases : []}
+							value={formattedPublisherRequest.aliases ? formattedPublisherRequest.aliases : ''}
 						/>
 					</Grid>
 					<Grid item xs={12}>

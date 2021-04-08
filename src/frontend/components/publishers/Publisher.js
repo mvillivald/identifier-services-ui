@@ -305,16 +305,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.aliases"/>
-							</Typography>
-							<hr/>
 							<ListComponent
 								edit={isEdit && isEditable('')}
 								fieldName="aliases"
 								clearFields={clearFields}
 								label={intl.formatMessage({id: 'listComponent.aliases'})}
-								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : []}
+								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : ''}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -517,16 +513,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.aliases"/>
-							</Typography>
-							<hr/>
 							<ListComponent
 								edit={isEdit && isEditable('aliases')}
 								fieldName="aliases"
 								clearFields={clearFields}
 								label={intl.formatMessage({id: 'listComponent.aliases'})}
-								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : []}
+								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : ''}
 							/>
 						</Grid>
 						<Grid item xs={12}>

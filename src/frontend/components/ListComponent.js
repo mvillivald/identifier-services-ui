@@ -9,7 +9,6 @@ import renderTextField from './form/render/renderTextField';
 import renderSelect from './form/render/renderSelect';
 import renderMultiSelect from './form/render/renderMultiSelect';
 import renderTextArea from './form/render/renderTextArea';
-import renderAliases from './form/render/renderAliases';
 import renderContactDetail from './form/render/renderContactDetail';
 import useFormStyles from '../styles/form';
 import useStyles from '../styles/listComponent';
@@ -30,7 +29,7 @@ export default function (props) {
 			case 'string':
 			case 'number':
 				return (
-					(fieldName === 'additionalDetails' || fieldName === 'notes' || fieldName === 'rejectionReason' ||
+					(fieldName === 'additionalDetails' || fieldName === 'notes' || fieldName === 'rejectionReason' || fieldName === 'aliases' ||
 						fieldName === 'organizationDetails[affiliate]' || fieldName === 'organizationDetails[distributor]') ?
 						(edit ? renderEditAdditionalDetails(fieldName, label) : value) :
 						<>
@@ -139,22 +138,6 @@ export default function (props) {
 							))}
 						</>
 					);
-				}
-
-				if (fieldName === 'aliases') {
-					if (edit) {
-						return (
-							<Grid item xs={12}>
-								<FieldArray
-									className={`${classes.arrayString} ${classes.full}`}
-									component={renderAliases}
-									name={fieldName}
-									type="arrayString"
-									props={{name: fieldName, clearFields, subName: 'alias', classes}}
-								/>
-							</Grid>
-						);
-					}
 				}
 
 				if (fieldName === 'organizationDetails[affiliates]') {

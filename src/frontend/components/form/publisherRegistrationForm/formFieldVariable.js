@@ -144,10 +144,9 @@ export const fieldArray = [
 			},
 			{
 				name: 'aliases',
-				type: 'arrayString',
+				type: 'textArea',
 				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.aliases"/>,
-				width: 'half',
-				subName: 'alias'
+				width: 'half'
 			},
 			{
 				name: 'postalAddress[address]',
