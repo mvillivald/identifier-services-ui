@@ -334,6 +334,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.aliases"/>
+							</Typography>
+							<hr/>
 							<ListComponent
 								fieldName="aliases"
 								label={intl.formatMessage({id: 'listComponent.aliases'})}

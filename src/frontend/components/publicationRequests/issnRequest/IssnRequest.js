@@ -193,10 +193,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
-	function formatValueforAssociatedRange(value) {
-		return value.map(item => item.subRange);
-	}
-
 	const {_id, state, seriesDetails, ...formattedIssnRequest} = {...issnRequest, ...issnRequest.seriesDetails};
 
 	let issnRequestDetail;
@@ -509,7 +505,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										value={issnRequest.createdResource ? issnRequest.createdResource : ''}
 									/>
 									<ListComponent label={intl.formatMessage({id: 'listComponent.creator'})} value={issnRequest.creator ? issnRequest.creator : ''}/>
-									<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={issnRequest.associatedRange ? formatValueforAssociatedRange(issnRequest.associatedRange) : ''}/>
 								</Grid>
 								<Grid item xs={12}>
 									<Typography variant="h6">
@@ -614,14 +609,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<Grid item xs={12}>
 									{renderButton(issnRequest.state)}
 								</Grid>}
-							<Fab
-								color="primary"
-								size="small"
-								title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
-								onClick={handleEditClick}
-							>
-								<EditIcon/>
-							</Fab>
+							{issnRequest.state !== 'accepted' &&
+								<Fab
+									color="primary"
+									size="small"
+									title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
+									onClick={handleEditClick}
+								>
+									<EditIcon/>
+								</Fab>}
 						</div>
 						<Grid container item spacing={3} className={classes.listItemSpinner}>
 							{issnRequestDetail}

@@ -305,6 +305,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.aliases"/>
+							</Typography>
+							<hr/>
 							<ListComponent
 								edit={isEdit && isEditable('')}
 								fieldName="aliases"
@@ -513,6 +517,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.aliases"/>
+							</Typography>
+							<hr/>
 							<ListComponent
 								edit={isEdit && isEditable('aliases')}
 								fieldName="aliases"
@@ -625,11 +633,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									{
 										isAuthenticated && userInfo.role === 'admin' &&
 											<Grid container item xs={12}>
-												<Grid item xs={2}>
-													<Button disabled={disableAssign} className={classes.buttons} variant="outlined" color="primary" onClick={handleRange}>
-														<FormattedMessage id="publisher.button.label.assignRanges"/>
-													</Button>
-												</Grid>
+												{!formattedPublisherDetail.publicationPublisher &&
+													<Grid item xs={2}>
+														<Button disabled={disableAssign} className={classes.buttons} variant="outlined" color="primary" onClick={handleRange}>
+															<FormattedMessage id="publisher.button.label.assignRanges"/>
+														</Button>
+													</Grid>}
 												{
 													publisher.publisherIdentifier && Object.keys(publisher.publisherIdentifier).length > 0 &&
 														<Grid item xs={2}>

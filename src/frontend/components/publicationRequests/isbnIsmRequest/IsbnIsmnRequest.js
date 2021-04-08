@@ -164,10 +164,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
-	function formatValueforAssociatedRange(value) {
-		return value.map(item => item.subRange);
-	}
-
 	function formatPublisher(values) {
 		const {publicationDetails} = values;
 		if (publicationDetails) {
@@ -564,10 +560,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publicationIsbnIsmnRequest.creator ? publicationIsbnIsmnRequest.creator : ''}
 								/>
 								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.associatedRange'})}
-									value={publicationIsbnIsmnRequest.associatedRange ? formatValueforAssociatedRange(publicationIsbnIsmnRequest.associatedRange) : ''}
-								/>
-								<ListComponent
 									fieldName="timestamp"
 									label={intl.formatMessage({id: 'listComponent.created'})}
 									value={publicationIsbnIsmnRequest.created ?
@@ -649,14 +641,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<Grid item xs={12}>
 									{renderButton(publicationIsbnIsmnRequest.state, publicationIsbnIsmnRequest.backgroundProcessingState)}
 								</Grid>}
-							<Fab
-								color="primary"
-								size="small"
-								title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
-								onClick={handleEditClick}
-							>
-								<EditIcon/>
-							</Fab>
+							{publicationIsbnIsmnRequest.state !== 'accepted' &&
+								<Fab
+									color="primary"
+									size="small"
+									title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
+									onClick={handleEditClick}
+								>
+									<EditIcon/>
+								</Fab>}
 						</div>
 						<Grid container item spacing={3} className={classes.listItemSpinner}>
 							{publicationIsbnIsmnRequestDetail}

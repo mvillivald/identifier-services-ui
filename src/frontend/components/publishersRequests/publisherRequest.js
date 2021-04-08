@@ -317,6 +317,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</Grid>
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
+						<Typography variant="h6">
+							<FormattedMessage id="listComponent.aliases"/>
+						</Typography>
+						<hr/>
 						<ListComponent
 							edit={isEdit && isEditable}
 							fieldName="aliases"
@@ -509,7 +513,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										{renderButton(publisherRequest.state)}
 									</Grid>
 							}
-							{isAuthenticated && userInfo.role === 'admin' &&
+							{isAuthenticated && userInfo.role === 'admin' && publisherRequest.state !== 'accepted' &&
 								<>
 									<Fab
 										color="primary"
