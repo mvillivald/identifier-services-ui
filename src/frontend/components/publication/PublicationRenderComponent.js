@@ -101,7 +101,7 @@ export default connect(mapStateToProps, actions)(props => {
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Basic Informations
+							{intl.formatMessage({id: 'publicationRender.label.basicInformation'})}
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={publication.title ? publication.title : ''}/>
@@ -112,7 +112,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Publisher Informations
+							{intl.formatMessage({id: 'publicationRender.label.publisher'})}
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.publisherName'})} value={(publication.publisher && publisherName !== null) ? publisherName : ''}/>
@@ -120,7 +120,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Main Series
+							{intl.formatMessage({id: 'publicationRender.label.mainSeries'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -150,7 +150,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Sub Series
+							{intl.formatMessage({id: 'publicationRender.label.subSeries'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -180,7 +180,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Format Details
+							{intl.formatMessage({id: 'publicationRender.label.formatDetails'})}
 						</Typography>
 						<hr/>
 						{
@@ -203,7 +203,7 @@ export default connect(mapStateToProps, actions)(props => {
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Time Details
+							{intl.formatMessage({id: 'publicationRender.label.publicationTime'})}
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="firstYear" label={intl.formatMessage({id: 'listComponent.firstYear'})} value={publication.firstYear ? publication.firstYear : ''}/>
@@ -213,7 +213,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Previous Publication
+							{intl.formatMessage({id: 'publicationRender.label.previousPublication'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -255,7 +255,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Identifier
+							{intl.formatMessage({id: 'publicationRender.label.identifier'})}
 						</Typography>
 						<hr/>
 						{
@@ -267,13 +267,13 @@ export default connect(mapStateToProps, actions)(props => {
 									</div>
 								)) :
 								<Typography variant="body1">
-									Identifier not assigned
+									{intl.formatMessage({id: 'publicationRender.label.identifierNotAssigned'})}
 								</Typography>
 						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Metadata References
+							{intl.formatMessage({id: 'publicationRender.label.metadataReference'})}
 						</Typography>
 						<hr/>
 						{
@@ -288,7 +288,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Other References
+							{intl.formatMessage({id: 'publicationRender.label.otherReferences'})}
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
@@ -349,7 +349,7 @@ export default connect(mapStateToProps, actions)(props => {
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Basic Informations
+							{intl.formatMessage({id: 'publicationRender.label.basicInformation'})}
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="title" label={intl.formatMessage({id: 'listComponent.title'})} value={publication.title ? publication.title : ''}/>
@@ -361,7 +361,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Series Details
+							{intl.formatMessage({id: 'publicationRender.label.seriesDetails'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -394,7 +394,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Uniform Details
+							{intl.formatMessage({id: 'publicationRender.label.uniformDetails'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -410,7 +410,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Format Details
+							{intl.formatMessage({id: 'publicationRender.label.formatDetails'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -491,7 +491,7 @@ export default connect(mapStateToProps, actions)(props => {
 				<Grid container item xs={6} md={6} spacing={2}>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Author Details
+							{intl.formatMessage({id: 'publicationRender.label.authorDetails'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -502,7 +502,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Publication Details
+							{intl.formatMessage({id: 'publicationRender.label.publicationDetails'})}
 						</Typography>
 						<hr/>
 						<ListComponent
@@ -531,7 +531,7 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Identifier
+							{intl.formatMessage({id: 'publicationRender.label.identifier'})}
 						</Typography>
 						<hr/>
 						{
@@ -543,13 +543,13 @@ export default connect(mapStateToProps, actions)(props => {
 									</div>
 								)) :
 								<Typography variant="body1">
-									Identifier not assigned
+									{intl.formatMessage({id: 'publicationRender.label.identifierNotAssigned'})}
 								</Typography>
 						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Metadata References
+							{intl.formatMessage({id: 'publicationRender.label.metadataReference'})}
 						</Typography>
 						<hr/>
 						{
@@ -564,14 +564,14 @@ export default connect(mapStateToProps, actions)(props => {
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							Additional Details
+							{intl.formatMessage({id: 'publicationRender.label.additionalDetails'})}
 						</Typography>
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="additionalDetails" label={intl.formatMessage({id: 'listComponent.additionalDetails'})} value={publication.additionalDetails ? publication.additionalDetails : ''}/>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
-							References
+							{intl.formatMessage({id: 'publicationRender.label.otherReferences'})}
 						</Typography>
 						<hr/>
 						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
