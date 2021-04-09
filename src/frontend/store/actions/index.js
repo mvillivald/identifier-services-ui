@@ -133,5 +133,6 @@ export {
 	fetchIsbnIsmnMonthlyStatistics,
 	createIssnRange,
 	createIsmnRange,
-	updateIsmnRange
+	updateIsmnRange,
+	fetchAllSubRange
 } from './identifierRangesActions';

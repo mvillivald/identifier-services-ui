@@ -543,3 +543,40 @@ export const fetchIsbnIsmnStatistics = ({identifierType, token}) => async dispat
 		dispatch(fail(ERROR, err));
 	}
 };
+
+export const fetchAllSubRange = ({token, offset}) => async dispatch => {
+	dispatch(setRangeListLoader());
+	try {
+		const responseIsbn = await fetch(`${API_URL}/ranges/query/isbn/subRange`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: {}
+				}],
+				offset: offset
+			})
+		});
+		const resultIsbn = await responseIsbn.json();
+		const responseIsmn = await fetch(`${API_URL}/ranges/query/ismn/subRange`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: {}
+				}],
+				offset: offset
+			})
+		});
+		const resultIsmn = await responseIsmn.json();
+		dispatch(success(IDR_LIST, {results: [...resultIsbn, ...resultIsmn]}));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};

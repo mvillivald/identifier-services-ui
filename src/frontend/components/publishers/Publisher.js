@@ -50,6 +50,7 @@ import SelectRange from './SelectRange';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {classificationCodes} from '../form/publisherRegistrationForm/formFieldVariable';
 import PrintElement from '../Print';
+import TableComponent from '../TableComponent';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherUpdateForm',
@@ -60,6 +61,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchPublisher,
 		fetchIDR,
 		fetchIDRIsmn,
+		fetchAllSubRange,
 		updatePublisher,
 		match,
 		history,
@@ -73,6 +75,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		sendMessage,
 		clearFields,
 		fetchIsbnIDRList,
+		subRangeList,
 		isAuthenticated,
 		userInfo} = props;
 	const {id} = match.params;
@@ -86,6 +89,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [enableUpdate, setEnableUpdate] = useState(false);
 	const [disableAssign, setDisableAssign] = useState(true);
 	const [tabsValue, setTabsValue] = useState('isbn');
+	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	const activeCheck = {
 		checked: true
@@ -98,6 +102,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			fetchPublisher(id, cookie[COOKIE_NAME]);
 		}
 	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit, sendMessage]);
+
+	useEffect(() => {
+		fetchAllSubRange({searchText: '', token: cookie[COOKIE_NAME], offset: 'unlimited'});
+	}, [cookie, fetchAllSubRange]);
 
 	useEffect(() => {
 		async function run() {
@@ -149,7 +157,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleRange() {
 		setAssignRange(!assignRange);
-		fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
+		fetchIsbnIDRList({token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
 	}
 
 	function handleOnClickSendMessage() {
@@ -167,6 +175,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				publisherEditableFields.includes(key) :
 				false);
 		return result;
+	}
+
+	const headRowsPublisherIdentifier = [
+		{id: 'publisherIdentifier', label: <FormattedMessage id="publication.metadataReference.headRows.identifier"/>},
+		{id: 'free', label: <FormattedMessage id="publication.metadataReference.headRows.free"/>},
+		{id: 'next', label: <FormattedMessage id="publication.metadataReference.headRows.next"/>},
+		{id: 'active', label: <FormattedMessage id="publication.metadataReference.headRows.active"/>}
+	];
+
+	function tableUserData(item) {
+		const result = subRangeList.length > 0 && subRangeList !== undefined && subRangeList.find(range => item === range.publisherIdentifier);
+		const {free, next, active} = result !== false && result !== undefined && result;
+
+		return {
+			publisherIdentifier: item,
+			free: free,
+			next: next,
+			active: active,
+			id: item
+		};
 	}
 
 	const {_id, publisherRangeId, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
@@ -363,6 +391,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
 								/>
 							</Grid>
+							{
+								formattedPublisherDetail.publisherIdentifier &&
+									<TableComponent
+										data={formattedPublisherDetail.publisherIdentifier.map(item => tableUserData(item))}
+										handleTableRowClick={id => setRowSelectedId(id)}
+										rowSelectedId={rowSelectedId}
+										headRows={headRowsPublisherIdentifier}
+									/>
+							}
 						</Grid>
 						{userInfo.role === 'admin' &&
 							<>
@@ -723,6 +760,7 @@ function mapStateToProps(state) {
 		initialValues: formatInitialValues(state.publisher.publisher),
 		isAuthenticated: state.login.isAuthenticated,
 		range: state.identifierRanges.range,
+		subRangeList: state.identifierRanges.rangesList,
 		userInfo: state.login.userInfo
 	});
 }

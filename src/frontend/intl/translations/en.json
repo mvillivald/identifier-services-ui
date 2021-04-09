@@ -896,6 +896,10 @@
     "publication.metadataReference.headRows.state": "State",
     "publication.metadataReference.headRows.status": "Status",
     "publication.metadataReference.headRows.identifier": "identifier",
+    "publication.metadataReference.headRows.free": "free",
+    "publication.metadataReference.headRows.active": "active",
+    "publication.metadataReference.headRows.next": "next",
+
 
     "publicationRender.label.basicInformation": "Basic informations",
     "publicationRender.label.uniformDetails": "Uniform details",
