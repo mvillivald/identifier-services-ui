@@ -40,7 +40,6 @@ export default connect(mapStateToProps, actions)(props => {
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [cursors] = useState([]);
 	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	const [modal, setModal] = useState(false);
 	const [isbnIsmnId, setIsbnIsmnId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
@@ -49,7 +48,7 @@ export default connect(mapStateToProps, actions)(props => {
 	useEffect(() => {
 		fetchIsbnIsmnList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
-	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating, modal, inputVal]);
+	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating, inputVal]);
 
 	const handleTableRowClick = id => {
 		setIsbnIsmnId(id);
@@ -74,9 +73,7 @@ export default connect(mapStateToProps, actions)(props => {
 			cursors={cursors}
 			publicationList={isbnIsmnList}
 			setLastCursor={setLastCursor}
-			modal={modal}
 			id={isbnIsmnId}
-			setModal={setModal}
 			setIsCreating={setIsCreating}
 			setSearchInputVal={setSearchInputVal}
 			{...props}
