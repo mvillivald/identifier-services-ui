@@ -96,7 +96,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	useEffect(() => {
 		if (Object.keys(isbnIsmn).length > 0) {
 			if (isbnIsmn.identifier && isbnIsmn.identifier.length > 0) {
-				setDisableAssign(true);
+				const formatDetailsArray = manageFormatDetails(isbnIsmn.formatDetails);
+				if (formatDetailsArray.length === isbnIsmn.identifier.length) {
+					setDisableAssign(true);
+				}
+
+				setDisableAssign(false);
 			} else {
 				setDisableAssign(false);
 			}
@@ -115,6 +120,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setPublisherId(null);
 		}
 	}, [cookie, createIsbnBatch, createIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
+
+	function manageFormatDetails(formatDetails) {
+		const {fileFormat, printFormat} = formatDetails;
+		const fileFormatArr = fileFormat && fileFormat.format;
+		const printFormatArr = printFormat && printFormat.format;
+		if (fileFormat && printFormat) {
+			return [
+				...fileFormatArr,
+				...printFormatArr
+			];
+		}
+
+		if (fileFormat) {
+			return [...fileFormatArr];
+		}
+
+		if (printFormat) {
+			return [...printFormatArr];
+		}
+	}
 
 	const handleEditClick = () => {
 		setIsEdit(true);

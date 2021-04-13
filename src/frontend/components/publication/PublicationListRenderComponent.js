@@ -107,7 +107,7 @@ export default connect(mapStateToProps)(props => {
 		const {id} = item;
 		const keys = headRows.map(k => k.id);
 		const result = keys.reduce((acc, key) => {
-			if (key === 'identifier' && item[key] !== undefined) {
+			if (key === 'identifier' && item[key] !== undefined && item[key].length > 0) {
 				return {...acc, [key]: item[key][0].id};
 			}
 
