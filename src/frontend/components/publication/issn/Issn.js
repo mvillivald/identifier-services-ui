@@ -92,10 +92,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (Object.keys(issn).length > 0) {
 			if (issn.identifier && issn.identifier.length > 0) {
 				if (issn.formatDetails.length === issn.identifier.length) {
-					setDisableAssign(true);
+					setDisableAssign(false);
 				}
 
-				setDisableAssign(false);
+				setDisableAssign(true);
 			} else {
 				setDisableAssign(false);
 			}

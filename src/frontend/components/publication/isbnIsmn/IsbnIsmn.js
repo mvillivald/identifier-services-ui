@@ -97,11 +97,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (Object.keys(isbnIsmn).length > 0) {
 			if (isbnIsmn.identifier && isbnIsmn.identifier.length > 0) {
 				const formatDetailsArray = manageFormatDetails(isbnIsmn.formatDetails);
+				console.log(formatDetailsArray.length, isbnIsmn.identifier.length)
 				if (formatDetailsArray.length === isbnIsmn.identifier.length) {
-					setDisableAssign(true);
+					setDisableAssign(false);
 				}
 
-				setDisableAssign(false);
+				setDisableAssign(true);
 			} else {
 				setDisableAssign(false);
 			}
