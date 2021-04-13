@@ -84,7 +84,7 @@ export const fetchPublisherOption = token => async dispatch => {
 				Authorization: `Bearer ${token}`
 			}
 		};
-		const response = await fetch(`${API_URL}/publishers/query/all`, properties);
+		const response = await fetch(`${API_URL}/publishers/fetch/all`, properties);
 		const result = await response.json();
 		dispatch(success(PUBLISHER_OPTIONS, result));
 	} catch (err) {
@@ -245,7 +245,7 @@ export const fetchAllPublishers = ({identifierType, type, token}) => async dispa
 			credentials: 'same-origin',
 			body: JSON.stringify(query)
 		};
-		const response = await fetch(`${API_URL}/publishers/query/all`, properties);
+		const response = await fetch(`${API_URL}/publishers/fetch/all`, properties);
 		const result = await response.json();
 		dispatch(success(PUBLISHERS_LIST, result));
 	} catch (err) {
