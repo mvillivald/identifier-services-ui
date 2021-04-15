@@ -83,7 +83,7 @@ export default connect(state => ({
 						props={{errors}}
 					/>
 					<Fab
-						color="primary"
+						color="secondary"
 						aria-label="Add"
 						size="small"
 						onClick={handleAliasesClick}

@@ -369,7 +369,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										<Grid item xs={12}>
 											{renderButton(usersRequest.state)}
 											<Fab
-												color="primary"
+												color="secondary"
 												size="small"
 												title={intl.formatMessage({id: 'user.fab.label.editUserRequest'})}
 												className={classes.fab}
@@ -382,7 +382,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									) : (
 										<Grid item xs={12}>
 											<Fab
-												color="primary"
+												color="secondary"
 												size="small"
 												title={intl.formatMessage({id: 'user.fab.label.editUserRequest'})}
 												onClick={handleEditClick}

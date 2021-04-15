@@ -159,7 +159,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<div className={classes.btnContainer}>
 						<Fab
-							color="primary"
+							color="secondary"
 							size="small"
 							title={intl.formatMessage({id: 'issn.title.fab.edit'})}
 							onClick={handleEditClick}

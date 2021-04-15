@@ -229,7 +229,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<Grid item xs={2}>
 							{isAuthenticated && (role === 'admin' || role === 'publisher') &&
 								<Fab
-									color="primary"
+									color="secondary"
 									size="small"
 									title={intl.formatMessage({id: 'user.fab.label.editUser'})}
 									onClick={handleEditClick}

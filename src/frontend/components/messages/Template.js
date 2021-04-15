@@ -166,7 +166,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<div className={classes.btnContainer}>
 						<Fab
-							color="primary"
+							color="secondary"
 							size="small"
 							title="Edit Publisher Detail"
 							onClick={handleEditClick}

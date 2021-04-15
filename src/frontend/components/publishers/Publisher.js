@@ -51,6 +51,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {classificationCodes} from '../form/publisherRegistrationForm/formFieldVariable';
 import PrintElement from '../Print';
 import TableComponent from '../TableComponent';
+import AlertDialogs from '../AlertDialogs';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'publisherUpdateForm',
@@ -77,7 +78,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		fetchIsbnIDRList,
 		subRangeList,
 		isAuthenticated,
-		userInfo} = props;
+		revokePublisherIsbn,
+		userInfo
+	} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
 	const intl = useIntl();
@@ -89,7 +92,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [enableUpdate, setEnableUpdate] = useState(false);
 	const [disableAssign, setDisableAssign] = useState(true);
 	const [tabsValue, setTabsValue] = useState('isbn');
-	const [rowSelectedId, setRowSelectedId] = useState(null);
+	const [message, setMessage] = useState(null);
+	const [openAlert, setOpenAlert] = useState(false);
+	const [confirmation, setConfirmation] = useState(false);
+	const [selectedToRevoke, setSelectedToRevoke] = useState(null);
+	const [isRevoking, setIsRevoking] = useState(false);
 
 	const activeCheck = {
 		checked: true
@@ -101,7 +108,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchPublisher(id, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit, sendMessage]);
+	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit, sendMessage, isRevoking]);
 
 	useEffect(() => {
 		fetchAllSubRange({searchText: '', token: cookie[COOKIE_NAME], offset: 'unlimited'});
@@ -141,6 +148,26 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			}
 		}
 	}, [publisher]);
+
+	useEffect(() => {
+		if (confirmation && selectedToRevoke !== null) {
+			setIsRevoking(true);
+			selectedToRevoke.forEach(async item => {
+				const result = await revokePublisherIsbn({subRangeValue: item, token: cookie[COOKIE_NAME]});
+				if (result) {
+					setIsRevoking(false);
+				}
+			});
+		}
+	}, [confirmation, cookie, revokePublisherIsbn, selectedToRevoke]);
+
+	function handleOnAgree() {
+		setConfirmation(true);
+	}
+
+	function handleOnCancel() {
+		setConfirmation(false);
+	}
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -189,12 +216,18 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const {free, next, active} = result !== false && result !== undefined && result;
 
 		return {
+			checkbox: '',
 			publisherIdentifier: item,
 			free: free,
 			next: next,
 			active: active,
 			id: item
 		};
+	}
+
+	function handleDelete(value) {
+		setMessage(intl.formatMessage({id: 'listComponent.confirmation.message.revoke'}));
+		setSelectedToRevoke(value);
 	}
 
 	const {_id, publisherRangeId, ...formattedPublisherDetail} = {...publisher, ...publisher.organizationDetails, notes: (publisher && publisher.notes) ? publisher.notes.map(item => {
@@ -384,20 +417,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<FormattedMessage id="listComponent.publisherIdentifier"/>
 							</Typography>
 							<hr/>
-							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
-								<ListComponent
-									edit={isEdit && isEditable('publisherIdentifier')} fieldName="publisherIdentifier"
-									clearFields={clearFields}
-									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
-								/>
-							</Grid>
 							{
 								formattedPublisherDetail.publisherIdentifier &&
 									<TableComponent
+										rowDeletable
 										data={formattedPublisherDetail.publisherIdentifier.map(item => tableUserData(item))}
-										handleTableRowClick={id => setRowSelectedId(id)}
-										rowSelectedId={rowSelectedId}
 										headRows={headRowsPublisherIdentifier}
+										handleDelete={handleDelete}
 									/>
 							}
 						</Grid>
@@ -694,7 +720,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												</Grid>
 												<Grid item xs={2}>
 													<Fab
-														color="primary"
+														color="secondary"
 														size="small"
 														title={intl.formatMessage({id: 'user.fab.label.editUser'})}
 														onClick={handleEditClick}
@@ -716,7 +742,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											</Grid>
 											<Grid item xs={2}>
 												<Fab
-													color="primary"
+													color="secondary"
 													size="small"
 													title={intl.formatMessage({id: 'user.fab.label.editUser'})}
 													onClick={handleEditClick}
@@ -728,7 +754,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									{/* {isAuthenticated && userInfo.role === 'publisher' &&
 								<div className={classes.btnContainer}>
 									<Fab
-										color="primary"
+										color="secondary"
 										size="small"
 										title="Edit Publisher Detail"
 										onClick={handleEditClick}
@@ -741,6 +767,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											{publisherDetail}
 										</Grid>
 									</RootRef>
+									{
+										message &&
+											<AlertDialogs
+												openAlert={openAlert}
+												setOpenAlert={setOpenAlert}
+												message={message}
+												setMessage={setMessage}
+												handleOnAgree={handleOnAgree}
+												handleOnCancel={handleOnCancel}
+											/>
+									}
 								</>}
 						</div>
 				)

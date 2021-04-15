@@ -26,11 +26,11 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
-import {Table, TableBody, TableCell, TableHead, TableFooter, TableRow, TableSortLabel, Paper, IconButton} from '@material-ui/core';
+import React, {useState} from 'react';
+import {makeStyles, useTheme, lighten} from '@material-ui/core/styles';
+import {Table, TableBody, TableCell, TableHead, TableFooter, TableRow, TableSortLabel, Toolbar, Tooltip, Paper, IconButton, Checkbox} from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import DeleteIcon from '@material-ui/icons/Delete';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import {FormattedMessage} from 'react-intl';
 
@@ -69,7 +69,7 @@ function EnhancedTableHead(props) {
 		onRequestSort(event, property);
 	};
 
-	return (
+	const component = (
 		<TableHead>
 			<TableRow>
 				{headRows.map(row => (
@@ -91,13 +91,47 @@ function EnhancedTableHead(props) {
 			</TableRow>
 		</TableHead>
 	);
+
+	return {...component};
 }
 
-EnhancedTableHead.propTypes = {
-	onRequestSort: PropTypes.func.isRequired,
-	order: PropTypes.string.isRequired,
-	orderBy: PropTypes.string.isRequired,
-	headRows: PropTypes.array.isRequired
+const useToolbarStyles = makeStyles(theme => ({
+	root: {
+		paddingLeft: theme.spacing(2),
+		paddingRight: theme.spacing(1)
+	},
+	highlight:
+		theme.palette.type === 'light' ?
+			{
+				color: theme.palette.secondary.main,
+				backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+			} :
+			{
+				color: theme.palette.text.primary,
+				backgroundColor: theme.palette.secondary.dark
+			},
+	toolbar: {
+		justifyContent: 'flex-end',
+		minHeight: 'unset'
+	}
+}));
+
+const EnhancedTableToolbar = props => {
+	const {numSelected, handleDelete, selected} = props;
+	const classes = useToolbarStyles();
+	const component = (
+		<Toolbar title="Delete" className={classes.toolbar}>
+			{numSelected > 0 && (
+				<Tooltip title="Delete">
+					<IconButton aria-label="delete" onClick={() => handleDelete(selected)}>
+						<DeleteIcon/>
+					</IconButton>
+				</Tooltip>
+			)}
+		</Toolbar>
+	);
+
+	return {...component};
 };
 
 const useStyles = makeStyles(theme => ({
@@ -133,8 +167,9 @@ const useStyles = makeStyles(theme => ({
 export default function (props) {
 	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings, page} = props;
 	const classes = useStyles();
-	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState(headRows[0].id);
+	const [order, setOrder] = useState('asc');
+	const [orderBy, setOrderBy] = useState(headRows[0].id);
+	const [selected, setSelected] = useState([]);
 
 	function handleRequestSort(event, property) {
 		const isDesc = orderBy === property && order === 'desc';
@@ -142,8 +177,33 @@ export default function (props) {
 		setOrderBy(property);
 	}
 
+	function handleClick(event, id) {
+		const selectedIndex = selected.indexOf(id);
+		let newSelected = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
+		}
+
+		setSelected(newSelected);
+	}
+
+	function isSelected(name) {
+		return selected.indexOf(name) !== -1;
+	}
+
 	const component = (
 		<Paper className={classes.paper}>
+			<EnhancedTableToolbar numSelected={selected.length} selected={selected} {...props}/>
 			<Table
 				className={classes.table}
 				aria-labelledby="tableTitle"
@@ -157,18 +217,35 @@ export default function (props) {
 				/>
 				<TableBody>
 					{stableSort(data, getSorting(order, orderBy))
-						.map(row => {
+						.map((row, i) => {
+							const isItemSelected = isSelected(row.id);
 							return (
 								<TableRow
 									key={row.id}
-									selected={row.userId ? row.userId === rowSelectedId : row.id === rowSelectedId}
+									selected={rowSelectedId ? (row.userId ? row.userId === rowSelectedId : row.id === rowSelectedId) : isItemSelected}
 									classes={{selected: classes.selected}}
+									role={!rowSelectedId && 'checkbox'}
 									className={classes.tableRow}
-									onClick={() => handleTableRowClick && handleTableRowClick(row.userId ? row.userId : (proceedings ? {type: row.type, id: row.id} : row.id))}
+									onClick={
+										event => handleTableRowClick ?
+											handleTableRowClick(row.userId ? row.userId : (proceedings ? {type: row.type, id: row.id} : row.id)) :
+											handleClick(event, row.id)
+									}
 								>
+									{
+										Object.keys(row).map(item => item === 'checkbox' &&
+											<TableCell padding="checkbox">
+												<Checkbox
+													checked={isItemSelected}
+													inputProps={{'aria-labelledby': `enhanced-table-checkbox${i}`, style: {position: 'unset', height: 'unset', width: 'unset'}}}
+												/>
+											</TableCell>
+										)
+									}
 									{headRows.reduce((acc, h) => {
-										Object.keys(row).forEach(key => (key !== 'id' && key !== 'mongoId') && (
-											h.id === key &&
+										Object.keys(row).forEach(key => (key !== 'id' && key !== 'mongoId' && key !== 'checkbox') &&
+											(
+												h.id === key &&
 												acc.push(
 													<TableCell key={row[key]} component="th" scope="row">
 														{(row[key] === true ?
@@ -181,7 +258,7 @@ export default function (props) {
 														)}
 													</TableCell>
 												)
-										));
+											));
 										return acc;
 									}, [])}
 								</TableRow>
@@ -202,11 +279,7 @@ export default function (props) {
 	);
 
 	return {
-		...component,
-		propTypes: {
-			data: PropTypes.array.isRequired,
-			headRows: PropTypes.array.isRequired
-		}
+		...component
 	};
 }
 
@@ -233,7 +306,7 @@ function TablePaginationActions(props) {
 		setLastCursor(offset);
 	}
 
-	return (
+	const component = (
 		<TableCell>
 			{/* <span>{page * 5 > queryDocCount ? queryDocCount : page * 5}/{queryDocCount}</span> */}
 			{/* <IconButton
@@ -268,13 +341,6 @@ function TablePaginationActions(props) {
 			</IconButton> */}
 		</TableCell>
 	);
-}
 
-TablePaginationActions.propTypes = {
-	offset: PropTypes.string.isRequired,
-	cursors: PropTypes.array.isRequired,
-	setLastCursor: PropTypes.func.isRequired,
-	page: PropTypes.number.isRequired,
-	setPage: PropTypes.func.isRequired,
-	queryDocCount: PropTypes.number.isRequired
-};
+	return {...component};
+}

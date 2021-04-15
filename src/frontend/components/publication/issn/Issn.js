@@ -266,7 +266,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												}
 											</Grid>
 											<Fab
-												color="primary"
+												color="secondary"
 												size="small"
 												title={intl.formatMessage({id: 'publication.issn.edit.label'})}
 												onClick={handleEditClick}

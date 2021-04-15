@@ -51,8 +51,6 @@ export default connect(mapStateToProps, actions)(props => {
 		clearFields,
 		fetchPublisher,
 		fetchedPublisher,
-		rowSelectedId,
-		handleTableRowClick,
 		headRows,
 		publisherLoading
 	} = props;
@@ -94,6 +92,10 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	return publicationDetail;
+
+	function handleIssnDelete(value) {
+		console.log(value);
+	}
 
 	function issnElements(publication) {
 		return (
@@ -279,10 +281,10 @@ export default connect(mapStateToProps, actions)(props => {
 						{
 							publication.metadataReference &&
 								<TableComponent
+									rowDeleteable
 									data={publication.metadataReference.map(item => tableUserData(item))}
-									handleTableRowClick={handleTableRowClick}
-									rowSelectedId={rowSelectedId}
 									headRows={headRows}
+									handleDelete={handleIssnDelete}
 								/>
 						}
 					</Grid>
@@ -335,12 +337,17 @@ export default connect(mapStateToProps, actions)(props => {
 		}, {});
 
 		return {
+			checkbox: '',
 			format: result.format,
 			state: result.state,
 			status: result.status,
 			identifier: result.identifier ? result.identifier : '',
 			id: result.format
 		};
+	}
+
+	function handleIsbnIsmnDelete(value) {
+		console.log(value);
 	}
 
 	function isbnIsmnElements(publication) {
@@ -555,10 +562,10 @@ export default connect(mapStateToProps, actions)(props => {
 						{
 							publication.metadataReference &&
 								<TableComponent
+									rowDeleteable
 									data={publication.metadataReference.map(item => tableUserData(item))}
-									handleTableRowClick={handleTableRowClick}
-									rowSelectedId={rowSelectedId}
 									headRows={headRows}
+									handleDelete={handleIsbnIsmnDelete}
 								/>
 						}
 					</Grid>

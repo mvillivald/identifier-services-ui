@@ -516,7 +516,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{isAuthenticated && userInfo.role === 'admin' && publisherRequest.state !== 'accepted' &&
 								<>
 									<Fab
-										color="primary"
+										color="secondary"
 										size="small"
 										title={intl.formatMessage({id: 'user.fab.label.editUser'})}
 										onClick={handleEditClick}

@@ -87,7 +87,7 @@ export default connect(state => ({
 					/>
 					<Tooltip title={<FormattedMessage id="form.aliases.tooltip"/>} aria-label="add aliases">
 						<Fab
-							color="primary"
+							color="secondary"
 							aria-label="Add"
 							size="small"
 							onClick={handleAliasesClick}

@@ -643,7 +643,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								</Grid>}
 							{publicationIsbnIsmnRequest.state !== 'accepted' &&
 								<Fab
-									color="primary"
+									color="secondary"
 									size="small"
 									title={intl.formatMessage({id: 'publication.isbnismn.edit.label'})}
 									onClick={handleEditClick}

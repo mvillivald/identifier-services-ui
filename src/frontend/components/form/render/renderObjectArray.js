@@ -91,7 +91,7 @@ export default connect(state => ({
 						))
 					}
 					<Fab
-						color="primary"
+						color="secondary"
 						aria-label="Add"
 						size="small"
 						onClick={handleAliasesClick}
