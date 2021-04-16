@@ -163,11 +163,6 @@ const theme = createMuiTheme({
 			root: {
 				display: 'flex'
 			}
-		},
-		MuiSvgIcon: {
-			root: {
-				fill: '#00224f !important'
-			}
 		}
 	}
 });

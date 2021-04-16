@@ -238,7 +238,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading) {
 		publisherDetail = <Spinner/>;
 	} else {
-		publisherDetail = (userInfo.role === 'admin' || userInfo.role === 'publisher') ?
+		publisherDetail = (userInfo.role === 'admin') ?
 			(
 				<>
 					<Grid container item xs={6} md={6} spacing={2}>
@@ -731,38 +731,24 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												</Grid>
 											</Grid>
 									}
-									{isAuthenticated && userInfo.role === 'publisher' &&
-										<Grid container item xs={12}>
-											<Grid item xs={2}>
-												<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickProceedings}>
-													<FormattedMessage id="button.label.proceedings"/>
-												</Button>
+									{
+										isAuthenticated && userInfo.role === 'publisher' &&
+											<Grid container item xs={12}>
+												<Grid item xs={2}>
+													<PrintElement componentRef={componentRef}/>
+												</Grid>
+												<Grid item xs={2}>
+													<Fab
+														color="secondary"
+														size="small"
+														title={intl.formatMessage({id: 'user.fab.label.editUser'})}
+														onClick={handleEditClick}
+													>
+														<EditIcon/>
+													</Fab>
+												</Grid>
 											</Grid>
-											<Grid item xs={2}>
-												<PrintElement componentRef={componentRef}/>
-											</Grid>
-											<Grid item xs={2}>
-												<Fab
-													color="secondary"
-													size="small"
-													title={intl.formatMessage({id: 'user.fab.label.editUser'})}
-													onClick={handleEditClick}
-												>
-													<EditIcon/>
-												</Fab>
-											</Grid>
-										</Grid>}
-									{/* {isAuthenticated && userInfo.role === 'publisher' &&
-								<div className={classes.btnContainer}>
-									<Fab
-										color="secondary"
-										size="small"
-										title="Edit Publisher Detail"
-										onClick={handleEditClick}
-									>
-										<EditIcon/>
-									</Fab>
-								</div>} */}
+									}
 									<RootRef rootRef={componentRef}>
 										<Grid container spacing={3} className={classes.listItemSpinner}>
 											{publisherDetail}
