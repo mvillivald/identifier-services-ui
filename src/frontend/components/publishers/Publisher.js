@@ -205,6 +205,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const headRowsPublisherIdentifier = [
+		{id: '', label: ''},
 		{id: 'publisherIdentifier', label: <FormattedMessage id="publication.metadataReference.headRows.identifier"/>},
 		{id: 'free', label: <FormattedMessage id="publication.metadataReference.headRows.free"/>},
 		{id: 'next', label: <FormattedMessage id="publication.metadataReference.headRows.next"/>},

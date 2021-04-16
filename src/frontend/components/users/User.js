@@ -53,7 +53,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, deleteUser, match} = props;
+	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, match} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
 	const intl = useIntl();
@@ -75,9 +75,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	useEffect(() => {
 		if (confirmation) {
-			deleteUser(id, user, cookie[COOKIE_NAME]);
+			const deletePayload = {
+				...user,
+				active: false
+			};
+
+			updateUser(id, deletePayload, cookie[COOKIE_NAME]);
+			setConfirmation(false);
+			history.push('/users');
 		}
-	}, [confirmation, cookie, deleteUser, id, user]);
+	}, [confirmation, cookie, id, updateUser, user]);
 
 	const handleEditClick = () => {
 		setIsEdit(true);

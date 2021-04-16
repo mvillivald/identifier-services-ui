@@ -65,7 +65,9 @@ export default connect(mapStateToProps, actions)(props => {
 	};
 
 	const headRows = [
+		{id: 'empty', label: ''},
 		{id: 'userId', label: intl.formatMessage({id: 'user.headRows.userId'})},
+		{id: 'active', label: intl.formatMessage({id: 'user.headRows.active'})},
 		{id: 'defaultLanguage', label: intl.formatMessage({id: 'user.headRows.defaultLanguage'})}
 	];
 	let usersData;
@@ -92,10 +94,12 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function usersDataRender(item) {
-		const {id, preferences, mongoId} = item;
+		const {id, preferences, mongoId, active} = item;
 		return {
+			empty: '',
 			userId: id,
 			mongoId: mongoId,
+			active: active === undefined ? true : active,
 			defaultLanguage: preferences.defaultLanguage
 		};
 	}

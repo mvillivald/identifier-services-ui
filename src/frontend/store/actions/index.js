@@ -82,8 +82,7 @@ export {
 	fetchUsersList,
 	fetchUsersRequestsList,
 	updateUserRequest,
-	updateUser,
-	deleteUser
+	updateUser
 } from './userActions';
 
 export {

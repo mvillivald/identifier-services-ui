@@ -90,6 +90,7 @@ export const createUser = (values, token) => async dispatch => {
 			dispatch(setMessage({color: 'error', msg: 'SSO-ID doesnot exists in crowd'}));
 			return response.status;
 		case HttpStatus.CONFLICT:
+		case 'INVALID_USER':
 			dispatch(setMessage({color: 'error', msg: 'User with this SSO-ID or email already exists'}));
 			return response.status;
 		default:
@@ -255,24 +256,24 @@ export const updateUser = (id, values, token) => async dispatch => {
 	}
 };
 
-export const deleteUser = (id, values, token) => async dispatch => {
-	dispatch(setLoader());
-	try {
-		const response = await fetch(`${API_URL}/users/${id}`, {
-			method: 'DELETE',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			credentials: 'same-origin',
-			body: JSON.stringify(values)
-		});
+// Export const deleteUser = (id, values, token) => async dispatch => {
+// 	dispatch(setLoader());
+// 	try {
+// 		const response = await fetch(`${API_URL}/users/${id}`, {
+// 			method: 'DELETE',
+// 			headers: {
+// 				Authorization: `Bearer ${token}`,
+// 				'Content-Type': 'application/json'
+// 			},
+// 			credentials: 'same-origin',
+// 			body: JSON.stringify(values)
+// 		});
 
-		if (response.status === HttpStatus.OK) {
-			dispatch(setMessage({color: 'success', msg: 'User Successfully Deleted!!!'}));
-			return response.status;
-		}
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
+// 		if (response.status === HttpStatus.OK) {
+// 			dispatch(setMessage({color: 'success', msg: 'User Successfully Deleted!!!'}));
+// 			return response.status;
+// 		}
+// 	} catch (err) {
+// 		dispatch(fail(ERROR, err));
+// 	}
+// };
