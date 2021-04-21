@@ -154,13 +154,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (confirmation && selectedToRevoke !== null) {
 			setIsRevoking(true);
 			selectedToRevoke.forEach(async item => {
-				const result = await revokePublisherIsbn({subRangeValue: item, token: cookie[COOKIE_NAME]});
-				if (result) {
-					setIsRevoking(false);
+				const filtered = subRangeList.filter(obj => item === obj.publisherIdentifier);
+				if (filtered.length > 0) {
+					const type = filtered[0].isbnRangeId ? 'isbn' : filtered[0].ismnRangeId ? 'ismn' : '';
+					const result = await revokePublisherIsbn({subRangeValue: {item, type}, token: cookie[COOKIE_NAME]});
+					if (result) {
+						setIsRevoking(false);
+					}
 				}
 			});
 		}
-	}, [confirmation, cookie, revokePublisherIsbn, selectedToRevoke]);
+	}, [confirmation, cookie, revokePublisherIsbn, selectedToRevoke]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function handleOnAgree() {
 		setConfirmation(true);
@@ -210,6 +214,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		{id: 'publisherIdentifier', label: <FormattedMessage id="publisher.identifier.headRows.identifier"/>},
 		{id: 'free', label: <FormattedMessage id="publisher.identifier.headRows.free"/>},
 		{id: 'next', label: <FormattedMessage id="publisher.identifier.headRows.next"/>},
+		{id: 'type', label: <FormattedMessage id="publisher.identifier.headRows.type"/>},
 		{id: 'active', label: <FormattedMessage id="publisher.identifier.headRows.active"/>}
 	];
 
@@ -643,6 +648,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					free: free,
 					next: next,
 					active: active,
+					type: result.isbnRangeId ? 'ISBN' : 'ISMN',
 					id: item
 				};
 			}
@@ -653,6 +659,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				free: '',
 				next: '',
 				active: '',
+				type: '',
 				id: item
 			};
 		}

@@ -206,10 +206,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const headRowsMetadataReference = [
-		{id: 'format', label: <FormattedMessage id="publication.metadataReference.headRows.format"/>},
-		{id: 'state', label: <FormattedMessage id="publication.metadataReference.headRows.state"/>},
-		{id: 'status', label: <FormattedMessage id="publication.metadataReference.headRows.status"/>},
-		{id: 'identifier', label: <FormattedMessage id="publication.metadataReference.headRows.identifier"/>}
+		{id: 'format', label: <FormattedMessage id="publication.isbnismn.metadataReference.headRows.format"/>},
+		{id: 'state', label: <FormattedMessage id="publication.isbnismn.metadataReference.headRows.state"/>},
+		{id: 'status', label: <FormattedMessage id="publication.isbnismn.metadataReference.headRows.status"/>},
+		{id: 'identifier', label: <FormattedMessage id="publication.isbnismn.metadataReference.headRows.identifier"/>}
 	];
 
 	const component = (

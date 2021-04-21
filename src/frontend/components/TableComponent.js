@@ -277,17 +277,16 @@ export default function (props) {
 				</Table>
 			</TableContainer>
 			{
-				pagination &&
-					<TablePagination
-						rowsPerPageOptions={[10, 25, 50]}
-						component="div"
-						count={data.length}
-						rowsPerPage={rowsPerPage}
-						page={page}
-						onChangePage={handleChangePage}
-						onChangeRowsPerPage={handleChangeRowsPerPage}
-						{...props}
-					/>
+				pagination && <TablePagination
+					rowsPerPageOptions={[10, 25, 50]}
+					component="div"
+					count={data.length}
+					rowsPerPage={rowsPerPage}
+					page={page}
+					onChangePage={handleChangePage}
+					onChangeRowsPerPage={handleChangeRowsPerPage}
+					{...props}
+				/>
 			}
 		</Paper>
 	);

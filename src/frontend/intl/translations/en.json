@@ -899,6 +899,7 @@
     "publisher.identifier.headRows.free": "free",
     "publisher.identifier.headRows.active": "active",
     "publisher.identifier.headRows.next": "next",
+    "publisher.identifier.headRows.type": "type",
 
 
     "publicationRender.label.basicInformation": "Basic informations",
@@ -918,6 +919,10 @@
     "publication.isbnismn.metadataReference.headRows.format": "Format",
     "publication.isbnismn.metadataReference.headRows.state": "State",
     "publication.isbnismn.metadataReference.headRows.status": "Status",
+    "publication.isbnismn.metadataReference.headRows.identifier": "Identifier",
+
+    "publication.identifier.headRows.identifier": "Identifier",
+    "publication.identifier.headRows.publicationType": "Publication Type",
 
     
 
