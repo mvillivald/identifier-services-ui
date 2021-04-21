@@ -574,18 +574,6 @@ export default connect(mapStateToProps, actions)(props => {
 						<hr/>
 						{
 							publication.identifier ?
-								publication.identifier.map(item => (
-									<div key={publication.identifier.id}>
-										<ListComponent label={intl.formatMessage({id: 'listComponent.id'})} value={item.id}/>
-										<ListComponent label={intl.formatMessage({id: 'listComponent.type'})} value={item.type}/>
-									</div>
-								)) :
-								<Typography variant="body1">
-									{intl.formatMessage({id: 'publicationRender.label.identifierNotAssigned'})}
-								</Typography>
-						}
-						{
-							publication.identifier ?
 								<TableComponent
 									rowDeletable
 									data={publication.identifier.map(item => tableUserDataIdentifier(item))}
