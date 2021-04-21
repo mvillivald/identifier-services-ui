@@ -40,17 +40,15 @@ import Spinner from '../Spinner';
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const intl = useIntl();
-	const {loading, fetchMessagesList, messagesList, totalMessages, queryDocCount, offset, history} = props;
+	const {loading, fetchMessagesList, messagesList, totalMessages, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [page, setPage] = useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
+	const [page, setPage] = useState(0);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchMessagesList(cookie[COOKIE_NAME], lastCursor, {'lastUpdated.timestamp': -1});
-	}, [lastCursor, cursors, fetchMessagesList, cookie]);
+		fetchMessagesList(cookie[COOKIE_NAME], {'lastUpdated.timestamp': -1});
+	}, [fetchMessagesList, cookie]);
 
 	const handleTableRowClick = id => {
 		setRowSelectedId(id);
@@ -72,17 +70,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		messageData = (
 			<TableComponent
+				pagination
 				data={messagesList.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
 				totalDoc={totalMessages}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -115,8 +110,6 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.message.listLoading,
 		messagesList: state.message.messagesList,
-		totalMessages: state.message.totalMessages,
-		offset: state.message.offset,
-		queryDocCount: state.message.queryDocCount
+		totalMessages: state.message.totalMessages
 	});
 }

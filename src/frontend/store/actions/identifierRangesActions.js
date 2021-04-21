@@ -32,7 +32,30 @@ import {setLoader, setRangeListLoader, success, fail, setMessage} from './common
 import HttpStatus from 'http-status';
 import moment from 'moment';
 
-export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
+export const fetchIDRList = ({token}) => async dispatch => {
+	try {
+		dispatch(setRangeListLoader());
+		const query = {};
+		const response = await fetch(`${API_URL}/ranges/query/identifier`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: query
+				}]
+			})
+		});
+		const result = await response.json();
+		dispatch(success(IDR_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchIsbnIDRList = ({searchText, token, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
 		(
@@ -71,8 +94,7 @@ export const fetchIsbnIDRList = ({searchText, token, offset, activeCheck, rangeT
 			body: JSON.stringify({
 				queries: [{
 					query: query
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const result = await response.json();
@@ -134,7 +156,7 @@ export const createNewIsbnRange = (values, token) => async dispatch => {
 };
 
 // Not being Used but will be used in future
-export const searchIDRList = ({searchField, searchText, token, offset, rangeType}) => async dispatch => {
+export const searchIDRList = ({searchField, searchText, token, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = {[searchField]: searchText};
 	const fetchUrl = rangeType === 'range' ?
@@ -155,8 +177,7 @@ export const searchIDRList = ({searchField, searchText, token, offset, rangeType
 			body: JSON.stringify({
 				queries: [{
 					query: query
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const result = await response.json();
@@ -212,7 +233,7 @@ export const createIsbnBatch = (values, token) => async dispatch => {
 };
 
 // ***************ISMN****************************
-export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeType}) => async dispatch => {
+export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
 		(
@@ -252,8 +273,7 @@ export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeT
 			body: JSON.stringify({
 				queries: [{
 					query: query
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const result = await response.json();
@@ -263,7 +283,7 @@ export const fetchIsmnIDRList = ({searchText, token, offset, activeCheck, rangeT
 	}
 };
 
-export const fetchIDRIsmnList = ({searchText, token, offset, activeCheck}) => async dispatch => {
+export const fetchIDRIsmnList = ({searchText, token, activeCheck}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
 		{prefix: searchText};
@@ -278,8 +298,7 @@ export const fetchIDRIsmnList = ({searchText, token, offset, activeCheck}) => as
 			body: JSON.stringify({
 				queries: [{
 					query: query
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const result = await response.json();
@@ -392,7 +411,7 @@ export const createIsmnBatch = (values, token) => async dispatch => {
 };
 // ***************ISSN****************************
 
-export const fetchIDRIssnList = ({searchText, token, offset, activeCheck}) => async dispatch => {
+export const fetchIDRIssnList = ({searchText, token, activeCheck}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
 		{prefix: searchText};
@@ -407,8 +426,7 @@ export const fetchIDRIssnList = ({searchText, token, offset, activeCheck}) => as
 			body: JSON.stringify({
 				queries: [{
 					query: query
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const result = await response.json();
@@ -544,7 +562,7 @@ export const fetchIsbnIsmnStatistics = ({identifierType, token}) => async dispat
 	}
 };
 
-export const fetchAllSubRange = ({token, offset}) => async dispatch => {
+export const fetchAllSubRange = ({token}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	try {
 		const responseIsbn = await fetch(`${API_URL}/ranges/query/isbn/subRange`, {
@@ -556,8 +574,7 @@ export const fetchAllSubRange = ({token, offset}) => async dispatch => {
 			body: JSON.stringify({
 				queries: [{
 					query: {}
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const resultIsbn = await responseIsbn.json();
@@ -570,12 +587,11 @@ export const fetchAllSubRange = ({token, offset}) => async dispatch => {
 			body: JSON.stringify({
 				queries: [{
 					query: {}
-				}],
-				offset: offset
+				}]
 			})
 		});
 		const resultIsmn = await responseIsmn.json();
-		dispatch(success(IDR_LIST, {results: [...resultIsbn, ...resultIsmn]}));
+		dispatch(success(IDR_LIST, {results: [...resultIsbn.results, ...resultIsmn.results], totalDoc: resultIsbn.totalDoc + resultIsmn.totalDoc}));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

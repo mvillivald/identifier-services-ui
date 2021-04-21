@@ -45,21 +45,19 @@ import TabComponent from '../TabComponent';
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const modalClasses = useModalStyles();
-	const {loading, fetchUsersRequestsList, usersRequestsList, queryDocCount, totalDoc, offset, userInfo, history} = props;
+	const {loading, fetchUsersRequestsList, usersRequestsList, totalDoc, userInfo, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
 	const [inputVal, setSearchInputVal] = useState('');
 	const [sortStateBy, setSortStateBy] = useState('new');
-	const [page, setPage] = useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
+	const [page, setPage] = useState(0);
 	const [isCreating, setIsCreating] = useState(false);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	useEffect(() => {
-		fetchUsersRequestsList({searchText: inputVal, sortStateBy: sortStateBy, token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
+		fetchUsersRequestsList({searchText: inputVal, sortStateBy: sortStateBy, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
-	}, [lastCursor, cursors, inputVal, sortStateBy, fetchUsersRequestsList, cookie, isCreating]);
+	}, [inputVal, sortStateBy, fetchUsersRequestsList, cookie, isCreating]);
 
 	const handleTableRowClick = id => {
 		history.push(`/requests/users/${id}`);
@@ -84,17 +82,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		usersData = (
 			<TableComponent
+				pagination
 				data={usersRequestsList.map(item => usersDataRender(item.id, item.state, item.publisher, item.email))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
 				totalDoc={totalDoc}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -113,7 +108,7 @@ export default connect(mapStateToProps, actions)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="userRequest.listAvailable"/>
 			</Typography>
-			<SearchComponent offset={offset} searchFunction={fetchUsersRequestsList} setSearchInputVal={setSearchInputVal}/>
+			<SearchComponent searchFunction={fetchUsersRequestsList} setSearchInputVal={setSearchInputVal}/>
 			<TabComponent
 				sortStateBy={sortStateBy}
 				handleChange={handleChange}
@@ -144,9 +139,7 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.users.listLoading,
 		usersRequestsList: state.users.usersRequestsList,
-		offset: state.users.requestOffset,
 		totalDoc: state.users.totalUsersRequests,
-		queryDocCount: state.users.queryDocCount,
 		userInfo: state.login.userInfo
 	});
 }

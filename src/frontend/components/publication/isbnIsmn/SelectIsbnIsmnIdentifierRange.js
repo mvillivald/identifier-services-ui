@@ -55,8 +55,6 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchIsmnIDRList,
 		rangesList,
 		rangeLoading,
-		offset,
-		queryDocCount,
 		rangeType,
 		setSubRangeId,
 		setPublisherId,
@@ -73,9 +71,7 @@ export default connect(mapStateToProps, actions)(props => {
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
-	const [page, setPage] = React.useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
+	const [page, setPage] = React.useState(0);
 	const [updateComponent] = useState(false);
 	const [activeCheck, setActiveCheck] = useState({
 		checked: false
@@ -105,25 +101,25 @@ export default connect(mapStateToProps, actions)(props => {
 
 	useEffect(() => {
 		if (publicationType === 'isbn') {
-			fetchIsbnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			fetchIsbnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 		}
 
 		if (publicationType === 'ismn') {
-			fetchIsmnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			fetchIsmnIDRList({searchText: isbnIsmn.publisher, token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 		}
-	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType, publicationType, fetchIsmnIDRList]);
+	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, activeCheck, rangeType, publicationType, fetchIsmnIDRList]);
 
 	useEffect(() => {
 		if (next && fetchedPublisher !== undefined) {
 			if (publicationType === 'isbn') {
-				fetchIsbnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+				fetchIsbnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 			}
 
 			if (publicationType === 'ismn') {
-				fetchIsmnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+				fetchIsmnIDRList({searchText: fetchedPublisher._id, token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 			}
 		}
-	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, lastCursor, activeCheck, rangeType, fetchedPublisher, next, publicationType, fetchIsmnIDRList]);
+	}, [updateComponent, isbnIsmn.publisher, fetchIsbnIDRList, cookie, activeCheck, rangeType, fetchedPublisher, next, publicationType, fetchIsmnIDRList]);
 
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {
@@ -237,17 +233,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		data = (
 			<TableComponent
+				pagination
 				data={rangesList
 					.map(item => listRender({...item}))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows()}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -323,9 +316,7 @@ function mapStateToProps(state) {
 	return ({
 		rangeLoading: state.identifierRanges.rangeListLoading,
 		rangesList: state.identifierRanges.rangesList,
-		offset: state.identifierRanges.offset,
 		totalDoc: state.identifierRanges.totalDoc,
-		queryDocCount: state.identifierRanges.queryDocCount,
 		publisherLoading: state.publisher.loading,
 		fetchedPublisher: state.publisher.publisher
 	});

@@ -46,7 +46,7 @@ import moment from 'moment';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, success, fail, setMessage} from './commonAction';
 
-export const fetchIsbnIsmnList = ({searchText, token, offset, activeCheck, sort}) => async dispatch => {
+export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
 		{$or: [{title: searchText}, {'identifier.id': searchText}]};
@@ -61,7 +61,6 @@ export const fetchIsbnIsmnList = ({searchText, token, offset, activeCheck, sort}
 				queries: [{
 					query: query
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});
@@ -72,7 +71,7 @@ export const fetchIsbnIsmnList = ({searchText, token, offset, activeCheck, sort}
 	}
 };
 
-export const fetchProceedingsList = ({searchText, token, offset, sort}) => async dispatch => {
+export const fetchProceedingsList = ({searchText, token, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	const query = {publisher: searchText};
 	try {
@@ -86,7 +85,6 @@ export const fetchProceedingsList = ({searchText, token, offset, sort}) => async
 				queries: [{
 					query: query
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});
@@ -102,7 +100,6 @@ export const fetchProceedingsList = ({searchText, token, offset, sort}) => async
 				queries: [{
 					query: query
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});
@@ -110,8 +107,7 @@ export const fetchProceedingsList = ({searchText, token, offset, sort}) => async
 
 		const result = {
 			results: [...resultIsbnIsmn.results, ...resultIssn.results],
-			totalDoc: (resultIsbnIsmn.totalDoc === undefined ? 0 : resultIsbnIsmn.totalDoc) + (resultIssn.totalDoc === undefined ? 0 : resultIssn.totalDoc),
-			queryDocCount: (resultIsbnIsmn.queryDocCount === undefined ? 0 : resultIsbnIsmn.queryDocCount) + (resultIssn.queryDocCount === undefined ? 0 : resultIssn.queryDocCount)
+			totalDoc: (resultIsbnIsmn.totalDoc === undefined ? 0 : resultIsbnIsmn.totalDoc) + (resultIssn.totalDoc === undefined ? 0 : resultIssn.totalDoc)
 		};
 
 		dispatch(success(ISBN_ISMN_LIST, result));
@@ -120,7 +116,7 @@ export const fetchProceedingsList = ({searchText, token, offset, sort}) => async
 	}
 };
 
-export const fetchIssnList = ({token, offset, sort}) => async dispatch => {
+export const fetchIssnList = ({token, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	try {
 		const response = await fetch(`${API_URL}/publications/issn/query`, {
@@ -133,7 +129,6 @@ export const fetchIssnList = ({token, offset, sort}) => async dispatch => {
 				queries: [{
 					query: {}
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});
@@ -282,7 +277,7 @@ export const publicationCreationRequest = ({values, subType}) => async dispatch 
 	return response.status;
 };
 
-export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortStateBy, offset, sort}) => async dispatch => {
+export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortStateBy, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	const query = {$or: [{title: searchText}, {additionalDetails: searchText}]};
 	try {
@@ -296,7 +291,6 @@ export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortSta
 				queries: [{
 					query: {...query, state: sortStateBy}
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});
@@ -349,7 +343,7 @@ export const updatePublicationIsbnIsmnRequest = (id, values, token) => async dis
 	}
 };
 
-export const fetchIssnRequestsList = ({searchText, token, sortStateBy, offset, sort}) => async dispatch => {
+export const fetchIssnRequestsList = ({searchText, token, sortStateBy, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	try {
 		const response = await fetch(`${API_URL}/requests/publications/issn/query`, {
@@ -362,7 +356,6 @@ export const fetchIssnRequestsList = ({searchText, token, sortStateBy, offset, s
 				queries: [{
 					query: {state: sortStateBy, title: searchText}
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});

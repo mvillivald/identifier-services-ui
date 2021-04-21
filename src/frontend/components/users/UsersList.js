@@ -44,20 +44,18 @@ export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const modalClasses = useModalStyles();
 
-	const {loading, fetchUsersList, usersList, totalUsers, queryDocCount, offset, userInfo, history} = props;
+	const {loading, fetchUsersList, usersList, totalUsers, userInfo, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
 	const [page, setPage] = useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 
 	useEffect(() => {
-		fetchUsersList(cookie[COOKIE_NAME], lastCursor, {'lastUpdated.timestamp': -1});
+		fetchUsersList(cookie[COOKIE_NAME], {'lastUpdated.timestamp': -1});
 		setIsCreating(false);
-	}, [lastCursor, cursors, fetchUsersList, cookie, isCreating]);
+	}, [fetchUsersList, cookie, isCreating]);
 
 	const handleTableRowClick = id => {
 		history.push(`/users/${id}`);
@@ -78,17 +76,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		usersData = (
 			<TableComponent
+				pagination
 				data={usersList.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
 				totalDoc={totalUsers}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -135,8 +130,6 @@ function mapStateToProps(state) {
 		loading: state.users.listLoading,
 		usersList: state.users.usersList,
 		userInfo: state.login.userInfo,
-		totalUsers: state.users.totalUsers,
-		offset: state.users.offset,
-		queryDocCount: state.users.queryDocCount
+		totalUsers: state.users.totalUsers
 	});
 }

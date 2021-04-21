@@ -92,7 +92,7 @@ export const fetchPublisherOption = token => async dispatch => {
 	}
 };
 
-export const searchPublisher = ({searchText, token, offset, activeCheck, sort}) => async dispatch => {
+export const searchPublisher = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setSearchListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}, selfPublisher: false} :
 		{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], selfPublisher: false};
@@ -109,7 +109,6 @@ export const searchPublisher = ({searchText, token, offset, activeCheck, sort}) 
 				queries: [{
 					query: query
 				}],
-				offset: offset,
 				sort: sort
 			})
 		};
@@ -161,7 +160,7 @@ export const publisherCreationRequest = values => async () => {
 	}
 };
 
-export const fetchPublishersRequestsList = ({searchText, token, sortStateBy, offset, sort}) => async dispatch => {
+export const fetchPublishersRequestsList = ({searchText, token, sortStateBy, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	try {
 		const response = await fetch(`${API_URL}/requests/publishers/query`, {
@@ -174,7 +173,6 @@ export const fetchPublishersRequestsList = ({searchText, token, sortStateBy, off
 				queries: [{
 					query: {state: sortStateBy, name: searchText}
 				}],
-				offset: offset,
 				sort: sort
 			})
 		});

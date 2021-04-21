@@ -40,20 +40,18 @@ import SearchComponent from '../../SearchComponent';
 import TabComponent from '../../TabComponent';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchPublicationIsbnIsmnRequestsList, publicationIsbnIsmnRequestList, loading, offset, queryDocCount, history} = props;
+	const {fetchPublicationIsbnIsmnRequestsList, publicationIsbnIsmnRequestList, loading, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const [inputVal, setSearchInputVal] = useState('');
-	const [page, setPage] = React.useState(1);
-	const [cursors] = useState([]);
+	const [page, setPage] = React.useState(0);
 	const [sortStateBy, setSortStateBy] = useState('new');
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchPublicationIsbnIsmnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
-	}, [cookie, fetchPublicationIsbnIsmnRequestsList, inputVal, sortStateBy, lastCursor]);
+		fetchPublicationIsbnIsmnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, sort: {'lastUpdated.timestamp': -1}});
+	}, [cookie, fetchPublicationIsbnIsmnRequestsList, inputVal, sortStateBy]);
 
 	const handleTableRowClick = id => {
 		history.push(`/requests/publications/isbn-ismn/${id}`);
@@ -80,17 +78,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		publicationIsbnIsmnRequestData = (
 			<TableComponent
+				pagination
 				data={publicationIsbnIsmnRequestList
 					.map(item => publicationIsbnIsmnRequestRender({id: item.id, state: item.state, title: item.title, language: item.language, publisher: item.publisher, additionalDetails: item.additionalDetails ? item.additionalDetails : ''}))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -130,9 +125,7 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.publication.listLoading,
 		publicationIsbnIsmnRequestList: state.publication.publicationIsbnIsmnRequestList,
-		offset: state.publication.offset,
 		totalDoc: state.publication.totalDoc,
-		queryDocCount: state.publication.queryDocCount,
 		role: state.login.userInfo.role
 	});
 }

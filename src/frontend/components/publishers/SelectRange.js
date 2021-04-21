@@ -53,8 +53,6 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchIsmnIDRList,
 		rangesList,
 		loading,
-		offset,
-		queryDocCount,
 		rangeType,
 		tabsValue,
 		setTabsValue,
@@ -64,9 +62,7 @@ export default connect(mapStateToProps, actions)(props => {
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
-	const [page, setPage] = React.useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
+	const [page, setPage] = React.useState(0);
 	const [updateComponent] = useState(false);
 	const [selectedId, setSelectedId] = useState(null);
 	const [openAlert, setOpenAlert] = useState(false);
@@ -79,13 +75,13 @@ export default connect(mapStateToProps, actions)(props => {
 
 	useEffect(() => {
 		if (tabsValue === 'isbn') {
-			fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			fetchIsbnIDRList({searchText: '', token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 		}
 
 		if (tabsValue === 'ismn') {
-			fetchIsmnIDRList({searchText: '', token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, rangeType});
+			fetchIsmnIDRList({searchText: '', token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 		}
-	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, lastCursor, rangeType, tabsValue, fetchIsmnIDRList]);
+	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, rangeType, tabsValue, fetchIsmnIDRList]);
 
 	useEffect(() => {
 		if (confirmation && selectedId !== null) {
@@ -153,17 +149,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		data = (
 			<TableComponent
+				pagination
 				data={rangesList
 					.map(item => listRender({...item}))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows()}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -261,8 +254,6 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.identifierRanges.rangeListLoading,
 		rangesList: state.identifierRanges.rangesList,
-		offset: state.identifierRanges.offset,
-		totalDoc: state.identifierRanges.totalDoc,
-		queryDocCount: state.identifierRanges.queryDocCount
+		totalDoc: state.identifierRanges.totalDoc
 	});
 }

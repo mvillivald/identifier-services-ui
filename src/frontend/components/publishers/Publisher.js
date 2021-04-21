@@ -77,6 +77,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		clearFields,
 		fetchIsbnIDRList,
 		subRangeList,
+		rangeListLoading,
 		isAuthenticated,
 		revokePublisherIsbn,
 		userInfo
@@ -108,10 +109,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchPublisher(id, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit, sendMessage, isRevoking]);
+	}, [cookie, fetchPublisher, id, publisherUpdated, isEdit, sendMessage, isRevoking, updatePublisher]);
 
 	useEffect(() => {
-		fetchAllSubRange({searchText: '', token: cookie[COOKIE_NAME], offset: 'unlimited'});
+		fetchAllSubRange({token: cookie[COOKIE_NAME]});
 	}, [cookie, fetchAllSubRange]);
 
 	useEffect(() => {
@@ -184,7 +185,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleRange() {
 		setAssignRange(!assignRange);
-		fetchIsbnIDRList({token: cookie[COOKIE_NAME], offset: null, activeCheck: activeCheck, rangeType: 'range'});
+		fetchIsbnIDRList({token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType: 'range'});
 	}
 
 	function handleOnClickSendMessage() {
@@ -205,26 +206,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const headRowsPublisherIdentifier = [
-		{id: '', label: ''},
-		{id: 'publisherIdentifier', label: <FormattedMessage id="publication.metadataReference.headRows.identifier"/>},
-		{id: 'free', label: <FormattedMessage id="publication.metadataReference.headRows.free"/>},
-		{id: 'next', label: <FormattedMessage id="publication.metadataReference.headRows.next"/>},
-		{id: 'active', label: <FormattedMessage id="publication.metadataReference.headRows.active"/>}
+		{id: 'checkbox', label: ''},
+		{id: 'publisherIdentifier', label: <FormattedMessage id="publisher.identifier.headRows.identifier"/>},
+		{id: 'free', label: <FormattedMessage id="publisher.identifier.headRows.free"/>},
+		{id: 'next', label: <FormattedMessage id="publisher.identifier.headRows.next"/>},
+		{id: 'active', label: <FormattedMessage id="publisher.identifier.headRows.active"/>}
 	];
-
-	function tableUserData(item) {
-		const result = subRangeList.length > 0 && subRangeList !== undefined && subRangeList.find(range => item === range.publisherIdentifier);
-		const {free, next, active} = result !== false && result !== undefined && result;
-
-		return {
-			checkbox: '',
-			publisherIdentifier: item,
-			free: free,
-			next: next,
-			active: active,
-			id: item
-		};
-	}
 
 	function handleDelete(value) {
 		setMessage(intl.formatMessage({id: 'listComponent.confirmation.message.revoke'}));
@@ -235,7 +222,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return {note: Buffer.from(item).toString('base64')};
 	}) : ''};
 	let publisherDetail;
-	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading) {
+	if ((Object.keys(publisher).length === 0) || formattedPublisherDetail === undefined || loading || rangeListLoading) {
 		publisherDetail = <Spinner/>;
 	} else {
 		publisherDetail = (userInfo.role === 'admin') ?
@@ -419,13 +406,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							</Typography>
 							<hr/>
 							{
-								formattedPublisherDetail.publisherIdentifier &&
+								formattedPublisherDetail.publisherIdentifier && subRangeList !== undefined && subRangeList.length > 0 ?
 									<TableComponent
 										rowDeletable
 										data={formattedPublisherDetail.publisherIdentifier.map(item => tableUserData(item))}
 										headRows={headRowsPublisherIdentifier}
 										handleDelete={handleDelete}
-									/>
+									/> :
+									<Typography variant="body1">
+										{intl.formatMessage({id: 'publicationRender.label.identifierNotAssigned'})}
+									</Typography>
 							}
 						</Grid>
 						{userInfo.role === 'admin' &&
@@ -642,6 +632,32 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		history.push(`/publishers/proceedings/${id}`);
 	}
 
+	function tableUserData(item) {
+		if (subRangeList !== undefined) {
+			const result = subRangeList.length > 0 && subRangeList.find(range => item === range.publisherIdentifier);
+			if (result) {
+				const {free, next, active} = result !== false && result !== undefined && result;
+				return {
+					checkbox: '',
+					publisherIdentifier: item,
+					free: free,
+					next: next,
+					active: active,
+					id: item
+				};
+			}
+
+			return {
+				checkbox: '',
+				publisherIdentifier: item,
+				free: '',
+				next: '',
+				active: '',
+				id: item
+			};
+		}
+	}
+
 	const component = (
 		<Grid item xs={12}>
 			<Typography variant="h5" className={classes.titleTopSticky}>
@@ -785,6 +801,7 @@ function mapStateToProps(state) {
 		isAuthenticated: state.login.isAuthenticated,
 		range: state.identifierRanges.range,
 		subRangeList: state.identifierRanges.rangesList,
+		rangeListLoading: state.identifierRanges.rangeListLoading,
 		userInfo: state.login.userInfo
 	});
 }

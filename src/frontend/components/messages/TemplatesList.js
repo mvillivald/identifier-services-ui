@@ -45,20 +45,17 @@ export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const intl = useIntl();
 	const modalClasses = useModalStyles();
-	const {loading, fetchTemplatesList, messagesList, totalMessages, queryDocCount, offset} = props;
+	const {loading, fetchTemplatesList, messagesList, totalMessages} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [page, setPage] = useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
+	const [page, setPage] = useState(0);
 	const [modal, setModal] = useState(false);
 	const [templateId, setTemplateId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		console.log(lastCursor);
-		fetchTemplatesList(cookie[COOKIE_NAME], lastCursor);
-	}, [lastCursor, cursors, fetchTemplatesList, cookie]);
+		fetchTemplatesList(cookie[COOKIE_NAME]);
+	}, [fetchTemplatesList, cookie]);
 
 	const handleTableRowClick = id => {
 		setTemplateId(id);
@@ -81,17 +78,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		messageData = (
 			<TableComponent
+				pagination
 				data={messagesList.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
 				totalDoc={totalMessages}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -135,8 +129,6 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.message.listLoading,
 		messagesList: state.message.messagesList,
-		totalMessages: state.message.totalMessages,
-		offset: state.message.offset,
-		queryDocCount: state.message.queryDocCount
+		totalMessages: state.message.totalMessages
 	});
 }

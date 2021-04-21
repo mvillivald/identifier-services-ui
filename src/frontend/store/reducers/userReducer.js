@@ -31,14 +31,11 @@ import {USERS_LIST, LOADER, LIST_LOADER, ERROR, USERS_REQUESTS_LIST, FETCH_USER,
 const initialState = {
 	usersList: [],
 	totalUsers: null,
-	offset: null,
 
-	requestOffset: null,
 	usersRequest: {},
 	usersRequestsList: [],
 	totalUsersRequests: null,
 
-	queryDocCount: null,
 	user: {},
 	loading: false,
 	listLoading: false,
@@ -75,18 +72,14 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				usersList: action.payload.results,
-				offset: action.payload.offset,
 				totalUsers: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case USERS_REQUESTS_LIST:
 			return {
 				...state,
 				usersRequestsList: action.payload.results,
-				requestOffset: action.payload.offset,
 				totalUsersRequests: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case FETCH_USERS_REQUEST:

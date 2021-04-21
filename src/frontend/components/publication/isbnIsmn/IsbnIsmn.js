@@ -205,7 +205,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		setAssignRange(!assignRange);
 	}
 
-	const headRows = [
+	const headRowsMetadataReference = [
 		{id: 'format', label: <FormattedMessage id="publication.metadataReference.headRows.format"/>},
 		{id: 'state', label: <FormattedMessage id="publication.metadataReference.headRows.state"/>},
 		{id: 'status', label: <FormattedMessage id="publication.metadataReference.headRows.status"/>},
@@ -239,7 +239,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										clearFields={clearFields} isEditable={isEditable}
 										handleTableRowClick={handleTableRowClick}
 										rowSelectedId={rowSelectedId}
-										headRows={headRows}
+										headRowsMetadataReference={headRowsMetadataReference}
 									/>
 								</Grid>
 							</form>
@@ -346,7 +346,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 											isEditable={isEditable}
 											handleTableRowClick={handleTableRowClick}
 											rowSelectedId={rowSelectedId}
-											headRows={headRows}
+											headRowsMetadataReference={headRowsMetadataReference}
 										/>
 									</Grid>
 								</RootRef>

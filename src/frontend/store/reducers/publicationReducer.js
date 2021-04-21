@@ -59,9 +59,7 @@ const initialState = {
 	issnRequestsList: [],
 	issnRequest: {},
 
-	offset: null,
 	totalDoc: null,
-	queryDocCount: null,
 	listLoading: false,
 	loading: false,
 	issnStatistics: null,
@@ -109,27 +107,21 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				isbnIsmnList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case ISSN_LIST:
 			return {
 				...state,
 				issnList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case PUBLICATIONISBNISMN_REQUESTS_LIST:
 			return {
 				...state,
 				publicationIsbnIsmnRequestList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case PUBLICATION_ISBN_ISMN_REQUEST:
@@ -142,9 +134,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				issnRequestsList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case ISSN_REQUEST:

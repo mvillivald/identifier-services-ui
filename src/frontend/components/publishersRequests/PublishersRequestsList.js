@@ -42,22 +42,20 @@ import ModalLayout from '../ModalLayout';
 import PublisherRegistrationForm from '../form/publisherRegistrationForm/PublisherRegistrationForm';
 import {commonStyles} from '../../styles/app';
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchPublishersRequestsList, publishersRequestsList, loading, offset, queryDocCount, history} = props;
+	const {fetchPublishersRequestsList, publishersRequestsList, loading, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const modalClasses = useModalStyles();
 	const [inputVal, setSearchInputVal] = useState('');
-	const [page, setPage] = React.useState(1);
-	const [cursors] = useState([]);
+	const [page, setPage] = React.useState(0);
 	const [sortStateBy, setSortStateBy] = useState('new');
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 
 	useEffect(() => {
-		fetchPublishersRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
-	}, [cookie, fetchPublishersRequestsList, isCreating, inputVal, sortStateBy, lastCursor]);
+		fetchPublishersRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, sort: {'lastUpdated.timestamp': -1}});
+	}, [cookie, fetchPublishersRequestsList, isCreating, inputVal, sortStateBy]);
 
 	const handleTableRowClick = id => {
 		history.push(`/requests/publishers/${id}`);
@@ -82,17 +80,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		publishersRequestsData = (
 			<TableComponent
+				pagination
 				data={publishersRequestsList
 					.map(item => publishersRequestsRender(item.id, item.state, item.name, item.language))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -131,8 +126,6 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.publisher.listLoading,
 		publishersRequestsList: state.publisher.publishersRequestsList,
-		offset: state.publisher.offset,
-		totalDoc: state.publisher.totalDoc,
-		queryDocCount: state.publisher.queryDocCount
+		totalDoc: state.publisher.totalDoc
 	});
 }

@@ -56,9 +56,7 @@ const initialState = {
 
 	rangesList: [],
 	range: {},
-	offset: null,
 	totalDoc: null,
-	queryDocCount: null,
 	rangeListLoading: false,
 	loading: false,
 	statistics: null,
@@ -81,18 +79,14 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				rangesList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				rangeListLoading: false
 			};
 		case IDR_ISBN_LIST:
 			return {
 				...state,
 				isbnList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				rangeListLoading: false
 			};
 		case IDENTIFIER:
@@ -117,9 +111,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				ismnList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				rangeListLoading: false
 			};
 		case IDR_ISMN:
@@ -132,9 +124,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				issnList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				rangeListLoading: false
 			};
 		case IDR_ISSN:

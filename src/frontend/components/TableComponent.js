@@ -27,12 +27,9 @@
  */
 
 import React, {useState} from 'react';
-import {makeStyles, useTheme, lighten} from '@material-ui/core/styles';
-import {Table, TableBody, TableCell, TableHead, TableFooter, TableRow, TableSortLabel, Toolbar, Tooltip, Paper, IconButton, Checkbox} from '@material-ui/core';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import {makeStyles, lighten} from '@material-ui/core/styles';
+import {Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Toolbar, Tooltip, Paper, IconButton, Checkbox, TablePagination, TableContainer} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import {FormattedMessage} from 'react-intl';
 
 function desc(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -165,11 +162,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function (props) {
-	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings, page} = props;
+	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings, page = 0, setPage, pagination} = props;
 	const classes = useStyles();
 	const [order, setOrder] = useState('asc');
 	const [orderBy, setOrderBy] = useState(headRows[0].id);
 	const [selected, setSelected] = useState([]);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 
 	function handleRequestSort(event, property) {
 		const isDesc = orderBy === property && order === 'desc';
@@ -201,146 +199,100 @@ export default function (props) {
 		return selected.indexOf(name) !== -1;
 	}
 
+	function handleChangePage(event, newPage) {
+		setPage(newPage);
+	}
+
+	const handleChangeRowsPerPage = event => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
+
 	const component = (
 		<Paper className={classes.paper}>
 			<EnhancedTableToolbar numSelected={selected.length} selected={selected} {...props}/>
-			<Table
-				className={classes.table}
-				aria-labelledby="tableTitle"
-			>
-				<EnhancedTableHead
-					order={order}
-					orderBy={orderBy}
-					rowCount={data.length}
-					headRows={headRows}
-					onRequestSort={handleRequestSort}
-				/>
-				<TableBody>
-					{stableSort(data, getSorting(order, orderBy))
-						.map((row, i) => {
-							const isItemSelected = isSelected(row.id);
-							return (
-								<TableRow
-									key={row.id}
-									selected={rowSelectedId ? (row.userId ? row.userId === rowSelectedId : row.id === rowSelectedId) : isItemSelected}
-									classes={{selected: classes.selected}}
-									role={!rowSelectedId && 'checkbox'}
-									className={classes.tableRow}
-									onClick={
-										event => handleTableRowClick ?
-											handleTableRowClick(row.userId ? row.userId : (proceedings ? {type: row.type, id: row.id} : row.id)) :
-											handleClick(event, row.id)
-									}
-								>
-									{
-										Object.keys(row).map(item => item === 'checkbox' &&
-											<TableCell padding="checkbox">
-												<Checkbox
-													checked={isItemSelected}
-													inputProps={{'aria-labelledby': `enhanced-table-checkbox${i}`, style: {position: 'unset', height: 'unset', width: 'unset'}}}
-												/>
-											</TableCell>
-										)
-									}
-									{headRows.reduce((acc, h) => {
-										Object.keys(row).forEach(key => (key !== 'id' && key !== 'mongoId' && key !== 'checkbox') &&
-											(
-												h.id === key &&
-												acc.push(
-													<TableCell key={row[key]} component="th" scope="row">
-														{(row[key] === true ?
-															'true' :
-															(
-																row[key] === false ?
-																	'false' :
-																	row[key]
-															)
-														)}
-													</TableCell>
-												)
-											));
-										return acc;
-									}, [])}
-								</TableRow>
-							);
-						})}
-				</TableBody>
-				{page &&
-					<TableFooter>
-						<TableRow>
-							<TablePaginationActions
-								colSpan={headRows.length}
-								{...props}
-							/>
-						</TableRow>
-					</TableFooter>}
-			</Table>
+			<TableContainer>
+				<Table
+					className={classes.table}
+					aria-labelledby="tableTitle"
+				>
+					<EnhancedTableHead
+						order={order}
+						orderBy={orderBy}
+						rowCount={data.length}
+						headRows={headRows}
+						onRequestSort={handleRequestSort}
+					/>
+					<TableBody>
+						{stableSort(data, getSorting(order, orderBy))
+							.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+							.map((row, i) => {
+								const isItemSelected = isSelected(row.id);
+								return (
+									<TableRow
+										key={row.id}
+										selected={rowSelectedId ? (row.userId ? row.userId === rowSelectedId : row.id === rowSelectedId) : isItemSelected}
+										classes={{selected: classes.selected}}
+										role={!rowSelectedId && 'checkbox'}
+										className={classes.tableRow}
+										onClick={
+											event => handleTableRowClick ?
+												handleTableRowClick(row.userId ? row.userId : (proceedings ? {type: row.type, id: row.id} : row.id)) :
+												handleClick(event, row.id)
+										}
+									>
+										{
+											Object.keys(row).map(item => item === 'checkbox' &&
+												<TableCell padding="checkbox">
+													<Checkbox
+														checked={isItemSelected}
+														inputProps={{'aria-labelledby': `enhanced-table-checkbox${i}`, style: {position: 'unset', height: 'unset', width: 'unset'}}}
+													/>
+												</TableCell>
+											)
+										}
+										{headRows.reduce((acc, h) => {
+											Object.keys(row).forEach(key => (key !== 'id' && key !== 'mongoId' && key !== 'checkbox') &&
+												(
+													h.id === key &&
+													acc.push(
+														<TableCell key={row[key]} component="th" scope="row">
+															{(row[key] === true ?
+																'true' :
+																(
+																	row[key] === false ?
+																		'false' :
+																		row[key]
+																)
+															)}
+														</TableCell>
+													)
+												));
+											return acc;
+										}, [])}
+									</TableRow>
+								);
+							})}
+					</TableBody>
+				</Table>
+			</TableContainer>
+			{
+				pagination &&
+					<TablePagination
+						rowsPerPageOptions={[10, 25, 50]}
+						component="div"
+						count={data.length}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onChangePage={handleChangePage}
+						onChangeRowsPerPage={handleChangeRowsPerPage}
+						{...props}
+					/>
+			}
 		</Paper>
 	);
 
 	return {
 		...component
 	};
-}
-
-function TablePaginationActions(props) {
-	const theme = useTheme();
-	const {
-		offset,
-		cursors,
-		setLastCursor,
-		page,
-		setPage,
-		queryDocCount
-	} = props;
-
-	function handleBackButtonClick() {
-		cursors.pop();
-		setPage(page - 1);
-		setLastCursor(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	}
-
-	function handleNextButtonClick() {
-		cursors.push(offset);
-		setPage(page + 1);
-		setLastCursor(offset);
-	}
-
-	const component = (
-		<TableCell>
-			{/* <span>{page * 5 > queryDocCount ? queryDocCount : page * 5}/{queryDocCount}</span> */}
-			{/* <IconButton
-				disabled={page === 1}
-				aria-label="First Page"
-				onClick={handleFirstPageButtonClick}
-			>
-				{theme.direction === 'rtl' ? <LastPageIcon/> : <FirstPageIcon/>}
-			</IconButton> */}
-			<IconButton
-				disabled={page === 1}
-				aria-label="Previous Page" onClick={handleBackButtonClick}
-			>
-				{theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
-			</IconButton>
-			<span><FormattedMessage id="table.footer.page"/>{page}</span>
-			<IconButton
-				/* global QUERY_LIMIT */
-				/* eslint no-undef: "error" */
-				disabled={queryDocCount <= QUERY_LIMIT}
-				aria-label="Next Page"
-				onClick={handleNextButtonClick}
-			>
-				{theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
-			</IconButton>
-			{/* <IconButton
-				disabled={(count * page) >= queryDocCount}
-				aria-label="Last Page"
-				onClick={handleLastPageButtonClick}
-			>
-				{theme.direction === 'rtl' ? <FirstPageIcon/> : <LastPageIcon/>}
-			</IconButton> */}
-		</TableCell>
-	);
-
-	return {...component};
 }

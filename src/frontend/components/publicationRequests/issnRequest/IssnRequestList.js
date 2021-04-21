@@ -40,20 +40,18 @@ import SearchComponent from '../../SearchComponent';
 import TabComponent from '../../TabComponent';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIssnRequestsList, issnRequestList, loading, offset, queryDocCount, history} = props;
+	const {fetchIssnRequestsList, issnRequestList, loading, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const [inputVal, setSearchInputVal] = useState('');
-	const [page, setPage] = React.useState(1);
-	const [cursors] = useState([]);
+	const [page, setPage] = React.useState(0);
 	const [sortStateBy, setSortStateBy] = useState('new');
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchIssnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
-	}, [cookie, fetchIssnRequestsList, inputVal, sortStateBy, lastCursor]);
+		fetchIssnRequestsList({searchText: inputVal, token: cookie[COOKIE_NAME], sortStateBy: sortStateBy, sort: {'lastUpdated.timestamp': -1}});
+	}, [cookie, fetchIssnRequestsList, inputVal, sortStateBy]);
 
 	const handleTableRowClick = id => {
 		history.push(`/requests/publications/issn/${id}`);
@@ -78,17 +76,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		issnRequestData = (
 			<TableComponent
+				pagination
 				data={issnRequestList
 					.map(item => issnRequestRender(item.id, item.state, item.title, item.language))}
 				handleTableRowClick={handleTableRowClick}
 				headRows={headRows}
 				rowSelectedId={rowSelectedId}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -126,9 +121,7 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.publication.listLoading,
 		issnRequestList: state.publication.issnRequestsList,
-		offset: state.publication.offset,
 		totalDoc: state.publication.totalDoc,
-		queryDocCount: state.publication.queryDocCount,
 		role: state.login.userInfo.role
 	});
 }

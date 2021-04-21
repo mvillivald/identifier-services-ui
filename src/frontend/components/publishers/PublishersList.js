@@ -40,22 +40,20 @@ import Spinner from '../Spinner';
 
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
-	const {loading, searchedPublishers, offset, location, searchPublisher, totalDoc, queryDocCount, history} = props;
+	const {loading, searchedPublishers, location, searchPublisher, totalDoc, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
 	const [inputVal, setSearchInputVal] = (location.state === undefined || location.state === null) ? useState('') : useState(location.state.searchText);
-	const [page, setPage] = React.useState(1);
+	const [page, setPage] = React.useState(0);
 	const [activeCheck, setActiveCheck] = useState({
 		checked: false
 	});
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		searchPublisher({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
-	}, [lastCursor, cursors, activeCheck, inputVal, searchPublisher, cookie]);
+		searchPublisher({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
+	}, [activeCheck, inputVal, searchPublisher, cookie]);
 
 	const handleChange = name => event => {
 		setActiveCheck({...activeCheck, [name]: event.target.checked});
@@ -81,17 +79,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		publishersData = (
 			<TableComponent
+				pagination
 				data={searchedPublishers.map(item => searchResultRender({id: item.id, name: item.name, phone: item.phone, aliases: item.aliases, email: item.email}))}
 				handleTableRowClick={handleTableRowClick}
 				headRows={headRows}
 				rowSelectedId={rowSelectedId}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
 				totalDoc={totalDoc}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -110,7 +105,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const component = (
 		<Grid item xs={12} className={classes.listSearch}>
 			<Typography variant="h5"><FormattedMessage id="publisher.search.title"/></Typography>
-			<SearchComponent offset={offset} searchFunction={searchPublisher} setSearchInputVal={setSearchInputVal}/>
+			<SearchComponent searchFunction={searchPublisher} setSearchInputVal={setSearchInputVal}/>
 			<FormControlLabel
 				control={
 					<Checkbox
@@ -135,8 +130,6 @@ function mapStateToProps(state) {
 		loading: state.publisher.searchListLoading,
 		searchedPublishers: state.publisher.searchedPublisher,
 		publishersList: state.publisher.publishersList,
-		offset: state.publisher.offset,
-		totalDoc: state.publisher.totalDoc,
-		queryDocCount: state.publisher.queryDocCount
+		totalDoc: state.publisher.totalDoc
 	});
 }

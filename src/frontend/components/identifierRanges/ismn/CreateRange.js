@@ -131,8 +131,6 @@ function mapStateToProps(state) {
 		loading: state.identifierRanges.rangeListLoading,
 		rangesList: state.identifierRanges.rangesList,
 		range: state.identifierRanges.range,
-		offset: state.identifierRanges.offset,
-		totalDoc: state.identifierRanges.totalDoc,
-		queryDocCount: state.identifierRanges.queryDocCount
+		totalDoc: state.identifierRanges.totalDoc
 	});
 }

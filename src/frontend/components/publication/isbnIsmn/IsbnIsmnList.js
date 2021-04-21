@@ -38,17 +38,15 @@ export default connect(mapStateToProps, actions)(props => {
 	const {fetchIsbnIsmnList, isbnIsmnList, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [isbnIsmnId, setIsbnIsmnId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 	const [inputVal, setSearchInputVal] = (location.state === undefined || location.state === null) ? useState('') : useState(location.state.searchText);
 
 	useEffect(() => {
-		fetchIsbnIsmnList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
+		fetchIsbnIsmnList({searchText: inputVal, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
-	}, [lastCursor, cursors, fetchIsbnIsmnList, cookie, isCreating, inputVal]);
+	}, [fetchIsbnIsmnList, cookie, isCreating, inputVal]);
 
 	const handleTableRowClick = id => {
 		setIsbnIsmnId(id);
@@ -70,9 +68,7 @@ export default connect(mapStateToProps, actions)(props => {
 			headRows={headRows}
 			handleTableRowClick={handleTableRowClick}
 			rowSelectedId={rowSelectedId}
-			cursors={cursors}
 			publicationList={isbnIsmnList}
-			setLastCursor={setLastCursor}
 			id={isbnIsmnId}
 			setIsCreating={setIsCreating}
 			setSearchInputVal={setSearchInputVal}
@@ -85,8 +81,6 @@ function mapStateToProps(state) {
 	return ({
 		isbnIsmnList: state.publication.isbnIsmnList,
 		totalpublication: state.publication.totalDoc,
-		offset: state.publication.offset,
-		queryDocCount: state.publication.queryDocCount,
 		role: state.login.userInfo.role
 	});
 }

@@ -41,8 +41,6 @@ import {
 const initialState = {
 	messagesList: [],
 	totalMessages: null,
-	offset: null,
-	queryDocCount: null,
 	messageInfo: null,
 	responseMessage: null,
 	loading: false,
@@ -77,9 +75,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				messagesList: action.payload.results,
-				offset: action.payload.offset,
 				totalMessages: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case FETCH_ALL_MESSAGES_LIST:
@@ -98,9 +94,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				messagesList: action.payload.results,
-				offset: action.payload.offset,
 				totalMessages: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case FETCH_ALL_TEMPLATES_LIST:

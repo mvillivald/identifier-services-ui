@@ -114,6 +114,7 @@ export {
 
 export {
 	fetchIDR,
+	fetchIDRList,
 	fetchIsbnIDRList,
 	searchIDRList,
 	fetchIdentifier,

@@ -52,9 +52,7 @@ const initialState = {
 
 	universityPublisher: [],
 
-	offset: null,
 	totalDoc: null,
-	queryDocCount: null,
 
 	loading: false,
 	listLoading: false,
@@ -101,9 +99,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				publishersRequestsList: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				listLoading: false
 			};
 		case PUBLISHER_REQUEST:
@@ -129,9 +125,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				searchedPublisher: action.payload.results,
-				offset: action.payload.offset,
 				totalDoc: action.payload.totalDoc,
-				queryDocCount: action.payload.queryDocCount,
 				searchListLoading: false
 			};
 		case PUBLISHER_OPTIONS:

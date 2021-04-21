@@ -34,7 +34,7 @@ import {
 	Link,
 	Typography
 } from '@material-ui/core';
-import {useIntl} from 'react-intl';
+import {useIntl, FormattedMessage} from 'react-intl';
 
 import ListComponent from '../ListComponent';
 import TableComponent from '../TableComponent';
@@ -46,12 +46,14 @@ export default connect(mapStateToProps, actions)(props => {
 		isbnIsmn,
 		issn,
 		publication,
+		rangesList,
 		isEdit,
 		isEditable,
 		clearFields,
 		fetchPublisher,
 		fetchedPublisher,
-		headRows,
+		fetchIDRList,
+		headRowsMetadataReference,
 		publisherLoading
 	} = props;
 	const intl = useIntl();
@@ -73,8 +75,69 @@ export default connect(mapStateToProps, actions)(props => {
 		}
 	}, [fetchedPublisher]);
 
+	useEffect(() => {
+		fetchIDRList({token: cookie[COOKIE_NAME]});
+	}, [cookie, fetchIDRList]);
+
 	function formatValueforAssociatedRange(value) {
 		return value.map(item => item.subRange ? item.subRange : item.block);
+	}
+
+	function handleIssnDelete(value) {
+		console.log(value);
+	}
+
+	const headRowsIdentifier = [
+		{id: '', label: ''},
+		{id: 'identifier', label: <FormattedMessage id="publication.identifier.headRows.identifier"/>},
+		{id: 'publicationType', label: <FormattedMessage id="publication.identifier.headRows.publicationType"/>}
+	];
+
+	function tableUserDataMetadataReference(item) {
+		const keys = headRowsMetadataReference.map(k => k.id);
+		const result = keys.reduce((acc, key) => {
+			if (key === 'id') {
+				return {...acc, format: item.format};
+			}
+
+			if (key === 'identifier') {
+				return {...acc, identifier: item.id};
+			}
+
+			return {...acc, [key]: item[key]};
+		}, {});
+
+		return {
+			format: result.format,
+			state: result.state,
+			status: result.status,
+			identifier: result.identifier ? result.identifier : '',
+			id: result.format
+		};
+	}
+
+	function tableUserDataIdentifier(item) {
+		const result = rangesList.length > 0 && rangesList !== undefined && rangesList.find(range => item.id === range.identifier);
+		if (result) {
+			const {identifier, publicationType} = result !== false && result !== undefined && result;
+			return {
+				checkbox: '',
+				identifier,
+				publicationType,
+				id: item.id
+			};
+		}
+
+		return {
+			checkbox: '',
+			identifier: '',
+			publicationType: '',
+			id: item.id
+		};
+	}
+
+	function handleIsbnIsmnDelete(value) {
+		console.log(value);
 	}
 
 	let publicationDetail;
@@ -92,10 +155,6 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	return publicationDetail;
-
-	function handleIssnDelete(value) {
-		console.log(value);
-	}
 
 	function issnElements(publication) {
 		return (
@@ -282,8 +341,8 @@ export default connect(mapStateToProps, actions)(props => {
 							publication.metadataReference &&
 								<TableComponent
 									rowDeleteable
-									data={publication.metadataReference.map(item => tableUserData(item))}
-									headRows={headRows}
+									data={publication.metadataReference.map(item => tableUserDataMetadataReference(item))}
+									headRows={headRowsMetadataReference}
 									handleDelete={handleIssnDelete}
 								/>
 						}
@@ -320,34 +379,6 @@ export default connect(mapStateToProps, actions)(props => {
 				</Grid>
 			</>
 		);
-	}
-
-	function tableUserData(item) {
-		const keys = headRows.map(k => k.id);
-		const result = keys.reduce((acc, key) => {
-			if (key === 'id') {
-				return {...acc, format: item.format};
-			}
-
-			if (key === 'identifier') {
-				return {...acc, identifier: item.id};
-			}
-
-			return {...acc, [key]: item[key]};
-		}, {});
-
-		return {
-			checkbox: '',
-			format: result.format,
-			state: result.state,
-			status: result.status,
-			identifier: result.identifier ? result.identifier : '',
-			id: result.format
-		};
-	}
-
-	function handleIsbnIsmnDelete(value) {
-		console.log(value);
 	}
 
 	function isbnIsmnElements(publication) {
@@ -553,6 +584,18 @@ export default connect(mapStateToProps, actions)(props => {
 									{intl.formatMessage({id: 'publicationRender.label.identifierNotAssigned'})}
 								</Typography>
 						}
+						{
+							publication.identifier ?
+								<TableComponent
+									rowDeletable
+									data={publication.identifier.map(item => tableUserDataIdentifier(item))}
+									headRows={headRowsIdentifier}
+									handleDelete={handleIsbnIsmnDelete}
+								/>	:
+								<Typography variant="body1">
+									{intl.formatMessage({id: 'publicationRender.label.identifierNotAssigned'})}
+								</Typography>
+						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -562,10 +605,8 @@ export default connect(mapStateToProps, actions)(props => {
 						{
 							publication.metadataReference &&
 								<TableComponent
-									rowDeleteable
-									data={publication.metadataReference.map(item => tableUserData(item))}
-									headRows={headRows}
-									handleDelete={handleIsbnIsmnDelete}
+									data={publication.metadataReference.map(item => tableUserDataMetadataReference(item))}
+									headRows={headRowsMetadataReference}
 								/>
 						}
 					</Grid>
@@ -614,6 +655,7 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		fetchedPublisher: state.publisher.publisher,
-		publisherLoading: state.publisher.loading
+		publisherLoading: state.publisher.loading,
+		rangesList: state.identifierRanges.rangesList
 	});
 }

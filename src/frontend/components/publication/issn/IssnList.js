@@ -38,16 +38,14 @@ export default connect(mapStateToProps, actions)(props => {
 	const {fetchIssnList, issnList, loading, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
 	const [modal, setModal] = useState(false);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 
 	useEffect(() => {
-		fetchIssnList({token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
+		fetchIssnList({token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
-	}, [lastCursor, cursors, fetchIssnList, cookie, isCreating]);
+	}, [fetchIssnList, cookie, isCreating]);
 
 	const handleTableRowClick = id => {
 		history.push(`/publications/issn/${id}`);
@@ -68,9 +66,7 @@ export default connect(mapStateToProps, actions)(props => {
 			headRows={headRows}
 			handleTableRowClick={handleTableRowClick}
 			rowSelectedId={rowSelectedId}
-			cursors={cursors}
 			publicationList={issnList.map(item => dataRender(item))}
-			setLastCursor={setLastCursor}
 			modal={modal}
 			setModal={setModal}
 			setIsCreating={setIsCreating}
@@ -91,8 +87,6 @@ function mapStateToProps(state) {
 		loading: state.publication.listLoading,
 		issnList: state.publication.issnList,
 		totalpublication: state.publication.totalDoc,
-		offset: state.publication.offset,
-		queryDocCount: state.publication.queryDocCount,
 		role: state.login.userInfo.role
 	});
 }

@@ -42,15 +42,13 @@ import ModalLayout from '../../ModalLayout';
 import RangeCreationForm from '../../form/RangeCreationForm';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIDRIssnList, issnList, loading, offset, queryDocCount, userInfo} = props;
+	const {fetchIDRIssnList, issnList, loading, userInfo} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const [inputVal, setSearchInputVal] = useState('');
-	const [page, setPage] = React.useState(1);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
+	const [page, setPage] = React.useState(0);
 	const [modal, setModal] = useState(false);
 	const [issnId, setIssnId] = useState(null);
 	const [updateComponent, setUpdateComponent] = useState(false);
@@ -60,9 +58,9 @@ export default connect(mapStateToProps, actions)(props => {
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
-		fetchIDRIssnList({searchText: inputVal, token: cookie[COOKIE_NAME], offset: lastCursor, activeCheck: activeCheck});
+		fetchIDRIssnList({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck});
 		setUpdateComponent(false);
-	}, [activeCheck, cookie, fetchIDRIssnList, inputVal, lastCursor, updateComponent]);
+	}, [activeCheck, cookie, fetchIDRIssnList, inputVal, updateComponent]);
 	const handleTableRowClick = id => {
 		setIssnId(id);
 		setModal(true);
@@ -87,17 +85,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		issnData = (
 			<TableComponent
+				pagination
 				data={issnList
 					.map(item => issnListRender(item.id, item.prefix, item.rangeStart, item.rangeEnd))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
-				cursors={cursors}
 				page={page}
 				setPage={setPage}
-				setLastCursor={setLastCursor}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -155,8 +150,6 @@ function mapStateToProps(state) {
 		userInfo: state.login.userInfo,
 		loading: state.identifierRanges.rangeListLoading,
 		issnList: state.identifierRanges.issnList,
-		offset: state.identifierRanges.offset,
-		totalDoc: state.identifierRanges.totalDoc,
-		queryDocCount: state.identifierRanges.queryDocCount
+		totalDoc: state.identifierRanges.totalDoc
 	});
 }

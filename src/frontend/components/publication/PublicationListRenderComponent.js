@@ -46,11 +46,7 @@ export default connect(mapStateToProps)(props => {
 		loading,
 		publicationList,
 		totalpublication,
-		offset,
-		queryDocCount,
 		headRows,
-		cursors,
-		setLastCursor,
 		isbnIsmn,
 		issn,
 		handleTableRowClick,
@@ -63,7 +59,7 @@ export default connect(mapStateToProps)(props => {
 
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState(0);
 	const [publications, setPublications] = useState(null);
 
 	useEffect(() => {
@@ -88,17 +84,14 @@ export default connect(mapStateToProps)(props => {
 	} else {
 		usersData = (
 			<TableComponent
+				pagination
 				data={publications.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
-				offset={offset}
 				page={page}
 				setPage={setPage}
-				cursors={cursors}
-				setLastCursor={setLastCursor}
 				totalDoc={totalpublication}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -124,7 +117,7 @@ export default connect(mapStateToProps)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
-			<SearchComponent offset={offset} searchFunction={fetchIsbnIsmnList} setSearchInputVal={setSearchInputVal}/>
+			<SearchComponent searchFunction={fetchIsbnIsmnList} setSearchInputVal={setSearchInputVal}/>
 			{usersData}
 			{issn ?	<Issn {...props}/> : (
 				isbnIsmn ?	<IsbnIsmn {...props}/> : null

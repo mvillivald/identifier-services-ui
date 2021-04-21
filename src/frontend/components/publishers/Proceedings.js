@@ -42,8 +42,6 @@ export default connect(mapStateToProps, actions)(props => {
 	const {
 		fetchProceedingsList,
 		isbnIsmnList,
-		offset,
-		queryDocCount,
 		loading,
 		match,
 		history,
@@ -53,13 +51,11 @@ export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const publisherId = match.params.id;
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [cursors] = useState([]);
-	const [lastCursor, setLastCursor] = useState(cursors.length === 0 ? null : cursors[cursors.length - 1]);
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState(0);
 
 	useEffect(() => {
-		fetchProceedingsList({searchText: publisherId, token: cookie[COOKIE_NAME], offset: lastCursor, sort: {'lastUpdated.timestamp': -1}});
-	}, [lastCursor, cursors, fetchProceedingsList, cookie, publisherId]);
+		fetchProceedingsList({searchText: publisherId, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
+	}, [fetchProceedingsList, cookie, publisherId]);
 
 	function handleTableRowClick({type, id}) {
 		history.push(`/publications/${type}/${id}`);
@@ -82,17 +78,14 @@ export default connect(mapStateToProps, actions)(props => {
 	} else {
 		usersData = (
 			<TableComponent
+				pagination
 				proceedings
 				data={isbnIsmnList.map(item => usersDataRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				headRows={headRows}
-				offset={offset}
 				page={page}
 				setPage={setPage}
-				cursors={cursors}
-				setLastCursor={setLastCursor}
 				totalDoc={totalpublication}
-				queryDocCount={queryDocCount}
 			/>
 		);
 	}
@@ -152,8 +145,6 @@ function mapStateToProps(state) {
 		loading: state.publication.listLoading,
 		isbnIsmnList: state.publication.isbnIsmnList,
 		totalpublication: state.publication.totalDoc,
-		offset: state.publication.offset,
-		queryDocCount: state.publication.queryDocCount,
 		role: state.login.userInfo.role
 	});
 }
