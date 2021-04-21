@@ -113,7 +113,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	useEffect(() => {
 		fetchAllSubRange({token: cookie[COOKIE_NAME]});
-	}, [cookie, fetchAllSubRange]);
+	}, [cookie, fetchAllSubRange, updatePublisher, assignRange, isEdit, publisherUpdated]);
 
 	useEffect(() => {
 		async function run() {
