@@ -101,7 +101,7 @@ export default connect(mapStateToProps, actions)(props => {
 			setIdentifierId(id);
 		}
 
-		setPage(1);
+		setPage(0);
 	};
 
 	const handleChange = name => event => {

@@ -162,7 +162,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function (props) {
-	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings, page = 0, setPage, pagination} = props;
+	const {data, headRows, handleTableRowClick, rowSelectedId, proceedings, page = 0, setPage, pagination, rowDeleteable} = props;
 	const classes = useStyles();
 	const [order, setOrder] = useState('asc');
 	const [orderBy, setOrderBy] = useState(headRows[0].id);
@@ -210,7 +210,7 @@ export default function (props) {
 
 	const component = (
 		<Paper className={classes.paper}>
-			<EnhancedTableToolbar numSelected={selected.length} selected={selected} {...props}/>
+			{rowDeleteable && <EnhancedTableToolbar numSelected={selected.length} selected={selected} {...props}/>}
 			<TableContainer>
 				<Table
 					className={classes.table}

@@ -48,7 +48,7 @@ export default connect(mapStateToProps, actions)(props => {
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState(0);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [isCreating, setIsCreating] = useState(false);
 
