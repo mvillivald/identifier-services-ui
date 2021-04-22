@@ -40,6 +40,7 @@ import ListComponent from '../ListComponent';
 import TableComponent from '../TableComponent';
 import Spinner from '../Spinner';
 import * as actions from '../../store/actions';
+import AlertDialogs from '../AlertDialogs';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {
@@ -54,20 +55,25 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchedPublisher,
 		fetchIDRList,
 		headRowsMetadataReference,
-		publisherLoading
+		publisherLoading,
+		revokePublication,
+		updatePublicationIsbnIsmn
 	} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [publisherName, setPublisherName] = useState(null);
-
+	const [message, setMessage] = useState(null);
+	const [openAlert, setOpenAlert] = useState(false);
+	const [selectedToRevoke, setSelectedToRevoke] = useState(null);
+	const [isRevoking, setIsRevoking] = useState(false);
 	const {_id, seriesDetails, id, ...formattedPublication} = {...publication, ...publication.seriesDetails};
 
 	useEffect(() => {
 		if (formattedPublication.publisher !== undefined) {
 			fetchPublisher(formattedPublication.publisher, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchPublisher, formattedPublication.publisher]);
+	}, [cookie, fetchPublisher, formattedPublication.publisher, updatePublicationIsbnIsmn, isRevoking]);
 
 	useEffect(() => {
 		if (Object.keys(fetchedPublisher).length > 0) {
@@ -79,12 +85,40 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchIDRList({token: cookie[COOKIE_NAME]});
 	}, [cookie, fetchIDRList]);
 
-	function formatValueforAssociatedRange(value) {
-		return value.map(item => item.subRange ? item.subRange : item.block);
+	function handleOnAgree() {
+		selectedToRevoke.forEach(async item => {
+			const itemObject = publication.identifier.find(i => i.id === item);
+			const result = await revokePublication({identifier: item, subRangeId: publication.associatedRange[0].id, token: cookie[COOKIE_NAME]});
+			const {_id, ...newPublicaiton} = {
+				...publication,
+				identifier: publication.identifier.filter(i => i.id !== item),
+				metadataReference: publication.metadataReference.map(i => {
+					if (i.format === itemObject.type) {
+						return {
+							...i,
+							state: 'pending',
+							update: true
+						};
+					}
+
+					return i;
+				})
+			};
+			if (result) {
+				const response = await updatePublicationIsbnIsmn(_id, newPublicaiton, cookie[COOKIE_NAME]);
+				if (response) {
+					setIsRevoking(false);
+				}
+			}
+		});
 	}
 
-	function handleIssnDelete(value) {
-		console.log(value);
+	function handleOnCancel() {
+		setIsRevoking(false);
+	}
+
+	function formatValueforAssociatedRange(value) {
+		return value.map(item => item.subRange ? item.subRange : item.block);
 	}
 
 	const headRowsIdentifier = [
@@ -137,7 +171,8 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function handleIsbnIsmnDelete(value) {
-		console.log(value);
+		setMessage(intl.formatMessage({id: 'publication.isbn.identifier.confirmation.message.revoke'}));
+		setSelectedToRevoke(value);
 	}
 
 	let publicationDetail;
@@ -337,15 +372,13 @@ export default connect(mapStateToProps, actions)(props => {
 							{intl.formatMessage({id: 'publicationRender.label.metadataReference'})}
 						</Typography>
 						<hr/>
-						{
+						{/* {
 							publication.metadataReference &&
 								<TableComponent
-									rowDeleteable
 									data={publication.metadataReference.map(item => tableUserDataMetadataReference(item))}
 									headRows={headRowsMetadataReference}
-									handleDelete={handleIssnDelete}
 								/>
-						}
+						} */}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -635,6 +668,17 @@ export default connect(mapStateToProps, actions)(props => {
 						/>
 					</Grid>
 				</Grid>
+				{
+					message &&
+						<AlertDialogs
+							openAlert={openAlert}
+							setOpenAlert={setOpenAlert}
+							message={message}
+							setMessage={setMessage}
+							handleOnAgree={handleOnAgree}
+							handleOnCancel={handleOnCancel}
+						/>
+				}
 			</>
 		);
 	}

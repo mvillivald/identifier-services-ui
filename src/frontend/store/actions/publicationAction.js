@@ -44,7 +44,7 @@ import {
 } from './types';
 import moment from 'moment';
 import HttpStatus from 'http-status';
-import {setLoader, setListLoader, success, fail, setMessage} from './commonAction';
+import {setPublicationLoader, setListLoader, success, fail, setMessage} from './commonAction';
 
 export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
@@ -140,7 +140,7 @@ export const fetchIssnList = ({token, sort}) => async dispatch => {
 };
 
 export const fetchIsbnIsmn = ({id, token}) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/${id}`, {
 			method: 'GET',
@@ -156,7 +156,7 @@ export const fetchIsbnIsmn = ({id, token}) => async dispatch => {
 };
 
 export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
 		const newValues = {...values, metadataReference: updateMetadataReference(values.metadataReference)};
@@ -173,16 +173,17 @@ export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch =
 			const result = await response.json();
 			dispatch(success(UPDATE_ISBN_ISMN, result));
 			dispatch(setMessage({color: 'success', msg: 'IsbnIsmn Request updated'}));
-		} else {
-			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+			return result;
 		}
+
+		dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
 };
 
 export const updatePublicationIssn = (id, values, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
 		const newValues = {...values, metadataReference: updateMetadataReference(values.metadataReference)};
@@ -199,9 +200,10 @@ export const updatePublicationIssn = (id, values, token) => async dispatch => {
 			const result = await response.json();
 			dispatch(success(UPDATE_ISSN, result));
 			dispatch(setMessage({color: 'success', msg: 'IsbnIsmn Request updated'}));
-		} else {
-			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+			return result;
 		}
+
+		dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
@@ -212,7 +214,7 @@ function updateMetadataReference(object) {
 }
 
 export const fetchIssn = ({id, token}) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		const response = await fetch(`${API_URL}/publications/issn/${id}`, {
 			method: 'GET',
@@ -306,7 +308,7 @@ export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortSta
 };
 
 export const fetchPublicationIsbnIsmnRequest = (id, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		const response = await fetch(`${API_URL}/requests/publications/isbn-ismn/${id}`, {
 			method: 'GET',
@@ -323,7 +325,7 @@ export const fetchPublicationIsbnIsmnRequest = (id, token) => async dispatch => 
 };
 
 export const updatePublicationIsbnIsmnRequest = (id, values, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
 		const response = await fetch(`${API_URL}/requests/publications/isbn-ismn/${id}`, {
@@ -371,7 +373,7 @@ export const fetchIssnRequestsList = ({searchText, token, sortStateBy, sort}) =>
 };
 
 export const fetchIssnRequest = (id, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		const response = await fetch(`${API_URL}/requests/publications/issn/${id}`, {
 			method: 'GET',
@@ -388,7 +390,7 @@ export const fetchIssnRequest = (id, token) => async dispatch => {
 };
 
 export const updateIssnRequest = (id, values, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
 		const response = await fetch(`${API_URL}/requests/publications/issn/${id}`, {
@@ -413,7 +415,7 @@ export const updateIssnRequest = (id, values, token) => async dispatch => {
 };
 
 export const fetchMarc = (id, token) => async dispatch => {
-	dispatch(setLoader());
+	dispatch(setPublicationLoader());
 	try {
 		const response = await fetch(`${API_URL}/marc/${id}`, {
 			method: 'GET',

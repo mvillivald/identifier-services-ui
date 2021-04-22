@@ -113,7 +113,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	useEffect(() => {
 		fetchAllSubRange({token: cookie[COOKIE_NAME]});
-	}, [cookie, fetchAllSubRange, updatePublisher, assignRange, isEdit, publisherUpdated]);
+	}, [cookie, fetchAllSubRange, updatePublisher, isEdit, publisherUpdated]);
 
 	useEffect(() => {
 		async function run() {
@@ -219,7 +219,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	];
 
 	function handleDelete(value) {
-		setMessage(intl.formatMessage({id: 'listComponent.confirmation.message.revoke'}));
+		setMessage(intl.formatMessage({id: 'publisher.identifier.confirmation.message.revoke'}));
 		setSelectedToRevoke(value);
 	}
 

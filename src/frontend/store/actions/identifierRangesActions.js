@@ -619,3 +619,25 @@ export const revokePublisherIsbn = ({subRangeValue, token}) => async dispatch =>
 	}
 };
 
+export const revokePublication = ({identifier, subRangeId, token}) => async dispatch => {
+	try {
+		dispatch(setLoader());
+		const response = await fetch(`${API_URL}/ranges/identifier/revoke`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				queries: [{
+					query: {identifier: identifier}
+				}],
+				subRangeId: subRangeId
+			})
+		});
+		return response.json();
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+

@@ -135,5 +135,6 @@ export {
 	createIsmnRange,
 	updateIsmnRange,
 	fetchAllSubRange,
-	revokePublisherIsbn
+	revokePublisherIsbn,
+	revokePublication
 } from './identifierRangesActions';

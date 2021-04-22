@@ -913,9 +913,11 @@
     "publicationRender.label.publicationDetails": "Publication details",
     "publicationRender.label.additionalDetails": "Additional information",
 
-    "listComponent.confirmation.message.assignSubRange": "Please Confirm to select this subRange",
-    "listComponent.confirmation.message.revoke": "Please Confirm to revoke this subRange",
+    "publisher.confirmation.message.assignSubRange": "Please Confirm to select this subRange",
+    "publisher.identifier.confirmation.message.revoke": "Please Confirm to revoke this subRange",
 
+    "publication.isbn.identifier.confirmation.message.revoke": "Please Confirm to revoke this ISBN",
+    "publication.ismn.identifier.confirmation.message.revoke": "Please Confirm to revoke this ISMN",
     "publication.isbnismn.metadataReference.headRows.format": "Format",
     "publication.isbnismn.metadataReference.headRows.state": "State",
     "publication.isbnismn.metadataReference.headRows.status": "Status",

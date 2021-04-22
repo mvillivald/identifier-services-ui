@@ -79,7 +79,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const handleTableRowClick = id => {
 		// TO DO alert Confirm message
 		if (id) {
-			setMessage(intl.formatMessage({id: 'listComponent.confirmation.message.assignSubRange'}));
+			setMessage(intl.formatMessage({id: 'publisher.confirmation.message.assignSubRange'}));
 			setSelectedId(id);
 		}
 	};
