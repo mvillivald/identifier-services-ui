@@ -199,7 +199,6 @@ export default connect(
 		}
 
 		function render(list) {
-			console.log(userValues);
 			switch (list.type) {
 				case 'text':
 					return (

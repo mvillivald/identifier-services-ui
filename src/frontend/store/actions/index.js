@@ -47,6 +47,7 @@ export {
 
 export {
 	sendMessage,
+	sendEmail,
 	createMessageTemplate,
 	fetchMessagesList,
 	fetchTemplatesList,

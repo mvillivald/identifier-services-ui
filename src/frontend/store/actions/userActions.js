@@ -32,15 +32,24 @@ import {createIntl, createIntlCache} from 'react-intl';
 import enMessages from '../../intl/translations/en.json';
 import fiMessages from '../../intl/translations/fi.json';
 import svMessages from '../../intl/translations/sv.json';
-import {USERS_LIST, ERROR, USERS_REQUESTS_LIST, FETCH_USER, UPDATE_USER, FETCH_USERS_REQUEST, USERS_REQUESTS_UPDATE} from './types';
-import {setLoader, setListLoader, success, setMessage, fail} from './commonAction';
+import {
+	USERS_LIST,
+	ERROR,
+	USERS_REQUESTS_LIST,
+	FETCH_USER,
+	UPDATE_USER,
+	FETCH_USERS_REQUEST,
+	USERS_REQUESTS_UPDATE
+} from './types';
+
+import {setLoader,
+	setListLoader, success, setMessage, fail} from './commonAction';
 import HttpStatus from 'http-status';
 
 const translations = {
 	fi: fiMessages,
 	en: enMessages,
 	sv: svMessages
-
 };
 
 const cache = createIntlCache();
@@ -78,22 +87,32 @@ export const createUser = (values, token) => async dispatch => {
 		credentials: 'same-origin',
 		body: JSON.stringify(values)
 	});
-	switch (response.status) {
-		case HttpStatus.OK:
+	if (response.status === HttpStatus.OK || response.status === HttpStatus.CREATED) {
+		const response = await fetch('/sendEmail', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({request: values})
+		});
+		if (response.status === HttpStatus.OK) {
 			dispatch(setMessage({color: 'success', msg: 'User created successfully'}));
-			return response.status;
-		case HttpStatus.CREATED:
-			dispatch(setMessage({color: 'success', msg: 'User created successfully'}));
-			return response.status;
-		case HttpStatus.NOT_FOUND:
-			dispatch(setMessage({color: 'error', msg: 'SSO-ID doesnot exists in crowd'}));
-			return response.status;
-		case HttpStatus.CONFLICT:
-		case 'INVALID_USER':
-			dispatch(setMessage({color: 'error', msg: 'User with this SSO-ID or email already exists'}));
-			return response.status;
-		default:
-			return null;
+			dispatch(setMessage({color: 'success', msg: 'Message sent successfully.'}));
+			return response;
+		}
+
+		return response.status;
+	}
+
+	if (response.status === HttpStatus.NOT_FOUND) {
+		dispatch(setMessage({color: 'error', msg: 'SSO-ID doesnot exists in crowd'}));
+		return response.status;
+	}
+
+	if (response.status === HttpStatus.CONFLICT) {
+		dispatch(setMessage({color: 'error', msg: 'User with this SSO-ID or email already exists'}));
+		return response.status;
 	}
 };
 
@@ -275,3 +294,51 @@ export const updateUser = (id, values, token) => async dispatch => {
 // 		dispatch(fail(ERROR, err));
 // 	}
 // };
+
+// async function createLinkAndSendEmail({request, PRIVATE_KEY_URL}) {
+// 	const {JWK, JWE} = jose;
+// 	const key = JWK.asKey(fs.readFileSync(PRIVATE_KEY_URL));
+// 	if (CROWD_URL && CROWD_APP_NAME && CROWD_APP_PASSWORD) {
+// 		const crowdClient = new CrowdClient({
+// 			baseUrl: CROWD_URL,
+// 			application: {
+// 				name: CROWD_APP_NAME,
+// 				password: CROWD_APP_PASSWORD
+// 			}
+// 		});
+
+// 		const response = await crowdClient.user.get(request.id);
+// 		if (response) {
+// 			const payload = jose.JWT.sign(request, key, {
+// 				expiresIn: '24 hours',
+// 				iat: true
+// 			});
+// 			const token = await JWE.encrypt(payload, key, {kid: key.kid});
+// 			const link = `${UI_URL}/users/passwordReset/${token}`;
+// 			const result = sendEmail({
+// 				name: 'forgot password',
+// 				args: {link},
+// 				getTemplate,
+
+// 				SMTP_URL,
+// 				API_EMAIL: request.email
+// 			});
+// 			return result;
+// 		}
+// 	}
+// }
+
+// async function getTemplate(query, cache) {
+// 	const client = createApiClient({
+// 		url: API_URL,
+// 		username: API_USERNAME,
+// 		password: API_PASSWORD,
+// 		userAgent: API_CLIENT_USER_AGENT
+// 	});
+// 	const key = JSON.stringify(query);
+// 	if (key in cache) {
+// 		return cache[key];
+// 	}
+
+// 	return {...cache, [key]: await client.templates.getTemplate(query)};
+// }

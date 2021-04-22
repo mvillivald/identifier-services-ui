@@ -41,6 +41,10 @@ export const API_URL = readEnvironmentVariable('API_URL', {
 	defaultValue: 'http://localhost:8081'
 });
 
+export const UI_URL = readEnvironmentVariable('UI_URL', {
+	defaultValue: 'http://localhost:8080'
+});
+
 export const ADMINISTRATORS_EMAIL = readEnvironmentVariable('ADMINISTRATORS_EMAIL');
 
 export const QUERY_LIMIT = readEnvironmentVariable('QUERY_LIMIT', {
@@ -61,3 +65,17 @@ export const PASSPORT_LOCAL = readEnvironmentVariable('PASSPORT_LOCAL');
 export const SYSTEM_USERNAME = readEnvironmentVariable('SYSTEM_USERNAME');
 export const SYSTEM_PASSWORD = readEnvironmentVariable('SYSTEM_PASSWORD');
 export const COOKIE_NAME = readEnvironmentVariable('COOKIE_NAME');
+
+export const CROWD_URL = readEnvironmentVariable('CROWD_URL', {
+	defaultValue: ''
+});
+export const CROWD_APP_NAME = readEnvironmentVariable('CROWD_APP_NAME', {
+	defaultValue: ''
+});
+export const CROWD_APP_PASSWORD = readEnvironmentVariable('CROWD_APP_PASSWORD', {
+	defaultValue: ''
+});
+
+export const API_CLIENT_USER_AGENT = readEnvironmentVariable('API_CLIENT_USER_AGENT', {defaultValue: '_RECORD-IMPORT-CONTROLLER'});
+export const API_USERNAME = readEnvironmentVariable('API_USERNAME');
+export const API_PASSWORD = readEnvironmentVariable('API_PASSWORD');

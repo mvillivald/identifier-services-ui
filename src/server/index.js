@@ -40,8 +40,28 @@ import uuidv4 from 'uuid/v4';
 import fs from 'fs';
 import HttpStatus from 'http-status';
 import jose from 'jose';
-import {HTTP_PORT, TOKEN_MAX_AGE, SMTP_URL, API_URL, ADMINISTRATORS_EMAIL, SYSTEM_USERNAME, SYSTEM_PASSWORD, PRIVATE_KEY_URL, NOTIFICATION_URL, COOKIE_NAME} from './config';
+import {
+	HTTP_PORT,
+	TOKEN_MAX_AGE,
+	SMTP_URL,
+	API_URL,
+	ADMINISTRATORS_EMAIL,
+	SYSTEM_USERNAME,
+	SYSTEM_PASSWORD,
+	PRIVATE_KEY_URL,
+	NOTIFICATION_URL,
+	COOKIE_NAME,
+	CROWD_APP_PASSWORD,
+	CROWD_APP_NAME,
+	CROWD_URL,
+	UI_URL,
+	API_USERNAME,
+	API_PASSWORD,
+	API_CLIENT_USER_AGENT
+} from './config';
 import * as frontendConfig from './frontEndConfig';
+import {Utils, createApiClient} from '@natlibfi/identifier-services-commons';
+import CrowdClient from 'atlassian-crowd-client';
 
 function bodyParse() {
 	validateContentType({
@@ -98,6 +118,16 @@ app.post('/message', (req, res) => {
 		});
 		console.log(response);
 		res.send('Message Sent');
+	}
+
+	main().catch(console.error);
+});
+
+app.post('/sendEmail', (req, res) => {
+	async function main() {
+		const {request} = req.body;
+		const result = await createLinkAndSendEmail({request});
+		res.json(result);
 	}
 
 	main().catch(console.error);
@@ -240,13 +270,17 @@ app.post('/requests/publications/issn', async (req, res) => {
 });
 
 async function systemAuth() {
-	const result = await fetch(`${API_URL}/auth`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Basic ${base64.encode(`${SYSTEM_USERNAME}:${SYSTEM_PASSWORD}`)}`
-		}
-	});
-	return result.headers.get('Token');
+	try {
+		const result = await fetch(`${API_URL}/auth`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Basic ${base64.encode(`${API_USERNAME}:${API_PASSWORD}`)}`
+			}
+		});
+		return result.headers.get('Token');
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 app.get('/notification', (req, res) => {
@@ -260,16 +294,20 @@ app.get('/logOut', (req, res) => {
 });
 
 app.post('/passwordreset', async (req, res) => {
-	const systemToken = await systemAuth();
-	const response = await fetch(`${API_URL}/users/${req.body.id}/password`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${systemToken}`,
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(req.body)
-	});
-	res.status(response.status).json();
+	try {
+		const systemToken = await systemAuth();
+		const response = await fetch(`${API_URL}/users/${req.body.id}/password`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${systemToken}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(req.body)
+		});
+		res.status(response.status).json();
+	} catch (err) {
+		console.log(err);
+	}
 });
 
 app.get('/users/passwordReset/:token', async (req, res) => {
@@ -309,4 +347,57 @@ function decryptToken(token) {
 	const encryptionKey = jose.JWK.asKey(fs.readFileSync(`${PRIVATE_KEY_URL}`, 'utf-8'));
 	const decrypted = jose.JWE.decrypt(token, encryptionKey);
 	return decrypted.toString();
+}
+
+async function createLinkAndSendEmail({request}) {
+	const {sendEmail} = Utils;
+	const {JWK, JWE} = jose;
+	const key = JWK.asKey(fs.readFileSync(PRIVATE_KEY_URL, 'utf-8'));
+	if (CROWD_URL && CROWD_APP_NAME && CROWD_APP_PASSWORD) {
+		const crowdClient = new CrowdClient({
+			baseUrl: CROWD_URL,
+			application: {
+				name: CROWD_APP_NAME,
+				password: CROWD_APP_PASSWORD
+			}
+		});
+
+		const response = await crowdClient.user.get(request.email);
+		if (response) {
+			const privateData = {
+				userId: request.email,
+				id: request.email
+			};
+			const payload = jose.JWT.sign(privateData, key, {
+				expiresIn: '24 hours',
+				iat: true
+			});
+			const token = await JWE.encrypt(payload, key, {kid: key.kid});
+			const link = `${UI_URL}/users/passwordReset/${token}`;
+			const result = sendEmail({
+				name: 'forgot password',
+				args: {link},
+				getTemplate,
+
+				SMTP_URL,
+				API_EMAIL: request.email
+			});
+			return result;
+		}
+	}
+}
+
+async function getTemplate(query, cache) {
+	const client = createApiClient({
+		url: API_URL,
+		username: API_USERNAME,
+		password: API_PASSWORD,
+		userAgent: API_CLIENT_USER_AGENT
+	});
+	const key = JSON.stringify(query);
+	if (key in cache) {
+		return cache[key];
+	}
+
+	return {...cache, [key]: await client.templates.getTemplate(query)};
 }
