@@ -265,7 +265,7 @@ export default connect(mapStateToProps, actions)(props => {
 
 		function formatDate(key, value) {
 			if (key === 'created') {
-				return moment(value, moment.defaultFormat).format('L');
+				return moment(Number(value), moment.defaultFormat).format('L');
 			}
 
 			return value;

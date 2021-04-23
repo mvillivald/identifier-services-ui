@@ -81,7 +81,7 @@ export const fetchIsbnIDRList = ({searchText, token, activeCheck, rangeType}) =>
 		rangeType === 'subRange' ?
 			`${API_URL}/ranges/query/isbn/subRange` :
 			rangeType === 'isbnBatch' ?
-				`${API_URL}/ranges/query/isbnBatch` :
+				`${API_URL}/ranges/query/rangebatch` :
 				`${API_URL}/ranges/query/identifier`;
 
 	try {
@@ -164,7 +164,7 @@ export const searchIDRList = ({searchField, searchText, token, rangeType}) => as
 		rangeType === 'subRange' ?
 			`${API_URL}/ranges/query/isbn/subRange` :
 			rangeType === 'isbnBatch' ?
-				`${API_URL}/ranges/query/isbnBatch` :
+				`${API_URL}/ranges/query/rangebatch` :
 				`${API_URL}/ranges/query/identifier`;
 
 	try {
@@ -260,7 +260,7 @@ export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) =>
 		rangeType === 'subRange' ?
 			`${API_URL}/ranges/query/ismn/subRange` :
 			rangeType === 'ismnBatch' ?
-				`${API_URL}/ranges/query/ismnBatch` :
+				`${API_URL}/ranges/query/rangebatch` :
 				`${API_URL}/ranges/query/identifier`;
 
 	try {

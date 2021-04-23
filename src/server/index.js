@@ -114,8 +114,9 @@ app.post('/message', (req, res) => {
 				body: body.description ? body.description : body.body
 			})
 		});
-		console.log(response);
-		res.send('Message Sent');
+		if (response) {
+			res.send('Message Sent');
+		}
 	}
 
 	main().catch(console.error);

@@ -73,9 +73,9 @@ export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => asy
 
 export const fetchProceedingsList = ({searchText, token, sort}) => async dispatch => {
 	dispatch(setListLoader());
-	const query = {publisher: searchText};
+	const query = {associatedRange: {$elemMatch: {$or: formatSearchQuery(searchText)}}};
 	try {
-		const responseIsbnIsmn = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
+		const responseIsbnIsmn = await fetch(`${API_URL}/publications/isbn-ismn/query/all`, {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -89,30 +89,22 @@ export const fetchProceedingsList = ({searchText, token, sort}) => async dispatc
 			})
 		});
 		const resultIsbnIsmn = await responseIsbnIsmn.json();
-
-		const responseIssn = await fetch(`${API_URL}/publications/issn/query`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				queries: [{
-					query: query
-				}],
-				sort: sort
-			})
-		});
-		const resultIssn = await responseIssn.json();
-
 		const result = {
-			results: [...resultIsbnIsmn.results, ...resultIssn.results],
-			totalDoc: (resultIsbnIsmn.totalDoc === undefined ? 0 : resultIsbnIsmn.totalDoc) + (resultIssn.totalDoc === undefined ? 0 : resultIssn.totalDoc)
+			results: resultIsbnIsmn,
+			totalDoc: resultIsbnIsmn.length
 		};
-
 		dispatch(success(ISBN_ISMN_LIST, result));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
+	}
+
+	function formatSearchQuery(searchTexts) {
+		if (searchTexts !== undefined) {
+			return searchTexts.reduce((acc, item) => {
+				acc.push({subRange: item});
+				return acc;
+			}, []);
+		}
 	}
 };
 

@@ -29,7 +29,8 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
-import {Grid, Typography} from '@material-ui/core';
+import {Grid, Typography, Button} from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {FormattedMessage} from 'react-intl';
 import moment from 'moment';
 
@@ -40,11 +41,13 @@ import * as actions from '../../store/actions';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {
+		fetchPublisher,
 		fetchProceedingsList,
 		isbnIsmnList,
 		loading,
 		match,
 		history,
+		publisher,
 		totalpublication
 	} = props;
 	/* global COOKIE_NAME */
@@ -54,11 +57,22 @@ export default connect(mapStateToProps, actions)(props => {
 	const [page, setPage] = useState(0);
 
 	useEffect(() => {
-		fetchProceedingsList({searchText: publisherId, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
-	}, [fetchProceedingsList, cookie, publisherId]);
+		fetchPublisher(publisherId, cookie[COOKIE_NAME]);
+	}, [cookie, fetchPublisher, publisherId]);
+
+	useEffect(() => {
+		if (publisher) {
+			const {publisherIdentifier} = publisher;
+			fetchProceedingsList({searchText: publisherIdentifier, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
+		}
+	}, [cookie, fetchProceedingsList, publisher]);
 
 	function handleTableRowClick({type, id}) {
 		history.push(`/publications/${type}/${id}`);
+	}
+
+	function handleBack() {
+		history.push(`/publishers/${publisherId}`);
 	}
 
 	const headRows = [
@@ -94,7 +108,7 @@ export default connect(mapStateToProps, actions)(props => {
 		const {id, publicationType} = item;
 		const keys = headRows.map(k => k.id);
 		const result = keys.reduce((acc, key) => {
-			if (key === 'identifier' && item[key] !== undefined) {
+			if (key === 'identifier' && item[key] !== undefined && item[key].length > 0) {
 				return {...acc, [key]: item[key][0].id};
 			}
 
@@ -115,7 +129,7 @@ export default connect(mapStateToProps, actions)(props => {
 			}
 
 			if (key === 'lastUpdated') {
-				return {...acc, [key]: moment(item[key].timestamp).format('L')};
+				return {...acc, [key]: moment(Number(item[key].timestamp)).format('L')};
 			}
 
 			return {...acc, [key]: item[key]};
@@ -132,6 +146,15 @@ export default connect(mapStateToProps, actions)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
+			<Grid container item xs={12}>
+				<Button
+					variant="outlined"
+					startIcon={<ArrowBackIosIcon/>}
+					onClick={handleBack}
+				>
+					<FormattedMessage id="form.button.label.back"/>
+				</Button>
+			</Grid>
 			{usersData}
 		</Grid>
 	);
@@ -142,6 +165,7 @@ export default connect(mapStateToProps, actions)(props => {
 
 function mapStateToProps(state) {
 	return ({
+		publisher: state.publisher.publisher,
 		loading: state.publication.listLoading,
 		isbnIsmnList: state.publication.isbnIsmnList,
 		totalpublication: state.publication.totalDoc,
