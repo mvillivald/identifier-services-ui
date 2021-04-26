@@ -315,7 +315,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								fieldName="seriesDetails[subSeries][title]"
 								label={intl.formatMessage({id: 'listComponent.title'})}
 								value={formatValues.subSeries && formatValues.subSeries.title ?
-									formatValues.subSeries.title : '' }
+									formatValues.subSeries.title : ''}
 							/>
 							<ListComponent
 								fieldName="seriesDetails[subSeries][identifier]"
