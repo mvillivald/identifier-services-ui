@@ -217,6 +217,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			};
 			return (
 				<Grid container item spacing={2} xs={12}>
+					{console.log(formatValues)}
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
 							<Typography variant="h6">
@@ -279,7 +280,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								fieldName="publisher[email]"
 								label={intl.formatMessage({id: 'listComponent.email'})}
-								value={formatValues.publisher && formatValues.publisher.email ? formatValues.publisher.email : ''}
+								value={formatValues && formatValues.email ? formatValues.email : ''}
 							/>
 							<ListComponent
 								fieldName="publisher[language]"
@@ -295,26 +296,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								fieldName="seriesDetails[mainSeries][title]"
 								label={intl.formatMessage({id: 'listComponent.title'})}
-								value={formatValues.seriesDetails ?
-									(formatValues.seriesDetails.mainSeries ?
-										(formatValues.seriesDetails.mainSeries.title ?
-											formatValues.seriesDetails.mainSeries.title :
-											''
-										) :
-										''
-									) :	''}
+								value={formatValues.mainSeries && formatValues.mainSeries.title ?
+									formatValues.mainSeries.title : ''}
 							/>
 							<ListComponent
 								fieldName="seriesDetails[mainSeries][identifier]"
 								label={intl.formatMessage({id: 'listComponent.identifier'})}
-								value={formatValues.seriesDetails ?
-									(formatValues.seriesDetails.mainSeries ?
-										(formatValues.seriesDetails.mainSeries.identifier ?
-											formatValues.seriesDetails.mainSeries.identifier :
-											''
-										) :
-										''
-									) : ''}
+								value={formatValues.mainSeries && formatValues.mainSeries.identifier ?
+									formatValues.mainSeries.identifier : ''}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -325,26 +314,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								fieldName="seriesDetails[subSeries][title]"
 								label={intl.formatMessage({id: 'listComponent.title'})}
-								value={formatValues.seriesDetails ?
-									(formatValues.seriesDetails.subSeries ?
-										(formatValues.seriesDetails.subSeries.title ?
-											formatValues.seriesDetails.subSeries.title :
-											''
-										) :
-										''
-									) : ''}
+								value={formatValues.subSeries && formatValues.subSeries.title ?
+									formatValues.subSeries.title : '' }
 							/>
 							<ListComponent
 								fieldName="seriesDetails[subSeries][identifier]"
 								label={intl.formatMessage({id: 'listComponent.identifier'})}
-								value={formatValues.seriesDetails ?
-									(formatValues.seriesDetails.subSeries ?
-										(formatValues.seriesDetails.subSeries.identifier ?
-											formatValues.seriesDetails.subSeries.identifier :
-											''
-										) :
-										''
-									) : ''}
+								value={formatValues.subSeries && formatValues.subSeries.identifier ?
+									formatValues.subSeries.identifier : ''}
 							/>
 						</Grid>
 					</Grid>
@@ -414,10 +391,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.url'})}
 								value={formatValues.formatDetails ?
-									(formatValues.formatDetails.url ?
-										formatValues.formatDetails.url :
-										''
-									) : ''}
+									formatValues.formatDetails.filter(item => item.url)[0].url : ''}
 							/>
 							<ListComponent
 								fieldName="manufacturer"

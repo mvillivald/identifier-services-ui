@@ -901,7 +901,7 @@
     "publisher.identifier.headRows.next": "next",
     "publisher.identifier.headRows.type": "type",
 
-
+    
     "publicationRender.label.basicInformation": "Basic informations",
     "publicationRender.label.uniformDetails": "Uniform details",
     "publicationRender.label.mainSeries": "Main-series",
@@ -926,9 +926,14 @@
     "publication.identifier.headRows.identifier": "Identifier",
     "publication.identifier.headRows.publicationType": "Publication Type",
 
-    
+    "publicationRegistration.form.authors.role.reader": "lukija",
 
+    "publisherRegistration.form.basicInformation.publisherCategory.churchOrcongregation" : "church or congregation",
+    "publisherRegistration.form.basicInformation.publisherCategory.governmentInstitution" : "government institution",
+    "publisherRegistration.form.basicInformation.publisherCategory.otherOrganization" : "other organization",
+    "publisherRegistration.form.basicInformation.publisherCategory.other" : "other",
     
+   
     "app.home.instructionCompletingForm": "If you publish regularly (for example, one or more publications a year) and you are not yet a member of the ISBN/ISMN system, then please complete the electronic application form to join the ISBN/ISMN system and application form for identifiers.{lineBreak}{lineBreak}If your publishing activities are occasional or you already have joined the ISBN system, please complete only the application form for identifiers."
 
 }

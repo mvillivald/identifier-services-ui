@@ -163,6 +163,11 @@ const theme = createMuiTheme({
 			root: {
 				display: 'flex'
 			}
+		},
+		MuiGrid: {
+			root: {
+				overflowWrap: 'break-word'
+			}
 		}
 	}
 });

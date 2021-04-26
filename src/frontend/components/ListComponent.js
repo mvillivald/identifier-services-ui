@@ -33,10 +33,10 @@ export default function (props) {
 						fieldName === 'organizationDetails[affiliate]' || fieldName === 'organizationDetails[distributor]') ?
 						(edit ? renderEditAdditionalDetails(fieldName, label) : value) :
 						<>
-							<Grid item xs={4}>
+							<Grid item xs={6}>
 								<span className={classes.label}>{label}:</span>
 							</Grid>
-							<Grid item xs={8}>
+							<Grid item xs={6}>
 								{edit ? (
 									fieldName === 'frequency' ? (
 										renderEditFrequency(fieldName)
@@ -78,10 +78,10 @@ export default function (props) {
 			case 'boolean':
 				return (
 					<>
-						<Grid item xs={4}>
+						<Grid item xs={6}>
 							<span className={classes.label}>{label}:</span>
 						</Grid>
-						<Grid item xs={8}>
+						<Grid item xs={6}>
 							{edit ? (
 								<Field
 									name={fieldName}
@@ -113,7 +113,7 @@ export default function (props) {
 						const codes = fieldName === 'classification' ? classificationCodes : isbnClassificationCodes;
 						return (
 							<>
-								<Grid item xs={4}>
+								<Grid item xs={6}>
 									<span className={classes.label}>{label}:</span>
 								</Grid>
 								{renderEditClassification(fieldName, codes)}
@@ -123,7 +123,7 @@ export default function (props) {
 
 					return (
 						<>
-							<Grid item xs={4}>
+							<Grid item xs={6}>
 								<span className={classes.label}>{label}:</span>
 							</Grid>
 							{obj.map(item => (
@@ -154,7 +154,7 @@ export default function (props) {
 					}
 
 					return (
-						<Grid item xs={4}>
+						<Grid item xs={6}>
 							<span> No affiliate Added</span>
 						</Grid>
 					);
@@ -214,7 +214,7 @@ export default function (props) {
 												)
 										);
 								}) : (
-									<Grid item xs={4}>
+									<Grid item xs={6}>
 										<span> No Authors Added</span>
 									</Grid>
 								)}
@@ -225,7 +225,7 @@ export default function (props) {
 				if (fieldName === 'issnFormatDetails') {
 					return (
 						<>
-							<Grid item xs={4}>
+							<Grid item xs={6}>
 								<span className={classes.label}>{label}:</span>
 							</Grid>
 							{obj.map(item => {
@@ -242,10 +242,10 @@ export default function (props) {
 				if (edit && fieldName === 'primaryContact') {
 					return (
 						<>
-							<Grid item xs={4}>
+							<Grid item xs={6}>
 								<span className={classes.label}>{label}:</span>
 							</Grid>
-							<Grid item xs={8}>
+							<Grid item xs={6}>
 								{/* TO DO: fix needed to edit primary contact */}
 								{/* {fieldArrayElement({data: fieldArray[1].primaryContact, fieldName: 'primaryContact', clearFields})} */}
 							</Grid>
@@ -256,10 +256,10 @@ export default function (props) {
 				if (obj.some(item => typeof item === 'string')) {
 					return (
 						<Grid item container className={classes.arrayContainer}>
-							<Grid item xs={4}>
+							<Grid item xs={6}>
 								<span className={classes.label}>{label}:</span>
 							</Grid>
-							<Grid item xs={8}>
+							<Grid item xs={6}>
 								{obj.map(item => {
 									return <Chip key={item} label={item}/>;
 								})}
@@ -327,7 +327,7 @@ export default function (props) {
 											)
 										) : edit ? (
 											key === 'defaultLanguage' ? (
-												<Grid item xs={8}>
+												<Grid item xs={6}>
 													<Field
 														name={`${fieldName}[${key}]`}
 														type="select"
@@ -342,7 +342,7 @@ export default function (props) {
 											) : key === 'format' ? (
 												value[key]
 											) : (value.format === 'electronic' || value.format === 'printed-and-electroinc') && key === 'fileFormat' ? (
-												<Grid item xs={8}>
+												<Grid item xs={6}>
 													<Field
 														name={`${fieldName}[${key}]`}
 														type="select"
@@ -357,7 +357,7 @@ export default function (props) {
 													/>
 												</Grid>
 											) : (value.format === 'printed' || value.format === 'printed-and-electroinc') && key === 'printFormat' ? (
-												<Grid item xs={8}>
+												<Grid item xs={6}>
 													<Field
 														name={`${fieldName}[${key}]`}
 														type="select"
@@ -400,7 +400,7 @@ export default function (props) {
 
 	function renderEditDefaultLanguage(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -417,7 +417,7 @@ export default function (props) {
 
 	function renderEditState(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -434,7 +434,7 @@ export default function (props) {
 
 	function renderEditBackgroundProcessingState(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -451,7 +451,7 @@ export default function (props) {
 
 	function renderEditPublisherType(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -468,7 +468,7 @@ export default function (props) {
 
 	function renderEditType(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -490,7 +490,7 @@ export default function (props) {
 
 	function renderEditPublisherCategory(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -509,7 +509,7 @@ export default function (props) {
 
 	function renderEditPublishingActivities(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -525,7 +525,7 @@ export default function (props) {
 
 	function renderEditMetadataDelivery(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"
@@ -541,7 +541,7 @@ export default function (props) {
 
 	function renderEditFrequency(fieldName) {
 		return (
-			<Grid item xs={8}>
+			<Grid item xs={6}>
 				<Field
 					name={fieldName}
 					type="select"

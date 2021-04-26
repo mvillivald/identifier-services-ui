@@ -410,14 +410,32 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									<FormattedMessage id="listComponent.informations"/>
 								</Typography>
 								<hr/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.name'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.name ? formatPublicationValue.publisher.name : ''}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.code'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.code ? formatPublicationValue.publisher.code : ''}
-								/>
+								{
+									formatPublicationValue.type === 'dissertation' ?
+										(
+											<>
+												<ListComponent
+													label={intl.formatMessage({id: 'listComponent.name'})}
+													value={formatPublicationValue.selectUniversity && formatPublicationValue.selectUniversity.title ? formatPublicationValue.selectUniversity.title : ''}
+												/>
+												<ListComponent
+													label={intl.formatMessage({id: 'listComponent.place'})}
+													value={formatPublicationValue.selectUniversity && formatPublicationValue.selectUniversity.place ? formatPublicationValue.selectUniversity.place : ''}
+												/>
+											</>
+										) : (
+											<>
+												<ListComponent
+													label={intl.formatMessage({id: 'listComponent.name'})}
+													value={formatPublicationValue.publisher && formatPublicationValue.publisher.name ? formatPublicationValue.publisher.name : ''}
+												/>
+												<ListComponent
+													label={intl.formatMessage({id: 'listComponent.code'})}
+													value={formatPublicationValue.publisher && formatPublicationValue.publisher.code ? formatPublicationValue.publisher.code : ''}
+												/>
+											</>
+										)
+								}
 								<ListComponent
 									label={intl.formatMessage({id: 'listComponent.address'})}
 									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
@@ -454,40 +472,50 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									label={intl.formatMessage({id: 'listComponent.email'})}
 									value={formatPublicationValue.publisher && formatPublicationValue.publisher.email ? formatPublicationValue.publisher.email : ''}
 								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.language'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.language ? formatPublicationValue.publisher.language : ''}
-								/>
+								{
+									formatPublicationValue.type === 'dissertation' ?
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.language'})}
+											value={formatPublicationValue.language ? formatPublicationValue.language : ''}
+										/> :
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.language'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.language ? formatPublicationValue.publisher.language : ''}
+										/>
+								}
 							</Grid>
 						</Grid>
-						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.publisher"/>&nbsp;
-								<FormattedMessage id="listComponent.publishingActivities"/>
-							</Typography>
-							<hr/>
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.currentYear'})}
-								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency &&
-									formatPublicationValue.publisher.publicationDetails.frequency.currentYear ? formatPublicationValue.publisher.publicationDetails.frequency.currentYear : ''}
-							/>
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.nextYear'})}
-								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency &&
-									formatPublicationValue.publisher.publicationDetails.frequency.nextYear ? formatPublicationValue.publisher.publicationDetails.frequency.nextYear : ''}
-							/>
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.previouslyPublished'})}
-								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.previouslyPublished ?
-									formatPublicationValue.publisher.publicationDetails.frequency.previouslyPublished : ''}
-							/>
-							<ListComponent
-								fieldName="publishingActivities"
-								label={intl.formatMessage({id: 'listComponent.publishingActivities'})}
-								value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency.publishingActivities ?
-									formatPublicationValue.publisher.publicationDetails.frequency.publishingActivities : ''}
-							/>
-						</Grid>
+						{
+							(formatPublicationValue.type !== 'dissertation' && formatPublicationValue.type !== 'map') &&
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.publisher"/>&nbsp;
+										<FormattedMessage id="listComponent.publishingActivities"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.currentYear'})}
+										value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency &&
+											formatPublicationValue.publisher.publicationDetails.frequency.currentYear ? formatPublicationValue.publisher.publicationDetails.frequency.currentYear : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.nextYear'})}
+										value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.frequency &&
+											formatPublicationValue.publisher.publicationDetails.frequency.nextYear ? formatPublicationValue.publisher.publicationDetails.frequency.nextYear : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.previouslyPublished'})}
+										value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.previouslyPublished ?
+											formatPublicationValue.publisher.publicationDetails.previouslyPublished : ''}
+									/>
+									<ListComponent
+										fieldName="publishingActivities"
+										label={intl.formatMessage({id: 'listComponent.publishingActivities'})}
+										value={formatPublicationValue.publisher && formatPublicationValue.publisher.publicationDetails && formatPublicationValue.publisher.publicationDetails.publishingActivities ?
+											formatPublicationValue.publisher.publicationDetails.publishingActivities : ''}
+									/>
+								</Grid>
+						}
 						<Grid item xs={12}>
 							<Typography variant="h6">
 								<FormattedMessage id="listComponent.authors"/>
@@ -499,15 +527,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								value={formatPublicationValue.authors ? formatPublicationValue.authors : []}
 							/>
 						</Grid>
-						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.additionalDetails"/>
-							</Typography>
-							<hr/>
-							<ListComponent
-								value={formatPublicationValue.additionalDetails ? formatPublicationValue.additionalDetails : ''}
-							/>
-						</Grid>
 					</Grid>
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
@@ -515,12 +534,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<FormattedMessage id="listComponent.publicationDetails"/>
 							</Typography>
 							<hr/>
-							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.classification'})}
-									value={formatPublicationValue.isbnClassification ? formatPublicationValue.isbnClassification : []}
-								/>
-							</Grid>
+							{
+								(formatPublicationValue.type !== 'dissertation' && formatPublicationValue.type !== 'map') &&
+									<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.classification'})}
+											value={formatPublicationValue.isbnClassification ? formatPublicationValue.isbnClassification : []}
+										/>
+									</Grid>
+							}
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.isPublic'})}
 								value={formatPublicationValue.isPublic ? formatPublicationValue.isPublic : ''}
@@ -538,7 +560,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							}
 						</Grid>
 
-						<Grid item xs={12}>
+						{/* <Grid item xs={12}>
 							<Typography variant="h6">
 								<FormattedMessage id="listComponent.uniformDetails"/>
 							</Typography>
@@ -551,7 +573,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								label={intl.formatMessage({id: 'listComponent.language'})}
 								value={formatPublicationValue.uniform && formatPublicationValue.uniform.language ? formatPublicationValue.uniform.language : ''}
 							/>
-						</Grid>
+						</Grid> */}
 						<Grid item xs={12}>
 							<Typography variant="h6">
 								<FormattedMessage id="listComponent.seriesDetails"/>
@@ -627,36 +649,30 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										''
 									) : ''}
 							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.run'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.run ?
+										formatPublicationValue.formatDetails.run :
+										''
+									) : ''}
+							/>
+							<ListComponent
+								label={intl.formatMessage({id: 'listComponent.edition'})}
+								value={formatPublicationValue.formatDetails ?
+									(formatPublicationValue.formatDetails.edition ?
+										formatPublicationValue.formatDetails.edition :
+										''
+									) : ''}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
-								<FormattedMessage id="listComponent.otherReference"/>
+								<FormattedMessage id="listComponent.additionalDetails"/>
 							</Typography>
 							<hr/>
 							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.state'})}
-								value={formatPublicationValue.state ? formatPublicationValue.state : ''}
-							/>
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.creator'})}
-								value={formatPublicationValue.creator ? formatPublicationValue.creator : ''}
-							/>
-							<ListComponent
-								fieldName="timestamp"
-								label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
-								value={formatPublicationValue.lastUpdated ?
-									(formatPublicationValue.lastUpdated.timestamp ?
-										formatPublicationValue.lastUpdated.timestamp :
-										''
-									) : ''}
-							/>
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
-								value={formatPublicationValue.lastUpdated ?
-									(formatPublicationValue.lastUpdated.user ?
-										formatPublicationValue.lastUpdated.user :
-										''
-									) : ''}
+								value={formatPublicationValue.additionalDetails ? formatPublicationValue.additionalDetails : ''}
 							/>
 						</Grid>
 					</Grid>
@@ -1139,10 +1155,11 @@ export function getFieldArray(intl) {
 							width: 'half',
 							options: [
 								{label: '', value: ''},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.author'}), value: 'author'},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.illustrator'}), value: 'illustrator'},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.translator'}), value: 'translator'},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.editor'}), value: 'editor'}
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.author'}), value: 'tekija'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.illustrator'}), value: 'kuvittaja'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.translator'}), value: 'kääntäjä'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.editor'}), value: 'toimittaja'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.reader'}), value: 'lukija'}
 							]
 						}
 					]

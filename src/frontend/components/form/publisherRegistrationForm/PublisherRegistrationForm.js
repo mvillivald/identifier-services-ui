@@ -267,16 +267,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publisherValues.contactPerson ? publisherValues.contactPerson : ''}
 								/>
 								<ListComponent
-									fieldName="publisherType"
-									label={intl.formatMessage({id: 'listComponent.publisherType'})}
-									value={publisherValues.publisherType ? publisherValues.publisherType : ''}
-								/>
-								<ListComponent
-									fieldName="creator"
-									label={intl.formatMessage({id: 'listComponent.creator'})}
-									value={publisherValues.creator ? publisherValues.creator : ''}
-								/>
-								<ListComponent
 									fieldName="website"
 									label={intl.formatMessage({id: 'listComponent.website'})}
 									value={publisherValues.website ? publisherValues.website : ''}
@@ -305,12 +295,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.city ?
 										publisherValues.postalAddress.city : ''}
 								/>
-								<ListComponent
+								{/* <ListComponent
 									fieldName="postalAddress[public]"
 									label={intl.formatMessage({id: 'listComponent.public'})}
 									value={publisherValues && publisherValues.postalAddress && publisherValues.postalAddress.public ?
 										publisherValues.postalAddress.public : ''}
-								/>
+								/> */}
 							</Grid>
 						</Grid>
 						<Grid item xs={12}>
@@ -374,7 +364,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								/>
 							</Grid>
 						</Grid>
-						<Grid item xs={12}>
+						{/* <Grid item xs={12}>
 							<Typography variant="h6">
 								<FormattedMessage id="listComponent.notes"/>
 							</Typography>
@@ -384,7 +374,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								label={intl.formatMessage({id: 'listComponent.notes'})}
 								value={publisherValues.notes ? publisherValues.notes : ''}
 							/>
-						</Grid>
+						</Grid> */}
 					</Grid>
 				</Grid>
 
