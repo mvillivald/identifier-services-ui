@@ -52,6 +52,12 @@ export default withRouter(props => {
 			title: <FormattedMessage id={dynamicTitle === '' ? 'app.modal.title.publicationRegistration' : `app.modal.title.publicationRegistration${dynamicTitle}`}/>,
 			name: 'publicationRegistration',
 			component: <SwitchPublicationForm title={dynamicTitle} setTitle={setDynamicTitle} {...props}/>
+		},
+		{
+			label: <FormattedMessage id="app.home.formButtons.publisherChangeRequest"/>,
+			title: <FormattedMessage id="app.modal.title.publisherChangeRequest"/>,
+			name: 'publisherChangeRequest',
+			path: 'https://elomake.helsinki.fi/lomakkeet/67127/lomake.html'
 		}
 	];
 	const classes = useStyles();
@@ -73,10 +79,22 @@ export default withRouter(props => {
 								{item.label}
 							</Button>
 						) : (
-							<ModalLayout key={item.label} form label={item.label} title={item.title} dynamicTitle={dynamicTitle} setDynamicTitle={setDynamicTitle} name={item.name} variant="outlined" classed={classes.button} color="primary">
-								{item.component}
-							</ModalLayout>
-						)
+							item.name === 'publisherChangeRequest' ?
+								(
+									<Button
+										key={item.label}
+										variant="outlined"
+										color="primary"
+										href={item.path}
+										target="_blank"
+									>
+										{item.label}
+									</Button>
+								) :	(
+									<ModalLayout key={item.label} form label={item.label} title={item.title} dynamicTitle={dynamicTitle} setDynamicTitle={setDynamicTitle} name={item.name} variant="outlined" classed={classes.button} color="primary">
+										{item.component}
+									</ModalLayout>
+								))
 				)}
 			</Grid>
 		</div>
