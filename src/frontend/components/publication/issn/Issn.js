@@ -61,9 +61,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		handleSubmit,
 		clearFields,
 		updatePublicationIssn,
-		updatedIssn,
 		match,
 		history,
+		loading,
 		assignIssnRange,
 		fetchMarc
 	} = props;
@@ -86,7 +86,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (id !== null) {
 			fetchIssn({id: id, token: cookie[COOKIE_NAME]});
 		}
-	}, [cookie, fetchIssn, id, updatedIssn]);
+	}, [cookie, fetchIssn, id, loading]);
 
 	useEffect(() => {
 		if (Object.keys(issn).length > 0) {
@@ -103,10 +103,16 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [issn]);
 
 	useEffect(() => {
-		if (rangeBlockId !== null) {
-			assignIssnRange({rangeBlockId, issn}, cookie[COOKIE_NAME]);
+		run();
+		async function run() {
+			if (rangeBlockId !== null) {
+				const resp = await assignIssnRange({rangeBlockId, issn}, cookie[COOKIE_NAME]);
+				if (resp) {
+					setAssignRange(false);
+				}
+			}
 		}
-	}, [assignIssnRange, cookie, issn, rangeBlockId]);
+	}, [assignIssnRange, cookie, rangeBlockId]);	// eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -301,6 +307,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 function mapStateToProps(state) {
 	return ({
+		loading: state.common.loading,
 		issn: state.publication.issn,
 		initialValues: state.publication.issn,
 		userInfo: state.login.userInfo,

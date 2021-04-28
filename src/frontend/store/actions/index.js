@@ -65,6 +65,7 @@ export {
 	success,
 	fail,
 	setLoader,
+	setLoadingDone,
 	loadSvgCaptcha,
 	postCaptchaInput,
 	setFormName,

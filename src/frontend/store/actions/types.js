@@ -26,6 +26,7 @@
  *
  */
 export const LOADER = 'LOADER';
+export const LOADER_DONE = 'LOADER_DONE';
 export const PUBLICATION_LOADER = 'PUBLICATION_LOADER';
 export const LIST_LOADER = 'LIST_LOADER';
 export const SEARCH_LIST_LOADER = 'SEARCH_LIST_LOADER';

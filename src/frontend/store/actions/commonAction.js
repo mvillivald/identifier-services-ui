@@ -27,7 +27,7 @@
  */
 import fetch from 'node-fetch';
 import XLSX from 'xlsx';
-import {LOADER, LIST_LOADER, GET_CAPTCHA, ERROR, SET_FORM_NAME, SNACKBAR_MESSAGE, GET_NOTIFICATION, RANGE_LIST_LOADER, SEARCH_LIST_LOADER, PUBLICATION_LOADER} from './types';
+import {LOADER, LOADER_DONE, LIST_LOADER, GET_CAPTCHA, ERROR, SET_FORM_NAME, SNACKBAR_MESSAGE, GET_NOTIFICATION, RANGE_LIST_LOADER, SEARCH_LIST_LOADER, PUBLICATION_LOADER} from './types';
 
 export function success(type, payload) {
 	return ({
@@ -46,6 +46,12 @@ export function fail(type, payload) {
 export const setLoader = () => {
 	return {
 		type: LOADER
+	};
+};
+
+export const setLoadingDone = () => {
+	return {
+		type: LOADER_DONE
 	};
 };
 

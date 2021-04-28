@@ -26,7 +26,7 @@
  *
  */
 
-import {GET_CAPTCHA, LOADER, SET_FORM_NAME, GET_NOTIFICATION} from '../actions/types';
+import {GET_CAPTCHA, LOADER, SET_FORM_NAME, GET_NOTIFICATION, LOADER_DONE} from '../actions/types';
 
 const initialState = {
 	captcha: {},
@@ -42,6 +42,11 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				loading: true
+			};
+		case LOADER_DONE:
+			return {
+				...state,
+				loading: false
 			};
 		case GET_CAPTCHA:
 			return {

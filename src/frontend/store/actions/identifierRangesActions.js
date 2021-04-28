@@ -28,7 +28,7 @@
 /* global API_URL */
 import fetch from 'node-fetch';
 import {ERROR, IDENTIFIER, IDR, IDR_LIST, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST, IDR_ISSN, RANGE_STATISTICS} from './types';
-import {setLoader, setRangeListLoader, success, fail, setMessage} from './commonAction';
+import {setLoader, setLoadingDone, setRangeListLoader, success, fail, setMessage} from './commonAction';
 import HttpStatus from 'http-status';
 import moment from 'moment';
 
@@ -437,8 +437,8 @@ export const fetchIDRIssnList = ({searchText, token, activeCheck}) => async disp
 };
 
 export const fetchIDRIssn = (id, token) => async dispatch => {
-	dispatch(setLoader());
 	try {
+		dispatch(setLoader());
 		const response = await fetch(`${API_URL}/ranges/issn/${id}`, {
 			method: 'GET',
 			headers: {
@@ -454,46 +454,56 @@ export const fetchIDRIssn = (id, token) => async dispatch => {
 };
 
 export const createIssnRange = (values, token) => async dispatch => {
-	const response = await fetch(`${API_URL}/ranges/issn`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		},
-		credentials: 'same-origin',
-		body: JSON.stringify(values)
-	});
-	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: 'ISSN range created successfully'}));
-		return response.status;
-	}
+	try {
+		const response = await fetch(`${API_URL}/ranges/issn`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+		if (response.status === HttpStatus.CREATED) {
+			dispatch(setMessage({color: 'success', msg: 'ISSN range created successfully'}));
+			return response.status;
+		}
 
-	if (response.status === HttpStatus.CONFLICT) {
-		dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
-		return response.status;
-	}
+		if (response.status === HttpStatus.CONFLICT) {
+			dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
+			return response.status;
+		}
 
-	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISSN range'}));
-	return response.status;
+		dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISSN range'}));
+		return response.status;
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };
 
 export const assignIssnRange = (values, token) => async dispatch => {
-	const response = await fetch(`${API_URL}/ranges/issn/assignRange`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		},
-		credentials: 'same-origin',
-		body: JSON.stringify(values)
-	});
-	if (response.status === HttpStatus.OK) {
-		dispatch(setMessage({color: 'success', msg: 'ISSN range created successfully'}));
-		return response.status;
-	}
+	try {
+		dispatch(setLoader());
+		const response = await fetch(`${API_URL}/ranges/issn/assignRange`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+		if (response.status === HttpStatus.OK) {
+			dispatch(setMessage({color: 'success', msg: 'ISSN range created successfully'}));
+			dispatch(setLoadingDone());
+			return response.status;
+		}
 
-	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISSN range'}));
-	return response.status;
+		dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISSN range'}));
+		return response.status;
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };
 
 export const fetchIssnRangeStatistics = ({startDate, endDate, token}) => async dispatch => {
