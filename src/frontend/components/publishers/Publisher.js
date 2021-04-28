@@ -384,8 +384,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									formattedPublisherDetail.publicationDetails.frequency.currentYear : ''}
 							/>
 							<ListComponent
-								edit={isEdit && isEditable('publicationDetails[frequency][currentYear]')}
-								fieldName="publicationDetails[frequency][currentYear]"
+								edit={isEdit && isEditable('publicationDetails[frequency][nextYear]')}
+								fieldName="publicationDetails[frequency][nextYear]"
 								label={intl.formatMessage({id: 'listComponent.nextYear'})}
 								value={formattedPublisherDetail && formattedPublisherDetail.publicationDetails && formattedPublisherDetail.publicationDetails.frequency && formattedPublisherDetail.publicationDetails.frequency.nextYear ?
 									formattedPublisherDetail.publicationDetails.frequency.nextYear : ''}
@@ -454,14 +454,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									</Typography>
 									<hr/>
 									<ListComponent
-										edit={isEdit && isEditable('active')}
-										fieldName="active"
+										edit={isEdit && isEditable('activity[active]')}
+										fieldName="activity[active]"
 										label={intl.formatMessage({id: 'listComponent.active'})}
 										value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.active ? formattedPublisherDetail.activity.active : ''}
 									/>
 									<ListComponent
-										edit={isEdit && isEditable('yearInactivated')}
-										fieldName="yearInactivated"
+										edit={isEdit && isEditable('activity[yearInactivated]')}
+										fieldName="activity[yearInactivated]"
 										label={intl.formatMessage({id: 'listComponent.yearInactivated'})}
 										value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.yearInactivated ? formattedPublisherDetail.activity.yearInactivated : ''}
 									/>

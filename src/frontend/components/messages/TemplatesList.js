@@ -33,7 +33,6 @@ import {Grid, Typography} from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
-import Template from './Template';
 import useModalStyles from '../../styles/formList';
 import ModalLayout from '../ModalLayout';
 import TableComponent from '../TableComponent';

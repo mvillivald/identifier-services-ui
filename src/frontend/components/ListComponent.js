@@ -496,11 +496,14 @@ export default function (props) {
 					type="select"
 					component={renderSelect}
 					options={[
-						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.associationCorporationOrganisation'}), value: 'association/corporation/organisation'},
-						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.cityMunicipality'}), value: 'city/municipality'},
-						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.clericalOrganisation'}), value: 'clerical organisation'},
-						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.privatePerson'}), value: 'private person'},
-						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.school'}), value: 'school'}
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.privatePerson"/>, value: 'private person'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.associationCorporationOrganisation"/>, value: 'association/corporation/organisation/foundation'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.cityMunicipality"/>, value: 'city/municipality'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.school"/>, value: 'school'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.chruchOrcongregation"/>, value: 'church or congregation'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.governmentInstitution"/>, value: 'government institution'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.otherOrganization"/>, value: 'other organization'},
+						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.other"/>, value: 'other'}
 					]}
 				/>
 			</Grid>
