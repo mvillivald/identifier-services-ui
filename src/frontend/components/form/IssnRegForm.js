@@ -217,7 +217,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			};
 			return (
 				<Grid container item spacing={2} xs={12}>
-					{console.log(formatValues)}
 					<Grid container item xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
 							<Typography variant="h6">
@@ -390,8 +389,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							/>
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.url'})}
-								value={formatValues.formatDetails ?
-									formatValues.formatDetails.filter(item => item.url)[0].url : ''}
+								value={getUrlValue(formatValues)}
 							/>
 							<ListComponent
 								fieldName="manufacturer"
@@ -414,6 +412,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				</Grid>
 
 			);
+		}
+
+		function getUrlValue(formatValues) {
+			const result = formatValues.formatDetails.filter(item => item.url);
+			return result.length > 0 ? result[0].url : '';
 		}
 
 		const component = (
