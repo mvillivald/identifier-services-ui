@@ -31,12 +31,14 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import ErrorIcons from '@material-ui/icons/ErrorOutline';
 import {Typography} from '@material-ui/core';
+import {useIntl} from 'react-intl';
 
 import useStyles from '../../../styles/error';
 
 export default function (props) {
 	const {input, label, options, className, isMulti, infoIconComponent, creatable} = props;
 	const {meta: {touched, error}} = props;
+	const intl = useIntl();
 	const classes = useStyles();
 
 	const component = (
@@ -70,7 +72,7 @@ export default function (props) {
 				/>}
 			{touched && error &&
 				<Typography variant="caption" color="error" className={classes.selectErrors}>
-					<ErrorIcons fontSize="inherit"/>{error}
+					<ErrorIcons fontSize="inherit"/>{intl.formatMessage({id: `error.${error}`})}
 				</Typography>}
 		</>
 	);

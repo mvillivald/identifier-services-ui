@@ -32,6 +32,7 @@ import {PropTypes} from 'prop-types';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {connect} from 'react-redux';
+import {useIntl} from 'react-intl';
 
 import renderTextField from './renderTextField';
 import useStyles from '../../../styles/form';
@@ -46,6 +47,7 @@ export default connect(state => ({
 }))(props => {
 	const [errors, setErrors] = useState();
 	const classes = useStyles();
+	const intl = useIntl();
 	const {fields, values, className, clearFields, name, subName, label} = props;
 	const handleAliasesClick = () => {
 		setErrors();
@@ -53,7 +55,7 @@ export default connect(state => ({
 			if (values[subName]) {
 				if (values[name]) {
 					if (values[name].includes(values[subName])) {
-						setErrors('Cannot add already existed data');
+						setErrors(intl.formatMessage({id: 'Cannot add already existed data'}));
 					} else {
 						fields.push(values[subName]);
 						clearFields(undefined, false, false, subName);
@@ -63,10 +65,10 @@ export default connect(state => ({
 					clearFields(undefined, false, false, subName);
 				}
 			} else {
-				setErrors('Required');
+				setErrors(intl.formatMessage({id: 'error.Required'}));
 			}
 		} else {
-			setErrors('Required');
+			setErrors(intl.formatMessage({id: 'error.Required'}));
 		}
 	};
 

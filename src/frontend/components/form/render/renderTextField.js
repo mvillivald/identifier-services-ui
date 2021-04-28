@@ -29,6 +29,7 @@ import React from 'react';
 import {PropTypes} from 'prop-types';
 import {TextField, InputAdornment, Typography} from '@material-ui/core';
 import ErrorIcons from '@material-ui/icons/ErrorOutline';
+import {useIntl} from 'react-intl';
 
 import useStyles from '../../../styles/error';
 
@@ -36,6 +37,7 @@ export default function (props) {
 	const {input, label, className, variant, infoIconComponent, type, meta, disabled, errors, ...custom} = props;
 	const {touched, error} = meta;
 	const classes = useStyles();
+	const intl = useIntl();
 	const component = (
 		<>
 			<TextField
@@ -53,10 +55,10 @@ export default function (props) {
 	<InputAdornment position="end">
 		<>
 			{touched && (error &&
-				<Typography variant="caption" color="error" className={classes.errors}><ErrorIcons fontSize="inherit"/>{error}</Typography>
+				<Typography variant="caption" color="error" className={classes.errors}><ErrorIcons fontSize="inherit"/>{intl.formatMessage({id: `error.${error}`})}</Typography>
 			)}
 			{touched && (errors &&
-				<Typography variant="caption" color="error" className={classes.errors}><ErrorIcons fontSize="inherit"/>{errors}</Typography>
+				<Typography variant="caption" color="error" className={classes.errors}><ErrorIcons fontSize="inherit"/>{intl.formatMessage({id: `error.${error}`})}</Typography>
 			)}
 		</>
 		{infoIconComponent && infoIconComponent}

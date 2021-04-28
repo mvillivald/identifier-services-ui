@@ -29,6 +29,7 @@
 import React from 'react';
 import {Input, InputLabel, NativeSelect, FormControl, Box, Typography} from '@material-ui/core';
 import ErrorIcons from '@material-ui/icons/ErrorOutline';
+import {useIntl} from 'react-intl';
 
 import useStyles from '../../../styles/error';
 
@@ -46,6 +47,7 @@ export default function (props) {
 		clearFields
 	} = props;
 	const {meta: {touched, error}} = props;
+	const intl = useIntl();
 
 	const component = (
 		<>
@@ -72,7 +74,7 @@ export default function (props) {
 			</FormControl>
 			{touched && error &&
 				<Box mt={2}>
-					<Typography variant="caption" color="error" className={classes.selectErrors}><ErrorIcons fontSize="inherit"/>{error}</Typography>
+					<Typography variant="caption" color="error" className={classes.selectErrors}><ErrorIcons fontSize="inherit"/>{intl.formatMessage({id: `error.${error}`})}</Typography>
 				</Box>}
 		</>
 	);

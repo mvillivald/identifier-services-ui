@@ -32,8 +32,9 @@ import {Fab, Grid, Chip} from '@material-ui/core';
 import {PropTypes} from 'prop-types';
 import AddIcon from '@material-ui/icons/Add';
 import {connect} from 'react-redux';
-import useStyles from '../../../styles/form';
+import {useIntl} from 'react-intl';
 
+import useStyles from '../../../styles/form';
 import renderTextField from './renderTextField';
 import renderSelect from './renderSelect';
 
@@ -43,6 +44,7 @@ export default connect(state => ({
 		getFormValues('publisherUpdateForm')(state)
 }))(props => {
 	const classes = useStyles();
+	const intl = useIntl();
 	const [errors, setErrors] = useState();
 	const {fields, values, clearFields, list: {name, subName}} = props;
 	const email = values && {
@@ -56,11 +58,11 @@ export default connect(state => ({
 			subName.every(item => values[item.name] !== undefined) ?
 				(values[name] ?
 					(values[name].some(item => values.value === item.value) ?
-						setErrors('Already Exist') :
+						setErrors(intl.formatMessage({id: 'already exist'})) :
 						fields.push(email) && subName.forEach(item => clearFields(undefined, false, item.name))) :
 					fields.push(email) && subName.forEach(item => clearFields(undefined, false, item.name))) :
 				null :
-			setErrors('Required');
+			setErrors(intl.formatMessage({id: 'Required'}));
 	};
 
 	const component = (

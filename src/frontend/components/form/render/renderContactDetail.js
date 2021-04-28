@@ -35,6 +35,7 @@ import {connect} from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 import {FormattedMessage} from 'react-intl';
 import HelpIcon from '@material-ui/icons/Help';
+import {useIntl} from 'react-intl';
 
 import PopoverComponent from '../../PopoverComponent';
 import renderTextField from './renderTextField';
@@ -54,6 +55,7 @@ export default connect(state => ({
 	const [errors, setErrors] = React.useState();
 	const {fields, data, fieldName, clearFields, meta: {touched, error}, values, publication} = props;
 	const classes = useStyles();
+	const intl = useIntl();
 
 	const contactDetail = values && {
 		email: values.email,
@@ -79,7 +81,7 @@ export default connect(state => ({
 			if (contactDetail && (contactDetail.email !== undefined)) {
 				if (values.primaryContact) {
 					if (values.primaryContact.some(item => item.email === contactDetail.email)) {
-						setErrors('already exist');
+						setErrors(intl.formatMessage({id: 'already exist'}));
 					} else if (contactDetail.email !== undefined) {
 						fields.push(contactDetail);
 						clearFields(undefined, false, false, 'givenName', 'familyName', 'email');
@@ -102,7 +104,7 @@ export default connect(state => ({
 				const condition = affiliate.affiliatesAddress && affiliate.affiliatesCity && affiliate.affiliatesZip && affiliate.affiliatesName;
 				if (values.affiliates) {
 					if (values.affiliates.some(item => item.affiliatesName === affiliate.affiliatesName)) {
-						setErrors('already exist');
+						setErrors(intl.formatMessage({id: 'already exist'}));
 					} else if (condition) {
 						fields.push(affiliate);
 						clearFields(undefined, false, false, 'affiliatesAddress', 'affiliatesAddressDetails', 'affiliatesCity', 'affiliatesZip', 'affiliatesZip', 'affiliatesName');
@@ -169,7 +171,7 @@ export default connect(state => ({
 				}
 			}
 			)}
-			{touched && error && <span>{error}</span>}
+			{touched && error && <span>{intl.formatMessage({id: `error.${error}`})}</span>}
 			{
 				(fieldName === 'primaryContact' &&
 					<div className={classes.addBtn}>
