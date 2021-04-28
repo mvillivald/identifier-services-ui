@@ -32,11 +32,14 @@ import {Button, Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {validate} from '@natlibfi/identifier-services-commons';
 import {useCookies} from 'react-cookie';
+import {useQuill} from 'react-quilljs';
 import {FormattedMessage} from 'react-intl';
 
 import useStyles from '../../styles/form';
 import renderTextField from './render/renderTextField';
-import renderTextArea from './render/renderTextArea';
+import RichTextEditor from '../messageElement/RichTextEditor';
+import {modules, formats} from '../messageElement/style';
+
 import renderStringArray from './render/renderStringArray';
 import renderSelect from './render/renderSelect';
 import * as actions from '../../store/actions/userActions';
@@ -100,12 +103,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const classes = useStyles();
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
+		const placeholder = 'Compose an epic...';
+		const theme = 'snow';
+		const {quill, quillRef} = useQuill({theme, modules, formats, placeholder});
 
 		const handleCreateTemplate = async values => {
 			const newValues = {...values,
 				name: values.templateName,
-				body: Buffer.from(values.body).toString('base64'),
-				notes: values.notes.map(note => Buffer.from(note).toString('base64'))
+				body: Buffer.from(values.body.body).toString('base64'),
+				notes: values.note ? values.notes.map(note => Buffer.from(note).toString('base64')) : ''
 			};
 			delete newValues.templateName;
 			createMessageTemplate(newValues, cookie[COOKIE_NAME]);
@@ -118,7 +124,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					<Grid container spacing={2} direction="row">
 						{fieldArray.map(list => (
 							<Grid key={list.name} item xs={list.width === 'full' ? 12 : 6}>
-								{element(list, classes, clearFields)}
+								{element({list, classes, clearFields, quill, quillRef})}
 							</Grid>
 						))}
 					</Grid>
@@ -145,7 +151,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		};
 	}));
 
-function element(list, classes, clearFields) {
+function element({list, classes, clearFields, quill, quillRef}) {
 	switch (list.type) {
 		case 'arrayString':
 			return (
@@ -183,10 +189,11 @@ function element(list, classes, clearFields) {
 			return (
 				<Field
 					className={classes.textArea}
-					component={renderTextArea}
+					component={RichTextEditor}
 					label={list.label}
 					name={list.name}
 					type={list.type}
+					props={{quillRef, quill}}
 				/>
 			);
 

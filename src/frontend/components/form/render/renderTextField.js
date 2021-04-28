@@ -33,7 +33,7 @@ import ErrorIcons from '@material-ui/icons/ErrorOutline';
 import useStyles from '../../../styles/error';
 
 export default function (props) {
-	const {input, label, className, infoIconComponent, type, meta, disabled, errors, ...custom} = props;
+	const {input, label, className, variant, infoIconComponent, type, meta, disabled, errors, ...custom} = props;
 	const {touched, error} = meta;
 	const classes = useStyles();
 	const component = (
@@ -44,6 +44,7 @@ export default function (props) {
 				disabled={disabled}
 				type={type}
 				className={className}
+				variant={variant}
 				error={touched && Boolean(error)}
 				inputProps={{...custom}}
 				// eslint-disable-next-line react/jsx-no-duplicate-props

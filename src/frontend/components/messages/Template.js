@@ -26,156 +26,103 @@
  *
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
 	Grid,
-	List,
-	ListItem,
-	ListItemText,
-	Fab,
 	Button
 } from '@material-ui/core';
 import {useCookies} from 'react-cookie';
 import {reduxForm, Field} from 'redux-form';
 import {connect} from 'react-redux';
-import EditIcon from '@material-ui/icons/Edit';
-import {FormattedMessage} from 'react-intl';
+import {useQuill} from 'react-quilljs';
+import {useIntl} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
 import useFormStyles from '../../styles/form';
 import * as actions from '../../store/actions';
-import ModalLayout from '../ModalLayout';
-import renderTextArea from '../form/render/renderTextArea';
 import renderTextField from '../form/render/renderTextField';
-import Spinner from '../Spinner';
+import {modules, formats} from '../messageElement/style';
+import RichTextEditor from '../messageElement/RichTextEditor';
 
 export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'messageTemplate',
 	enableReinitialize: true
 })(props => {
-	const {id, fetchMessageTemplate, messageInfo, handleSubmit, updateMessageTemplate} = props;
+	const {fetchMessageTemplate, messageInfo, handleSubmit, updateMessageTemplate, match, history} = props;
 	const classes = commonStyles();
 	const formClasses = useFormStyles();
+	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [isEdit, setIsEdit] = useState(false);
+	const {id} = match.params;
+
+	const placeholder = 'Compose an epic...';
+	const theme = 'snow';
+	const {quill, quillRef} = useQuill({theme, modules, formats, placeholder});
 
 	useEffect(() => {
 		const token = cookie[COOKIE_NAME];
 		if (id !== null) {
 			fetchMessageTemplate(id, token);
 		}
-	}, [cookie, fetchMessageTemplate, isEdit, id]);
+	}, [cookie, fetchMessageTemplate, id]);
 
-	const handleEditClick = () => {
-		setIsEdit(true);
-	};
-
-	const handleCancel = () => {
-		setIsEdit(false);
-	};
+	useEffect(() => {
+		if (quill !== undefined && (messageInfo !== null && messageInfo !== undefined)) {
+			quill.clipboard.dangerouslyPasteHTML(
+				`<span>${Buffer.from(messageInfo.body, 'base64').toString('utf8')}</span>`
+			);
+		}
+	}, [messageInfo]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function handleMessageUpdate(values) {
 		const {_id, ...updateValue} = {
 			...values,
-			body: Buffer.from(values.body).toString('base64')
+			body: Buffer.from(values.body.body).toString('base64')
 		};
 		updateMessageTemplate(id, updateValue, cookie[COOKIE_NAME]);
-		setIsEdit(false);
+		history.push('/templates');
 	}
 
-	let messageDetail;
-	if (messageInfo === null) {
-		messageDetail = <Spinner/>;
-	} else {
-		messageDetail = (
-			<>
-				{isEdit ?
-					<Grid item xs={12} md={12}>
-						<List>
-							<ListItem>
-								<ListItemText>
-									<Grid container>
-										<Grid item xs={4}>
-											<FormattedMessage id="messageTemplate.label.subject"/>
-										</Grid>
-										<Grid item xs={8}><Field name="subject" className={formClasses.editForm} component={renderTextField}/></Grid>
-									</Grid>
-									<Grid container>
-										<Grid item xs={4}>
-											<FormattedMessage id="messageTemplate.label.body"/>
-										</Grid>
-										<Grid item xs={8}><Field name="body" className={formClasses.editForm} component={renderTextArea} props={{encoded: true}}/></Grid>
-									</Grid>
-								</ListItemText>
-							</ListItem>
-						</List>
-					</Grid> :
-					<Grid item xs={12} md={12}>
-						<List>
-							<ListItem>
-								<ListItemText>
-									<Grid container>
-										<>
-											<Grid item xs={4}>
-												<FormattedMessage id="messageTemplate.label.subject"/>:
-											</Grid>
-											<Grid item xs={8}>{messageInfo.subject}</Grid>
-										</>
-									</Grid>
-									<hr/>
-									<Grid container>
-										<>
-											<Grid item xs={4}>
-												<FormattedMessage id="messageTemplate.label.message"/>
-											</Grid>
-											<Grid item xs={8}>{Buffer.from(messageInfo.body, 'base64').toString('utf8')}</Grid>
-										</>
-									</Grid>
-								</ListItemText>
-							</ListItem>
-						</List>
-					</Grid>}
-			</>
-		);
-	}
+	let messageDetail = (
+		<Grid container item xs={12} md={12}>
+			<Grid item xs={12} md={12} style={{margin: '10px 0'}}>
+				<Field
+					name="subject"
+					className={formClasses.editForm}
+					component={renderTextField}
+					props={{variant: 'outlined', label: intl.formatMessage({id: 'messageTemplate.label.subject'})}}
+				/>
+			</Grid>
+			<Grid item xs={12} md={12}>
+				<Field
+					className={formClasses.textArea}
+					component={RichTextEditor}
+					name="body"
+					props={{quillRef, quill}}
+				/>
+				{/* <div style={{width: '100%', minHeight: 400, border: '1px solid lightgray'}}>
+					<div ref={quillRef}/>
+				</div> */}
+			</Grid>
+		</Grid>
+	);
 
 	const component = (
-		<ModalLayout isTableRow color="primary" title="Message Detail" {...props}>
-			{isEdit ?
-				<div className={classes.listItem}>
-					<form>
-						<Grid container spacing={3} className={classes.listItemSpinner}>
-							{messageDetail}
-						</Grid>
-						<div className={classes.btnContainer}>
-							<Button onClick={handleCancel}>Cancel</Button>
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={handleSubmit(handleMessageUpdate)}
-							>
-								UPDATE
-							</Button>
-						</div>
-					</form>
-				</div> :
-				<div className={classes.listItem}>
-					<Grid container spacing={3} className={classes.listItemSpinner}>
-						{messageDetail}
-					</Grid>
-					<div className={classes.btnContainer}>
-						<Fab
-							color="secondary"
-							size="small"
-							title="Edit Publisher Detail"
-							onClick={handleEditClick}
-						>
-							<EditIcon/>
-						</Fab>
-					</div>
-				</div>}
-		</ModalLayout>
+		<div style={{width: '100%', margin: '60px'}}>
+			<form>
+				<div className={classes.btnContainer}>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleSubmit(handleMessageUpdate)}
+					>
+						UPDATE
+					</Button>
+				</div>
+				{messageDetail}
+			</form>
+		</div>
 	);
 	return {
 		...component

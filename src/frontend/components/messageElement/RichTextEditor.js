@@ -29,17 +29,24 @@
 import React, {useEffect} from 'react';
 
 export default function (props) {
-	const {messageInfo, setMessageToBeSend, quill, quillRef} = props;
+	const {messageInfo, setMessageToBeSend, quill, quillRef, input, disabled} = props;
 
 	useEffect(() => {
 		if (quill) {
 			quill.on('text-change', () => {
 				if (messageInfo !== null) {
-					setMessageToBeSend({...messageInfo, body: quillRef.current.innerHTML});
+					if (setMessageToBeSend) {
+						setMessageToBeSend({...messageInfo, body: quillRef.current.innerHTML});
+					}
+
+					if (input) {
+						const {onChange} = input;
+						onChange({body: quillRef.current.innerHTML});
+					}
 				}
 			});
 		}
-	}, [messageInfo, quill, quillRef, setMessageToBeSend]);
+	}, [disabled, input, messageInfo, quill, quillRef, setMessageToBeSend]);
 
 	const component = (
 		<div style={{width: '100%', minHeight: 400, border: '1px solid lightgray'}}>

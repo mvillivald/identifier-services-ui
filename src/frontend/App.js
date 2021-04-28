@@ -77,6 +77,7 @@ import svMessages from './intl/translations/sv.json';
 import SnackBar from './components/SnackBar';
 import {commonStyles} from './styles/app';
 import * as actions from './store/actions';
+import Template from './components/messages/Template';
 
 export default connect(mapStateToProps, actions)(withRouter(props => {
 	const {lang, userInfo, isAuthenticated, history, responseMessage} = props;
@@ -114,7 +115,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/requests/users', role: ['admin', 'publisher'], component: UsersRequestsList},
 		{path: '/requests/users/:id', role: ['admin', 'publisher'], component: UsersRequest},
 		{path: '/templates', role: ['admin'], component: TemplatesList},
-		{path: '/templates/:id', role: ['admin'], component: TemplatesList},
+		{path: '/template/:id', role: ['admin'], component: Template},
 		{path: '/messages', role: ['admin'], component: MessagesList},
 		{path: '/messages/:id', role: ['admin'], component: Message},
 		{path: '/requests/publishers', role: ['publisher', 'admin'], component: PublishersRequestsList},

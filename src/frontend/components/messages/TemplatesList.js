@@ -45,12 +45,10 @@ export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const intl = useIntl();
 	const modalClasses = useModalStyles();
-	const {loading, fetchTemplatesList, messagesList, totalMessages} = props;
+	const {loading, fetchTemplatesList, messagesList, totalMessages, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [page, setPage] = useState(0);
-	const [modal, setModal] = useState(false);
-	const [templateId, setTemplateId] = useState(null);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
 	useEffect(() => {
@@ -58,9 +56,8 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [fetchTemplatesList, cookie]);
 
 	const handleTableRowClick = id => {
-		setTemplateId(id);
-		setModal(true);
 		setRowSelectedId(id);
+		history.push(`/template/${id}`);
 	};
 
 	const headRows = [
@@ -117,7 +114,6 @@ export default connect(mapStateToProps, actions)(props => {
 				<TemplateCreationForm {...props}/>
 			</ModalLayout>
 			{messageData}
-			<Template id={templateId} modal={modal} setModal={setModal}/>
 		</Grid>
 	);
 	return {

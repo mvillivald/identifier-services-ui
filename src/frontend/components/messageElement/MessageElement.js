@@ -203,7 +203,6 @@ export default connect(mapStateToProps, actions)(props => {
 				{/* Format and Edit Message */}
 				<RichTextEditor
 					messageInfo={messageInfo}
-					selectedTemplate={selectedTemplate}
 					quill={quill}
 					quillRef={quillRef}
 					setMessageToBeSend={setMessageToBeSend}
