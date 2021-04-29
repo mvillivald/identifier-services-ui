@@ -352,7 +352,7 @@ async function createLinkAndSendEmail({request}) {
 	const {sendEmail} = Utils;
 	const {JWK, JWE} = jose;
 	const key = JWK.asKey(fs.readFileSync(PRIVATE_KEY_URL, 'utf-8'));
-	console.log('DEBUG------------>', PRIVATE_KEY_URL)
+	console.log('DEBUG------------>', PRIVATE_KEY_URL);
 	if (CROWD_URL && CROWD_APP_NAME && CROWD_APP_PASSWORD) {
 		const crowdClient = new CrowdClient({
 			baseUrl: CROWD_URL,
