@@ -351,7 +351,9 @@ function decryptToken(token) {
 async function createLinkAndSendEmail({request}) {
 	const {sendEmail} = Utils;
 	const {JWK, JWE} = jose;
+	console.log('DEBUG------------>', PRIVATE_KEY_URL);
 	const key = JWK.asKey(fs.readFileSync(PRIVATE_KEY_URL, 'utf-8'));
+	console.log('KEY --------->', key);
 	if (CROWD_URL && CROWD_APP_NAME && CROWD_APP_PASSWORD) {
 		const crowdClient = new CrowdClient({
 			baseUrl: CROWD_URL,
