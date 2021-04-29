@@ -352,6 +352,7 @@ async function createLinkAndSendEmail({request}) {
 	const {sendEmail} = Utils;
 	const {JWK, JWE} = jose;
 	const key = JWK.asKey(fs.readFileSync(PRIVATE_KEY_URL, 'utf-8'));
+	console.log('DEBUG------------>', PRIVATE_KEY_URL)
 	if (CROWD_URL && CROWD_APP_NAME && CROWD_APP_PASSWORD) {
 		const crowdClient = new CrowdClient({
 			baseUrl: CROWD_URL,
@@ -374,7 +375,7 @@ async function createLinkAndSendEmail({request}) {
 			const token = await JWE.encrypt(payload, key, {kid: key.kid});
 			const link = `${UI_URL}/users/passwordReset/${token}`;
 			const result = sendEmail({
-				name: 'forgot password',
+				name: 'change password',
 				args: {link},
 				getTemplate,
 
