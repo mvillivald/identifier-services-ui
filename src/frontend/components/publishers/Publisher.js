@@ -91,7 +91,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const [assignRange, setAssignRange] = useState(false);
 	const [newPublisherRangeId, setNewPublisherRangeId] = useState(null);
 	const [enableUpdate, setEnableUpdate] = useState(false);
-	const [disableAssign, setDisableAssign] = useState(true);
+	const [disableAssign, setDisableAssign] = useState(false);
 	const [tabsValue, setTabsValue] = useState('isbn');
 	const [message, setMessage] = useState(null);
 	const [openAlert, setOpenAlert] = useState(false);

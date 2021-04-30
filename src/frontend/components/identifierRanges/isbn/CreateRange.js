@@ -30,20 +30,18 @@ import React from 'react';
 import {useCookies} from 'react-cookie';
 import {reduxForm, Field} from 'redux-form';
 import {validate} from '@natlibfi/identifier-services-commons';
-import {connect} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
 import {
 	Grid,
 	Button
 } from '@material-ui/core';
 
-import * as actions from '../../../store/actions';
 import renderTextField from '../../form/render/renderTextField';
 import renderSelect from '../../form/render/renderSelect';
 import {commonStyles} from '../../../styles/app';
 import formStyles from '../../../styles/form';
 
-export default connect(mapStateToProps, actions)(reduxForm({
+export default reduxForm({
 	form: 'rangeCreation',
 	validate,
 	initialValues: {
@@ -51,7 +49,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	},
 	enableReinitialize: true
 })(props => {
-	const {handleSubmit, createIsbnRange, handleClose} = props;
+	const {handleSubmit, createIsbnRange, setFinishedCreating, handleClose} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
@@ -59,6 +57,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	async function handleCreateRange(values) {
 		await createIsbnRange(values, cookie[COOKIE_NAME]);
+		setFinishedCreating(true);
 		handleClose();
 	}
 
@@ -126,14 +125,4 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	return {
 		...component
 	};
-}));
-
-function mapStateToProps(state) {
-	return ({
-		userInfo: state.login.userInfo,
-		loading: state.identifierRanges.rangeListLoading,
-		rangesList: state.identifierRanges.rangesList,
-		range: state.identifierRanges.range,
-		totalDoc: state.identifierRanges.totalDoc
-	});
-}
+});

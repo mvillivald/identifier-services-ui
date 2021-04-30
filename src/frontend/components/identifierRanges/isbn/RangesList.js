@@ -50,7 +50,7 @@ import Identifier from './Identifier';
 import PickIsbnListForm from '../../form/PickIsbnListForm';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIsbnIDRList, rangesList, userInfo, listLoading, loading} = props;
+	const {fetchIsbnIDRList, rangesList, userInfo, listLoading, loading, createIsbnRange} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -64,6 +64,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [modal, setModal] = useState(false);
 	const [identifierModal, setIdentifierModal] = useState(false);
 	const [identifierId, setIdentifierId] = useState(null);
+	const [finishedCreating, setFinishedCreating] = useState(false);
 	const [activeCheck, setActiveCheck] = useState({
 		checked: false
 	});
@@ -74,6 +75,11 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchIsbnIDRList({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
 	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, inputVal, rangeType]);
 
+	useEffect(() => {
+		if (finishedCreating === true) {
+			fetchIsbnIDRList({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, rangeType});
+		}
+	}, [updateComponent, activeCheck, cookie, fetchIsbnIDRList, inputVal, rangeType, finishedCreating]);
 	const handleTableRowClick = id => {
 		setRowSelectedId(id);
 		if (rangeType === 'range') {
@@ -256,7 +262,7 @@ export default connect(mapStateToProps, actions)(props => {
 								name="rangeCreation"
 								variant="outlined"
 							>
-								<CreateRange {...props}/>
+								<CreateRange createIsbnRange={createIsbnRange} setFinishedCreating={setFinishedCreating} {...props}/>
 							</ModalLayout>
 						)
 				}

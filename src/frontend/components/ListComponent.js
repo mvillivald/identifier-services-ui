@@ -89,8 +89,8 @@ export default function (props) {
 									className={formClasses.editForm}
 									component={renderSelect}
 									options={[
-										{label: 'True', value: 'true'},
-										{label: 'False', value: 'false'}
+										{label: 'True', value: true},
+										{label: 'False', value: false}
 									]}
 								/>
 							) : (
