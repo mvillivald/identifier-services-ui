@@ -123,6 +123,7 @@ export {
 	createNewIsmnRange,
 	createIsbnRange,
 	createIsbnBatch,
+	pickRangeList,
 	createIsmnBatch,
 	assignIssnRange,
 	fetchIsmnIDRList,

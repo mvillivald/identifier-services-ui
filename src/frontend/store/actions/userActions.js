@@ -110,7 +110,7 @@ export const createUser = (values, token) => async dispatch => {
 		return response.status;
 	}
 
-	if (response.status === HttpStatus.CONFLICT) {
+	if (response.status === HttpStatus.CONFLICT || response.status === HttpStatus.INTERNAL_SERVER_ERROR) {
 		dispatch(setMessage({color: 'error', msg: 'User with this SSO-ID or email already exists'}));
 		return response.status;
 	}

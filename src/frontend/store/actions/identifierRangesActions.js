@@ -232,6 +232,26 @@ export const createIsbnBatch = (values, token) => async dispatch => {
 	}
 };
 
+export const pickRangeList = (values, token) => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/ranges/isbn/pickRangeList`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin',
+			body: JSON.stringify(values)
+		});
+		if (response) {
+			dispatch(setMessage({color: 'success', msg: 'RangeList Successfully Created'}));
+			return response;
+		}
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
 // ***************ISMN****************************
 export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());

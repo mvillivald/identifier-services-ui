@@ -47,9 +47,10 @@ import TableComponent from '../../TableComponent';
 import {commonStyles} from '../../../styles/app';
 import CreateRange from './CreateRange';
 import Identifier from './Identifier';
+import PickIsbnListForm from '../../form/PickIsbnListForm';
 
 export default connect(mapStateToProps, actions)(props => {
-	const {fetchIsbnIDRList, rangesList, userInfo, loading} = props;
+	const {fetchIsbnIDRList, rangesList, userInfo, listLoading, loading} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -157,7 +158,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	let data;
-	if ((rangesList === undefined) || (loading)) {
+	if ((rangesList === undefined) || (listLoading)) {
 		data = <Spinner/>;
 	} else if (rangesList.length === 0) {
 		data = <p><FormattedMessage id="app.render.noData"/></p>;
@@ -242,7 +243,7 @@ export default connect(mapStateToProps, actions)(props => {
 			/>
 			<Grid>
 				{
-					userInfo.role === 'admin' &&
+					userInfo.role === 'admin' && rangeType === 'range' &&
 						(
 							<ModalLayout
 								form
@@ -259,6 +260,37 @@ export default connect(mapStateToProps, actions)(props => {
 							</ModalLayout>
 						)
 				}
+				{
+					rangeType === 'isbnBatch' &&
+					// <Button
+					// 	type="button"
+					// 	color="primary"
+					// 	variant="outlined"
+					// 	style={{margin: '0 10px'}}
+					// 	onClick={() => console.log('clicked')}
+					// >
+					// 	Extract ISBNs
+					// </Button>
+
+						<ModalLayout
+							form
+							isTableRow
+							modal={modal}
+							setModal={setModal}
+							color="primary"
+							title={intl.formatMessage({id: 'app.modal.title.pickIsbnList'})}
+							label={intl.formatMessage({id: 'app.modal.title.pickIsbnList'})}
+							name="pickIsbnList"
+							variant="outlined"
+						>
+							<PickIsbnListForm
+								rangeType={rangeType}
+								subRangeId={subRangeId}
+								loading={loading}
+								{...props}
+							/>
+						</ModalLayout>
+				}
 			</Grid>
 			{ identifierModal && <Identifier id={identifierId} setIdentifierId={setIdentifierId} modal={identifierModal} setIdentifierModal={setIdentifierModal} {...props}/> }
 
@@ -273,9 +305,9 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		userInfo: state.login.userInfo,
-		loading: state.identifierRanges.rangeListLoading,
+		listLoading: state.identifierRanges.rangeListLoading,
+		loading: state.identifierRanges.loading,
 		rangesList: state.identifierRanges.rangesList,
-		range: state.identifierRanges.range,
 		totalDoc: state.identifierRanges.totalDoc
 	});
 }
