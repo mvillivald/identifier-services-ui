@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import renderTextField from './form/render/renderTextField';
 import renderSelect from './form/render/renderSelect';
+import renderSelectAutoComplete from './form/render/renderSelectAutoComplete';
 import renderMultiSelect from './form/render/renderMultiSelect';
 import renderTextArea from './form/render/renderTextArea';
 import renderContactDetail from './form/render/renderContactDetail';
@@ -18,7 +19,7 @@ import {classificationCodes, isbnClassificationCodes, publisherCategory} from '.
 
 export default function (props) {
 	const classes = useStyles();
-	const {label, value, edit, linkPath, fieldName, clearFields} = props;
+	const {label, value, edit, linkPath, fieldName, clearFields, publication} = props;
 	const intl = useIntl();
 	const formClasses = useFormStyles();
 
@@ -29,7 +30,7 @@ export default function (props) {
 			case 'string':
 			case 'number':
 				return (
-					(fieldName === 'additionalDetails' || fieldName === 'notes' || fieldName === 'rejectionReason' || fieldName === 'aliases' ||
+					(fieldName === 'additionalDetails' || fieldName === 'notes' || fieldName === 'rejectionReason' || fieldName === 'aliases' || fieldName === 'earlierName' ||
 						fieldName === 'organizationDetails[affiliate]' || fieldName === 'organizationDetails[distributor]') ?
 						(edit ? renderEditAdditionalDetails(fieldName, label) : value) :
 						<>
@@ -43,13 +44,13 @@ export default function (props) {
 									) : (fieldName === 'preferences[defaultLanguage]' || fieldName === 'language') || fieldName === 'publisher[language]' || fieldName === 'uniform[language]' ? (
 										renderEditDefaultLanguage(fieldName)
 									) : fieldName === 'type' ? (
-										renderEditType(fieldName)
+										publication === 'isbn-ismn' ? renderIsbnIsmnType(fieldName, value) : renderEditType(fieldName)
 									) : fieldName === 'state' ? (
 										renderEditState(fieldName)
 									) : fieldName === 'publisherType' ? (
 										renderEditPublisherType(fieldName)
 									) : fieldName === 'publisherCategory' ? (
-										renderEditPublisherCategory(fieldName)
+										renderEditPublisherCategory(fieldName, value)
 									) : fieldName === 'metadataDelivery' ? (
 										renderEditMetadataDelivery(fieldName)
 									) : fieldName === 'classification' ? (
@@ -466,6 +467,25 @@ export default function (props) {
 		);
 	}
 
+	function renderIsbnIsmnType(fieldName, value) {
+		return (
+			<Grid item xs={6}>
+				<Field
+					disableClearable
+					freeSolo
+					name={fieldName}
+					type="select"
+					component={renderSelectAutoComplete}
+					options={[
+						{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.book'}), value: 'book'},
+						{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.other'}), value: 'other'}
+					]}
+					props={{defaultValue: value}}
+				/>
+			</Grid>
+		);
+	}
+
 	function renderEditType(fieldName) {
 		return (
 			<Grid item xs={6}>
@@ -490,21 +510,22 @@ export default function (props) {
 
 	function renderEditPublisherCategory(fieldName) {
 		return (
-			<Grid item xs={6}>
+			<Grid item xs={12}>
 				<Field
 					name={fieldName}
 					type="select"
 					component={renderSelect}
 					options={[
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.privatePerson"/>, value: 'private person'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.associationCorporationOrganisation"/>, value: 'association/corporation/organisation/foundation'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.cityMunicipality"/>, value: 'city/municipality'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.school"/>, value: 'school'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.chruchOrcongregation"/>, value: 'church or congregation'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.governmentInstitution"/>, value: 'government institution'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.otherOrganization"/>, value: 'other organization'},
-						{label: <FormattedMessage id="publisherRegistration.form.basicInformation.publisherCategory.other"/>, value: 'other'}
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.privatePerson'}), value: 'private person'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.associationCorporationOrganisation'}), value: 'association/corporation/organisation/foundation'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.cityMunicipality'}), value: 'city/municipality'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.school'}), value: 'school'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.churchOrcongregation'}), value: 'church or congregation'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.governmentInstitution'}), value: 'government institution'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.otherOrganization'}), value: 'other organization'},
+						{label: intl.formatMessage({id: 'publisherRegistration.form.basicInformation.publisherCategory.other'}), value: 'other'}
 					]}
+					props={{isMulti: false, creatable: false}}
 				/>
 			</Grid>
 		);

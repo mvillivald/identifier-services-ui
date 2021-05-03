@@ -11,6 +11,7 @@ export default function (props) {
 		disableClearable,
 		freeSolo,
 		placeholder,
+		defaultValue,
 		disabled
 	} = props;
 	const component = (
@@ -24,6 +25,7 @@ export default function (props) {
 				disabled={disabled}
 				options={options}
 				getOptionLabel={option => option.title}
+				defaultValue={defaultValue}
 				renderInput={params => (
 					<TextField {...params} className={className} placeholder={placeholder} variant="outlined"/>
 				)}

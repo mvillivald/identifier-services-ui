@@ -289,8 +289,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								edit={isEdit && isEditable}
 								fieldName="postalAddress[public]"
 								label={intl.formatMessage({id: 'listComponent.public'})}
-								value={formattedPublisherRequest && formattedPublisherRequest.postalAddress && formattedPublisherRequest.postalAddress.public ?
-									formattedPublisherRequest.postalAddress.public : ''}
+								value={Boolean(formattedPublisherRequest && formattedPublisherRequest.postalAddress && formattedPublisherRequest.postalAddress.public)}
 							/>
 						</Grid>
 					</Grid>
@@ -330,6 +329,30 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
+							<FormattedMessage id="listComponent.earlierName"/>
+						</Typography>
+						<hr/>
+						<ListComponent
+							edit={isEdit && isEditable}
+							fieldName="earlierName"
+							label={intl.formatMessage({id: 'listComponent.earlierName'})}
+							value={formattedPublisherRequest.earlierName ? formattedPublisherRequest.earlierName : ''}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							<FormattedMessage id="listComponent.earlierName"/>
+						</Typography>
+						<hr/>
+						<ListComponent
+							edit={isEdit && isEditable}
+							fieldName="earlierName"
+							label={intl.formatMessage({id: 'listComponent.earlierName'})}
+							value={formattedPublisherRequest.earlierName ? formattedPublisherRequest.earlierName : ''}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
 							Frequency
 						</Typography>
 						<hr/>
@@ -342,7 +365,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						/>
 						<ListComponent
 							edit={isEdit && isEditable}
-							fieldName="publicationDetails[frequency][currentYear]"
+							fieldName="publicationDetails[frequency][nextYear]"
 							label={intl.formatMessage({id: 'listComponent.nextYear'})}
 							value={formattedPublisherRequest && formattedPublisherRequest.publicationDetails && formattedPublisherRequest.publicationDetails.frequency && formattedPublisherRequest.publicationDetails.frequency.nextYear ?
 								formattedPublisherRequest.publicationDetails.frequency.nextYear : ''}
@@ -390,7 +413,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										value={formattedPublisherRequest.backgroundProcessingState ? formattedPublisherRequest.backgroundProcessingState : ''}
 									/>
 									<ListComponent
-										edit={isEdit && isEditable}
 										linkPath={`/publishers/${formattedPublisherRequest.createdResource}`}
 										fieldName="createdResource"
 										label={intl.formatMessage({id: 'listComponent.createdResource'})}

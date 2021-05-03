@@ -590,7 +590,12 @@ export default connect(mapStateToProps, actions)(props => {
 							label={intl.formatMessage({id: 'listComponent.isPublic'})}
 							value={publication.isPublic ? publication.isPublic : ''}
 						/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.type'})} value={publication.type ? publication.type : ''}/>
+						<ListComponent
+							edit={isEdit && isEditable && publication.type !== 'map' && publication.type !== 'dissertation'} fieldName="type"
+							label={intl.formatMessage({id: 'listComponent.type'})}
+							value={publication.type ? publication.type : ''}
+							publication="isbn-ismn"
+						/>
 						<ListComponent
 							label={intl.formatMessage({id: 'listComponent.scale'})}
 							value={publication.mapDetails ?

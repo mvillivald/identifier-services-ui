@@ -289,7 +289,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									value={formattedPublisherDetail.publisherType ? formattedPublisherDetail.publisherType : ''}
 								/>
 								<ListComponent
-									edit={isEdit && isEditable('creator')}
 									fieldName="creator"
 									label={intl.formatMessage({id: 'listComponent.creator'})}
 									value={formattedPublisherDetail.creator ? formattedPublisherDetail.creator : ''}
@@ -331,8 +330,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									edit={isEdit && isEditable('postalAddress[public]')}
 									fieldName="postalAddress[public]"
 									label={intl.formatMessage({id: 'listComponent.public'})}
-									value={formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.public ?
-										formattedPublisherDetail.postalAddress.public : ''}
+									value={Boolean(formattedPublisherDetail && formattedPublisherDetail.postalAddress && formattedPublisherDetail.postalAddress.public)}
 								/>
 							</Grid>
 						</Grid>
@@ -369,6 +367,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								clearFields={clearFields}
 								label={intl.formatMessage({id: 'listComponent.aliases'})}
 								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.earlierName"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								edit={isEdit && isEditable('')}
+								fieldName="earlierName"
+								clearFields={clearFields}
+								label={intl.formatMessage({id: 'listComponent.earlierName'})}
+								value={formattedPublisherDetail.earlierName ? formattedPublisherDetail.earlierName : ''}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -457,7 +468,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										edit={isEdit && isEditable('activity[active]')}
 										fieldName="activity[active]"
 										label={intl.formatMessage({id: 'listComponent.active'})}
-										value={formattedPublisherDetail.activity && formattedPublisherDetail.activity.active ? formattedPublisherDetail.activity.active : ''}
+										value={Boolean(formattedPublisherDetail.activity && formattedPublisherDetail.activity.active)}
 									/>
 									<ListComponent
 										edit={isEdit && isEditable('activity[yearInactivated]')}

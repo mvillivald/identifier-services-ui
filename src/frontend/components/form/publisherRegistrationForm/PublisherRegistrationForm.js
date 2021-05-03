@@ -336,6 +336,17 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
+								<FormattedMessage id="listComponent.earlierName"/>
+							</Typography>
+							<hr/>
+							<ListComponent
+								fieldName="earlierName"
+								label={intl.formatMessage({id: 'listComponent.earlierName'})}
+								value={publisherValues.earlierName ? publisherValues.earlierName : ''}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
 								Frequency
 							</Typography>
 							<hr/>

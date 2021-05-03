@@ -945,6 +945,11 @@
     "error.At least one member must be enter": "At least one member must be enter",
     "error.Value must be between more than 2 characters": "Value must be between more than 2 characters",
     "error.already exist": "already exist",
-    "error.Cannot add already existed data": "Cannot add already existed data"
+    "error.Cannot add already existed data": "Cannot add already existed data",
+
+    "publisherRegistration.form.publishingActivities.earlierName": "Earlier name",
+    "user.headRows.active": "isActive",
+
+    "listComponent.earlierName" : "Earlier name"
 
 }

@@ -152,6 +152,12 @@ export const fieldArray = [
 				width: 'half'
 			},
 			{
+				name: 'earlierName',
+				type: 'textArea',
+				label: <FormattedMessage id="publisherRegistration.form.publishingActivities.earlierName"/>,
+				width: 'half'
+			},
+			{
 				name: 'postalAddress[address]',
 				type: 'text',
 				label: <FormattedMessage id="publisherRegistration.form.basicInformation.postalAddress"/>,

@@ -119,6 +119,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			authors: formatAuthorsValue(publicationIsbnIsmnRequest.authors, values.authors),
 			isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : [],
 			publisher: formatPublisher(values.publisher),
+			type: typeof values.type === 'string' ? values.type : values.type.value,
 			state: 'new',
 			backgroundProcessingState: 'inProgress'
 		};
@@ -343,8 +344,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							edit={isEdit && isEditable}
 							fieldName="publisher[publicationDetails][previouslyPublished]"
 							label={intl.formatMessage({id: 'listComponent.previouslyPublished'})}
-							value={publicationIsbnIsmnRequest.publisher && publicationIsbnIsmnRequest.publisher.publicationDetails && publicationIsbnIsmnRequest.publisher.publicationDetails.previouslyPublished ?
-								publicationIsbnIsmnRequest.publisher.publicationDetails.previouslyPublished : ''}
+							value={Boolean(publicationIsbnIsmnRequest.publisher && publicationIsbnIsmnRequest.publisher.publicationDetails && publicationIsbnIsmnRequest.publisher.publicationDetails.previouslyPublished)}
 						/>
 						<ListComponent
 							edit={isEdit && isEditable}
@@ -395,11 +395,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						<ListComponent
 							edit={isEdit && isEditable} fieldName="isPublic"
 							label={intl.formatMessage({id: 'listComponent.isPublic'})}
-							value={publicationIsbnIsmnRequest.isPublic ? publicationIsbnIsmnRequest.isPublic : ''}
+							value={Boolean(publicationIsbnIsmnRequest.isPublic)}
 						/>
 						<ListComponent
+							edit={isEdit && isEditable && publicationIsbnIsmnRequest.type !== 'map' && publicationIsbnIsmnRequest.type !== 'dissertation'} fieldName="type"
 							label={intl.formatMessage({id: 'listComponent.type'})}
 							value={publicationIsbnIsmnRequest.type ? publicationIsbnIsmnRequest.type : ''}
+							publication="isbn-ismn"
 						/>
 						{
 							publicationIsbnIsmnRequest.type === 'map' &&
