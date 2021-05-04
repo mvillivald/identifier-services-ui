@@ -176,7 +176,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	function handleOnClickSendMessage() {
 		const path = Buffer.from(`publication=${id}`).toString('base64');
-		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publications/isbn-ismn/${id}`, type: 'isbn-ismn', id: id}});
+		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publications/isbn-ismn/${id}`, type: 'isbn-ismn', id: id, isbnIsmn: isbnIsmn}});
 	}
 
 	function handleOnClickShowMarc() {
