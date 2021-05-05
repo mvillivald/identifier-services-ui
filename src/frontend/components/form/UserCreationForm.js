@@ -284,6 +284,6 @@ function mapStateToProps(state) {
 		userValues: getFormValues('userCreation')(state),
 		listloading: state.publisher.listLoading,
 		publishersList: state.publisher.publishersList,
-		publisherOptions: state.publisher.publisherOptions
+		publisherOptions: state.publisher.publisherOptions.filter(i => i.publisherType === 'T' || i.publisherType === 'P')
 	};
 }

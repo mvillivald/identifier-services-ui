@@ -366,7 +366,7 @@ function mapStateToProps(state) {
 		isbnIsmn: state.publication.isbnIsmn,
 		fetchedMarc: state.publication.fetchedMarc,
 		initialValues: formatInitialValues(state.publication.isbnIsmn),
-		publisherOption: state.publisher.publisherOptions,
+		publisherOption: state.publisher.publisherOptions.filter(i => i.publisherType === 'T' || i.publisherType === 'P'),
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,
 		userInfo: state.login.userInfo,
 		messageListLoading: state.message.listLoading,

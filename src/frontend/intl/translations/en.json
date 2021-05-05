@@ -139,6 +139,7 @@
     "publicationRegistration.stepper.label.Time": "Time",
     "publicationRegistration.stepper.label.PreviousPublication": "Previous publication",
     "publicationRegistration.stepper.label.SeriesDetails": "Series details",
+    "publicationRegistration.stepper.label.additionalDetails" : "Additional Details",
 
    
 
@@ -846,7 +847,6 @@
     "form.multipleSelectInstruction": "In order to select Multiple options, select again from a dropdown list",
     "form.createableSelectInstruction": "In order to add other option, type a desire option in input field and click on create or press enter",
 
-    "publicationRegistration.stepper.label.additionalDetails" : "Additional Details",
     "publicationRegistration.form.additionalDetails": "Additional Details",
     "publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.label": "Before you fill in this ISBN request form, ",
     "publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.labelBold": "please check at your department/faculty if you get an ISBN from your university.",
@@ -913,6 +913,26 @@
     "publicationRender.label.publicationDetails": "Publication details",
     "publicationRender.label.additionalDetails": "Additional information",
 
+    "listComponent.ISSN.name": "Julkaisijan nimi",
+    "listComponent.ISSN.frequency": "Ilmestymistiheys",
+    "publicationRegistration.ISSN.stepper.label.publisherBasicInfo": "Publisher basic info",
+    "publicationRegistration.ISSN.stepper.label.basicInformation" : "Basic information",
+    "publicationRegistration.ISSN.stepper.label.publishingActivities" : "Publishing activities",
+    "publicationRegistration.ISSN.stepper.label.primaryContact" : "Primary contact",
+    "publicationRegistration.ISSN.stepper.label.organization" : "Organization",
+    "publicationRegistration.ISSN.stepper.label.Authors" : "Authors",
+    "publicationRegistration.ISSN.stepper.label.Series" : "Series",
+    "publicationRegistration.ISSN.stepper.label.formatDetails" : "Format details",
+    "publicationRegistration.ISSN.stepper.label.preview" : "Preview",
+    "publicationRegistration.ISSN.stepper.label.UniversityInfo" : "University",
+    "publicationRegistration.ISSN.stepper.label.contactInfo": "Contact info",
+    "publicationRegistration.ISSN.stepper.label.Time": "Time",
+    "publicationRegistration.ISSN.stepper.label.PreviousPublication": "Previous publication",
+    "publicationRegistration.ISSN.stepper.label.SeriesDetails": "Series details",
+    "publicationRegistration.ISSN.stepper.label.additionalDetails" : "Additional Details",
+
+    "app.home.instructionCompletingForm": "If you publish regularly (for example, one or more publications a year) and you are not yet a member of the ISBN/ISMN system, then please complete the electronic application form to join the ISBN/ISMN system and application form for identifiers.{lineBreak}{lineBreak}If your publishing activities are occasional or you already have joined the ISBN system, please complete only the application form for identifiers.",
+
     "publisher.confirmation.message.assignSubRange": "Please Confirm to select this subRange",
     "publisher.identifier.confirmation.message.revoke": "Please Confirm to revoke this subRange",
 
@@ -935,8 +955,6 @@
 
     "app.home.formButtons.publisherChangeRequest": "Publisher's Change Request",
     "app.modal.title.publisherChangeRequest": "Publisher Change Request",
-
-    "app.home.instructionCompletingForm": "If you publish regularly (for example, one or more publications a year) and you are not yet a member of the ISBN/ISMN system, then please complete the electronic application form to join the ISBN/ISMN system and application form for identifiers.{lineBreak}{lineBreak}If your publishing activities are occasional or you already have joined the ISBN system, please complete only the application form for identifiers.",
 
     "error.Required": "Required",
     "error.Invalid Value": "Invalid value",

@@ -304,7 +304,7 @@ export default connect(mapStateToProps, actions)(props => {
 						<hr/>
 						<ListComponent edit={isEdit && isEditable} fieldName="firstYear" label={intl.formatMessage({id: 'listComponent.firstYear'})} value={publication.firstYear ? publication.firstYear : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="firstNumber" label={intl.formatMessage({id: 'listComponent.firstNumber'})} value={publication.firstNumber ? publication.firstNumber : ''}/>
-						<ListComponent edit={isEdit && isEditable} fieldName="frequency" label={intl.formatMessage({id: 'listComponent.frequency'})} value={publication.frequency ? publication.frequency : ''}/>
+						<ListComponent edit={isEdit && isEditable} fieldName="frequency" label={intl.formatMessage({id: 'listComponent.ISSN.frequency'})} value={publication.frequency ? publication.frequency : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="type" label={intl.formatMessage({id: 'listComponent.type'})} value={publication.type ? publication.type : ''}/>
 					</Grid>
 					<Grid item xs={12}>

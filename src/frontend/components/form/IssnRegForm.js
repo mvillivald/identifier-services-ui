@@ -236,7 +236,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<hr/>
 							<ListComponent
 								fieldName="publisher[name]"
-								label={intl.formatMessage({id: 'listComponent.name'})}
+								label={intl.formatMessage({id: 'listComponent.ISSN.name'})}
 								value={formatValues.publisher && formatValues.publisher.name ? formatValues.publisher.name : ''}
 							/>
 							<ListComponent
@@ -332,7 +332,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							<hr/>
 							<ListComponent fieldName="firstYear" label={intl.formatMessage({id: 'listComponent.firstYear'})} value={formatValues.firstYear ? formatValues.firstYear : ''}/>
 							<ListComponent fieldName="firstNumber" label={intl.formatMessage({id: 'listComponent.firstNumber'})} value={formatValues.firstNumber ? formatValues.firstNumber : ''}/>
-							<ListComponent fieldName="frequency" label={intl.formatMessage({id: 'listComponent.frequency'})} value={formatValues.frequency ? formatValues.frequency : ''}/>
+							<ListComponent fieldName="frequency" label={intl.formatMessage({id: 'listComponent.ISSN.frequency'})} value={formatValues.frequency ? formatValues.frequency : ''}/>
 							<ListComponent fieldName="type" label={intl.formatMessage({id: 'listComponent.type'})} value={formatValues.type ? formatValues.type : ''}/>
 						</Grid>
 						<Grid item xs={12}>
@@ -429,7 +429,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						{steps.map(label => (
 							<Step key={label}>
 								<StepLabel className={classes.stepLabel}>
-									{intl.formatMessage({id: `publicationRegistration.stepper.label.${label}`})}
+									{intl.formatMessage({id: `publicationRegistration.ISSN.stepper.label.${label}`})}
 								</StepLabel>
 							</Step>
 						))}
