@@ -372,13 +372,13 @@ export default connect(mapStateToProps, actions)(props => {
 							{intl.formatMessage({id: 'publicationRender.label.metadataReference'})}
 						</Typography>
 						<hr/>
-						{/* {
+						{
 							publication.metadataReference &&
 								<TableComponent
 									data={publication.metadataReference.map(item => tableUserDataMetadataReference(item))}
 									headRows={headRowsMetadataReference}
 								/>
-						} */}
+						}
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">

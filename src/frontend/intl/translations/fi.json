@@ -947,6 +947,11 @@
     "publication.isbnismn.metadataReference.headRows.status": "Status",
     "publication.isbnismn.metadataReference.headRows.identifier": "Identifier",
 
+    "publication.issn.metadataReference.headRows.format": "Format",
+    "publication.issn.metadataReference.headRows.state": "State",
+    "publication.issn.metadataReference.headRows.status": "Status",
+    "publication.issn.metadataReference.headRows.identifier": "Identifier",
+
     "publication.identifier.headRows.identifier": "Identifier",
     "publication.identifier.headRows.publicationType": "Publication Type",
     

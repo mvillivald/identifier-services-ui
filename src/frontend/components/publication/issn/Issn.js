@@ -161,11 +161,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		return isEdit && !nonEditableFields.includes(key);
 	}
 
-	const headRows = [
-		{id: 'format', label: <FormattedMessage id="publication.metadataReference.headRows.format"/>},
-		{id: 'state', label: <FormattedMessage id="publication.metadataReference.headRows.state"/>},
-		{id: 'status', label: <FormattedMessage id="publication.metadataReference.headRows.status"/>},
-		{id: 'identifier', label: <FormattedMessage id="publication.metadataReference.headRows.identifier"/>}
+	const headRowsMetadataReference = [
+		{id: 'format', label: <FormattedMessage id="publication.issn.metadataReference.headRows.format"/>},
+		{id: 'state', label: <FormattedMessage id="publication.issn.metadataReference.headRows.state"/>},
+		{id: 'status', label: <FormattedMessage id="publication.issn.metadataReference.headRows.status"/>},
+		{id: 'identifier', label: <FormattedMessage id="publication.issn.metadataReference.headRows.identifier"/>}
 	];
 
 	const component = (
@@ -196,7 +196,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										isEditable={isEditable}
 										handleTableRowClick={handleTableRowClick}
 										rowSelectedId={rowSelectedId}
-										headRows={headRows}
+										headRowsMetadataReference={headRowsMetadataReference}
 									/>
 								</Grid>
 							</form>
@@ -290,7 +290,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 												isEditable={isEditable}
 												handleTableRowClick={handleTableRowClick}
 												rowSelectedId={rowSelectedId}
-												headRows={headRows}
+												headRowsMetadataReference={headRowsMetadataReference}
 											/>
 										</Grid>
 									</RootRef>
