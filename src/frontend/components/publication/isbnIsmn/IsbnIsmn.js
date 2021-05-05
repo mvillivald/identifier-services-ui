@@ -166,7 +166,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			const value = newValue.map(item => ({
 				givenName: item.authorGivenName ? item.authorGivenName : '',
 				familyName: item.authorFamilyName ? item.authorFamilyName : '',
-				role: item.role && item.role
+				role: item.role && item.role.map(i => i.value)
 			}));
 			return value;
 		}
