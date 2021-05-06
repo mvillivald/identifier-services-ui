@@ -53,7 +53,12 @@ import PrintElement from '../Print';
 import TableComponent from '../TableComponent';
 import AlertDialogs from '../AlertDialogs';
 
-export default connect(mapStateToProps, actions)(reduxForm({
+const mapDispatchToProps = {
+	...actions,
+	postMessage: actions.setMessage
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 	form: 'publisherUpdateForm',
 	validate,
 	enableReinitialize: true
@@ -74,6 +79,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		createNewIsmnRange,
 		handleSubmit,
 		sendMessage,
+		postMessage,
 		clearFields,
 		fetchIsbnIDRList,
 		subRangeList,
@@ -153,16 +159,22 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	useEffect(() => {
 		if (confirmation && selectedToRevoke !== null) {
 			setIsRevoking(true);
-			selectedToRevoke.forEach(async item => {
-				const filtered = subRangeList.filter(obj => item === obj.publisherIdentifier);
-				if (filtered.length > 0) {
-					const type = filtered[0].isbnRangeId ? 'isbn' : filtered[0].ismnRangeId ? 'ismn' : '';
-					const result = await revokePublisherIsbn({subRangeValue: {item, type}, token: cookie[COOKIE_NAME]});
-					if (result) {
-						setIsRevoking(false);
+			const filteredSubrange = subRangeList.filter(item => selectedToRevoke.includes(item.publisherIdentifier) && item);
+			const deletableRange = filteredSubrange.filter(i => Number(i.taken) === 0);
+			if (deletableRange.length > 0) {
+				selectedToRevoke.forEach(async item => {
+					const filtered = deletableRange.filter(obj => item === obj.publisherIdentifier);
+					if (filtered.length > 0) {
+						const type = filtered[0].isbnRangeId ? 'isbn' : filtered[0].ismnRangeId ? 'ismn' : '';
+						const result = await revokePublisherIsbn({subRangeValue: {item, type}, token: cookie[COOKIE_NAME]});
+						if (result) {
+							setIsRevoking(false);
+						}
 					}
-				}
-			});
+				});
+			} else {
+				postMessage({color: 'error', msg: intl.formatMessage({id: 'publisher.revoke.impossible'})});
+			}
 		}
 	}, [confirmation, cookie, revokePublisherIsbn, selectedToRevoke]); // eslint-disable-line react-hooks/exhaustive-deps
 
