@@ -58,6 +58,8 @@ export const updatePublisher = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/publishers/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -81,6 +83,8 @@ export const fetchPublisherOption = token => async dispatch => {
 		const properties = {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		};
@@ -129,6 +133,8 @@ export const getUniversityPublisher = () => async dispatch => {
 		const response = await fetch(`${API_URL}/publishers/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
@@ -149,6 +155,8 @@ export const publisherCreationRequest = values => async () => {
 	const response = await fetch('/requests/publishers', {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			'Content-Type': 'application/json'
 		},
 		credentials: 'same-origin',
@@ -166,6 +174,8 @@ export const fetchPublishersRequestsList = ({searchText, token, sortStateBy, sor
 		const response = await fetch(`${API_URL}/requests/publishers/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -189,6 +199,8 @@ export const fetchPublisherRequest = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/requests/publishers/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -207,6 +219,8 @@ export const updatePublisherRequest = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/requests/publishers/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -237,6 +251,8 @@ export const fetchAllPublishers = ({identifierType, type, token}) => async dispa
 		const properties = {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},

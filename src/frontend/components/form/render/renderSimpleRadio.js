@@ -38,7 +38,7 @@ export default function (props) {
 			<Typography variant="subtitle1">{label}</Typography>
 			<FormControl>
 				<RadioGroup {...input} {...rest}>
-					<FormControlLabel value="admin" control={<Radio color="primary"/>} label={intl.formatMessage({id: 'userCreation.form.radio.label.admin'})}/>
+					<FormControlLabel disabled value="admin" control={<Radio color="primary"/>} label={intl.formatMessage({id: 'userCreation.form.radio.label.admin'})}/>
 					<FormControlLabel value="publisher" control={<Radio color="primary"/>} label={intl.formatMessage({id: 'userCreation.form.radio.label.publisher'})}/>
 				</RadioGroup>
 			</FormControl>

@@ -36,6 +36,8 @@ export const passwordReset = values => async dispatch => {
 		const response = await fetch('/passwordreset', {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(values)
@@ -57,6 +59,8 @@ export const passwordResetForm = values => async dispatch => {
 		const response = await fetch('/passwordreset', {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(values)
@@ -82,6 +86,8 @@ export const decryptToken = values => async dispatch => {
 		const response = await fetch('/decryptToken', {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(values)
@@ -101,6 +107,8 @@ export const decodeToken = values => async dispatch => {
 		const response = await fetch('/decodeToken', {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(values)

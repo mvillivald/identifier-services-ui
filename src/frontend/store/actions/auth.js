@@ -34,7 +34,9 @@ export const normalLogin = values => async dispatch => {
 	const response = await fetch('/auth', {
 		method: 'POST',
 		body: JSON.stringify(values),
-		headers: {'Content-Type': 'application/json'}
+		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp', 'Content-Type': 'application/json'}
 	});
 	if (response.status === HttpStatus.BAD_REQUEST) {
 		return 'unauthorize';
@@ -52,6 +54,8 @@ export const getUserInfo = token => async dispatch => {
 	const result = await fetch(`${API_URL}/auth`, {
 		method: 'GET',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`
 		}
 	});

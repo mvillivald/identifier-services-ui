@@ -45,6 +45,8 @@ export const sendMessage = (values, token) => async dispatch => {
 	const response = await fetch('/message', {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -60,6 +62,8 @@ export const createMessageTemplate = (values, token) => async dispatch => {
 	const response = await fetch(`${API_URL}/templates`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -76,6 +80,8 @@ export const fetchMessagesList = (token, sort) => async dispatch => {
 		const response = await fetch(`${API_URL}/messages/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -97,6 +103,8 @@ export const fetchTemplatesList = token => async dispatch => {
 		const response = await fetch(`${API_URL}/templates/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -117,6 +125,8 @@ export const fetchAllMessagessList = token => async dispatch => {
 		const response = await fetch(`${API_URL}/messages/query/all`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -133,6 +143,8 @@ export const fetchAllTemplatesList = token => async dispatch => {
 		const response = await fetch(`${API_URL}/templates/query/all`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -149,6 +161,8 @@ export const fetchMessage = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/messages/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -165,6 +179,8 @@ export const fetchMessageTemplate = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/templates/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -181,6 +197,8 @@ export const updateMessageTemplate = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/templates/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},

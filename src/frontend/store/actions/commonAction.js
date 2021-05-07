@@ -102,6 +102,8 @@ export const postCaptchaInput = (inputData, id) => async dispatch => {
 		const response = await fetch('/captcha', {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(body)

@@ -39,6 +39,8 @@ export const fetchIDRList = ({token}) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/query/identifier`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -88,6 +90,8 @@ export const fetchIsbnIDRList = ({searchText, token, activeCheck, rangeType}) =>
 		const response = await fetch(fetchUrl, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -110,6 +114,8 @@ export const fetchIDR = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/isbn/subRange/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -127,6 +133,8 @@ export const fetchIdentifier = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/identifier/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -143,6 +151,8 @@ export const createNewIsbnRange = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/isbn/subRange`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -171,6 +181,8 @@ export const searchIDRList = ({searchField, searchText, token, rangeType}) => as
 		const response = await fetch(fetchUrl, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -191,6 +203,8 @@ export const createIsbnRange = (values, token) => async dispatch => {
 	const response = await fetch(`${API_URL}/ranges/isbn`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -216,6 +230,8 @@ export const createIsbnBatch = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/isbnBatch`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -237,6 +253,8 @@ export const pickRangeList = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/isbn/pickRangeList`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -287,6 +305,8 @@ export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) =>
 		const response = await fetch(fetchUrl, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -312,6 +332,8 @@ export const fetchIDRIsmnList = ({searchText, token, activeCheck}) => async disp
 		const response = await fetch(`${API_URL}/ranges/ismn/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -334,6 +356,8 @@ export const fetchIDRIsmn = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/ismn/subRange/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -350,6 +374,8 @@ export const createNewIsmnRange = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/ismn/subRange`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -369,6 +395,8 @@ export const updateIsmnRange = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/ismn/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -387,6 +415,8 @@ export const createIsmnRange = (values, token) => async dispatch => {
 	const response = await fetch(`${API_URL}/ranges/ismn`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -414,6 +444,8 @@ export const createIsmnBatch = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/ismnBatch`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -440,6 +472,8 @@ export const fetchIDRIssnList = ({searchText, token, activeCheck}) => async disp
 		const response = await fetch(`${API_URL}/ranges/issn/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -462,6 +496,8 @@ export const fetchIDRIssn = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/issn/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -478,6 +514,8 @@ export const createIssnRange = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/issn`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -507,6 +545,8 @@ export const assignIssnRange = (values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/ranges/issn/assignRange`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -534,6 +574,8 @@ export const fetchIssnRangeStatistics = ({startDate, endDate, token}) => async d
 		const response = await fetch(`${API_URL}/ranges/issn/queryStatistics`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -556,6 +598,8 @@ export const fetchIsbnIsmnMonthlyStatistics = ({startDate, endDate, token}) => a
 		const response = await fetch(`${API_URL}/ranges/isbn-ismn/queryMonthlyStatistics`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -577,6 +621,8 @@ export const fetchIsbnIsmnStatistics = ({identifierType, token}) => async dispat
 			const response = await fetch(`${API_URL}/ranges/isbn-ismn/queryIsbnIsmnStatistics`, {
 				method: 'POST',
 				headers: {
+					'Cross-Origin-Opener-Policy': 'same-origin',
+					'Cross-Origin-Embedder-Policy': 'require-corp',
 					Authorization: `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				},
@@ -598,6 +644,8 @@ export const fetchAllSubRange = ({token}) => async dispatch => {
 		const responseIsbn = await fetch(`${API_URL}/ranges/query/isbn/subRange`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -611,6 +659,8 @@ export const fetchAllSubRange = ({token}) => async dispatch => {
 		const responseIsmn = await fetch(`${API_URL}/ranges/query/ismn/subRange`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -634,6 +684,8 @@ export const revokePublisherIsbn = ({subRangeValue, token}) => async dispatch =>
 		const responseIsbn = await fetch(`${API_URL}/ranges/${type}/subRange/revoke`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -655,6 +707,8 @@ export const revokePublication = ({identifier, subRangeId, token}) => async disp
 		const response = await fetch(`${API_URL}/ranges/identifier/revoke`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},

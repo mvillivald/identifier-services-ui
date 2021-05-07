@@ -54,6 +54,8 @@ export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => asy
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -78,6 +80,8 @@ export const fetchProceedingsList = ({searchText, token, sort}) => async dispatc
 		const responseIsbnIsmn = await fetch(`${API_URL}/publications/isbn-ismn/query/all`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -114,6 +118,8 @@ export const fetchIssnList = ({token, sort}) => async dispatch => {
 		const response = await fetch(`${API_URL}/publications/issn/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -137,6 +143,8 @@ export const fetchIsbnIsmn = ({id, token}) => async dispatch => {
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -155,6 +163,8 @@ export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch =
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -182,6 +192,8 @@ export const updatePublicationIssn = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/publications/issn/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -211,6 +223,8 @@ export const fetchIssn = ({id, token}) => async dispatch => {
 		const response = await fetch(`${API_URL}/publications/issn/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -225,6 +239,8 @@ export const publicationCreation = ({values, token, subType}) => async dispatch 
 	const response = await fetch(`${API_URL}/publications/${subType}`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -244,6 +260,8 @@ export const fetchIssnStatistics = ({token, startDate, endDate}) => async dispat
 		const response = await fetch(`${API_URL}/publications/issn/queryStatistics`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -263,6 +281,8 @@ export const publicationCreationRequest = ({values, subType}) => async dispatch 
 	const response = await fetch(`/requests/publications/${subType}`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			'Content-Type': 'application/json'
 		},
 		credentials: 'same-origin',
@@ -282,6 +302,8 @@ export const fetchPublicationIsbnIsmnRequestsList = ({searchText, token, sortSta
 		const response = await fetch(`${API_URL}/requests/publications/isbn-ismn/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -305,6 +327,8 @@ export const fetchPublicationIsbnIsmnRequest = (id, token) => async dispatch => 
 		const response = await fetch(`${API_URL}/requests/publications/isbn-ismn/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -323,6 +347,8 @@ export const updatePublicationIsbnIsmnRequest = (id, values, token) => async dis
 		const response = await fetch(`${API_URL}/requests/publications/isbn-ismn/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -347,6 +373,8 @@ export const fetchIssnRequestsList = ({searchText, token, sortStateBy, sort}) =>
 		const response = await fetch(`${API_URL}/requests/publications/issn/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -370,6 +398,8 @@ export const fetchIssnRequest = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/requests/publications/issn/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}
@@ -388,6 +418,8 @@ export const updateIssnRequest = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/requests/publications/issn/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -412,6 +444,8 @@ export const fetchMarc = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/marc/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			}

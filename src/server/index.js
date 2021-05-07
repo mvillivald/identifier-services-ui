@@ -105,6 +105,8 @@ app.post('/message', (req, res) => {
 		const response = await fetch(`${API_URL}/messages/`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: token,
 				'Content-Type': 'application/json'
 			},
@@ -163,6 +165,8 @@ app.post('/auth', async (req, res) => {
 	const result = await fetch(`${API_URL}/auth`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Basic ${base64.encode(`${req.body.username}:${req.body.password}`)}`
 		}
 	});
@@ -195,6 +199,8 @@ app.post('/requests/publishers', async (req, res) => {
 	const response = await fetch(`${API_URL}/requests/publishers`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${systemToken}`,
 			'Content-Type': 'application/json'
 		},
@@ -245,6 +251,8 @@ app.post('/requests/publications/isbn-ismn', async (req, res) => {
 	const response = await fetch(`${API_URL}/requests/publications/isbn-ismn`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${systemToken}`,
 			'Content-Type': 'application/json'
 		},
@@ -273,6 +281,8 @@ async function systemAuth() {
 		const result = await fetch(`${API_URL}/auth`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Basic ${base64.encode(`${API_USERNAME}:${API_PASSWORD}`)}`
 			}
 		});
@@ -298,6 +308,8 @@ app.post('/passwordreset', async (req, res) => {
 		const response = await fetch(`${API_URL}/users/${req.body.id}/password`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${systemToken}`,
 				'Content-Type': 'application/json'
 			},

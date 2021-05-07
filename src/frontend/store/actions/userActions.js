@@ -60,6 +60,8 @@ export const fetchUsersList = (token, sort) => async dispatch => {
 		const response = await fetch(`${API_URL}/users/query`, {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -81,6 +83,8 @@ export const createUser = (values, token) => async dispatch => {
 	const response = await fetch(`${API_URL}/users`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -91,6 +95,8 @@ export const createUser = (values, token) => async dispatch => {
 		const response = await fetch('/sendEmail', {
 			method: 'POST',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -120,6 +126,8 @@ export const createUserRequest = (values, token) => async dispatch => {
 	const response = await fetch(`${API_URL}/requests/users`, {
 		method: 'POST',
 		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
@@ -148,6 +156,8 @@ export const fetchUser = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/users/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -164,6 +174,8 @@ export const findUserByUserId = ({userId, token}) => async dispatch => {
 		const properties = {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		};
@@ -186,6 +198,8 @@ export const fetchUserRequest = (id, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/requests/users/${id}`, {
 			method: 'GET',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`
 			}
 		});
@@ -234,6 +248,8 @@ export const updateUserRequest = (id, values, token, lang) => async dispatch => 
 		const response = await fetch(`${API_URL}/requests/users/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
@@ -257,6 +273,8 @@ export const updateUser = (id, values, token) => async dispatch => {
 		const response = await fetch(`${API_URL}/users/${id}`, {
 			method: 'PUT',
 			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json'
 			},
