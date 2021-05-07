@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import React from 'react';
-import {Grid, Typography, Box} from '@material-ui/core';
+import {Grid, Typography, Box, Link} from '@material-ui/core';
 import {Field, FieldArray} from 'redux-form';
 import {FormattedMessage} from 'react-intl';
 import renderTextField from './render/renderTextField';
@@ -121,6 +121,13 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							infoIconComponent={list.instructions && <PopoverComponent icon={<HelpIcon/>} infoText={list.instructions}/>}
 							disabled={list.disable}
 						/>
+						{
+							list.link &&
+								<>
+									<PopoverComponent icon={<HelpIcon/>} infoText={list.instructions}/>
+									<Link target="_blank" href={list.link} color="primary" underline="always"> additional information </Link>
+								</>
+						}
 					</Grid>
 
 				);
@@ -293,7 +300,9 @@ function getSubFormatDetailsFieldArray(intl) {
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
-					type: 'numeric',
+					instructions: getEditionInstruction(),
+					link: 'https://www.kiwi.fi/display/ISBNjaISMN/Uuden+painoksen+tunnukset',
+					type: 'text',
 					width: 'half'
 				}
 			]
@@ -352,6 +361,8 @@ function getSubFormatDetailsFieldArray(intl) {
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.edition'}),
 					name: 'formatDetails[edition]',
+					instructions: getEditionInstruction(),
+					link: 'https://www.kiwi.fi/display/ISBNjaISMN/Uuden+painoksen+tunnukset',
 					type: 'text',
 					width: 'half'
 				}
@@ -404,6 +415,16 @@ export function getUrlInstruction() {
 		<>
 			<Typography>
 				<FormattedMessage id="form.urlInstruction"/>
+			</Typography>
+		</>
+	);
+}
+
+export function getEditionInstruction() {
+	return (
+		<>
+			<Typography>
+				<FormattedMessage id="form.editionInstruction"/>
 			</Typography>
 		</>
 	);

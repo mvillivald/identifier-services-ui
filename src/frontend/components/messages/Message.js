@@ -38,6 +38,7 @@ import {connect} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
 import {useQuill} from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
+import moment from 'moment';
 
 import {commonStyles} from '../../styles/app';
 import * as actions from '../../store/actions';
@@ -80,20 +81,28 @@ export default connect(mapStateToProps, actions)(props => {
 					<ListItem>
 						<ListItemText>
 							<Grid container>
-								<Grid item xs={1}>
+								<Grid item xs={2}>
+									<strong>
+										<FormattedMessage id="message.label.date"/>:
+									</strong>
+								</Grid>
+								<Grid item xs={10}>{moment(Number(messageInfo.created.timestamp)).format('L')}</Grid>
+							</Grid>
+							<Grid container>
+								<Grid item xs={2}>
 									<strong>
 										<FormattedMessage id="message.label.email"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={11}>{messageInfo.email}</Grid>
+								<Grid item xs={10}>{messageInfo.email}</Grid>
 							</Grid>
 							<Grid container>
-								<Grid item xs={1}>
+								<Grid item xs={2}>
 									<strong>
 										<FormattedMessage id="message.label.subject"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={11}>{messageInfo.subject}</Grid>
+								<Grid item xs={10}>{messageInfo.subject}</Grid>
 							</Grid>
 							<Grid container>
 								<div style={{width: '100%', minHeight: 400, border: '1px solid lightgray'}}>
