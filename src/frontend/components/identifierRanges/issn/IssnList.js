@@ -31,6 +31,7 @@ import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
 import {Grid, Typography, FormControlLabel, Checkbox} from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
+import moment from 'moment';
 
 import * as actions from '../../../store/actions';
 import Spinner from '../../Spinner';
@@ -53,7 +54,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const [issnId, setIssnId] = useState(null);
 	const [updateComponent, setUpdateComponent] = useState(false);
 	const [activeCheck, setActiveCheck] = useState({
-		checked: false
+		checked: false,
+		canceled: false
 	});
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
@@ -74,7 +76,15 @@ export default connect(mapStateToProps, actions)(props => {
 	const headRows = [
 		{id: 'prefix', label: intl.formatMessage({id: 'ranges.prefix'})},
 		{id: 'rangeStart', label: intl.formatMessage({id: 'ranges.rangeStart'})},
-		{id: 'rangeEnd', label: intl.formatMessage({id: 'ranges.rangeEnd'})}
+		{id: 'rangeEnd', label: intl.formatMessage({id: 'ranges.rangeEnd'})},
+		{id: 'free', label: intl.formatMessage({id: 'ranges.free'})},
+		{id: 'taken', label: intl.formatMessage({id: 'ranges.taken'})},
+		{id: 'canceled', label: intl.formatMessage({id: 'ranges.canceled'})},
+		{id: 'next', label: intl.formatMessage({id: 'ranges.next'})},
+		{id: 'isClosed', label: intl.formatMessage({id: 'ranges.isClosed'})},
+		{id: 'created', label: intl.formatMessage({id: 'ranges.created'})},
+		{id: 'createdby', label: intl.formatMessage({id: 'ranges.createdBy'})}
+
 	];
 
 	let issnData;
@@ -87,7 +97,7 @@ export default connect(mapStateToProps, actions)(props => {
 			<TableComponent
 				pagination
 				data={issnList
-					.map(item => issnListRender(item.id, item.prefix, item.rangeStart, item.rangeEnd))}
+					.map(item => issnListRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				rowSelectedId={rowSelectedId}
 				headRows={headRows}
@@ -97,12 +107,20 @@ export default connect(mapStateToProps, actions)(props => {
 		);
 	}
 
-	function issnListRender(id, prefix, rangeStart, rangeEnd) {
+	function issnListRender(item) {
+		const {id, prefix, rangeStart, rangeEnd, free, taken, canceled, next, isClosed, created} = item;
 		return {
 			id: id,
 			prefix: prefix,
 			rangeStart: rangeStart,
-			rangeEnd: rangeEnd
+			rangeEnd: rangeEnd,
+			free: free,
+			taken: taken,
+			canceled: canceled,
+			next: next,
+			isClosed: isClosed,
+			created: moment(Number(created.timestamp)).format('L'),
+			createdBy: created.user
 		};
 	}
 
@@ -121,21 +139,34 @@ export default connect(mapStateToProps, actions)(props => {
 						onChange={handleChange('checked')}
 					/>
 				}
-				label={intl.formatMessage({id: 'issnList.label.checkbox'})}
+				label={intl.formatMessage({id: 'rangesList.label.checkbox.active'})}
 			/>
-			{
-				userInfo.role === 'admin' &&
-					<ModalLayout
-						form
-						label={intl.formatMessage({id: 'issnList.label.button.create'})}
-						title={intl.formatMessage({id: 'issnList.label.button.create'})}
-						name="issnCreationRange"
-						variant="outlined"
+			<FormControlLabel
+				control={
+					<Checkbox
+						checked={activeCheck.canceled}
+						value="checked"
 						color="primary"
-					>
-						<RangeCreationForm setUpdateComponent={setUpdateComponent} {...props}/>
-					</ModalLayout>
-			}
+						onChange={handleChange('canceled')}
+					/>
+				}
+				label={intl.formatMessage({id: 'rangesList.label.checkbox.canceled'})}
+			/>
+			<Grid>
+				{
+					userInfo.role === 'admin' &&
+						<ModalLayout
+							form
+							label={intl.formatMessage({id: 'issnList.label.button.create'})}
+							title={intl.formatMessage({id: 'issnList.label.button.create'})}
+							name="issnCreationRange"
+							variant="outlined"
+							color="primary"
+						>
+							<RangeCreationForm setUpdateComponent={setUpdateComponent} {...props}/>
+						</ModalLayout>
+				}
+			</Grid>
 			{issnData}
 			<Issn id={issnId} modal={modal} setModal={setModal}/>
 		</Grid>

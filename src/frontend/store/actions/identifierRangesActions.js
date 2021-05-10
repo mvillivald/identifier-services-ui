@@ -360,6 +360,7 @@ export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) =>
 	}
 };
 
+// NOT BEING USED
 export const fetchIDRIsmnList = ({searchText, token, activeCheck}) => async dispatch => {
 	dispatch(setRangeListLoader());
 	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
@@ -502,8 +503,12 @@ export const createIsmnBatch = (values, token) => async dispatch => {
 
 export const fetchIDRIssnList = ({searchText, token, activeCheck}) => async dispatch => {
 	dispatch(setRangeListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {prefix: searchText, active: true} :
-		{prefix: searchText};
+	const query = activeCheck !== undefined &&
+		(activeCheck.checked === true && activeCheck.canceled === true) ?
+		{active: true, canceled: {$ne: '0'}} :
+		activeCheck.checked === true ? {prefix: searchText, active: true} :
+			activeCheck.canceled === true ? {canceled: {$ne: '0'}} :
+				{prefix: searchText};
 
 	try {
 		const response = await fetch(`${API_URL}/ranges/issn/query`, {
