@@ -114,6 +114,7 @@ export default connect(mapStateToProps, actions)(props => {
 				control={
 					<Checkbox
 						checked={activeCheck.checked}
+						disabled={activeCheck.filterByIdentifier}
 						value="checked"
 						color="primary"
 						onChange={handleChange('checked')}
