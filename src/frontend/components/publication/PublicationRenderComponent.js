@@ -122,7 +122,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	const headRowsIdentifier = [
-		{id: '', label: ''},
+		{id: 'checkbox', label: ''},
 		{id: 'identifier', label: <FormattedMessage id="publication.identifier.headRows.identifier"/>},
 		{id: 'publicationType', label: <FormattedMessage id="publication.identifier.headRows.publicationType"/>}
 	];
@@ -155,7 +155,6 @@ export default connect(mapStateToProps, actions)(props => {
 		if (result) {
 			const {identifier, publicationType} = result !== false && result !== undefined && result;
 			return {
-				checkbox: '',
 				identifier,
 				publicationType,
 				id: item.id
@@ -163,7 +162,6 @@ export default connect(mapStateToProps, actions)(props => {
 		}
 
 		return {
-			checkbox: '',
 			identifier: '',
 			publicationType: '',
 			id: item.id

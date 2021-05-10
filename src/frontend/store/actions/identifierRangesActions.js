@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -59,25 +60,40 @@ export const fetchIDRList = ({token}) => async dispatch => {
 
 export const fetchIsbnIDRList = ({searchText, token, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
-		(
-			rangeType === 'subRange' ?
+	const query = activeCheck !== undefined &&
+		(activeCheck.canceled === true && activeCheck.active === true) ?
+		(rangeType === 'subRange' ?
+			{$or: [{isbnRangeId: searchText}, {publisherId: searchText}], canceled: {$ne: '0'}} :
+			(rangeType === 'isbnBatch' ?
+				{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
+				(rangeType === 'identifier' ?
+					{identifierBatchId: searchText} :
+					{active: true, canceled: {$ne: '0'}}))) :
+		activeCheck.checked === true ?
+			(rangeType === 'subRange' ?
 				{$or: [{isbnRangeId: searchText}, {publisherId: searchText}], active: true} :
 				(rangeType === 'isbnBatch' ?
 					{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
-						{prefix: searchText, active: true}))
-		) :
-		(
-			rangeType === 'subRange' ?
-				{$or: [{isbnRangeId: searchText}, {publisherId: searchText}]} :
-				(rangeType === 'isbnBatch' ?
-					{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
-					(rangeType === 'identifier' ?
-						{identifierBatchId: searchText} :
-						{prefix: searchText}))
-		);
+						{prefix: searchText, active: true}))) :
+			activeCheck.canceled === true ?
+				(rangeType === 'subRange' ?
+					{$or: [{isbnRangeId: searchText}, {publisherId: searchText}], canceled: {$ne: '0'}} :
+					(rangeType === 'isbnBatch' ?
+						{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
+						(rangeType === 'identifier' ?
+							{identifierBatchId: searchText} :
+							{canceled: {$ne: '0'}}))) :
+				(
+					rangeType === 'subRange' ?
+						{$or: [{isbnRangeId: searchText}, {publisherId: searchText}]} :
+						(rangeType === 'isbnBatch' ?
+							{publisherIdentifierRangeId: searchText, identifierType: 'ISBN'} :
+							(rangeType === 'identifier' ?
+								{identifierBatchId: searchText} :
+								{prefix: searchText}))
+				);
 	const fetchUrl = rangeType === 'range' ?
 		`${API_URL}/ranges/query/isbn` :
 		rangeType === 'subRange' ?
@@ -273,7 +289,8 @@ export const pickRangeList = (values, token) => async dispatch => {
 // ***************ISMN****************************
 export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) => async dispatch => {
 	dispatch(setRangeListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ?
+	const query = activeCheck !== undefined &&
+		(activeCheck.canceled === true && activeCheck.active === true) ?
 		(
 			rangeType === 'subRange' ?
 				{$or: [{ismnRangeId: searchText}, {publisherId: searchText}], active: true} :
@@ -281,17 +298,37 @@ export const fetchIsmnIDRList = ({searchText, token, activeCheck, rangeType}) =>
 					{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
 					(rangeType === 'identifier' ?
 						{identifierBatchId: searchText} :
-						{prefix: searchText, active: true}))
+						{active: true, canceled: {$ne: '0'}}))
 		) :
-		(
-			rangeType === 'subRange' ?
-				{$or: [{ismnRangeId: searchText}, {publisherId: searchText}]} :
-				(rangeType === 'ismnBatch' ?
-					{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
-					(rangeType === 'identifier' ?
-						{identifierBatchId: searchText} :
-						{prefix: searchText}))
-		);
+		activeCheck.checked === true ?
+			(
+				rangeType === 'subRange' ?
+					{$or: [{ismnRangeId: searchText}, {publisherId: searchText}], active: true} :
+					(rangeType === 'ismnBatch' ?
+						{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
+						(rangeType === 'identifier' ?
+							{identifierBatchId: searchText} :
+							{prefix: searchText, active: true}))
+			) :
+			activeCheck.canceled === true ?
+				(
+					rangeType === 'subRange' ?
+						{$or: [{ismnRangeId: searchText}, {publisherId: searchText}], active: true} :
+						(rangeType === 'ismnBatch' ?
+							{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
+							(rangeType === 'identifier' ?
+								{identifierBatchId: searchText} :
+								{canceled: {$ne: '0'}}))
+				) :
+				(
+					rangeType === 'subRange' ?
+						{$or: [{ismnRangeId: searchText}, {publisherId: searchText}]} :
+						(rangeType === 'ismnBatch' ?
+							{publisherIdentifierRangeId: searchText, identifierType: 'ISMN'} :
+							(rangeType === 'identifier' ?
+								{identifierBatchId: searchText} :
+								{prefix: searchText}))
+				);
 
 	const fetchUrl = rangeType === 'range' ?
 		`${API_URL}/ranges/query/ismn` :

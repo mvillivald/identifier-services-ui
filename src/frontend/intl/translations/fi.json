@@ -193,7 +193,7 @@
     "ranges.identifier": "Tunniste",
     "ranges.identifierBatchId": "Identifier Batch ID",
     "ranges.publicationType": "Julkaisun tyyppi",
-    "rangesList.label.checkbox": "Näytä vain aktiiviset lohkot",
+    "rangesList.label.checkbox.active": "Näytä vain aktiiviset lohkot",
     "rangesList.title.range": "Lista lohkoista ISBN/ISMN",
     "rangesList.title.subRange": "Lista alalohkoista ISBN/ISMN",
     "rangesList.title.isbnIsmnBatch": "List of Batch ISBN/ISMN",
@@ -977,6 +977,9 @@
     "publisherRegistration.form.publishingActivities.earlierName": "Earlier name",
     "user.headRows.active": "isActive",
 
-    "listComponent.earlierName" : "Earlier name"
+    "listComponent.earlierName" : "Earlier name",
+
+    "rangesList.label.checkbox.canceled": "Show with canceled"
+
 
 }

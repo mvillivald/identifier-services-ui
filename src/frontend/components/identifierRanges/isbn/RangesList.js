@@ -66,7 +66,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const [identifierId, setIdentifierId] = useState(null);
 	const [finishedCreating, setFinishedCreating] = useState(false);
 	const [activeCheck, setActiveCheck] = useState({
-		checked: false
+		checked: false,
+		canceled: false
 	});
 
 	const [rowSelectedId, setRowSelectedId] = useState(null);
@@ -245,7 +246,18 @@ export default connect(mapStateToProps, actions)(props => {
 						onChange={handleChange('checked')}
 					/>
 				}
-				label={intl.formatMessage({id: 'rangesList.label.checkbox'})}
+				label={intl.formatMessage({id: 'rangesList.label.checkbox.active'})}
+			/>
+			<FormControlLabel
+				control={
+					<Checkbox
+						checked={activeCheck.canceled}
+						value="checked"
+						color="primary"
+						onChange={handleChange('canceled')}
+					/>
+				}
+				label={intl.formatMessage({id: 'rangesList.label.checkbox.canceled'})}
 			/>
 			<Grid>
 				{

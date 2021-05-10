@@ -418,7 +418,7 @@
     "ranges.identifier": "Identifier",
     "ranges.identifierBatchId": "Identifier batch ID",
     "ranges.publicationType": "Publication type",
-    "rangesList.label.checkbox": "Show only active ranges",
+    "rangesList.label.checkbox.active": "Show only active ranges",
     "rangesList.title.range": "ISBN/ISMN ranges",
     "rangesList.title.subRange": "List of sub-ranges ISBN/ISMN",
     "rangesList.title.isbnIsmnBatch": "List of batch ISBN/ISMN",
@@ -976,6 +976,9 @@
     "publisherRegistration.form.publishingActivities.earlierName": "Earlier name",
     "user.headRows.active": "isActive",
 
-    "listComponent.earlierName" : "Earlier name"
+    "listComponent.earlierName" : "Earlier name",
+
+    "rangesList.label.checkbox.canceled": "Show with canceled"
+
 
 }
