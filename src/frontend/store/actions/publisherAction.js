@@ -98,9 +98,11 @@ export const fetchPublisherOption = token => async dispatch => {
 
 export const searchPublisher = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setSearchListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}, selfPublisher: false} :
-		{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], selfPublisher: false};
-
+	const query = activeCheck !== undefined &&
+	activeCheck.filterByIdentifier === true && activeCheck.checked === true ? {$or: [{publisherIdentifier: searchText}, {activity: {active: true}}]} :
+		activeCheck.filterByIdentifier === true ? {publisherIdentifier: searchText} :
+			activeCheck.checked === true ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}, selfPublisher: false} :
+				{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], selfPublisher: false};
 	try {
 		const properties = {
 			method: 'POST',

@@ -43,7 +43,7 @@
     "login.haka.infoLink": "Tietosuoja-sivu.",
 
     "publisher.search.title": "Hae kustantajaa nimellä",
-    "publisher.search.filter": "Näytä vain aktiiviset kustantajat",
+    "publisher.search.filter.active": "Näytä vain aktiiviset kustantajat",
 
     "request.publisher.search-title": "Etsi liittymislomake nimellä",
     "request.button.publisher-registration": "Kustantajan rekisteröinti",
@@ -979,7 +979,10 @@
 
     "listComponent.earlierName" : "Earlier name",
 
-    "rangesList.label.checkbox.canceled": "Show with canceled"
+    "rangesList.label.checkbox.canceled": "Show with canceled",
+    "publisher.search.filter.filterByIdentifier": "Search by identifier",
+    "publisherList.headRows.active": "Active"
+
 
 
 }

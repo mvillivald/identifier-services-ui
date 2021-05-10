@@ -47,7 +47,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const [inputVal, setSearchInputVal] = (location.state === undefined || location.state === null) ? useState('') : useState(location.state.searchText);
 	const [page, setPage] = React.useState(0);
 	const [activeCheck, setActiveCheck] = useState({
-		checked: false
+		checked: false,
+		filterByIdentifier: false
 	});
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 
@@ -69,7 +70,8 @@ export default connect(mapStateToProps, actions)(props => {
 		{id: 'name', label: intl.formatMessage({id: 'publisherList.headRows.name'})},
 		{id: 'aliases', label: intl.formatMessage({id: 'publisherList.headRows.aliases'})},
 		{id: 'email', label: intl.formatMessage({id: 'publisherList.headRows.email'})},
-		{id: 'phone', label: intl.formatMessage({id: 'publisherList.headRows.phone'})}
+		{id: 'phone', label: intl.formatMessage({id: 'publisherList.headRows.phone'})},
+		{id: 'active', label: intl.formatMessage({id: 'publisherList.headRows.active'})}
 	];
 	let publishersData;
 	if (loading) {
@@ -80,7 +82,7 @@ export default connect(mapStateToProps, actions)(props => {
 		publishersData = (
 			<TableComponent
 				pagination
-				data={searchedPublishers.map(item => searchResultRender({id: item.id, name: item.name, phone: item.phone, aliases: item.aliases, email: item.email}))}
+				data={searchedPublishers.map(item => searchResultRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				headRows={headRows}
 				rowSelectedId={rowSelectedId}
@@ -91,14 +93,16 @@ export default connect(mapStateToProps, actions)(props => {
 		);
 	}
 
-	function searchResultRender({id, name, phone, aliases, email}) {
+	function searchResultRender(item) {
+		const {id, name, phone, aliases, email, activity} = item;
 		return {
 			id: id,
 			empty: '',
 			name: name,
 			aliases: aliases ? aliases : '',
 			email: email,
-			phone: phone
+			phone: phone,
+			active: activity.active
 		};
 	}
 
@@ -115,7 +119,18 @@ export default connect(mapStateToProps, actions)(props => {
 						onChange={handleChange('checked')}
 					/>
 				}
-				label={<FormattedMessage id="publisher.search.filter"/>}
+				label={<FormattedMessage id="publisher.search.filter.active"/>}
+			/>
+			<FormControlLabel
+				control={
+					<Checkbox
+						checked={activeCheck.filterByIdentifier}
+						value="checked"
+						color="primary"
+						onChange={handleChange('filterByIdentifier')}
+					/>
+				}
+				label={<FormattedMessage id="publisher.search.filter.filterByIdentifier"/>}
 			/>
 			{publishersData}
 		</Grid>

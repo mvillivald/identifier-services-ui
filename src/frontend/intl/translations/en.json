@@ -268,7 +268,7 @@
     "login.haka.infoLink": "Data protection page.",
 
     "publisher.search.title": "Publisher Register",
-    "publisher.search.filter": "Show only active publishers",
+    "publisher.search.filter.active": "Show only active publishers",
 
     "request.publisher.search-title": "Application form to join the ISMN/ISBN system",
     "request.button.publisher-registration": "Publisher Registration",
@@ -978,7 +978,9 @@
 
     "listComponent.earlierName" : "Earlier name",
 
-    "rangesList.label.checkbox.canceled": "Show with canceled"
+    "rangesList.label.checkbox.canceled": "Show with canceled",
+    "publisher.search.filter.filterByIdentifier": "Search by identifier",
+    "publisherList.headRows.active": "Active"
 
 
 }
