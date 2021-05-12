@@ -86,7 +86,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 		rangeListLoading,
 		isAuthenticated,
 		revokePublisherIsbn,
-		userInfo
+		userInfo,
+		lang
 	} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
@@ -643,12 +644,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 					publisherRangeId: publisherRangeId ? [...publisherRangeId, newPublisherRangeId] : [newPublisherRangeId],
 					publisherIdentifier: publisherIdentifier ? formatPublisherIdentifier(publisherIdentifier, range.publisherIdentifier) : [range.publisherIdentifier]
 				};
-				updatePublisher(_id, {...newPublisher}, token);
+				updatePublisher(_id, {...newPublisher}, token, lang);
 			}
 		} else {
 			const {_id, alias, ...updateValues} = values;
 			const newClassification = values.classification.map(item => item.value.toString());
-			updatePublisher(_id, {...updateValues, classification: newClassification}, token);
+			updatePublisher(_id, {...updateValues, classification: newClassification}, token, lang);
 			setIsEdit(false);
 		}
 

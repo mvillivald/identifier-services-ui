@@ -44,7 +44,19 @@ import {
 } from './types';
 import moment from 'moment';
 import HttpStatus from 'http-status';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
 import {setPublicationLoader, setListLoader, success, fail, setMessage} from './commonAction';
+
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+};
+
+const cache = createIntlCache();
 
 export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
@@ -161,7 +173,13 @@ export const fetchIsbnIsmn = ({id, token}) => async dispatch => {
 	}
 };
 
-export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch => {
+export const updatePublicationIsbnIsmn = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
@@ -180,17 +198,23 @@ export const updatePublicationIsbnIsmn = (id, values, token) => async dispatch =
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
 			dispatch(success(UPDATE_ISBN_ISMN, result));
-			dispatch(setMessage({color: 'success', msg: 'IsbnIsmn Request updated'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'IsbnIsmn Request updated'})}));
 			return result;
 		}
 
-		dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Request update unsuccessful'})}));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
 };
 
-export const updatePublicationIssn = (id, values, token) => async dispatch => {
+export const updatePublicationIssn = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
@@ -209,11 +233,11 @@ export const updatePublicationIssn = (id, values, token) => async dispatch => {
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
 			dispatch(success(UPDATE_ISSN, result));
-			dispatch(setMessage({color: 'success', msg: 'IsbnIsmn Request updated'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'IsbnIsmn Request updated'})}));
 			return result;
 		}
 
-		dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Request update unsuccessful'})}));
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
@@ -241,7 +265,13 @@ export const fetchIssn = ({id, token}) => async dispatch => {
 	}
 };
 
-export const publicationCreation = ({values, token, subType}) => async dispatch => {
+export const publicationCreation = ({values, token, subType, lang}) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	const response = await fetch(`${API_URL}/publications/${subType}`, {
 		method: 'POST',
 		headers: {
@@ -253,7 +283,7 @@ export const publicationCreation = ({values, token, subType}) => async dispatch 
 		body: JSON.stringify(values)
 	});
 	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: `${subType} has created successfully`}));
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: `${subType} has created successfully`})}));
 	}
 
 	return response.status;
@@ -283,7 +313,13 @@ export const fetchIssnStatistics = ({token, startDate, endDate}) => async dispat
 };
 
 // ****************REQUESTS**********************************
-export const publicationCreationRequest = ({values, subType}) => async dispatch => {
+export const publicationCreationRequest = ({values, subType, lang}) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	const response = await fetch(`/requests/publications/${subType}`, {
 		method: 'POST',
 		headers: {
@@ -295,7 +331,7 @@ export const publicationCreationRequest = ({values, subType}) => async dispatch 
 		body: JSON.stringify(values)
 	});
 	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: `${subType} creation request sent successfully`}));
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: `${subType} creation request sent successfully`})}));
 	}
 
 	return response.status;
@@ -346,7 +382,13 @@ export const fetchPublicationIsbnIsmnRequest = (id, token) => async dispatch => 
 	}
 };
 
-export const updatePublicationIsbnIsmnRequest = (id, values, token) => async dispatch => {
+export const updatePublicationIsbnIsmnRequest = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
@@ -363,10 +405,10 @@ export const updatePublicationIsbnIsmnRequest = (id, values, token) => async dis
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
-			dispatch(setMessage({color: 'success', msg: 'IsbnIsmn Request updated'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'IsbnIsmn Request updated'})}));
 			dispatch(success(PUBLICATION_ISBN_ISMN_REQUEST, result));
 		} else {
-			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+			dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Request update unsuccessful'})}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));
@@ -417,7 +459,13 @@ export const fetchIssnRequest = (id, token) => async dispatch => {
 	}
 };
 
-export const updateIssnRequest = (id, values, token) => async dispatch => {
+export const updateIssnRequest = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setPublicationLoader());
 	try {
 		delete values.backgroundProcessingState;
@@ -434,10 +482,10 @@ export const updateIssnRequest = (id, values, token) => async dispatch => {
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
-			dispatch(setMessage({color: 'success', msg: 'Issn Request updated'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Issn Request updated'})}));
 			dispatch(success(ISSN_REQUEST, result));
 		} else {
-			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+			dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Request update unsuccessful'})}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));

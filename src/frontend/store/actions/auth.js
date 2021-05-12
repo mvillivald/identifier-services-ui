@@ -29,8 +29,25 @@ import {AUTHENTICATION, LOG_OUT} from './types';
 import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {setMessage} from './commonAction';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
 
-export const normalLogin = values => async dispatch => {
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+};
+const cache = createIntlCache();
+
+export const normalLogin = (values, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	const response = await fetch('/auth', {
 		method: 'POST',
 		body: JSON.stringify(values),
@@ -44,7 +61,7 @@ export const normalLogin = values => async dispatch => {
 
 	const result = await response.json();
 
-	dispatch(setMessage({color: 'success', msg: 'Login successful'}));
+	dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Login successful'})}));
 	return dispatch(getUserInfo(result));
 };
 

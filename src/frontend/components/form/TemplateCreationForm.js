@@ -98,7 +98,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			createMessageTemplate,
 			clearFields,
 			pristine,
-			valid
+			valid,
+			lang
 		} = props;
 		const classes = useStyles();
 		/* global COOKIE_NAME */
@@ -114,7 +115,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				notes: values.note ? values.notes.map(note => Buffer.from(note).toString('base64')) : ''
 			};
 			delete newValues.templateName;
-			createMessageTemplate(newValues, cookie[COOKIE_NAME]);
+			createMessageTemplate(newValues, cookie[COOKIE_NAME], lang);
 			handleClose();
 		};
 

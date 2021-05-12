@@ -63,7 +63,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		userInfo,
 		fetchPublisherRequest,
 		publisherRequest,
-		updatePublisherRequest
+		updatePublisherRequest,
+		lang
 	} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
@@ -98,7 +99,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			rejectionReason: rejectReason
 		};
 		delete newPublisherRequest._id;
-		updatePublisherRequest(publisherRequest._id, newPublisherRequest, cookie[COOKIE_NAME]);
+		updatePublisherRequest(publisherRequest._id, newPublisherRequest, cookie[COOKIE_NAME], lang);
 		setReject(!reject);
 		setButtonState(publisherRequest.state);
 	}
@@ -110,7 +111,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			state: 'new',
 			backgroundProcessingState: 'inProgress'
 		};
-		updatePublisherRequest(publisherRequest._id, newPublisherRequest, cookie[COOKIE_NAME]);
+		updatePublisherRequest(publisherRequest._id, newPublisherRequest, cookie[COOKIE_NAME], lang);
 		setIsEdit(false);
 	}
 
@@ -123,7 +124,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			state: 'accepted'
 		};
 		delete newPublisherRequest._id;
-		updatePublisherRequest(publisherRequest._id, newPublisherRequest, cookie[COOKIE_NAME]);
+		updatePublisherRequest(publisherRequest._id, newPublisherRequest, cookie[COOKIE_NAME], lang);
 		setButtonState(publisherRequest.state);
 	}
 

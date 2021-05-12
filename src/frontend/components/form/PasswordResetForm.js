@@ -35,7 +35,7 @@ import useStyles from '../../styles/login';
 import * as actions from '../../store/actions';
 
 export default connect(null, actions)(props => {
-	const {passwordResetForm, setPwd, handleClose} = props;
+	const {passwordResetForm, setPwd, handleClose, lang} = props;
 	const intl = useIntl();
 	const [email, setEmail] = useState('');
 	const classes = useStyles();
@@ -45,7 +45,7 @@ export default connect(null, actions)(props => {
 
 	const handleEmailSubmit = async e => {
 		e.preventDefault();
-		const result = await passwordResetForm({id: email});
+		const result = await passwordResetForm({id: email}, lang);
 		if (result === HttpStatus.OK) {
 			setPwd(false);
 			handleClose();

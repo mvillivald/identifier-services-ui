@@ -68,7 +68,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			universityPublisher,
 			setMessage,
 			handleSubmit,
-			history
+			history,
+			lang
 		} = props;
 		const intl = useIntl();
 		const fieldArray = getFieldArray(intl);
@@ -240,7 +241,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		async function handlePublicationRegistration(values) {
 			if (isAuthenticated) {
-				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'isbn-ismn'});
+				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'isbn-ismn', lang: lang});
 				if (result === HttpStatus.CREATED) {
 					history.push('/');
 				}
@@ -378,7 +379,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		async function submitPublication(values, result) {
 			if (result === true) {
-				const result = await publicationCreationRequest({values: values, subType: 'isbn-ismn'});
+				const result = await publicationCreationRequest({values: values, subType: 'isbn-ismn', lang: lang});
 				if (result === HttpStatus.CREATED) {
 					history.push('/');
 				}

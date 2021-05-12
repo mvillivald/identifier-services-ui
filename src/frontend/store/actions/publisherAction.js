@@ -29,9 +29,21 @@
 /* global API_URL */
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
 import {PUBLISHER, PUBLISHERS_LIST, UPDATE_PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
 import {setLoader, setListLoader, setMessage, success, fail, setSearchListLoader} from './commonAction';
 import HttpStatus from 'http-status';
+
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+};
+
+const cache = createIntlCache();
 
 export const fetchPublisher = (id, token) => async dispatch => {
 	dispatch(setListLoader());
@@ -52,7 +64,13 @@ export const fetchPublisher = (id, token) => async dispatch => {
 	}
 };
 
-export const updatePublisher = (id, values, token) => async dispatch => {
+export const updatePublisher = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setLoader());
 	try {
 		const response = await fetch(`${API_URL}/publishers/${id}`, {
@@ -68,10 +86,10 @@ export const updatePublisher = (id, values, token) => async dispatch => {
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
-			dispatch(setMessage({color: 'success', msg: 'Publisher updated'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Publisher updated'})}));
 			dispatch(success(UPDATE_PUBLISHER, result.value));
 		} else {
-			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+			dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Request update unsuccessful'})}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));
@@ -213,7 +231,13 @@ export const fetchPublisherRequest = (id, token) => async dispatch => {
 	}
 };
 
-export const updatePublisherRequest = (id, values, token) => async dispatch => {
+export const updatePublisherRequest = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setLoader());
 	try {
 		delete values.backgroundProcessingState;
@@ -230,10 +254,10 @@ export const updatePublisherRequest = (id, values, token) => async dispatch => {
 		});
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
-			dispatch(setMessage({color: 'success', msg: 'Publisher Request updated'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Publisher Request updated'})}));
 			dispatch(success(PUBLISHER_REQUEST, result.value));
 		} else {
-			dispatch(setMessage({color: 'error', msg: 'Request update unsuccessful'}));
+			dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Request update unsuccessful'})}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));

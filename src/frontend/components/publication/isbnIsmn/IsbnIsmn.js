@@ -69,7 +69,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		match,
 		createIsbnBatch,
 		createIsmnBatch,
-		fetchMarc
+		fetchMarc,
+		lang
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -111,15 +112,15 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	useEffect(() => {
 		if (subRangeId !== null && publisherId !== null) {
 			if (isbnIsmn.type === 'music') {
-				createIsmnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+				createIsmnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME], lang);
 			} else {
-				createIsbnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME]);
+				createIsbnBatch({id: subRangeId, publisherId, isbnIsmn}, cookie[COOKIE_NAME], lang);
 			}
 
 			setSubRangeId(null);
 			setPublisherId(null);
 		}
-	}, [cookie, createIsbnBatch, createIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]);
+	}, [cookie, createIsbnBatch, createIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function manageFormatDetails(formatDetails) {
 		const {fileFormat, printFormat} = formatDetails;
@@ -157,7 +158,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : []
 		};
 		const token = cookie[COOKIE_NAME];
-		updatePublicationIsbnIsmn(id, updateValues, token);
+		updatePublicationIsbnIsmn(id, updateValues, token, lang);
 		setIsEdit(false);
 	};
 

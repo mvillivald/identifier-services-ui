@@ -30,8 +30,26 @@ import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {ERROR} from './types';
 import {setMessage} from './commonAction';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
 
-export const passwordReset = values => async dispatch => {
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+};
+
+const cache = createIntlCache();
+
+export const passwordReset = (values, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		const response = await fetch('/passwordreset', {
 			method: 'POST',
@@ -43,7 +61,7 @@ export const passwordReset = values => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		if (response.status === HttpStatus.OK) {
-			dispatch(setMessage({color: 'success', msg: 'Password Changed successfully'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Password Changed successfully'})}));
 			return response.status;
 		}
 	} catch (err) {
@@ -54,7 +72,13 @@ export const passwordReset = values => async dispatch => {
 	}
 };
 
-export const passwordResetForm = values => async dispatch => {
+export const passwordResetForm = (values, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		const response = await fetch('/passwordreset', {
 			method: 'POST',
@@ -66,12 +90,12 @@ export const passwordResetForm = values => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		if (response.status === HttpStatus.OK) {
-			dispatch(setMessage({color: 'success', msg: 'Password reset link has been sent to your email'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Password reset link has been sent to your email'})}));
 			return response.status;
 		}
 
 		if (response.status === HttpStatus.NOT_FOUND) {
-			dispatch(setMessage({color: 'error', msg: 'ID not found'}));
+			dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'ID not found'})}));
 		}
 	} catch (err) {
 		dispatch({

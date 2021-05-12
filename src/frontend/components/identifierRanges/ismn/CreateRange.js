@@ -49,14 +49,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	initialValues: {prefix: '979-0'},
 	enableReinitialize: true
 })(props => {
-	const {handleSubmit, createIsmnRange, setCreatingNewRange, handleClose} = props;
+	const {handleSubmit, createIsmnRange, setCreatingNewRange, handleClose, lang} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const formClasses = formStyles();
 
 	async function handleCreateRange(values) {
-		await createIsmnRange(values, cookie[COOKIE_NAME]);
+		await createIsmnRange(values, cookie[COOKIE_NAME], lang);
 		handleClose();
 		setCreatingNewRange(false);
 	}

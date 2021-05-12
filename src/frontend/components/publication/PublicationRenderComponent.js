@@ -57,7 +57,8 @@ export default connect(mapStateToProps, actions)(props => {
 		headRowsMetadataReference,
 		publisherLoading,
 		revokePublication,
-		updatePublicationIsbnIsmn
+		updatePublicationIsbnIsmn,
+		lang
 	} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
@@ -105,7 +106,7 @@ export default connect(mapStateToProps, actions)(props => {
 				})
 			};
 			if (result) {
-				const response = await updatePublicationIsbnIsmn(_id, newPublicaiton, cookie[COOKIE_NAME]);
+				const response = await updatePublicationIsbnIsmn(_id, newPublicaiton, cookie[COOKIE_NAME], lang);
 				if (response) {
 					setIsRevoking(false);
 				}

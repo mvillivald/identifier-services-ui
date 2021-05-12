@@ -32,6 +32,18 @@ import {ERROR, IDENTIFIER, IDR, IDR_LIST, IDR_ISMN_LIST, IDR_ISMN, IDR_ISSN_LIST
 import {setLoader, setLoadingDone, setRangeListLoader, success, fail, setMessage} from './commonAction';
 import HttpStatus from 'http-status';
 import moment from 'moment';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
+
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+};
+
+const cache = createIntlCache();
 
 export const fetchIDRList = ({token}) => async dispatch => {
 	try {
@@ -215,7 +227,13 @@ export const searchIDRList = ({searchField, searchText, token, rangeType}) => as
 	}
 };
 
-export const createIsbnRange = (values, token) => async dispatch => {
+export const createIsbnRange = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	const response = await fetch(`${API_URL}/ranges/isbn`, {
 		method: 'POST',
 		headers: {
@@ -228,20 +246,26 @@ export const createIsbnRange = (values, token) => async dispatch => {
 		body: JSON.stringify(values)
 	});
 	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: 'ISBN range created successfully'}));
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'ISBN range created successfully'})}));
 		return response.status;
 	}
 
 	if (response.status === HttpStatus.CONFLICT) {
-		dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Range already exists'})}));
 		return response.status;
 	}
 
-	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISBN range'}));
+	dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'There is a problem creating ISBN range'})}));
 	return response.status;
 };
 
-export const createIsbnBatch = (values, token) => async dispatch => {
+export const createIsbnBatch = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		const response = await fetch(`${API_URL}/ranges/isbnBatch`, {
 			method: 'POST',
@@ -256,7 +280,7 @@ export const createIsbnBatch = (values, token) => async dispatch => {
 		});
 
 		if (response) {
-			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Range Successfully Assigned.'})}));
 			return response;
 		}
 	} catch (err) {
@@ -264,7 +288,13 @@ export const createIsbnBatch = (values, token) => async dispatch => {
 	}
 };
 
-export const pickRangeList = (values, token) => async dispatch => {
+export const pickRangeList = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		const response = await fetch(`${API_URL}/ranges/isbn/pickRangeList`, {
 			method: 'POST',
@@ -278,7 +308,7 @@ export const pickRangeList = (values, token) => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		if (response) {
-			dispatch(setMessage({color: 'success', msg: 'RangeList Successfully Created'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'RangeList Successfully Created'})}));
 			return response;
 		}
 	} catch (err) {
@@ -448,7 +478,13 @@ export const updateIsmnRange = (id, values, token) => async dispatch => {
 	}
 };
 
-export const createIsmnRange = (values, token) => async dispatch => {
+export const createIsmnRange = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setRangeListLoader());
 	const response = await fetch(`${API_URL}/ranges/ismn`, {
 		method: 'POST',
@@ -462,22 +498,28 @@ export const createIsmnRange = (values, token) => async dispatch => {
 		body: JSON.stringify(values)
 	});
 	if (response.status === HttpStatus.CREATED) {
-		dispatch(setMessage({color: 'success', msg: 'ISMN range created successfully'}));
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'ISMN range created successfully'})}));
 		dispatch(success(IDR_ISMN, response));
 		return response.status;
 	}
 
 	if (response.status === HttpStatus.CONFLICT) {
-		dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Range already exists'})}));
 		dispatch(fail(ERROR, 'Range already exists'));
 		return response.status;
 	}
 
-	dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISMN range'}));
+	dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'There is a problem creating ISMN range'})}));
 	return response.status;
 };
 
-export const createIsmnBatch = (values, token) => async dispatch => {
+export const createIsmnBatch = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		const response = await fetch(`${API_URL}/ranges/ismnBatch`, {
 			method: 'POST',
@@ -492,7 +534,7 @@ export const createIsmnBatch = (values, token) => async dispatch => {
 		});
 
 		if (response) {
-			dispatch(setMessage({color: 'success', msg: 'Range Successfully Assigned.'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Range Successfully Assigned.'})}));
 			return response;
 		}
 	} catch (err) {
@@ -551,7 +593,13 @@ export const fetchIDRIssn = (id, token) => async dispatch => {
 	}
 };
 
-export const createIssnRange = (values, token) => async dispatch => {
+export const createIssnRange = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		const response = await fetch(`${API_URL}/ranges/issn`, {
 			method: 'POST',
@@ -565,23 +613,29 @@ export const createIssnRange = (values, token) => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		if (response.status === HttpStatus.CREATED) {
-			dispatch(setMessage({color: 'success', msg: 'ISSN range created successfully'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'ISSN range created successfully'})}));
 			return response.status;
 		}
 
 		if (response.status === HttpStatus.CONFLICT) {
-			dispatch(setMessage({color: 'error', msg: 'Range already exists'}));
+			dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'Range already exists'})}));
 			return response.status;
 		}
 
-		dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISSN range'}));
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'There is a problem creating ISSN range'})}));
 		return response.status;
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}
 };
 
-export const assignIssnRange = (values, token) => async dispatch => {
+export const assignIssnRange = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	try {
 		dispatch(setLoader());
 		const response = await fetch(`${API_URL}/ranges/issn/assignRange`, {
@@ -596,12 +650,12 @@ export const assignIssnRange = (values, token) => async dispatch => {
 			body: JSON.stringify(values)
 		});
 		if (response.status === HttpStatus.OK) {
-			dispatch(setMessage({color: 'success', msg: 'ISSN range created successfully'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'ISSN range created successfully'})}));
 			dispatch(setLoadingDone());
 			return response.status;
 		}
 
-		dispatch(setMessage({color: 'error', msg: 'There is a problem creating ISSN range'}));
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'There is a problem creating ISSN range'})}));
 		return response.status;
 	} catch (err) {
 		dispatch(fail(ERROR, err));

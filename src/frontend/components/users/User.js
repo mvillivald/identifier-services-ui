@@ -53,7 +53,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	validate,
 	enableReinitialize: true
 })(props => {
-	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, match} = props;
+	const {user, userInfo, isAuthenticated, handleSubmit, updateUser, userUpdated, loading, fetchUser, match, lang} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
 	const intl = useIntl();
@@ -80,11 +80,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				active: false
 			};
 
-			updateUser(id, deletePayload, cookie[COOKIE_NAME]);
+			updateUser(id, deletePayload, cookie[COOKIE_NAME], lang);
 			setConfirmation(false);
 			history.push('/users');
 		}
-	}, [confirmation, cookie, id, updateUser, user]);
+	}, [confirmation, cookie, id, updateUser, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleEditClick = () => {
 		setIsEdit(true);
@@ -108,7 +108,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	const handleOnSubmit = values => {
 		const newValues = {...values, givenName: values.firstname, familyName: values.lastname, displayName: values.displayname};
-		updateUser(id, newValues, cookie[COOKIE_NAME]);
+		updateUser(id, newValues, cookie[COOKIE_NAME], lang);
 		setIsEdit(false);
 	};
 

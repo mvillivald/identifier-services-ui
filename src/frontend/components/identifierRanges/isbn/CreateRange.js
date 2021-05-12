@@ -49,14 +49,14 @@ export default reduxForm({
 	},
 	enableReinitialize: true
 })(props => {
-	const {handleSubmit, createIsbnRange, setFinishedCreating, handleClose} = props;
+	const {handleSubmit, createIsbnRange, setFinishedCreating, handleClose, lang} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = commonStyles();
 	const formClasses = formStyles();
 
 	async function handleCreateRange(values) {
-		await createIsbnRange(values, cookie[COOKIE_NAME]);
+		await createIsbnRange(values, cookie[COOKIE_NAME], lang);
 		setFinishedCreating(true);
 		handleClose();
 	}

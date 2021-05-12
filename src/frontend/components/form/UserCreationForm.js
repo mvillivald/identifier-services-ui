@@ -113,7 +113,8 @@ export default connect(
 			userValues,
 			setIsCreating,
 			fetchPublisherOption,
-			publisherOptions
+			publisherOptions,
+			lang
 		} = props;
 		const classes = useStyles();
 		/* global COOKIE_NAME */
@@ -155,7 +156,7 @@ export default connect(
 					}
 				}
 
-				const response = await createUser(newUser, token);
+				const response = await createUser(newUser, token, lang);
 				if (response !== HttpStatus.CONFLICT) {
 					handleClose();
 					setIsCreating(true);

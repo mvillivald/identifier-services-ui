@@ -65,8 +65,7 @@ export default function ({userInfo, isAuthenticated}) {
 				{label: <FormattedMessage id="app.subMenu.publications"/>, roleView: ['admin', 'system', 'publisher'], listItem: [
 					{label: <FormattedMessage id="app.subSubMenu.ISBN-ISMN"/>, path: 'requests/publications/isbn-ismn', roleView: ['admin', 'system', 'publisher']},
 					{label: <FormattedMessage id="app.subSubMenu.ISSN"/>, path: 'requests/publications/issn', roleView: ['admin']}
-				]},
-				{label: <FormattedMessage id="app.subMenu.users"/>, path: 'requests/users', roleView: ['admin', 'system']}
+				]}
 			]
 		},
 		{

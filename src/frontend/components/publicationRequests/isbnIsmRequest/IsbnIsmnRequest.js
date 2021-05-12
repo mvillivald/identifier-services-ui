@@ -64,7 +64,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		publicationIsbnIsmnRequest,
 		updatePublicationIsbnIsmnRequest,
 		setIsUpdating,
-		handleSubmit
+		handleSubmit,
+		lang
 	} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
@@ -108,7 +109,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			rejectionReason: rejectReason
 		};
 		delete newPublicationIsbnIsmnRequest._id;
-		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME]);
+		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME], lang);
 		setReject(!reject);
 		setButtonState(publicationIsbnIsmnRequest.state);
 	}
@@ -124,7 +125,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			backgroundProcessingState: 'inProgress'
 		};
 		delete newPublicationIsbnIsmnRequest._id;
-		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME]);
+		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME], lang);
 		setIsEdit(false);
 	}
 
@@ -150,7 +151,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			state: 'accepted'
 		};
 		delete newPublicationIsbnIsmnRequest._id;
-		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME]);
+		updatePublicationIsbnIsmnRequest(publicationIsbnIsmnRequest._id, newPublicationIsbnIsmnRequest, cookie[COOKIE_NAME], lang);
 		setButtonState(publicationIsbnIsmnRequest.state);
 		setIsUpdating(true);
 	}

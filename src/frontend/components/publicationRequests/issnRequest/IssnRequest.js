@@ -63,7 +63,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		issnRequest,
 		updateIssnRequest,
 		match,
-		setIsUpdating
+		setIsUpdating,
+		lang
 	} = props;
 	const {id} = match.params;
 	const classes = commonStyles();
@@ -107,7 +108,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			rejectionReason: rejectReason
 		};
 		delete newIssnRequest._id;
-		updateIssnRequest(issnRequest._id, newIssnRequest, cookie[COOKIE_NAME]);
+		updateIssnRequest(issnRequest._id, newIssnRequest, cookie[COOKIE_NAME], lang);
 		setReject(!reject);
 		setButtonState(issnRequest.state);
 	}
@@ -121,7 +122,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			backgroundProcessingState: 'inProgress'
 		};
 		delete newIssnRequest._id;
-		updateIssnRequest(issnRequest._id, newIssnRequest, cookie[COOKIE_NAME]);
+		updateIssnRequest(issnRequest._id, newIssnRequest, cookie[COOKIE_NAME], lang);
 		setIsEdit(false);
 		setButtonState(issnRequest.state);
 	}
@@ -135,7 +136,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			state: 'accepted'
 		};
 		delete newIssnRequest._id;
-		updateIssnRequest(issnRequest._id, newIssnRequest, cookie[COOKIE_NAME]);
+		updateIssnRequest(issnRequest._id, newIssnRequest, cookie[COOKIE_NAME], lang);
 		setButtonState(issnRequest.state);
 		setIsUpdating(true);
 	}

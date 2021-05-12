@@ -62,6 +62,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		loading,
 		handleSubmit,
 		isAuthenticated,
+		lang,
 		userInfo} = props;
 	const classes = useStyles();
 	const formClasses = useFormStyles();
@@ -136,7 +137,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const handlePublisherUpdate = values => {
 		const {_id, ...updateValues} = values;
 		const token = cookie[COOKIE_NAME];
-		updatePublisher(match.params.id, updateValues, token);
+		updatePublisher(match.params.id, updateValues, token, lang);
 		setIsEdit(false);
 	};
 

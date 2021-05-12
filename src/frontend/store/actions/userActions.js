@@ -35,11 +35,8 @@ import svMessages from '../../intl/translations/sv.json';
 import {
 	USERS_LIST,
 	ERROR,
-	USERS_REQUESTS_LIST,
 	FETCH_USER,
-	UPDATE_USER,
-	FETCH_USERS_REQUEST,
-	USERS_REQUESTS_UPDATE
+	UPDATE_USER
 } from './types';
 
 import {setLoader,
@@ -79,7 +76,13 @@ export const fetchUsersList = (token, sort) => async dispatch => {
 	}
 };
 
-export const createUser = (values, token) => async dispatch => {
+export const createUser = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	const response = await fetch(`${API_URL}/users`, {
 		method: 'POST',
 		headers: {
@@ -103,8 +106,8 @@ export const createUser = (values, token) => async dispatch => {
 			body: JSON.stringify({request: values})
 		});
 		if (response.status === HttpStatus.OK) {
-			dispatch(setMessage({color: 'success', msg: 'User created successfully'}));
-			dispatch(setMessage({color: 'success', msg: 'Message sent successfully.'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'User created successfully'})}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Message sent successfully.'})}));
 			return response;
 		}
 
@@ -119,34 +122,6 @@ export const createUser = (values, token) => async dispatch => {
 	if (response.status === HttpStatus.CONFLICT || response.status === HttpStatus.INTERNAL_SERVER_ERROR) {
 		dispatch(setMessage({color: 'error', msg: 'User with this SSO-ID or email already exists'}));
 		return response.status;
-	}
-};
-
-export const createUserRequest = (values, token) => async dispatch => {
-	const response = await fetch(`${API_URL}/requests/users`, {
-		method: 'POST',
-		headers: {
-			'Cross-Origin-Opener-Policy': 'same-origin',
-			'Cross-Origin-Embedder-Policy': 'require-corp',
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		},
-		credentials: 'same-origin',
-		body: JSON.stringify(values)
-	});
-
-	switch (response.status) {
-		case HttpStatus.OK:
-			dispatch(setMessage({color: 'success', msg: 'Registration request sent successfully'}));
-			return response.status;
-		case HttpStatus.NOT_FOUND:
-			dispatch(setMessage({color: 'error', msg: 'SSO-ID doesnot exists in crowd'}));
-			return response.status;
-		case HttpStatus.CONFLICT:
-			dispatch(setMessage({color: 'error', msg: 'Request with this SSO-ID or email already exists'}));
-			return response.status;
-		default:
-			return null;
 	}
 };
 
@@ -192,82 +167,13 @@ export const findUserByUserId = ({userId, token}) => async dispatch => {
 	}
 };
 
-export const fetchUserRequest = (id, token) => async dispatch => {
-	dispatch(setLoader());
-	try {
-		const response = await fetch(`${API_URL}/requests/users/${id}`, {
-			method: 'GET',
-			headers: {
-				'Cross-Origin-Opener-Policy': 'same-origin',
-				'Cross-Origin-Embedder-Policy': 'require-corp',
-				Authorization: `Bearer ${token}`
-			}
-		});
-		const result = await response.json();
-		dispatch(success(FETCH_USERS_REQUEST, result));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const fetchUsersRequestsList = ({searchText, sortStateBy, token, sort}) => async dispatch => {
-	dispatch(setListLoader());
-	try {
-		const properties = {
-			method: 'POST',
-			headers: token ? {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			} :
-				{'Content-Type': 'application/json'},
-			body: JSON.stringify({
-				queries: [{
-					query: {state: sortStateBy, $or: [{publisher: searchText}, {givenName: searchText}]}
-				}],
-				sort: sort
-			})
-		};
-		const response = await fetch(`${API_URL}/requests/users/query`, properties);
-		const result = await response.json();
-		dispatch(success(USERS_REQUESTS_LIST, result));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const updateUserRequest = (id, values, token, lang) => async dispatch => {
-	dispatch(setLoader());
-	try {
-		const messsages = translations[lang];
-		const intl = createIntl({
-			locale: lang,
-			defaultLocale: 'fi',
-			messages: messsages
-		}, cache);
-		delete values.backgroundProcessingState;
-		const response = await fetch(`${API_URL}/requests/users/${id}`, {
-			method: 'PUT',
-			headers: {
-				'Cross-Origin-Opener-Policy': 'same-origin',
-				'Cross-Origin-Embedder-Policy': 'require-corp',
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json'
-			},
-			credentials: 'same-origin',
-			body: JSON.stringify(values)
-		});
-		if (response.status === HttpStatus.OK) {
-			const result = await response.json();
-			dispatch(success(USERS_REQUESTS_UPDATE, result.value));
-			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'userRequest.update.message.success'})}));
-			return response.status;
-		}
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const updateUser = (id, values, token) => async dispatch => {
+export const updateUser = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setLoader());
 	try {
 		const response = await fetch(`${API_URL}/users/${id}`, {
@@ -284,7 +190,7 @@ export const updateUser = (id, values, token) => async dispatch => {
 		if (response.status === HttpStatus.OK) {
 			const result = await response.json();
 			dispatch(success(UPDATE_USER, result));
-			dispatch(setMessage({color: 'success', msg: 'User Updated Succesfully.'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'User Updated Succesfully.'})}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));

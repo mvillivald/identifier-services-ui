@@ -66,7 +66,7 @@ export default connect(null, actions)(reduxForm({
 	validate
 })(
 	props => {
-		const {location, handleSubmit, valid, createIssnRange, createIsmnRange, createIsbnRange, pristine, handleClose, setUpdateComponent} = props;
+		const {location, handleSubmit, valid, createIssnRange, createIsmnRange, createIsbnRange, pristine, handleClose, setUpdateComponent, lang} = props;
 		const classes = useStyles();
 		/* global COOKIE_NAME */
 		const [cookie] = useCookies(COOKIE_NAME);
@@ -74,15 +74,15 @@ export default connect(null, actions)(reduxForm({
 		async function handlecreateRange(values) {
 			let response;
 			if (location.pathname === '/ranges/isbn') {
-				response = await createIsbnRange(values, cookie[COOKIE_NAME]);
+				response = await createIsbnRange(values, cookie[COOKIE_NAME], lang);
 			}
 
 			if (location.pathname === '/ranges/issn') {
-				response = await createIssnRange(values, cookie[COOKIE_NAME]);
+				response = await createIssnRange(values, cookie[COOKIE_NAME], lang);
 			}
 
 			if (location.pathname === '/ranges/ismn') {
-				response = await createIsmnRange(values, cookie[COOKIE_NAME]);
+				response = await createIsmnRange(values, cookie[COOKIE_NAME], lang);
 			}
 
 			if (response === 201) {

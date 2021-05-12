@@ -39,7 +39,7 @@ export default connect(mapStateToProps)(({isAuthenticated, userInfo, role, compo
 			{...rest}
 			render={props => isAuthenticated === true ? (
 				role.includes(userInfo.role) ?
-					<Component {...props}/> : <DeniedComponent/>
+					<Component {...props} {...rest}/> : <DeniedComponent/>
 			) : <Typography variant="h4" style={{display: 'flex', justifyContent: 'center', marginTop: 40}}>Please Login to Continue</Typography>}/>
 	);
 	return {

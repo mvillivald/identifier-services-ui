@@ -65,7 +65,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		history,
 		loading,
 		assignIssnRange,
-		fetchMarc
+		fetchMarc,
+		lang
 	} = props;
 	const {id} = match.params;
 	const intl = useIntl();
@@ -106,7 +107,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		run();
 		async function run() {
 			if (rangeBlockId !== null) {
-				const resp = await assignIssnRange({rangeBlockId, issn}, cookie[COOKIE_NAME]);
+				const resp = await assignIssnRange({rangeBlockId, issn}, cookie[COOKIE_NAME], lang);
 				if (resp) {
 					setAssignRange(false);
 				}
@@ -125,7 +126,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const handlePublicationUpdate = values => {
 		const {_id, ...updateValues} = values;
 		const token = cookie[COOKIE_NAME];
-		updatePublicationIssn(id, updateValues, token);
+		updatePublicationIssn(id, updateValues, token, lang);
 		setIsEdit(false);
 		history.push('/publications/issn');
 	};

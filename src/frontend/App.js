@@ -52,8 +52,6 @@ import IsbnIsmnList from './components/publication/isbnIsmn/IsbnIsmnList';
 import IsbnIsmn from './components/publication/isbnIsmn/IsbnIsmn';
 import IssnList from './components/publication/issn/IssnList';
 import Issn from './components/publication/issn/Issn';
-import UsersRequestsList from './components/usersRequests/UsersRequestsList';
-import UsersRequest from './components/usersRequests/UsersRequest';
 import TemplatesList from './components/messages/TemplatesList';
 import MessagesList from './components/messages/MessagesList';
 import Message from './components/messages/Message';
@@ -112,8 +110,6 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/publications/isbn-ismn/:id', role: ['admin', 'publisher', 'system'], component: IsbnIsmn},
 		{path: '/publications/issn', role: ['admin', 'publisher', 'system'], component: IssnList},
 		{path: '/publications/issn/:id', role: ['admin', 'publisher', 'system'], component: Issn},
-		{path: '/requests/users', role: ['admin', 'publisher'], component: UsersRequestsList},
-		{path: '/requests/users/:id', role: ['admin', 'publisher'], component: UsersRequest},
 		{path: '/templates', role: ['admin'], component: TemplatesList},
 		{path: '/template/:id', role: ['admin'], component: Template},
 		{path: '/messages', role: ['admin'], component: MessagesList},
@@ -160,6 +156,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 					role={pRoute.role}
 					path={pRoute.path}
 					component={pRoute.component}
+					{...props}
 				/>
 			))}
 		</>

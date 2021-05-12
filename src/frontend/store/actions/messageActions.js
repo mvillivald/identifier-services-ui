@@ -40,8 +40,26 @@ import {
 import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
+import {createIntl, createIntlCache} from 'react-intl';
+import enMessages from '../../intl/translations/en.json';
+import fiMessages from '../../intl/translations/fi.json';
+import svMessages from '../../intl/translations/sv.json';
 
-export const sendMessage = (values, token) => async dispatch => {
+const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
+};
+
+const cache = createIntlCache();
+
+export const sendMessage = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	const response = await fetch('/message', {
 		method: 'POST',
 		headers: {
@@ -53,11 +71,17 @@ export const sendMessage = (values, token) => async dispatch => {
 		body: JSON.stringify(values)
 	});
 	if (response.status === HttpStatus.OK) {
-		dispatch(setMessage({color: 'success', msg: 'Message sent successfully.'}));
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Message sent successfully.'})}));
 	}
 };
 
-export const createMessageTemplate = (values, token) => async dispatch => {
+export const createMessageTemplate = (values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setLoader());
 	const response = await fetch(`${API_URL}/templates`, {
 		method: 'POST',
@@ -70,7 +94,7 @@ export const createMessageTemplate = (values, token) => async dispatch => {
 		body: JSON.stringify(values)
 	});
 	if (response.status === HttpStatus.OK) {
-		dispatch(setMessage({color: 'success', msg: 'Message Template created successfully.'}));
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Message Template created successfully.'})}));
 	}
 };
 
@@ -191,7 +215,13 @@ export const fetchMessageTemplate = (id, token) => async dispatch => {
 	}
 };
 
-export const updateMessageTemplate = (id, values, token) => async dispatch => {
+export const updateMessageTemplate = (id, values, token, lang) => async dispatch => {
+	const messsages = translations[lang];
+	const intl = createIntl({
+		locale: lang,
+		defaultLocale: 'fi',
+		messages: messsages
+	}, cache);
 	dispatch(setLoader());
 	try {
 		const response = await fetch(`${API_URL}/templates/${id}`, {
@@ -208,7 +238,7 @@ export const updateMessageTemplate = (id, values, token) => async dispatch => {
 		const result = await response.json();
 		dispatch(success(FETCH_TEMPLATE, result.value));
 		if (response.status === HttpStatus.OK) {
-			dispatch(setMessage({color: 'success', msg: 'Message Updated successfully'}));
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Message Updated successfully'})}));
 		}
 	} catch (err) {
 		dispatch(fail(ERROR, err));

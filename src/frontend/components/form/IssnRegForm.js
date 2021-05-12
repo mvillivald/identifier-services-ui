@@ -63,7 +63,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			publicationCreation,
 			publicationCreationRequest,
 			handleSubmit,
-			history
+			history,
+			lang
 		} = props;
 
 		const intl = useIntl();
@@ -140,7 +141,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		async function handlePublicationRegistration(values) {
 			if (isAuthenticated) {
-				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'issn'});
+				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'issn', lang: lang});
 				if (result === HttpStatus.CREATED) {
 					history.push('/');
 				}
@@ -189,7 +190,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		async function submitPublication(values, result) {
 			if (result === true) {
-				const result = await publicationCreationRequest({values: values, subType: 'issn'});
+				const result = await publicationCreationRequest({values: values, subType: 'issn', lang: lang});
 				if (result === HttpStatus.CREATED) {
 					history.push('/');
 				}

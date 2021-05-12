@@ -57,7 +57,8 @@ export default connect(mapStateToProps, actions)(props => {
 		issn,
 		sendMessage,
 		location,
-		history
+		history,
+		lang
 	} = props;
 	const {state} = location;
 	const classes = useStyles();
@@ -173,7 +174,7 @@ export default connect(mapStateToProps, actions)(props => {
 		const tooltipElement = div.getElementsByClassName('ql-tooltip ql-hidden')[0];
 		div.removeChild(tooltipElement);
 		if (recipientEmail !== null) {
-			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail}, cookie[COOKIE_NAME]);
+			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail}, cookie[COOKIE_NAME], lang);
 			history.push(state.prevPath);
 		}
 

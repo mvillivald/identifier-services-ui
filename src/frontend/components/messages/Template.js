@@ -48,7 +48,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'messageTemplate',
 	enableReinitialize: true
 })(props => {
-	const {fetchMessageTemplate, messageInfo, handleSubmit, updateMessageTemplate, match, history} = props;
+	const {fetchMessageTemplate, messageInfo, handleSubmit, updateMessageTemplate, match, history, lang} = props;
 	const classes = commonStyles();
 	const formClasses = useFormStyles();
 	const intl = useIntl();
@@ -80,7 +80,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			...values,
 			body: Buffer.from(values.body.body).toString('base64')
 		};
-		updateMessageTemplate(id, updateValue, cookie[COOKIE_NAME]);
+		updateMessageTemplate(id, updateValue, cookie[COOKIE_NAME], lang);
 		history.push('/templates');
 	}
 

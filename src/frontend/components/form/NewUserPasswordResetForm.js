@@ -73,7 +73,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		decodeToken,
 		captcha,
 		match,
-		valid
+		valid,
+		lang
 	} = props;
 	const intl = useIntl();
 	const {params} = match;
@@ -103,7 +104,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (result === true) {
 				if (confirmPassword === newPassword) {
 					setError(null);
-					const response = await passwordReset({...values, id: decode.userId});
+					const response = await passwordReset({...values, id: decode.userId}, lang);
 					if (response === HttpStatus.OK) {
 						props.history.push('/');
 					}

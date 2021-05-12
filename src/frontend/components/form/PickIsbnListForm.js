@@ -52,7 +52,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		handleClose,
 		pickRangeList,
 		pristine,
-		valid
+		valid,
+		lang
 	} = props;
 	const [cookie] = useCookies(COOKIE_NAME);
 	const classes = useStyles();
@@ -94,7 +95,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, fetchIDR, rangeType, subRangeId]);
 
 	async function handleCreateRange(values) {
-		await pickRangeList({...values, subRangeId}, cookie[COOKIE_NAME]);
+		await pickRangeList({...values, subRangeId}, cookie[COOKIE_NAME], lang);
 		handleClose();
 	}
 
