@@ -38,14 +38,16 @@ export default connect(mapStateToProps, actions)(props => {
 	const {fetchIssnList, issnList, loading, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [modal, setModal] = useState(false);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
+	const [inputVal, setSearchInputVal] = (location.state === undefined || location.state === null) ? useState('') : useState(location.state.searchText);
 	const [isCreating, setIsCreating] = useState(false);
-
+	const [activeCheck, setActiveCheck] = useState({
+		identifier: false
+	});
 	useEffect(() => {
-		fetchIssnList({token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
+		fetchIssnList({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
 		setIsCreating(false);
-	}, [fetchIssnList, cookie, isCreating]);
+	}, [fetchIssnList, cookie, isCreating, activeCheck, inputVal]);
 
 	const handleTableRowClick = id => {
 		history.push(`/publications/issn/${id}`);
@@ -67,9 +69,10 @@ export default connect(mapStateToProps, actions)(props => {
 			handleTableRowClick={handleTableRowClick}
 			rowSelectedId={rowSelectedId}
 			publicationList={issnList.map(item => dataRender(item))}
-			modal={modal}
-			setModal={setModal}
+			setSearchInputVal={setSearchInputVal}
 			setIsCreating={setIsCreating}
+			activeCheck={activeCheck}
+			setActiveCheck={setActiveCheck}
 			{...props}
 		/>
 	);

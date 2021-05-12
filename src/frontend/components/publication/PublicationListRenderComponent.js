@@ -28,7 +28,7 @@
 
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
-import {Grid, Typography} from '@material-ui/core';
+import {Grid, Typography, FormControlLabel, Checkbox} from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
 import {useCookies} from 'react-cookie';
 
@@ -54,6 +54,8 @@ export default connect(mapStateToProps)(props => {
 		fetchIsbnIsmnList,
 		fetchAllPublishers,
 		publishersList,
+		activeCheck,
+		setActiveCheck,
 		rowSelectedId
 	} = props;
 
@@ -61,7 +63,6 @@ export default connect(mapStateToProps)(props => {
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [page, setPage] = useState(0);
 	const [publications, setPublications] = useState(null);
-
 	useEffect(() => {
 		fetchAllPublishers({token: cookie[COOKIE_NAME]});
 	}, [cookie, fetchAllPublishers]);
@@ -75,6 +76,10 @@ export default connect(mapStateToProps)(props => {
 			setPublications(newPublication);
 		}
 	}, [cookie, publicationList, publishersList]);
+
+	const handleChange = name => event => {
+		setActiveCheck({...activeCheck, [name]: event.target.checked});
+	};
 
 	let usersData;
 	if (loading) {
@@ -117,7 +122,22 @@ export default connect(mapStateToProps)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
-			<SearchComponent searchFunction={fetchIsbnIsmnList} setSearchInputVal={setSearchInputVal}/>
+			<Grid item xs={12}>
+				<SearchComponent searchFunction={fetchIsbnIsmnList} activeCheck={activeCheck} setSearchInputVal={setSearchInputVal}/>
+			</Grid>
+			<Grid item xs={12}>
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={activeCheck.identifier}
+							value="checked"
+							color="primary"
+							onChange={handleChange('identifier')}
+						/>
+					}
+					label={<FormattedMessage id="isbnismn.search.filter.filterByIdentifier"/>}
+				/>
+			</Grid>
 			{usersData}
 			{issn ?	<Issn {...props}/> : (
 				isbnIsmn ?	<IsbnIsmn {...props}/> : null

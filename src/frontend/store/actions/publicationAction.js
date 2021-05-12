@@ -48,8 +48,10 @@ import {setPublicationLoader, setListLoader, success, fail, setMessage} from './
 
 export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
-	const query = (activeCheck !== undefined && activeCheck.checked === true) ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
-		{$or: [{title: searchText}, {'identifier.id': searchText}]};
+	const query = activeCheck !== undefined &&
+		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText}}}} :
+		activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
+			{$or: [{title: searchText}, {'identifier.id': searchText}]};
 	try {
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
 			method: 'POST',
@@ -112,7 +114,11 @@ export const fetchProceedingsList = ({searchText, token, sort}) => async dispatc
 	}
 };
 
-export const fetchIssnList = ({token, sort}) => async dispatch => {
+export const fetchIssnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
+	const query = activeCheck !== undefined &&
+		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText}}}} :
+		activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
+			{$or: [{title: searchText}, {'identifier.id': searchText}]};
 	dispatch(setListLoader());
 	try {
 		const response = await fetch(`${API_URL}/publications/issn/query`, {
@@ -125,7 +131,7 @@ export const fetchIssnList = ({token, sort}) => async dispatch => {
 			},
 			body: JSON.stringify({
 				queries: [{
-					query: {}
+					query: query
 				}],
 				sort: sort
 			})

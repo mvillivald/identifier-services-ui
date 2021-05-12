@@ -118,11 +118,11 @@ export default connect(mapStateToProps, actions)(props => {
 			}
 
 			if (selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers') {
-				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'T'}]}});
+				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'A'}]}});
 			}
 
 			if (selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
-				fetchAllPublishers({identifierType, type: {publisherType: 'A'}});
+				fetchAllPublishers({identifierType, type: {publisherType: 'T'}});
 			}
 		}
 	}, [startDate, endDate, identifierType, selectedIsbnIsmnType]);

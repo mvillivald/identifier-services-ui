@@ -38,7 +38,7 @@ import useStyles from '../styles/searchComponent';
 import * as actions from '../store/actions';
 
 export default connect(null, actions)(withRouter(injectIntl(props => {
-	const {searchFunction, history, setSearchInputVal, intl} = props;
+	const {searchFunction, history, setSearchInputVal, intl, activeCheck} = props;
 	const classes = useStyles();
 	const [inputVal, setInputVal] = useState('');
 	/* global COOKIE_NAME */
@@ -52,10 +52,10 @@ export default connect(null, actions)(withRouter(injectIntl(props => {
 		e.preventDefault();
 		if (props.homePage) {
 			history.push('/publishers/', {searchText: inputVal});
-			searchFunction({searchText: inputVal, token: cookie[COOKIE_NAME]});
+			searchFunction({searchText: inputVal, activeCheck: activeCheck, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
 		} else {
 			setSearchInputVal(inputVal);
-			searchFunction({searchText: inputVal, token: cookie[COOKIE_NAME]});
+			searchFunction({searchText: inputVal, activeCheck: activeCheck, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
 		}
 	};
 

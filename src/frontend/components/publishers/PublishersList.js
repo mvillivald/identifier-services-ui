@@ -29,7 +29,7 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
-import {Grid, Typography, Checkbox, FormControlLabel} from '@material-ui/core';
+import {Grid, Typography, Checkbox, FormControlLabel, Select, MenuItem, FormHelperText} from '@material-ui/core';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import SearchComponent from '../SearchComponent';
@@ -51,6 +51,7 @@ export default connect(mapStateToProps, actions)(props => {
 		filterByIdentifier: false
 	});
 	const [rowSelectedId, setRowSelectedId] = useState(null);
+	const [selectedCategory, setSelectedCategory] = useState(null);
 
 	useEffect(() => {
 		searchPublisher({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
@@ -106,33 +107,61 @@ export default connect(mapStateToProps, actions)(props => {
 		};
 	}
 
+	function onChange(event) {
+		setSelectedCategory(event.target.value);
+	}
+
+	const categoryOptions = ['1', '2', '3', '4', '5'];
+
 	const component = (
-		<Grid item xs={12} className={classes.listSearch}>
-			<Typography variant="h5"><FormattedMessage id="publisher.search.title"/></Typography>
-			<SearchComponent searchFunction={searchPublisher} setSearchInputVal={setSearchInputVal}/>
-			<FormControlLabel
-				control={
-					<Checkbox
-						checked={activeCheck.checked}
-						disabled={activeCheck.filterByIdentifier}
-						value="checked"
-						color="primary"
-						onChange={handleChange('checked')}
-					/>
-				}
-				label={<FormattedMessage id="publisher.search.filter.active"/>}
-			/>
-			<FormControlLabel
-				control={
-					<Checkbox
-						checked={activeCheck.filterByIdentifier}
-						value="checked"
-						color="primary"
-						onChange={handleChange('filterByIdentifier')}
-					/>
-				}
-				label={<FormattedMessage id="publisher.search.filter.filterByIdentifier"/>}
-			/>
+		<Grid container item xs={12} className={classes.listSearch}>
+			<Grid item xs={12}>
+				<Typography variant="h5"><FormattedMessage id="publisher.search.title"/></Typography>
+			</Grid>
+			<Grid item xs={12}>
+				<SearchComponent searchFunction={searchPublisher} activeCheck={activeCheck} setSearchInputVal={setSearchInputVal}/>
+			</Grid>
+			<Grid container item xs={12}>
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={activeCheck.checked}
+							disabled={activeCheck.filterByIdentifier}
+							value="checked"
+							color="primary"
+							onChange={handleChange('checked')}
+						/>
+					}
+					label={<FormattedMessage id="publisher.search.filter.active"/>}
+				/>
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={activeCheck.filterByIdentifier}
+							value="checked"
+							color="primary"
+							onChange={handleChange('filterByIdentifier')}
+						/>
+					}
+					label={<FormattedMessage id="publisher.search.filter.filterByIdentifier"/>}
+				/>
+				<Grid item>
+					<Select
+						labelId="select-type-label"
+						id="type"
+						value={selectedCategory}
+						className={classes.selectCategory}
+						onChange={onChange}
+					>
+						{categoryOptions.map(item => (
+							<MenuItem key={item} value={item}>{item}</MenuItem>
+						))}
+					</Select>
+					<FormHelperText>
+						<FormattedMessage id="publisher.search.filter.filterByRangeCategory"/>
+					</FormHelperText>
+				</Grid>
+			</Grid>
 			{publishersData}
 		</Grid>
 	);

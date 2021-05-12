@@ -237,7 +237,7 @@ const useStyles = makeStyles(theme => ({
 		margin: '20px auto',
 		height: 'auto',
 		display: 'flex',
-		flexDirection: 'column',
+		flexDirection: 'row',
 		padding: 20,
 		'& .select-useType': {
 			display: 'flex',

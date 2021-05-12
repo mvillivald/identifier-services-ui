@@ -279,6 +279,9 @@ export const commonStyles = makeStyles({
 	buttons: {
 		width: '95%',
 		margin: '0 auto'
+	},
+	selectCategory: {
+		width: 150
 	}
 
 });

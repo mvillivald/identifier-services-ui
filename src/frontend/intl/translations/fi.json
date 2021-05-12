@@ -981,7 +981,11 @@
 
     "rangesList.label.checkbox.canceled": "Show with canceled",
     "publisher.search.filter.filterByIdentifier": "Search by identifier",
-    "publisherList.headRows.active": "Active"
+    "publisher.search.filter.filterByRangeCategory": "Filter by category",
+    "publisherList.headRows.active": "Active",
+    "button.label.requestIsbn": "request ISBN",
+    "isbnismn.search.filter.filterByIdentifier": "Search by identifier"
+
 
 
 

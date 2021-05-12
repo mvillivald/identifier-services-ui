@@ -121,21 +121,38 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 		function getStepContent(step) {
 			if (isAuthenticated) {
-				switch (step) {
-					case 0:
-						return element({array: fieldArray[3].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
-					case 1:
-						return withFormTitle({arr: fieldArray[4].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
-					case 2:
-						return withFormTitle({arr: fieldArray[5].Series, publicationValues, clearFields});
-					case 3:
-						return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
-					case 4:
-						return renderAdditionalInformation();
-					case 5:
-						return renderPreview(publicationValues);
-					default:
-						return 'Unknown step';
+				if (user.role !== undefined && user.role === 'publisher') {
+					switch (step) {
+						case 0:
+							return element({array: fieldArray[3].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
+						case 1:
+							return withFormTitle({arr: fieldArray[4].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
+						case 2:
+							return withFormTitle({arr: fieldArray[5].Series, publicationValues, clearFields});
+						case 3:
+							return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
+						case 4:
+							return renderPreview(publicationValues);
+						default:
+							return 'Unknown step';
+					}
+				} else {
+					switch (step) {
+						case 0:
+							return element({array: fieldArray[3].basicInformation, classes, clearFields, publicationIsbnValues: publicationValues});
+						case 1:
+							return withFormTitle({arr: fieldArray[4].Authors, publicationValues, clearFields, formName: 'isbnIsmnRegForm'});
+						case 2:
+							return withFormTitle({arr: fieldArray[5].Series, publicationValues, clearFields});
+						case 3:
+							return element({array: fieldArray[6].formatDetails, fieldName: 'formatDetails', publicationIsbnValues: publicationValues, classes, clearFields, intl});
+						case 4:
+							return renderAdditionalInformation();
+						case 5:
+							return renderPreview(publicationValues);
+						default:
+							return 'Unknown step';
+					}
 				}
 			}
 
@@ -284,7 +301,6 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			}
 
 			const map = values.mapDetails ? values.mapDetails : undefined;
-
 			const {
 				select,
 				selectFormat,
@@ -312,7 +328,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				formatDetails: formatDetail(),
 				type: values.type.value,
 				publicationTime: moment(values.publicationTime.toLocaleString()).toISOString(),
-				isPublic: values.isPublic.value,
+				isPublic: user.role !== 'publisher' && values.isPublic.value,
 				isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : undefined,
 				mapDetails: publicationValues.type.value === 'map' ? map : undefined
 			};
@@ -404,86 +420,89 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								<ListComponent label={intl.formatMessage({id: 'listComponent.subtitle'})} value={formatPublicationValue.subtitle ? formatPublicationValue.subtitle : ''}/>
 								<ListComponent label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={formatPublicationValue.publicationTime ? moment(formatPublicationValue.publicationTime).format('YYYY/MM') : ''}/>
 							</Grid>
-							<Grid item xs={12}>
-								<Typography variant="h6">
-									<FormattedMessage id="listComponent.publisher"/>&nbsp;
-									<FormattedMessage id="listComponent.informations"/>
-								</Typography>
-								<hr/>
-								{
-									formatPublicationValue.type === 'dissertation' ?
-										(
-											<>
-												<ListComponent
-													label={intl.formatMessage({id: 'listComponent.name'})}
-													value={formatPublicationValue.selectUniversity && formatPublicationValue.selectUniversity.title ? formatPublicationValue.selectUniversity.title : ''}
-												/>
-												<ListComponent
-													label={intl.formatMessage({id: 'listComponent.place'})}
-													value={formatPublicationValue.selectUniversity && formatPublicationValue.selectUniversity.place ? formatPublicationValue.selectUniversity.place : ''}
-												/>
-											</>
-										) : (
-											<>
-												<ListComponent
-													label={intl.formatMessage({id: 'listComponent.name'})}
-													value={formatPublicationValue.publisher && formatPublicationValue.publisher.name ? formatPublicationValue.publisher.name : ''}
-												/>
-												<ListComponent
-													label={intl.formatMessage({id: 'listComponent.code'})}
-													value={formatPublicationValue.publisher && formatPublicationValue.publisher.code ? formatPublicationValue.publisher.code : ''}
-												/>
-											</>
-										)
-								}
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.address'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
-										formatPublicationValue.publisher.postalAddress.address && formatPublicationValue.publisher.postalAddress.address :
-										(formatPublicationValue.publisher && formatPublicationValue.publisher.address ?
-											formatPublicationValue.publisher.address :
-											'')}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.zip'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
-										formatPublicationValue.publisher.postalAddress.zip && formatPublicationValue.publisher.postalAddress.zip :
-										(formatPublicationValue.publisher && formatPublicationValue.publisher.zip ?
-											formatPublicationValue.publisher.zip :
-											'')}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.city'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
-										formatPublicationValue.publisher.postalAddress.city && formatPublicationValue.publisher.postalAddress.city :
-										(formatPublicationValue.publisher && formatPublicationValue.publisher.city ?
-											formatPublicationValue.publisher.city :
-											'')}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.phone'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.phone ? formatPublicationValue.publisher.phone : ''}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.contactPerson'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.contactPerson ? formatPublicationValue.publisher.contactPerson : ''}
-								/>
-								<ListComponent
-									label={intl.formatMessage({id: 'listComponent.email'})}
-									value={formatPublicationValue.publisher && formatPublicationValue.publisher.email ? formatPublicationValue.publisher.email : ''}
-								/>
-								{
-									formatPublicationValue.type === 'dissertation' ?
+							{
+								user.role !== 'publisher' &&
+									<Grid item xs={12}>
+										<Typography variant="h6">
+											<FormattedMessage id="listComponent.publisher"/>&nbsp;
+											<FormattedMessage id="listComponent.informations"/>
+										</Typography>
+										<hr/>
+										{
+											formatPublicationValue.type === 'dissertation' ?
+												(
+													<>
+														<ListComponent
+															label={intl.formatMessage({id: 'listComponent.name'})}
+															value={formatPublicationValue.selectUniversity && formatPublicationValue.selectUniversity.title ? formatPublicationValue.selectUniversity.title : ''}
+														/>
+														<ListComponent
+															label={intl.formatMessage({id: 'listComponent.place'})}
+															value={formatPublicationValue.selectUniversity && formatPublicationValue.selectUniversity.place ? formatPublicationValue.selectUniversity.place : ''}
+														/>
+													</>
+												) : (
+													<>
+														<ListComponent
+															label={intl.formatMessage({id: 'listComponent.name'})}
+															value={formatPublicationValue.publisher && formatPublicationValue.publisher.name ? formatPublicationValue.publisher.name : ''}
+														/>
+														<ListComponent
+															label={intl.formatMessage({id: 'listComponent.code'})}
+															value={formatPublicationValue.publisher && formatPublicationValue.publisher.code ? formatPublicationValue.publisher.code : ''}
+														/>
+													</>
+												)
+										}
 										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.language'})}
-											value={formatPublicationValue.language ? formatPublicationValue.language : ''}
-										/> :
-										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.language'})}
-											value={formatPublicationValue.publisher && formatPublicationValue.publisher.language ? formatPublicationValue.publisher.language : ''}
+											label={intl.formatMessage({id: 'listComponent.address'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+												formatPublicationValue.publisher.postalAddress.address && formatPublicationValue.publisher.postalAddress.address :
+												(formatPublicationValue.publisher && formatPublicationValue.publisher.address ?
+													formatPublicationValue.publisher.address :
+													'')}
 										/>
-								}
-							</Grid>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.zip'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+												formatPublicationValue.publisher.postalAddress.zip && formatPublicationValue.publisher.postalAddress.zip :
+												(formatPublicationValue.publisher && formatPublicationValue.publisher.zip ?
+													formatPublicationValue.publisher.zip :
+													'')}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.city'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.postalAddress && formatPublicationValue.publisher.postalAddress ?
+												formatPublicationValue.publisher.postalAddress.city && formatPublicationValue.publisher.postalAddress.city :
+												(formatPublicationValue.publisher && formatPublicationValue.publisher.city ?
+													formatPublicationValue.publisher.city :
+													'')}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.phone'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.phone ? formatPublicationValue.publisher.phone : ''}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.contactPerson ? formatPublicationValue.publisher.contactPerson : ''}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.email'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.email ? formatPublicationValue.publisher.email : ''}
+										/>
+										{
+											formatPublicationValue.type === 'dissertation' ?
+												<ListComponent
+													label={intl.formatMessage({id: 'listComponent.language'})}
+													value={formatPublicationValue.language ? formatPublicationValue.language : ''}
+												/> :
+												<ListComponent
+													label={intl.formatMessage({id: 'listComponent.language'})}
+													value={formatPublicationValue.publisher && formatPublicationValue.publisher.language ? formatPublicationValue.publisher.language : ''}
+												/>
+										}
+									</Grid>
+							}
 						</Grid>
 						{
 							(formatPublicationValue.type !== 'dissertation' && formatPublicationValue.type !== 'map') &&
@@ -543,10 +562,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										/>
 									</Grid>
 							}
-							<ListComponent
-								label={intl.formatMessage({id: 'listComponent.isPublic'})}
-								value={formatPublicationValue.isPublic ? formatPublicationValue.isPublic : ''}
-							/>
+							{
+								user.role !== 'publisher' &&
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.isPublic'})}
+										value={formatPublicationValue.isPublic ? formatPublicationValue.isPublic : ''}
+									/>
+							}
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.type'})}
 								value={formatPublicationValue.type ? formatPublicationValue.type : ''}
@@ -666,15 +688,18 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									) : ''}
 							/>
 						</Grid>
-						<Grid item xs={12}>
-							<Typography variant="h6">
-								<FormattedMessage id="listComponent.additionalDetails"/>
-							</Typography>
-							<hr/>
-							<ListComponent
-								value={formatPublicationValue.additionalDetails ? formatPublicationValue.additionalDetails : ''}
-							/>
-						</Grid>
+						{
+							user.role !== 'publisher' &&
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										<FormattedMessage id="listComponent.additionalDetails"/>
+									</Typography>
+									<hr/>
+									<ListComponent
+										value={formatPublicationValue.additionalDetails ? formatPublicationValue.additionalDetails : ''}
+									/>
+								</Grid>
+						}
 					</Grid>
 				</Grid>
 			);
@@ -688,6 +713,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						result.push(Object.keys(item));
 					}
 				});
+				if (user.role !== undefined && user.role === 'publisher') {
+					return result.filter(i => i[0] !== 'additionalDetails');
+				}
+
 				return result;
 			}
 
@@ -764,28 +793,43 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			];
 		}
 
+		const typeOptions = user.role === 'publisher' ?
+			[
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.book'}), value: 'book'},
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.dissertation'}), value: 'dissertation'},
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.map'}), value: 'map'}
+			] :
+			[
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.book'}), value: 'book'},
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.dissertation'}), value: 'dissertation'},
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.music'}), value: 'music'},
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.map'}), value: 'map'},
+				{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.other'}), value: 'other'}
+			];
+
 		const component = (
 			<>
 				{typeSelect ?
-					<div className={classes.typeSelect}>
-						<Grid item xs={12} className="select-useType">
-							<Field
-								disableClearable
-								freeSolo
-								name="isPublic"
-								placeholder={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.placeholder'})}
-								className={classes.selectField}
-								component={renderSelectAutoComplete}
-								label={<FormattedMessage id="publicationRegistrationIsbnIsmn.form.isPubic.label"/>}
-								options={[
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.option.yes'}), value: true},
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.option.no'}), value: false}
-								]}
-							/>
-							<Typography variant="h6" className="note-txt">
-								<strong><FormattedMessage id="publicationRegistrationIsbnIsmn.form.note"/></strong>
-							</Typography>
-						</Grid>
+					<Grid container className={classes.typeSelect} direction="row">
+						{user.role !== 'publisher' &&
+							<Grid item xs={12} className="select-useType">
+								<Field
+									disableClearable
+									freeSolo
+									name="isPublic"
+									placeholder={intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.placeholder'})}
+									className={classes.selectField}
+									component={renderSelectAutoComplete}
+									label={<FormattedMessage id="publicationRegistrationIsbnIsmn.form.isPubic.label"/>}
+									options={[
+										{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.option.yes'}), value: true},
+										{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.note.option.no'}), value: false}
+									]}
+								/>
+								<Typography variant="h6" className="note-txt">
+									<strong><FormattedMessage id="publicationRegistrationIsbnIsmn.form.note"/></strong>
+								</Typography>
+							</Grid>}
 						<Grid item xs={12} className="select-useType">
 							<Field
 								disableClearable
@@ -795,18 +839,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 								className={classes.selectField}
 								component={renderSelectAutoComplete}
 								label={<FormattedMessage id="publicationRegistrationIsbnIsmn.form.type.label"/>}
-								options={[
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.book'}), value: 'book'},
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.dissertation'}), value: 'dissertation'},
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.music'}), value: 'music'},
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.map'}), value: 'map'},
-									{title: intl.formatMessage({id: 'publicationRegistrationIsbnIsmn.form.type.option.other'}), value: 'other'}
-								]}
+								options={typeOptions}
 							/>
 						</Grid>
 						<Grid item xs={12} className="select-useType">
 							{
-								publicationValues && publicationValues.type && publicationValues.type.value === 'dissertation' &&
+								publicationValues && publicationValues.type && publicationValues.type.value === 'dissertation' && user.role !== 'publisher' &&
 									<form>
 										<Typography variant="body2" class={{margin: '30px 0 10px 0'}}>
 											<FormattedMessage id="publicationRegistrationIsbnIsmn.form.checkbox.isbnFromUniversity.label"/>
@@ -833,7 +871,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							onClick={handleContinueClick}
 						>Continue
 						</Button>
-					</div> :
+					</Grid> :
 					<form className={classes.container} onSubmit={handleSubmit(handlePublicationRegistration)}>
 						<div className={classes.topSticky}>
 							<Typography variant="h5">
@@ -891,6 +929,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		);
 
 		function enableContinue() {
+			if (user.role !== undefined && user.role === 'publisher') {
+				return publicationValues && !publicationValues.type;
+			}
+
 			if (publicationValues && publicationValues.type && publicationValues.type.value === 'dissertation') {
 				return publicationValues && (!publicationValues.isPublic || !publicationValues.type || !isbnFromUniversity);
 			}

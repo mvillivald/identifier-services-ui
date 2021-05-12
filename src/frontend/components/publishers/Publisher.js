@@ -221,6 +221,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 		return result;
 	}
 
+	function handleRequestIsbn() {
+		history.push('/isbnIsmnRegistrationForm');
+	}
+
 	const headRowsPublisherIdentifier = [
 		{id: 'checkbox', label: ''},
 		{id: 'publisherIdentifier', label: <FormattedMessage id="publisher.identifier.headRows.identifier"/>},
@@ -782,6 +786,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 											<Grid container item xs={12}>
 												<Grid item xs={2}>
 													<PrintElement componentRef={componentRef}/>
+												</Grid>
+												<Grid item xs={2}>
+													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleRequestIsbn}>
+														<FormattedMessage id="button.label.requestIsbn"/>
+													</Button>
 												</Grid>
 												<Grid item xs={2}>
 													<Fab
