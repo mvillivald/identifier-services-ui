@@ -379,7 +379,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 							</Typography>
 							<hr/>
 							<ListComponent
-								edit={isEdit && isEditable('')}
+								edit={isEdit && isEditable('aliases')}
 								fieldName="aliases"
 								clearFields={clearFields}
 								label={intl.formatMessage({id: 'listComponent.aliases'})}
@@ -392,7 +392,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 							</Typography>
 							<hr/>
 							<ListComponent
-								edit={isEdit && isEditable('')}
+								edit={isEdit && isEditable('earlierName')}
 								fieldName="earlierName"
 								clearFields={clearFields}
 								label={intl.formatMessage({id: 'listComponent.earlierName'})}

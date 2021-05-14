@@ -31,7 +31,6 @@ import {useCookies} from 'react-cookie';
 import {connect} from 'react-redux';
 import {
 	Grid,
-	Link,
 	Typography
 } from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
@@ -58,12 +57,12 @@ export default connect(mapStateToProps, actions)(props => {
 		publisherLoading,
 		revokePublication,
 		updatePublicationIsbnIsmn,
+		userInfo,
 		lang
 	} = props;
 	const intl = useIntl();
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
-	const [publisherName, setPublisherName] = useState(null);
 	const [message, setMessage] = useState(null);
 	const [openAlert, setOpenAlert] = useState(false);
 	const [selectedToRevoke, setSelectedToRevoke] = useState(null);
@@ -75,12 +74,6 @@ export default connect(mapStateToProps, actions)(props => {
 			fetchPublisher(formattedPublication.publisher, cookie[COOKIE_NAME]);
 		}
 	}, [cookie, fetchPublisher, formattedPublication.publisher, updatePublicationIsbnIsmn, isRevoking]);
-
-	useEffect(() => {
-		if (Object.keys(fetchedPublisher).length > 0) {
-			setPublisherName(fetchedPublisher.name);
-		}
-	}, [fetchedPublisher]);
 
 	useEffect(() => {
 		fetchIDRList({token: cookie[COOKIE_NAME]});
@@ -210,8 +203,94 @@ export default connect(mapStateToProps, actions)(props => {
 							{intl.formatMessage({id: 'publicationRender.label.publisher'})}
 						</Typography>
 						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.publisherName'})} value={(publication.publisher && publisherName !== null) ? publisherName : ''}/>
-						<Link href={`/publishers/${publication.publisher}`} color="primary" underline="always"> publisherDetails </Link>
+						<>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[name]')}
+								fieldName="publisher[name]"
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={fetchedPublisher.name ? fetchedPublisher.name : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[code]')}
+								fieldName="publisher[code]"
+								label={intl.formatMessage({id: 'listComponent.code'})}
+								value={fetchedPublisher.code ? fetchedPublisher.code : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[phone]')}
+								fieldName="publisher[phone]"
+								label={intl.formatMessage({id: 'listComponent.phone'})}
+								value={fetchedPublisher.phone ? fetchedPublisher.phone : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[language]')}
+								fieldName="publisher[language]"
+								label={intl.formatMessage({id: 'listComponent.language'})}
+								value={fetchedPublisher.language ? fetchedPublisher.language : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[email]')}
+								fieldName="publisher[email]"
+								label={intl.formatMessage({id: 'listComponent.email'})}
+								value={fetchedPublisher.email ? fetchedPublisher.email : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[contactPerson]')}
+								fieldName="publisher[contactPerson]"
+								label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+								value={fetchedPublisher.contactPerson ? fetchedPublisher.contactPerson : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[publisherType]')}
+								fieldName="publisher[publisherType]"
+								label={intl.formatMessage({id: 'listComponent.publisherType'})}
+								value={fetchedPublisher.publisherType ? fetchedPublisher.publisherType : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][address]')}
+								fieldName="publisher[postalAddress][address]"
+								label={intl.formatMessage({id: 'listComponent.address'})}
+								value={fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.address ?
+									fetchedPublisher.postalAddress.address : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][city]')}
+								fieldName="publisher[postalAddress][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.city ?
+									fetchedPublisher.postalAddress.city : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][zip]')}
+								fieldName="publisher[postalAddress][zip]"
+								label={intl.formatMessage({id: 'listComponent.zip'})}
+								value={fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.zip ?
+									fetchedPublisher.postalAddress.zip : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][public]')}
+								fieldName="publisher[postalAddress][public]"
+								label={intl.formatMessage({id: 'listComponent.public'})}
+								value={Boolean(fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.public)}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[aliases]')}
+								fieldName="publisher[aliases]"
+								clearFields={clearFields}
+								label={intl.formatMessage({id: 'listComponent.aliases'})}
+								value={fetchedPublisher.aliases ? fetchedPublisher.aliases : ''}
+							/>
+							{
+								userInfo.role === 'admin' &&
+									<ListComponent
+										edit={isEdit && isEditable('publisher[earlierName]')}
+										fieldName="publisher[earlierName]"
+										clearFields={clearFields}
+										label={intl.formatMessage({id: 'listComponent.earlierName'})}
+										value={fetchedPublisher.earlierName ? fetchedPublisher.earlierName : ''}
+									/>
+							}
+						</>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -366,48 +445,53 @@ export default connect(mapStateToProps, actions)(props => {
 								</Typography>
 						}
 					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							{intl.formatMessage({id: 'publicationRender.label.metadataReference'})}
-						</Typography>
-						<hr/>
-						{
-							publication.metadataReference &&
-								<TableComponent
-									data={publication.metadataReference.map(item => tableUserDataMetadataReference(item))}
-									headRows={headRowsMetadataReference}
-								/>
-						}
-					</Grid>
-					<Grid item xs={12}>
-						<Typography variant="h6">
-							{intl.formatMessage({id: 'publicationRender.label.otherReferences'})}
-						</Typography>
-						<hr/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
-						<ListComponent
-							linkPath={`/requests/publications/issn/${publication.request}`}
-							label={intl.formatMessage({id: 'listComponent.request'})}
-							value={publication.request ? publication.request : ''}
-						/>
-						<ListComponent
-							fieldName="timestamp"
-							label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
-							value={publication.lastUpdated ?
-								(publication.lastUpdated.timestamp ?
-									publication.lastUpdated.timestamp :
-									''
-								) : ''}
-						/>
-						<ListComponent
-							label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
-							value={publication.lastUpdated ?
-								(publication.lastUpdated.user ?
-									publication.lastUpdated.user :
-									''
-								) : ''}
-						/>
-					</Grid>
+					{
+						userInfo.role === 'admin' &&
+							<>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										{intl.formatMessage({id: 'publicationRender.label.metadataReference'})}
+									</Typography>
+									<hr/>
+									{
+										publication.metadataReference &&
+											<TableComponent
+												data={publication.metadataReference.map(item => tableUserDataMetadataReference(item))}
+												headRows={headRowsMetadataReference}
+											/>
+									}
+								</Grid>
+								<Grid item xs={12}>
+									<Typography variant="h6">
+										{intl.formatMessage({id: 'publicationRender.label.otherReferences'})}
+									</Typography>
+									<hr/>
+									<ListComponent label={intl.formatMessage({id: 'listComponent.associatedRange'})} value={publication.associatedRange ? formatValueforAssociatedRange(publication.associatedRange) : []}/>
+									<ListComponent
+										linkPath={`/requests/publications/issn/${publication.request}`}
+										label={intl.formatMessage({id: 'listComponent.request'})}
+										value={publication.request ? publication.request : ''}
+									/>
+									<ListComponent
+										fieldName="timestamp"
+										label={intl.formatMessage({id: 'listComponent.lastUpdated'})}
+										value={publication.lastUpdated ?
+											(publication.lastUpdated.timestamp ?
+												publication.lastUpdated.timestamp :
+												''
+											) : ''}
+									/>
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.lastUpdatedBy'})}
+										value={publication.lastUpdated ?
+											(publication.lastUpdated.user ?
+												publication.lastUpdated.user :
+												''
+											) : ''}
+									/>
+								</Grid>
+							</>
+					}
 				</Grid>
 			</>
 		);
@@ -426,8 +510,121 @@ export default connect(mapStateToProps, actions)(props => {
 						<ListComponent edit={isEdit && isEditable} fieldName="subtitle" label={intl.formatMessage({id: 'listComponent.subtitle'})} value={publication.subtitle ? publication.subtitle : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="language" label={intl.formatMessage({id: 'listComponent.language'})} value={publication.language ? publication.language : ''}/>
 						<ListComponent edit={isEdit && isEditable} fieldName="publicationTime" label={intl.formatMessage({id: 'listComponent.publicationTime'})} value={publication.publicationTime ? publication.publicationTime : ''}/>
-						<ListComponent label={intl.formatMessage({id: 'listComponent.publisherName'})} value={(publication.publisher && publisherName !== null) ? publisherName : ''}/>
-						<Link href={`/publishers/${publication.publisher}`} color="primary" underline="always"> publisherDetails </Link>
+					</Grid>
+					<Grid item xs={12}>
+						<Typography variant="h6">
+							{intl.formatMessage({id: 'publicationRender.label.publisher'})}
+						</Typography>
+						<hr/>
+						<>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[name]')}
+								fieldName="publisher[name]"
+								label={intl.formatMessage({id: 'listComponent.name'})}
+								value={fetchedPublisher.name ? fetchedPublisher.name : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[code]')}
+								fieldName="publisher[code]"
+								label={intl.formatMessage({id: 'listComponent.code'})}
+								value={fetchedPublisher.code ? fetchedPublisher.code : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[phone]')}
+								fieldName="publisher[phone]"
+								label={intl.formatMessage({id: 'listComponent.phone'})}
+								value={fetchedPublisher.phone ? fetchedPublisher.phone : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[language]')}
+								fieldName="publisher[language]"
+								label={intl.formatMessage({id: 'listComponent.language'})}
+								value={fetchedPublisher.language ? fetchedPublisher.language : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[email]')}
+								fieldName="publisher[email]"
+								label={intl.formatMessage({id: 'listComponent.email'})}
+								value={fetchedPublisher.email ? fetchedPublisher.email : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[contactPerson]')}
+								fieldName="publisher[contactPerson]"
+								label={intl.formatMessage({id: 'listComponent.contactPerson'})}
+								value={fetchedPublisher.contactPerson ? fetchedPublisher.contactPerson : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[publisherType]')}
+								fieldName="publisher[publisherType]"
+								label={intl.formatMessage({id: 'listComponent.publisherType'})}
+								value={fetchedPublisher.publisherType ? fetchedPublisher.publisherType : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][address]')}
+								fieldName="publisher[postalAddress][address]"
+								label={intl.formatMessage({id: 'listComponent.address'})}
+								value={fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.address ?
+									fetchedPublisher.postalAddress.address : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][city]')}
+								fieldName="publisher[postalAddress][city]"
+								label={intl.formatMessage({id: 'listComponent.city'})}
+								value={fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.city ?
+									fetchedPublisher.postalAddress.city : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[postalAddress][zip]')}
+								fieldName="publisher[postalAddress][zip]"
+								label={intl.formatMessage({id: 'listComponent.zip'})}
+								value={fetchedPublisher && fetchedPublisher.postalAddress && fetchedPublisher.postalAddress.zip ?
+									fetchedPublisher.postalAddress.zip : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[aliases]')}
+								fieldName="publisher[aliases]"
+								clearFields={clearFields}
+								label={intl.formatMessage({id: 'listComponent.aliases'})}
+								value={fetchedPublisher.aliases ? fetchedPublisher.aliases : ''}
+							/>
+							{
+								userInfo.role === 'admin' &&
+									<ListComponent
+										edit={isEdit && isEditable('publisher[earlierName]')}
+										fieldName="publisher[earlierName]"
+										clearFields={clearFields}
+										label={intl.formatMessage({id: 'listComponent.earlierName'})}
+										value={fetchedPublisher.earlierName ? fetchedPublisher.earlierName : ''}
+									/>
+							}
+							<ListComponent
+								edit={isEdit && isEditable('publisher[publicationDetails][frequency][currentYear]')}
+								fieldName="publisher[publicationDetails][frequency][currentYear]"
+								label={intl.formatMessage({id: 'listComponent.currentYear'})}
+								value={fetchedPublisher && fetchedPublisher.publicationDetails && fetchedPublisher.publicationDetails.frequency && fetchedPublisher.publicationDetails.frequency.currentYear ?
+									fetchedPublisher.publicationDetails.frequency.currentYear : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[publicationDetails][frequency][nextYear]')}
+								fieldName="publisher[publicationDetails][frequency][nextYear]"
+								label={intl.formatMessage({id: 'listComponent.nextYear'})}
+								value={fetchedPublisher && fetchedPublisher.publicationDetails && fetchedPublisher.publicationDetails.frequency && fetchedPublisher.publicationDetails.frequency.nextYear ?
+									fetchedPublisher.publicationDetails.frequency.nextYear : ''}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[publicationDetails]previouslyPublished')}
+								fieldName="publisher[publicationDetails]previouslyPublished"
+								label={intl.formatMessage({id: 'listComponent.previouslyPublished'})}
+								value={fetchedPublisher && fetchedPublisher.publicationDetails && Boolean(fetchedPublisher.publicationDetails.previouslyPublished)}
+							/>
+							<ListComponent
+								edit={isEdit && isEditable('publisher[publicationDetails]publishingActivities')}
+								fieldName="publisher[publicationDetails]publishingActivities"
+								label={intl.formatMessage({id: 'listComponent.publishingActivities'})}
+								value={fetchedPublisher && fetchedPublisher.publicationDetails && fetchedPublisher.publicationDetails.publishingActivities ?
+									fetchedPublisher.publicationDetails.publishingActivities : ''}
+							/>
+						</>
 					</Grid>
 					<Grid item xs={12}>
 						<Typography variant="h6">
@@ -692,6 +889,7 @@ function mapStateToProps(state) {
 	return ({
 		fetchedPublisher: state.publisher.publisher,
 		publisherLoading: state.publisher.loading,
-		rangesList: state.identifierRanges.rangesList
+		rangesList: state.identifierRanges.rangesList,
+		userInfo: state.login.userInfo
 	});
 }

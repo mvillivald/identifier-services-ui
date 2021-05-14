@@ -63,6 +63,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		clearFields,
 		updatePublicationIsbnIsmn,
 		updatedIsbnIsmn,
+		updatePublisher,
+		fetchPublisher,
 		fetchPublisherOption,
 		publisherOption,
 		history,
@@ -93,6 +95,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			fetchPublisherOption({token: cookie[COOKIE_NAME]});
 		}
 	}, [cookie, fetchIsbnIsmn, fetchPublisherOption, id, updatedIsbnIsmn, isEdit]);
+
+	useEffect(() => {
+		if (isbnIsmn.publisher !== undefined) {
+			fetchPublisher(isbnIsmn.publisher, cookie[COOKIE_NAME]);
+		}
+	}, [cookie, fetchPublisher, isbnIsmn.publisher]);
 
 	useEffect(() => {
 		if (Object.keys(isbnIsmn).length > 0) {
@@ -155,10 +163,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const updateValues = {
 			...rest,
 			authors: formatAuthorsValue(isbnIsmn.authors, values.authors),
+			publisher: isbnIsmn.publisher,
 			isbnClassification: values.isbnClassification ? values.isbnClassification.map(item => item.value.toString()) : []
 		};
 		const token = cookie[COOKIE_NAME];
-		updatePublicationIsbnIsmn(id, updateValues, token, lang);
+		const {alias, ...updatePublisherValues} = values.publisher;
+		updatePublisher(_id, updatePublisherValues, token, lang);
+		updatePublicationIsbnIsmn(id, {...updateValues, publisher: isbnIsmn.publisher}, token, lang);
 		setIsEdit(false);
 	};
 
@@ -366,7 +377,7 @@ function mapStateToProps(state) {
 	return ({
 		isbnIsmn: state.publication.isbnIsmn,
 		fetchedMarc: state.publication.fetchedMarc,
-		initialValues: formatInitialValues(state.publication.isbnIsmn),
+		initialValues: formatInitialValues({...state.publication.isbnIsmn, publisher: state.publisher.publisher}),
 		publisherOption: state.publisher.publisherOptions.filter(i => i.publisherType === 'T' || i.publisherType === 'P'),
 		updatedIsbnIsmn: state.publication.updatedIsbnIsmn,
 		userInfo: state.login.userInfo,

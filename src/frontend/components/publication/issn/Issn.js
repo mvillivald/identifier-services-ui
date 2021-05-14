@@ -58,6 +58,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		issn,
 		userInfo,
 		fetchIssn,
+		fetchPublisher,
 		handleSubmit,
 		clearFields,
 		updatePublicationIssn,
@@ -65,6 +66,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		history,
 		loading,
 		assignIssnRange,
+		updatePublisher,
 		fetchMarc,
 		lang
 	} = props;
@@ -88,6 +90,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			fetchIssn({id: id, token: cookie[COOKIE_NAME]});
 		}
 	}, [cookie, fetchIssn, id, loading]);
+
+	useEffect(() => {
+		if (issn.publisher !== undefined) {
+			fetchPublisher(issn.publisher, cookie[COOKIE_NAME]);
+		}
+	}, [cookie, fetchPublisher, issn.publisher]);
 
 	useEffect(() => {
 		if (Object.keys(issn).length > 0) {
@@ -126,7 +134,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	const handlePublicationUpdate = values => {
 		const {_id, ...updateValues} = values;
 		const token = cookie[COOKIE_NAME];
-		updatePublicationIssn(id, updateValues, token, lang);
+		const {alias, ...updatePublisherValues} = values.publisher;
+		updatePublisher(_id, updatePublisherValues, token, lang);
+
+		updatePublicationIssn(issn.publisher, {...updateValues, publisher: issn.publisher}, token, lang);
 		setIsEdit(false);
 		history.push('/publications/issn');
 	};
@@ -310,7 +321,7 @@ function mapStateToProps(state) {
 	return ({
 		loading: state.common.loading,
 		issn: state.publication.issn,
-		initialValues: state.publication.issn,
+		initialValues: {...state.publication.issn, publisher: state.publisher.publisher},
 		userInfo: state.login.userInfo,
 		updatedIssn: state.publication.updatedIssn,
 		messageListLoading: state.message.listLoading,

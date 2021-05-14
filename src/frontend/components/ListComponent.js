@@ -47,9 +47,9 @@ export default function (props) {
 										publication === 'isbn-ismn' ? renderIsbnIsmnType(fieldName, value) : renderEditType(fieldName)
 									) : fieldName === 'state' ? (
 										renderEditState(fieldName)
-									) : fieldName === 'publisherType' ? (
+									) : (fieldName === 'publisherType' || fieldName === 'publisher[publisherType]') ? (
 										renderEditPublisherType(fieldName)
-									) : fieldName === 'publisherCategory' ? (
+									) : fieldName === 'publisherCategory' || fieldName === 'publisher[publisherCategory]'? (
 										renderEditPublisherCategory(fieldName, value)
 									) : fieldName === 'metadataDelivery' ? (
 										renderEditMetadataDelivery(fieldName)
