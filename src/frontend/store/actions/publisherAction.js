@@ -119,7 +119,8 @@ export const searchPublisher = ({searchText, token, activeCheck, sort}) => async
 	const query = activeCheck !== undefined &&
 		activeCheck.filterByIdentifier === true ? {publisherIdentifier: searchText} :
 		activeCheck.checked === true ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}, selfPublisher: false} :
-			{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], selfPublisher: false};
+			activeCheck.selfPublishers === true ? {$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], activity: {active: true}, selfPublisher: false, publisherType: 'T'} :
+				{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], selfPublisher: false};
 	try {
 		const properties = {
 			method: 'POST',

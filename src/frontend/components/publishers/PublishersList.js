@@ -48,7 +48,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const [page, setPage] = React.useState(0);
 	const [activeCheck, setActiveCheck] = useState({
 		checked: false,
-		filterByIdentifier: false
+		filterByIdentifier: false,
+		selfPublishers: false
 	});
 	const [rowSelectedId, setRowSelectedId] = useState(null);
 	const [selectedCategory, setSelectedCategory] = useState(null);
@@ -144,6 +145,17 @@ export default connect(mapStateToProps, actions)(props => {
 						/>
 					}
 					label={<FormattedMessage id="publisher.search.filter.filterByIdentifier"/>}
+				/>
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={activeCheck.selfPublishers}
+							value="checked"
+							color="primary"
+							onChange={handleChange('selfPublishers')}
+						/>
+					}
+					label={<FormattedMessage id="publisher.search.filter.selfPublishers"/>}
 				/>
 				<Grid item>
 					<Select

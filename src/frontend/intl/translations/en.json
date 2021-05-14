@@ -983,7 +983,8 @@
     "publisher.search.filter.filterByRangeCategory": "Filter by category",
     "publisherList.headRows.active": "Active",
     "button.label.requestIsbn": "request ISBN",
-    "isbnismn.search.filter.filterByIdentifier": "Search by identifier"
+    "isbnismn.search.filter.filterByIdentifier": "Search by identifier",
+    "publisher.search.filter.selfPublishers": "Self publishers"
 
 
 }
