@@ -86,7 +86,7 @@ app.post('/message', (req, res) => {
 	async function main() {
 		const parseUrl = parse(SMTP_URL, true);
 		const emailcontent = `
-			<p>${body.description ? body.description : body.body}</p>
+			${body.description ? body.description : body.body}
 		`;
 
 		let transporter = nodemailer.createTransport({
@@ -94,10 +94,10 @@ app.post('/message', (req, res) => {
 			port: parseUrl.port,
 			secure: false
 		});
-
 		await transporter.sendMail({
 			from: ADMINISTRATORS_EMAIL,
 			to: body.sendTo ? body.sendTo : body.email,
+			cc: body.cc ? body.cc : [],
 			replyTo: ADMINISTRATORS_EMAIL,
 			subject: body.subject,
 			html: emailcontent

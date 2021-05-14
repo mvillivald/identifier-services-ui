@@ -52,6 +52,8 @@ export default connect(mapStateToProps, actions)(props => {
 		publisherOption,
 		publisherEmail,
 		fetchIsbnIsmn,
+		fetchPublisher,
+		publisher,
 		fetchIssn,
 		isbnIsmn,
 		issn,
@@ -66,11 +68,12 @@ export default connect(mapStateToProps, actions)(props => {
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [selectedTemplate, setSelectedTemplate] = useState(null);
-	const [selectedPublisher, setSelectedPublisher] = useState(null);
 	const [recipientEmail, setRecipientEmail] = useState(null);
+	const [carbonCopy, setCarbonCopy] = useState(null);
 
 	const [messageToBeSend, setMessageToBeSend] = useState(null);
-	const {type, id} = state;
+	const {type, id, publication} = state;
+	const publisherId = publication.publisher;
 
 	const placeholder = 'Compose an epic...';
 
@@ -105,10 +108,10 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [cookie, fetchAllTemplatesList]);
 
 	useEffect(() => {
-		if (selectedPublisher) {
-			setRecipientEmail(selectedPublisher.value);
+		if (publisherId !== undefined) {
+			fetchPublisher(publisherId, cookie[COOKIE_NAME]);
 		}
-	}, [selectedPublisher]);
+	}, [cookie, publisherId, fetchPublisher]);
 
 	useEffect(() => {
 		if (quill !== undefined && messageInfo !== null) {
@@ -153,6 +156,10 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function getPublisherOptions(option, email) {
+		if (publisher) {
+			return [{value: publisher.email, label: `${publisher.name} (${publisher.email})`}];
+		}
+
 		if (email) {
 			return [{value: email, label: email}];
 		}
@@ -174,7 +181,7 @@ export default connect(mapStateToProps, actions)(props => {
 		const tooltipElement = div.getElementsByClassName('ql-tooltip ql-hidden')[0];
 		div.removeChild(tooltipElement);
 		if (recipientEmail !== null) {
-			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail}, cookie[COOKIE_NAME], lang);
+			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail.map(i => i.value), cc: carbonCopy.map(i => i.value)}, cookie[COOKIE_NAME], lang);
 			history.push(state.prevPath);
 		}
 
@@ -185,11 +192,19 @@ export default connect(mapStateToProps, actions)(props => {
 		<Grid container item className={classes.listItem} xs={12}>
 			<Grid item xs={12}>
 				<CreatableSelect
-					isMulti={false}
+					isMulti
 					options={getPublisherOptions(publisherOption, publisherEmail)}
 					placeholder="Select Recipient Publisher"
-					value={selectedPublisher}
-					onChange={value => setSelectedPublisher(value)}
+					value={recipientEmail}
+					onChange={value => setRecipientEmail(value)}
+				/>
+			</Grid>
+			<Grid item xs={12}>
+				<CreatableSelect
+					isMulti
+					placeholder="Cc"
+					value={carbonCopy}
+					onChange={value => setCarbonCopy(value)}
 				/>
 			</Grid>
 			<Grid item xs={12}>
@@ -228,6 +243,7 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		publisherOption: state.publisher.publisherOptions,
+		publisher: state.publisher.publisher,
 		isbnIsmn: state.publication.isbnIsmn,
 		issn: state.publication.issn,
 		messageTemplates: state.message.messagesList,
