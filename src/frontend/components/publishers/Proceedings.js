@@ -26,10 +26,10 @@
  *
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
-import {Grid, Typography, Button} from '@material-ui/core';
+import {Grid, Typography, Button, RootRef} from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {FormattedMessage} from 'react-intl';
 import moment from 'moment';
@@ -37,6 +37,7 @@ import moment from 'moment';
 import {commonStyles} from '../../styles/app';
 import TableComponent from '../TableComponent';
 import Spinner from '../Spinner';
+import PrintElement from '../Print';
 import * as actions from '../../store/actions';
 
 export default connect(mapStateToProps, actions)(props => {
@@ -55,6 +56,8 @@ export default connect(mapStateToProps, actions)(props => {
 	const publisherId = match.params.id;
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [page, setPage] = useState(0);
+
+	const componentRef = useRef();
 
 	useEffect(() => {
 		fetchPublisher(publisherId, cookie[COOKIE_NAME]);
@@ -147,15 +150,22 @@ export default connect(mapStateToProps, actions)(props => {
 				<FormattedMessage id="publicationListRender.heading.list"/>
 			</Typography>
 			<Grid container item xs={12}>
-				<Button
-					variant="outlined"
-					startIcon={<ArrowBackIosIcon/>}
-					onClick={handleBack}
-				>
-					<FormattedMessage id="form.button.label.back"/>
-				</Button>
+				<Grid item xs={1}>
+					<Button
+						variant="outlined"
+						startIcon={<ArrowBackIosIcon/>}
+						onClick={handleBack}
+					>
+						<FormattedMessage id="form.button.label.back"/>
+					</Button>
+				</Grid>
+				<Grid item xs={1}>
+					<PrintElement componentRef={componentRef}/>
+				</Grid>
 			</Grid>
-			{usersData}
+			<RootRef rootRef={componentRef}>
+				{usersData}
+			</RootRef>
 		</Grid>
 	);
 	return {

@@ -54,6 +54,7 @@ import IssnList from './components/publication/issn/IssnList';
 import Issn from './components/publication/issn/Issn';
 import TemplatesList from './components/messages/TemplatesList';
 import MessagesList from './components/messages/MessagesList';
+import PublisherMessagesList from './components/messages/PublisherMessagesList';
 import Message from './components/messages/Message';
 import PublishersRequestsList from './components/publishersRequests/PublishersRequestsList';
 import PublishersRequest from './components/publishersRequests/publisherRequest';
@@ -126,7 +127,8 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/ranges/issn', role: ['admin'], component: IDRIssnList},
 		{path: '/ranges/issn/:id', role: ['admin'], component: IDRIssnList},
 		{path: '/statistics', role: ['admin'], component: Statistics},
-		{path: '/sendMessage/:id', role: ['admin'], component: MessageElement}
+		{path: '/sendMessage/:id', role: ['admin'], component: MessageElement},
+		{path: '/publishers/sentMessages/:id', role: ['admin'], component: PublisherMessagesList}
 	];
 
 	const routes = (

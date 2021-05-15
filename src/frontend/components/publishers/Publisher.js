@@ -665,6 +665,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 		history.push(`/publishers/proceedings/${id}`);
 	}
 
+	function handleOnClickMessages() {
+		history.push({pathname: `/publishers/sentMessages/${id}`, state: {prevPath: `/publishers/${id}`, email: publisher.email}});
+	}
+
 	function tableUserData(item) {
 		if (subRangeList !== undefined) {
 			const result = subRangeList.length > 0 && subRangeList.find(range => item === range.publisherIdentifier);
@@ -762,6 +766,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 															</Button>
 														</Grid>
 												}
+												<Grid item xs={2}>
+													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickMessages}>
+														<FormattedMessage id="button.label.messages"/>
+													</Button>
+												</Grid>
 												<Grid item xs={2}>
 													<Button className={classes.buttons} variant="outlined" color="primary" onClick={handleOnClickProceedings}>
 														<FormattedMessage id="button.label.proceedings"/>

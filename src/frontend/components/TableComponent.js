@@ -278,7 +278,7 @@ export default function (props) {
 			</TableContainer>
 			{
 				pagination && <TablePagination
-					rowsPerPageOptions={[10, 25, 50]}
+					rowsPerPageOptions={[10, 25, 50, 100, 500, 1000]}
 					component="div"
 					count={data.length}
 					rowsPerPage={rowsPerPage}

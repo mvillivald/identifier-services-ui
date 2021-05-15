@@ -98,9 +98,10 @@ export const createMessageTemplate = (values, token, lang) => async dispatch => 
 	}
 };
 
-export const fetchMessagesList = (token, sort) => async dispatch => {
+export const fetchMessagesList = (token, sort, email) => async dispatch => {
 	dispatch(setLoader());
 	try {
+		const query = email ? {email: email} : {};
 		const response = await fetch(`${API_URL}/messages/query`, {
 			method: 'POST',
 			headers: {
@@ -110,7 +111,7 @@ export const fetchMessagesList = (token, sort) => async dispatch => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({queries: [{
-				query: {}
+				query: query
 			}],
 			sort: sort})
 		});
