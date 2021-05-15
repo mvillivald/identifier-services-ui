@@ -84,7 +84,7 @@ export default connect(mapStateToProps, actions)(props => {
 		publishersData = (
 			<TableComponent
 				pagination
-				data={searchedPublishers.map(item => searchResultRender(item))}
+				data={activeCheck.filterByIdentifier ? (searchedPublishers.filter(i => i.selfPublisher === false)).map(item => searchResultRender(item)) : searchedPublishers.map(item => searchResultRender(item))}
 				handleTableRowClick={handleTableRowClick}
 				headRows={headRows}
 				rowSelectedId={rowSelectedId}

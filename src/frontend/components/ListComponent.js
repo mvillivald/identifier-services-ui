@@ -49,7 +49,7 @@ export default function (props) {
 										renderEditState(fieldName)
 									) : (fieldName === 'publisherType' || fieldName === 'publisher[publisherType]') ? (
 										renderEditPublisherType(fieldName)
-									) : fieldName === 'publisherCategory' || fieldName === 'publisher[publisherCategory]'? (
+									) : fieldName === 'publisherCategory' || fieldName === 'publisher[publisherCategory]' ? (
 										renderEditPublisherCategory(fieldName, value)
 									) : fieldName === 'metadataDelivery' ? (
 										renderEditMetadataDelivery(fieldName)
