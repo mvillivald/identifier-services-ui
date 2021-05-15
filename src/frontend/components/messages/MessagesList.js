@@ -33,6 +33,7 @@ import {Grid, Typography} from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
+import SearchComponent from '../SearchComponent';
 import TableComponent from '../TableComponent';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
@@ -45,10 +46,11 @@ export default connect(mapStateToProps, actions)(props => {
 	const [cookie] = useCookies(COOKIE_NAME);
 	const [page, setPage] = useState(0);
 	const [rowSelectedId, setRowSelectedId] = useState(null);
+	const [inputVal, setSearchInputVal] = useState('');
 
 	useEffect(() => {
-		fetchMessagesList(cookie[COOKIE_NAME], {'lastUpdated.timestamp': -1});
-	}, [fetchMessagesList, cookie]);
+		fetchMessagesList({searchText: inputVal, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
+	}, [fetchMessagesList, cookie, inputVal]);
 
 	const handleTableRowClick = id => {
 		setRowSelectedId(id);
@@ -98,6 +100,9 @@ export default connect(mapStateToProps, actions)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="messageList.list.heading"/>
 			</Typography>
+			<Grid item xs={12}>
+				<SearchComponent searchFunction={fetchMessagesList} setSearchInputVal={setSearchInputVal}/>
+			</Grid>
 			{messageData}
 		</Grid>
 	);

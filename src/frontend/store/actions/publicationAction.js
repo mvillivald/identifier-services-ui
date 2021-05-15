@@ -61,7 +61,7 @@ const cache = createIntlCache();
 export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	const query = activeCheck !== undefined &&
-		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText}}}} :
+		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText, $options: 'i'}}}} :
 		activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
 			{$or: [{title: searchText}, {'identifier.id': searchText}]};
 	try {
@@ -128,7 +128,7 @@ export const fetchProceedingsList = ({searchText, token, sort}) => async dispatc
 
 export const fetchIssnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	const query = activeCheck !== undefined &&
-		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText}}}} :
+		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText, $options: 'i'}}}} :
 		activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
 			{$or: [{title: searchText}, {'identifier.id': searchText}]};
 	dispatch(setListLoader());

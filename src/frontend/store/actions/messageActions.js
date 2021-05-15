@@ -98,10 +98,10 @@ export const createMessageTemplate = (values, token, lang) => async dispatch => 
 	}
 };
 
-export const fetchMessagesList = (token, sort, email) => async dispatch => {
+export const fetchMessagesList = ({searchText, token, sort, email}) => async dispatch => {
 	dispatch(setLoader());
 	try {
-		const query = email ? {email: email} : {};
+		const query = email ? {$and: [{subject: {$regex: searchText, $options: 'i'}}, {email: email}]} : {$or: [{subject: {$regex: searchText, $options: 'i'}}, {email: {$regex: searchText, $options: 'i'}}]};
 		const response = await fetch(`${API_URL}/messages/query`, {
 			method: 'POST',
 			headers: {
