@@ -52,7 +52,7 @@ export default connect(mapStateToProps, actions)(props => {
 		selfPublishers: false
 	});
 	const [rowSelectedId, setRowSelectedId] = useState(null);
-	const [selectedCategory, setSelectedCategory] = useState(null);
+	const [selectedCategory, setSelectedCategory] = useState('0');
 
 	useEffect(() => {
 		searchPublisher({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
@@ -78,10 +78,10 @@ export default connect(mapStateToProps, actions)(props => {
 	let publishersData;
 	if (loading) {
 		publishersData = <Spinner/>;
-	} else if (searchedPublishers === null || searchedPublishers.length === 0) {
+	} else if (searchedPublishers === null || searchedPublishers === undefined || searchedPublishers.length === 0) {
 		publishersData = <p><FormattedMessage id="publisherList.emptySearch"/></p>;
 	} else {
-		publishersData = (
+		publishersData = selectedCategory === null ? (
 			<TableComponent
 				pagination
 				data={activeCheck.filterByIdentifier ? (searchedPublishers.filter(i => i.selfPublisher === false)).map(item => searchResultRender(item)) : searchedPublishers.map(item => searchResultRender(item))}
@@ -92,11 +92,22 @@ export default connect(mapStateToProps, actions)(props => {
 				setPage={setPage}
 				totalDoc={totalDoc}
 			/>
+		) : (
+			<TableComponent
+				pagination
+				data={dataFilteredByCatagory(searchedPublishers, selectedCategory)}
+				handleTableRowClick={handleTableRowClick}
+				headRows={headRows}
+				rowSelectedId={rowSelectedId}
+				page={page}
+				setPage={setPage}
+				totalDoc={dataFilteredByCatagory(searchedPublishers, selectedCategory).length}
+			/>
 		);
 	}
 
 	function searchResultRender(item) {
-		const {id, name, phone, aliases, email, activity} = item;
+		const {id, name, phone, aliases, email, activity, publisherIdentifier} = item;
 		return {
 			id: id,
 			empty: '',
@@ -104,15 +115,26 @@ export default connect(mapStateToProps, actions)(props => {
 			aliases: aliases ? aliases : '',
 			email: email,
 			phone: phone,
-			active: activity.active
+			active: activity.active,
+			publisherIdentifier: publisherIdentifier
 		};
+	}
+
+	function dataFilteredByCatagory(searchedPublishers, selectedCategory) {
+		const newData = activeCheck.filterByIdentifier ?
+			(searchedPublishers.filter(i => i.selfPublisher === false)).map(item => searchResultRender(item)) :
+			searchedPublishers.map(item => searchResultRender(item));
+		const result = newData.filter(item => {
+			return item.publisherIdentifier.some(ident => selectedCategory === '0' ? true : ident.slice(8).length === Number(selectedCategory)) && item;
+		});
+		return result;
 	}
 
 	function onChange(event) {
 		setSelectedCategory(event.target.value);
 	}
 
-	const categoryOptions = ['1', '2', '3', '4', '5'];
+	const categoryOptions = ['0', '1', '2', '3', '4', '5'];
 
 	const component = (
 		<Grid container item xs={12} className={classes.listSearch}>
