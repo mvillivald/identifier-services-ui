@@ -207,7 +207,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 
 	function handleOnClickSendMessage() {
 		const path = Buffer.from(`publisher=${id}`).toString('base64');
-		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publishers/${id}`, type: 'publisher'}});
+		history.push({pathname: `/sendMessage/${path}`, state: {prevPath: `/publishers/${id}`, id: id, type: 'publisher'}});
 	}
 
 	function isEditable(key) {

@@ -73,7 +73,7 @@ export default connect(mapStateToProps, actions)(props => {
 
 	const [messageToBeSend, setMessageToBeSend] = useState(null);
 	const {type, id, publication} = state;
-	const publisherId = publication.publisher;
+	const publisherId = publication === undefined ? id : publication.publisher;
 
 	const placeholder = 'Compose an epic...';
 
