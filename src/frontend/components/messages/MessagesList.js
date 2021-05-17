@@ -31,6 +31,7 @@ import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
 import {Grid, Typography} from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
+import moment from 'moment';
 
 import {commonStyles} from '../../styles/app';
 import SearchComponent from '../SearchComponent';
@@ -61,7 +62,8 @@ export default connect(mapStateToProps, actions)(props => {
 		{id: 'empty', label: ''},
 		{id: 'email', label: intl.formatMessage({id: 'message.label.email'})},
 		{id: 'subject', label: intl.formatMessage({id: 'message.label.subject'})},
-		{id: 'body', label: intl.formatMessage({id: 'message.label.body'})}
+		{id: 'body', label: intl.formatMessage({id: 'message.label.body'})},
+		{id: 'date', label: intl.formatMessage({id: 'message.label.date'})}
 	];
 
 	let messageData;
@@ -85,13 +87,14 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function usersDataRender(item) {
-		const {id, email, subject, body} = item;
+		const {id, email, subject, body, created} = item;
 		return {
 			id: id,
 			empty: '',
 			email: email,
 			subject: subject,
-			body: `${Buffer.from(body, 'base64').toString('utf8').slice(0, 20)}... `
+			body: `${Buffer.from(body, 'base64').toString('utf8').slice(0, 20)}... `,
+			date: moment(Number(created.timestamp)).format('L')
 		};
 	}
 
