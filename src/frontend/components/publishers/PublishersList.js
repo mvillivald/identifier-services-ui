@@ -125,7 +125,11 @@ export default connect(mapStateToProps, actions)(props => {
 			(searchedPublishers.filter(i => i.selfPublisher === false)).map(item => searchResultRender(item)) :
 			searchedPublishers.map(item => searchResultRender(item));
 		const result = newData.filter(item => {
-			return item.publisherIdentifier.some(ident => selectedCategory === '0' ? true : ident.slice(8).length === Number(selectedCategory)) && item;
+			if (selectedCategory === '0') {
+				return item;
+			}
+
+			return item.publisherIdentifier && item.publisherIdentifier.some(ident => ident.slice(8).length === Number(selectedCategory)) && item;
 		});
 		return result;
 	}
