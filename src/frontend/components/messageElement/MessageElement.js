@@ -181,7 +181,7 @@ export default connect(mapStateToProps, actions)(props => {
 		const tooltipElement = div.getElementsByClassName('ql-tooltip ql-hidden')[0];
 		div.removeChild(tooltipElement);
 		if (recipientEmail !== null) {
-			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail.map(i => i.value), cc: carbonCopy.map(i => i.value)}, cookie[COOKIE_NAME], lang);
+			sendMessage({...messageToBeSend, body: div.innerHTML, sendTo: recipientEmail.map(i => i.value), cc: carbonCopy !== null && carbonCopy.map(i => i.value)}, cookie[COOKIE_NAME], lang);
 			history.push(state.prevPath);
 		}
 
