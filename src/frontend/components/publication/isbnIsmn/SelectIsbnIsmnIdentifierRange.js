@@ -177,7 +177,7 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'subRange') {
-				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'closed');
+				array.unshift('publisherIdentifier', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'deleted', 'next', 'active', 'isClosed');
 			}
 
 			return array;
@@ -265,7 +265,7 @@ export default connect(mapStateToProps, actions)(props => {
 
 		function formatDate(key, value) {
 			if (key === 'created') {
-				return moment(Number(value), moment.defaultFormat).format('L');
+				return moment(Number(value.timestamp)).format('L');
 			}
 
 			return value;

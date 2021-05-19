@@ -797,7 +797,7 @@ export const revokePublisherIsbn = ({subRangeValue, token}) => async dispatch =>
 	}
 };
 
-export const revokePublication = ({identifier, subRangeId, token}) => async dispatch => {
+export const revokePublication = ({identifier, publisherId, token}) => async dispatch => {
 	try {
 		dispatch(setLoader());
 		const response = await fetch(`${API_URL}/ranges/identifier/revoke`, {
@@ -812,7 +812,7 @@ export const revokePublication = ({identifier, subRangeId, token}) => async disp
 				queries: [{
 					query: {identifier: identifier}
 				}],
-				subRangeId: subRangeId
+				publisherId: publisherId
 			})
 		});
 		return response.json();

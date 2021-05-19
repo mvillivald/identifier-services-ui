@@ -128,6 +128,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setSubRangeId(null);
 			setPublisherId(null);
 		}
+
+		fetchIsbnIsmn({id: id, token: cookie[COOKIE_NAME]});
 	}, [cookie, createIsbnBatch, createIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function manageFormatDetails(formatDetails) {

@@ -118,11 +118,11 @@ export default connect(mapStateToProps, actions)(props => {
 			}
 
 			if (selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers') {
-				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'A'}]}});
+				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'T'}]}});
 			}
 
 			if (selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
-				fetchAllPublishers({identifierType, type: {publisherType: 'T'}});
+				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'A'}, {selfPublisher: true}]}});
 			}
 		}
 	}, [startDate, endDate, identifierType, selectedIsbnIsmnType]);
@@ -182,7 +182,7 @@ export default connect(mapStateToProps, actions)(props => {
 			selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers' ||
 			selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
 				const newJsonSheet = allPublishers.map(publisher => ({
-					Registrant_Status_Code: publisher.activity ? (publisher.activity.active === true ? 'A' : 'I') : '',
+					Registrant_Status_Code: publisher.activity ? (publisher.activity.active === true ? 'A' : 'I') : '', // Need to fix should be according to publication not publisher
 					Registrant_Prefix_Type: publisher.publisherType ? publisher.publisherType : '',
 					Registrant_Prefix_Or_ISBN: publisher.publisherIdentifier ? publisher.publisherIdentifier[0] : '',
 					Registrant_Name: publisher.name ? publisher.name : '',

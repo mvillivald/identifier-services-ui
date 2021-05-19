@@ -56,6 +56,7 @@ export default connect(mapStateToProps, actions)(props => {
 		headRowsMetadataReference,
 		publisherLoading,
 		revokePublication,
+		publicationLoading,
 		updatePublicationIsbnIsmn,
 		userInfo,
 		lang
@@ -66,23 +67,22 @@ export default connect(mapStateToProps, actions)(props => {
 	const [message, setMessage] = useState(null);
 	const [openAlert, setOpenAlert] = useState(false);
 	const [selectedToRevoke, setSelectedToRevoke] = useState(null);
-	const [isRevoking, setIsRevoking] = useState(false);
 	const {_id, seriesDetails, id, ...formattedPublication} = {...publication, ...publication.seriesDetails};
 
 	useEffect(() => {
 		if (formattedPublication.publisher !== undefined) {
 			fetchPublisher(formattedPublication.publisher, cookie[COOKIE_NAME]);
 		}
-	}, [cookie, fetchPublisher, formattedPublication.publisher, updatePublicationIsbnIsmn, isRevoking]);
+	}, [cookie, fetchPublisher, formattedPublication.publisher, publicationLoading]);
 
 	useEffect(() => {
 		fetchIDRList({token: cookie[COOKIE_NAME]});
-	}, [cookie, fetchIDRList]);
+	}, [cookie, fetchIDRList, publicationLoading]);
 
 	function handleOnAgree() {
 		selectedToRevoke.forEach(async item => {
 			const itemObject = publication.identifier.find(i => i.id === item);
-			const result = await revokePublication({identifier: item, subRangeId: publication.associatedRange[0].id, token: cookie[COOKIE_NAME]});
+			const result = await revokePublication({identifier: item, publisherId: publication.publisher, token: cookie[COOKIE_NAME]});
 			const {_id, ...newPublicaiton} = {
 				...publication,
 				identifier: publication.identifier.filter(i => i.id !== item),
@@ -99,16 +99,10 @@ export default connect(mapStateToProps, actions)(props => {
 				})
 			};
 			if (result) {
-				const response = await updatePublicationIsbnIsmn(_id, newPublicaiton, cookie[COOKIE_NAME], lang);
-				if (response) {
-					setIsRevoking(false);
-				}
+				await updatePublicationIsbnIsmn(_id, newPublicaiton, cookie[COOKIE_NAME], lang);
+				return fetchPublisher(formattedPublication.publisher, cookie[COOKIE_NAME]);
 			}
 		});
-	}
-
-	function handleOnCancel() {
-		setIsRevoking(false);
 	}
 
 	function formatValueforAssociatedRange(value) {
@@ -807,7 +801,7 @@ export default connect(mapStateToProps, actions)(props => {
 						</Typography>
 						<hr/>
 						{
-							publication.identifier ?
+							publication.identifier && publication.identifier.length > 0 ?
 								<TableComponent
 									rowDeletable
 									data={publication.identifier.map(item => tableUserDataIdentifier(item))}
@@ -877,7 +871,6 @@ export default connect(mapStateToProps, actions)(props => {
 							message={message}
 							setMessage={setMessage}
 							handleOnAgree={handleOnAgree}
-							handleOnCancel={handleOnCancel}
 						/>
 				}
 			</>
@@ -888,6 +881,7 @@ export default connect(mapStateToProps, actions)(props => {
 function mapStateToProps(state) {
 	return ({
 		fetchedPublisher: state.publisher.publisher,
+		publicationLoading: state.publication.loading,
 		publisherLoading: state.publisher.loading,
 		rangesList: state.identifierRanges.rangesList,
 		userInfo: state.login.userInfo
