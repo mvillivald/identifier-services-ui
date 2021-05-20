@@ -94,31 +94,39 @@ app.post('/message', (req, res) => {
 			port: parseUrl.port,
 			secure: false
 		});
-		await transporter.sendMail({
+		transporter.sendMail({
 			from: ADMINISTRATORS_EMAIL,
 			to: body.sendTo ? body.sendTo : body.email,
 			cc: body.cc ? body.cc : [],
 			replyTo: ADMINISTRATORS_EMAIL,
 			subject: body.subject,
 			html: emailcontent
+		}, async (err, info) => {
+			console.log(info);
+			if (info && info.accepted) {
+				const response = await fetch(`${API_URL}/messages/`, {
+					method: 'POST',
+					headers: {
+						'Cross-Origin-Opener-Policy': 'same-origin',
+						'Cross-Origin-Embedder-Policy': 'require-corp',
+						Authorization: token,
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						subject: body.subject,
+						email: body.sendTo ? body.sendTo : body.email,
+						body: body.description ? body.description : body.body
+					})
+				});
+				if (response) {
+					res.send('Message Sent');
+				}
+			}
+
+			if (err) {
+				res.send('Error sending message');
+			}
 		});
-		const response = await fetch(`${API_URL}/messages/`, {
-			method: 'POST',
-			headers: {
-				'Cross-Origin-Opener-Policy': 'same-origin',
-				'Cross-Origin-Embedder-Policy': 'require-corp',
-				Authorization: token,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				subject: body.subject,
-				email: body.sendTo ? body.sendTo : body.email,
-				body: body.description ? body.description : body.body
-			})
-		});
-		if (response) {
-			res.send('Message Sent');
-		}
 	}
 
 	main().catch(console.error);
