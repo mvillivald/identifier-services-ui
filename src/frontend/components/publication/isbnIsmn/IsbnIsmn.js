@@ -170,7 +170,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		};
 		const token = cookie[COOKIE_NAME];
 		const {alias, ...updatePublisherValues} = values.publisher;
-		updatePublisher(_id, updatePublisherValues, token, lang);
+		const publisherId = updatePublisherValues._id;
+		delete updatePublisherValues._id;
+		updatePublisher(publisherId, updatePublisherValues, token, lang);
 		updatePublicationIsbnIsmn(id, {...updateValues, publisher: isbnIsmn.publisher}, token, lang);
 		setIsEdit(false);
 	};
