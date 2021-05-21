@@ -60,7 +60,6 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchIssnStatistics,
 		fetchAllPublishers,
 		fetchIsbnIsmnList,
-		fetchPublisherForStats,
 		rangeStatistics,
 		issnStatistics,
 		allPublishers,
@@ -274,7 +273,7 @@ export default connect(mapStateToProps, actions)(props => {
 					ISNI: ''
 				}));
 
-				console.log(newJsonSheet)
+				console.log(newJsonSheet);
 			}
 		}
 

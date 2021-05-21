@@ -129,7 +129,6 @@ app.post('/message', (req, res) => {
 				res.send('Error sending message');
 			}
 		});
-<<<<<<< HEAD
 		const response = await fetch(`${API_URL}/messages/`, {
 			method: 'POST',
 			headers: {
@@ -148,8 +147,6 @@ app.post('/message', (req, res) => {
 		if (response) {
 			res.send('Message Sent');
 		}
-=======
->>>>>>> 242f657d726ddc0ab863f60a75547bffefec7153
 	}
 
 	main().catch(console.error);

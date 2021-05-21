@@ -44,7 +44,6 @@ import AdminNav from './components/navbar/adminNav';
 import NewUserPasswordResetForm from './components/form/NewUserPasswordResetForm';
 import Publisher from './components/publishers/Publisher';
 import PublishersList from './components/publishers/PublishersList';
-import PublisherProfile from './components/publishers/PublisherProfile';
 import Proceedings from './components/publishers/Proceedings';
 import User from './components/users/User';
 import UsersList from './components/users/UsersList';
