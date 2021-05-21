@@ -60,10 +60,11 @@ const cache = createIntlCache();
 
 export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
-	const query = activeCheck !== undefined &&
+	const query = activeCheck === undefined ?
+		{$or: [{title: searchText}, {'identifier.id': searchText}]} :
 		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText, $options: 'i'}}}} :
-		activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
-			{$or: [{title: searchText}, {'identifier.id': searchText}]};
+			activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
+				{$or: [{title: searchText}, {'identifier.id': searchText}]};
 	try {
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
 			method: 'POST',

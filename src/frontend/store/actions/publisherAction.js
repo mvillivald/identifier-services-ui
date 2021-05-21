@@ -268,11 +268,13 @@ export const updatePublisherRequest = (id, values, token, lang) => async dispatc
 export const fetchAllPublishers = ({identifierType, type, token}) => async dispatch => {
 	dispatch(setListLoader());
 	try {
-		const query = type ?
+		const query = type && identifierType ?
 			{query: {identifierType: identifierType.toLowerCase(), type}} :
 			(identifierType ?
 				{query: {identifierType: identifierType.toLowerCase()}} :
-				{query: {}}
+				type ?
+					{query: {type}} :
+					{query: {}}
 			);
 		const properties = {
 			method: 'POST',
@@ -288,6 +290,24 @@ export const fetchAllPublishers = ({identifierType, type, token}) => async dispa
 		const response = await fetch(`${API_URL}/publishers/fetch/all`, properties);
 		const result = await response.json();
 		dispatch(success(PUBLISHERS_LIST, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const fetchPublisherForStats = (id, token) => async dispatch => {
+	dispatch(setListLoader());
+	try {
+		const response = await fetch(`${API_URL}/publishers/${id}`, {
+			method: 'GET',
+			headers: token ? {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			} :
+				{'Content-Type': 'application/json'}
+		});
+		const result = await response.json();
+		return result;
 	} catch (err) {
 		dispatch(fail(ERROR, err));
 	}

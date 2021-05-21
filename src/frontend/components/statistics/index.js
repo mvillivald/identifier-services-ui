@@ -59,9 +59,12 @@ export default connect(mapStateToProps, actions)(props => {
 		fetchIsbnIsmnMonthlyStatistics,
 		fetchIssnStatistics,
 		fetchAllPublishers,
+		fetchIsbnIsmnList,
+		fetchPublisherForStats,
 		rangeStatistics,
 		issnStatistics,
 		allPublishers,
+		publication,
 		exportXLS
 	} = props;
 	/* global COOKIE_NAME */
@@ -118,11 +121,12 @@ export default connect(mapStateToProps, actions)(props => {
 			}
 
 			if (selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers') {
-				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'T'}]}});
+				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'P'}, {publisherType: 'T'}]}, token: cookie[COOKIE_NAME]});
 			}
 
 			if (selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
-				fetchAllPublishers({identifierType, type: {$or: [{publisherType: 'A'}, {selfPublisher: true}]}});
+				fetchAllPublishers({type: {$or: [{publisherType: 'A'}]}, token: cookie[COOKIE_NAME]});
+				fetchIsbnIsmnList({searchText: '', token: cookie[COOKIE_NAME], sort: {'lastupdated.timestamp': -1}});
 			}
 		}
 	}, [startDate, endDate, identifierType, selectedIsbnIsmnType]);
@@ -179,12 +183,11 @@ export default connect(mapStateToProps, actions)(props => {
 			}
 
 			if (selectedIsbnIsmnType === 'allIsbnPublishers' || selectedIsbnIsmnType === 'allIsmnPublishers' ||
-			selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers' ||
-			selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
+			selectedIsbnIsmnType === 'internationalRegistryIsbnPublishers' || selectedIsbnIsmnType === 'internationalRegistryIsmnPublishers') {
 				const newJsonSheet = allPublishers.map(publisher => ({
 					Registrant_Status_Code: publisher.activity ? (publisher.activity.active === true ? 'A' : 'I') : '', // Need to fix should be according to publication not publisher
 					Registrant_Prefix_Type: publisher.publisherType ? publisher.publisherType : '',
-					Registrant_Prefix_Or_ISBN: publisher.publisherIdentifier ? publisher.publisherIdentifier[0] : '',
+					Registrant_Prefix_Or_ISBN: publisher.publisherIdentifier ? publisher.publisherIdentifier.join(', ') : '',
 					Registrant_Name: publisher.name ? publisher.name : '',
 					ISO_Country_Code: 'FI',
 					Address_Line_1: publisher.postalAddress && publisher.postalAddress.address ? publisher.postalAddress.address : '',
@@ -234,6 +237,44 @@ export default connect(mapStateToProps, actions)(props => {
 
 				const ws = XLSX.utils.json_to_sheet(newJsonSheet, {header: headers});
 				exportXLS(wbout, ws);
+			}
+
+			if (selectedIsbnIsmnType === 'selfPublishedIsbn' || selectedIsbnIsmnType === 'selfPublishedIsmn') {
+				const result = publication.reduce((acc, item) => {
+					const publisher = allPublishers.find(publisher => item.publisher === publisher.id);
+					if (publisher) {
+						acc.push({...item, publisher: publisher});
+					}
+
+					return acc;
+				}, []);
+				const newJsonSheet = result.map(item => ({
+					Registrant_Status_Code: 'A',
+					Registrant_Prefix_Type: item.publisher.publisherType ? item.publisher.publisherType : '',
+					Registrant_Prefix_Or_ISBN: item.publisher.publisherIdentifier ? item.publisher.publisherIdentifier.join(', ') : '',
+					Registrant_Name: item.publisher.name ? item.publisher.name : '',
+					ISO_Country_Code: 'FI',
+					Address_Line_1: item.publisher.postalAddress && item.publisher.postalAddress.address ? item.publisher.postalAddress.address : '',
+					Address_Line_2: item.publisher.postalAddress && item.publisher.postalAddress.city ? (item.publisher.postalAddress.zip ? `${item.publisher.postalAddress.zip} ${item.publisher.postalAddress.city}` : '') : '',
+					Address_Line_3: '',
+					Address_Line_4: '',
+					Admin_Contact_Name: item.publisher.contactPerson ? item.publisher.contactPerson : '',
+					Admin_Phone: item.publisher.phone ? item.publisher.phone : '',
+					Admin_Fax: '',
+					Admin_Email: item.publisher.email ? item.publisher.email : '',
+					Alternate_Contact_Type: '',
+					Alternate_Contact_Name: '',
+					Alternate_Phone: '',
+					Alternate_Fax: '',
+					Alternate_Email: '',
+					SAN: '',
+					GLN: '',
+					Website_URL: item.publisher.website ? item.publisher.website : '',
+					Registrant_ID: '',
+					ISNI: ''
+				}));
+
+				console.log(newJsonSheet)
 			}
 		}
 
@@ -424,6 +465,7 @@ function mapStateToProps(state) {
 	return ({
 		listLoading: state.identifierRanges.rangeListLoading,
 		issnStatistics: state.publication.issnStatistics,
+		publication: state.publication.isbnIsmnList,
 		allPublishers: state.publisher.publishersList,
 		rangeStatistics: state.identifierRanges.statistics
 	});
