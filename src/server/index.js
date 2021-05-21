@@ -112,7 +112,8 @@ app.post('/message', (req, res) => {
 			},
 			body: JSON.stringify({
 				subject: body.subject,
-				email: body.sendTo ? body.sendTo : body.email,
+				email: body.sendTo,
+				cc: body.cc,
 				body: body.description ? body.description : body.body
 			})
 		});

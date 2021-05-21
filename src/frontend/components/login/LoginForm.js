@@ -59,12 +59,8 @@ export default connect(null, actions)(reduxForm({
 			setLoginError('Incorrect username or Password');
 		} else if (response) {
 			switch (response.role) {
-				case 'publisher-admin':
-					history.push(`/publishers/${response.publisher}`);
-					handleClose();
-					break;
 				case 'publisher':
-					history.push(`/publishers/${response.publisher}`);
+					history.push(`/publishers/profile/${response.publisher}`);
 					handleClose();
 					break;
 				default:

@@ -95,7 +95,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/publishers/:id', component: Publisher},
 		{path: '/publishers/proceedings/:id', component: Proceedings},
 		{path: '/users/passwordReset/:token', component: NewUserPasswordResetForm},
-		{path: '/publishers/profile/:id', component: PublisherProfile}
+		{path: '/publishers/profile/:id', component: Publisher}
 	];
 
 	const routeForms = [

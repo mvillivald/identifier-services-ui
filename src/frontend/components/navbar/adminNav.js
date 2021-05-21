@@ -138,7 +138,7 @@ export default function ({userInfo, isAuthenticated}) {
 			(
 				<>
 					<div className={classes.publicMenu}>
-						<Link exact to={`/publishers/${userInfo.publisher}`} activeClassName={classes.active}>
+						<Link exact to={`/publishers/profile/${userInfo.publisher}`} activeClassName={classes.active}>
 							<div className={classes.menuIcon}>
 								<AccountBoxIcon fontSize="default" color="primary"/>
 								<FormattedMessage id="app.menu.profile"/>

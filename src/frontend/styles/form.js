@@ -33,6 +33,10 @@ const useStyles = makeStyles(theme => ({
 		margin: '40px auto',
 		width: 1200
 	},
+	pickListContainer: {
+		margin: '40px',
+		width: 1200
+	},
 	previewContainer: {
 		width: '100%',
 		margin: '40px 0px 40px 0px',

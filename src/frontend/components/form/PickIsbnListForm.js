@@ -134,7 +134,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}
 
 	const component = (
-		<form className={classes.container} onSubmit={handleSubmit(handleCreateRange)}>
+		<form className={classes.pickListContainer} onSubmit={handleSubmit(handleCreateRange)}>
 			<Grid container direction="column">
 				{formFields.map(item => render(item))}
 				<Grid item xs={12} md={12} className={classes.btnContainer}>

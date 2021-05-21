@@ -987,7 +987,8 @@
     "isbnismn.search.filter.filterByIdentifier": "Search by identifier",
     "publisher.search.filter.selfPublishers": "Self publishers",
     "button.label.messages": "messages sent",
-    "message.label.date": "Date"
+    "message.label.date": "Date",
+    "app.modal.title.pickIsbnList":  "Create unbound Isbn"
 
 
 }
