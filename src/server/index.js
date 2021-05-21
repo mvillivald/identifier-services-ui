@@ -94,40 +94,13 @@ app.post('/message', (req, res) => {
 			port: parseUrl.port,
 			secure: false
 		});
-		transporter.sendMail({
+		await transporter.sendMail({
 			from: ADMINISTRATORS_EMAIL,
 			to: body.sendTo ? body.sendTo : body.email,
 			cc: body.cc ? body.cc : [],
 			replyTo: ADMINISTRATORS_EMAIL,
 			subject: body.subject,
 			html: emailcontent
-		}, (err, info) => {
-			const allEmails = [...body.sendTo, ...body.cc];
-			allEmails.forEach(async email => {
-				if (info && info.accepted) {
-					const response = await fetch(`${API_URL}/messages/`, {
-						method: 'POST',
-						headers: {
-							'Cross-Origin-Opener-Policy': 'same-origin',
-							'Cross-Origin-Embedder-Policy': 'require-corp',
-							Authorization: token,
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							subject: body.subject,
-							email: email,
-							body: body.description ? body.description : body.body
-						})
-					});
-					if (response) {
-						res.send('Message Sent');
-					}
-				}
-			});
-
-			if (err) {
-				res.send('Error sending message');
-			}
 		});
 		const response = await fetch(`${API_URL}/messages/`, {
 			method: 'POST',
@@ -139,7 +112,7 @@ app.post('/message', (req, res) => {
 			},
 			body: JSON.stringify({
 				subject: body.subject,
-				email: body.sendTo,
+				email: body.sendTo ? body.sendTo : body.email,
 				cc: body.cc,
 				body: body.description ? body.description : body.body
 			})
