@@ -135,9 +135,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const {_id, ...updateValues} = values;
 		const token = cookie[COOKIE_NAME];
 		const {alias, ...updatePublisherValues} = values.publisher;
-		updatePublisher(_id, updatePublisherValues, token, lang);
-
-		updatePublicationIssn(issn.publisher, {...updateValues, publisher: issn.publisher}, token, lang);
+		const publisherId = updatePublisherValues._id;
+		delete updatePublisherValues._id;
+		updatePublisher(publisherId, updatePublisherValues, token, lang);
+		updatePublicationIssn(_id, {...updateValues, publisher: issn.publisher}, token, lang);
 		setIsEdit(false);
 		history.push('/publications/issn');
 	};
