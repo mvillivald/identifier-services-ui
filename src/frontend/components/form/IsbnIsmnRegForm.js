@@ -1198,7 +1198,7 @@ export function getFieldArray(intl) {
 							width: 'half',
 							options: [
 								{label: '', value: ''},
-								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.author'}), value: 'tekija'},
+								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.author'}), value: 'tekijä'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.illustrator'}), value: 'kuvittaja'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.translator'}), value: 'kääntäjä'},
 								{label: intl.formatMessage({id: 'publicationRegistration.form.authors.role.editor'}), value: 'toimittaja'},
