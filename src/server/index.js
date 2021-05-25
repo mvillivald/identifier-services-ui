@@ -294,12 +294,8 @@ async function systemAuth() {
 }
 
 app.get('/notification', (req, res) => {
-	try {
-		const data = fs.readFileSync(`${NOTIFICATION_URL}`, 'utf8');
-		res.json(data);
-	} catch (err) {
-		res.json(err);
-	}
+	const data = fs.readFileSync(`${NOTIFICATION_URL}`, 'utf8');
+	res.json(data);
 });
 
 app.get('/logOut', (req, res) => {
