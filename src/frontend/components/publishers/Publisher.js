@@ -224,7 +224,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 	}
 
 	function handleRequestIsbn() {
-		history.push('/isbnIsmnRegistrationForm');
+		history.push({pathname: '/isbnIsmnRegistrationForm', state: {prevPath: `/publishers/${id}`}});
 	}
 
 	const headRowsPublisherIdentifier = [

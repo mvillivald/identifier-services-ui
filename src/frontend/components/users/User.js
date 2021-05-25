@@ -75,7 +75,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 	useEffect(() => {
 		if (confirmation) {
-			const {firstname, lastname, ...deletePayload} = {
+			const {_id, firstname, lastname, ...deletePayload} = {
 				...user,
 				givenName: user.firstname,
 				familyName: user.lastname,
@@ -177,7 +177,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 									Object.keys(user).map(key => {
 										return (typeof user[key] === 'string' || typeof user[key] === 'boolean') ?
 											(
-												<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={user[key]}/>
+												<ListComponent label={intl.formatMessage({id: `user.label.${key}`})} value={user[key].toString()}/>
 											) :
 											null;
 									})

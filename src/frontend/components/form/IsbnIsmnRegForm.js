@@ -69,8 +69,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setMessage,
 			handleSubmit,
 			history,
+			location,
 			lang
 		} = props;
+		const {prevPath} = location.state;
 		const intl = useIntl();
 		const fieldArray = getFieldArray(intl);
 		const dissFieldArray = getDissertationFieldArray(intl);
@@ -243,6 +245,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (isAuthenticated) {
 				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'isbn-ismn', lang: lang});
 				if (result === HttpStatus.CREATED) {
+					if (prevPath) {
+						history.push(prevPath);
+					}
+
 					history.push('/');
 				}
 			} else if (captchaInput.length === 0) {

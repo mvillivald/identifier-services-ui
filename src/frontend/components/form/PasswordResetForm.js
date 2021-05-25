@@ -60,7 +60,7 @@ export default connect(null, actions)(props => {
 			<form onSubmit={handleEmailSubmit}>
 				<TextField
 					variant="outlined"
-					placeholder={intl.formatmessage({id: 'passwordResetForm.placeholder.resetInput'})}
+					placeholder={intl.formatMessage({id: 'passwordResetForm.placeholder.resetInput'})}
 					className={classes.resetInput}
 					value={email}
 					onChange={handleEmailChange}/>
