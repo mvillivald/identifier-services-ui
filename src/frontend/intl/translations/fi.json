@@ -997,7 +997,8 @@
     "publisher.identifier.publicationtype": "Publication type",
     "issnRequest.listComponent.timeDetails": "Time details",
     "rangesList.breadCrumbs.label.ismnBatch": "Ismn Batch",
-    "publisher.identifier.headRows.publicationType": "Publication type"
+    "publisher.identifier.headRows.publicationType": "Publication type",
+    "user.label.active": "Active"
 
 
 
