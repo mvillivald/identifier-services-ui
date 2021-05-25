@@ -72,7 +72,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			location,
 			lang
 		} = props;
-		const {prevPath} = location.state;
+		const {prevPath} = location.state !== undefined && location.state;
 		const intl = useIntl();
 		const fieldArray = getFieldArray(intl);
 		const dissFieldArray = getDissertationFieldArray(intl);
