@@ -39,7 +39,7 @@ import * as actions from '../../store/actions/userActions';
 import renderMultiSelect from './render/renderMultiSelect';
 
 export default connect(mapStateToProps, actions)(reduxForm({
-	form: 'pickIsbnListForm',
+	form: 'createUnboundIsbnListForm',
 	validate
 })(props => {
 	const {
@@ -50,7 +50,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		publisherOptions,
 		handleSubmit,
 		handleClose,
-		pickRangeList,
+		createUnboundIsbnList,
 		pristine,
 		valid,
 		lang
@@ -62,19 +62,19 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		{
 			name: 'identifierType',
 			type: 'text',
-			label: <FormattedMessage id="identifierType"/>,
+			label: <FormattedMessage id="createUnboundListForm.identifierType"/>,
 			width: 'half'
 		},
 		{
 			name: 'identifierCount',
 			type: 'number',
-			label: <FormattedMessage id="How many?"/>,
+			label: <FormattedMessage id="createUnboundListForm.identifierCount"/>,
 			width: 'half'
 		},
 		{
 			name: 'publisherId',
 			type: 'select',
-			label: <FormattedMessage id="publisherId"/>,
+			label: <FormattedMessage id="createUnboundListForm.publisher"/>,
 			options: publisherOptions
 		}
 	];
@@ -89,13 +89,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		}
 
 		async function run() {
-			console.log('isbnBatch', subRangeId);
 			await fetchIDR(subRangeId, cookie[COOKIE_NAME]);
 		}
 	}, [cookie, fetchIDR, rangeType, subRangeId]);
 
 	async function handleCreateRange(values) {
-		await pickRangeList({...values, subRangeId}, cookie[COOKIE_NAME], lang);
+		await createUnboundIsbnList({...values, subRangeId}, cookie[COOKIE_NAME], lang);
 		handleClose();
 	}
 
@@ -155,8 +154,7 @@ function mapStateToProps(state) {
 	});
 }
 
-function formatInitialValues(range) {
-	console.log(range);
+function formatInitialValues() {
 	return {
 		identifierType: 'ISBN',
 		publicationIdentifierRangeId: 'rangeId'

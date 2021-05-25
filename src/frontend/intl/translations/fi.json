@@ -166,7 +166,7 @@
 
     "rangesList.breadCrumbs.label.ranges": "Lohkot",
     "rangesList.breadCrumbs.label.subrange": "Alalohkot",
-    "rangesList.breadCrumbs.label.isbnIsmnBatch": "IsbnIsmn Batch",
+    "rangesList.breadCrumbs.label.isbnBatch": "Isbn Batch",
     "ranges.prefix": "Etuliite*",
     "ranges.rangeStart": "Lohkon alku*",
     "ranges.rangeEnd": "Lohkon loppu*",
@@ -988,7 +988,18 @@
     "publisher.search.filter.selfPublishers": "Self publishers",
     "button.label.messages": "messages sent",
     "message.label.date": "Date",
-    "app.modal.title.pickIsbnList":  "Create unbound Isbn"
+    "app.modal.title.createUnboundIsbnList":  "Create unbound Isbn",
+    "createUnboundListForm.identifierCount": "Identifier count, should not exceed free isbn value",
+    "createUnboundListForm.identifierType": "Identifier type",
+    "createUnboundListForm.publisher": "Publisher",
+    "createUnboundIsbnList.error.creationFailed": "Creation Unsuccessful",
+    "createUnboundIsbnList.success.created": "RangeList Successfully Created",
+    "publisher.identifier.publicationtype": "Publication type",
+    "issnRequest.listComponent.timeDetails": "Time details",
+    "rangesList.breadCrumbs.label.ismnBatch": "Ismn Batch",
+    "publisher.identifier.headRows.publicationType": "Publication type"
+
+
 
 
 }

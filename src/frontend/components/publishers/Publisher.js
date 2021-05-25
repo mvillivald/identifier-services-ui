@@ -105,6 +105,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 	const [confirmation, setConfirmation] = useState(false);
 	const [selectedToRevoke, setSelectedToRevoke] = useState(null);
 	const [isRevoking, setIsRevoking] = useState(false);
+	const [page, setPage] = React.useState(0);
 
 	const activeCheck = {
 		checked: true
@@ -233,6 +234,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 		{id: 'next', label: <FormattedMessage id="publisher.identifier.headRows.next"/>},
 		{id: 'type', label: <FormattedMessage id="publisher.identifier.headRows.type"/>},
 		{id: 'active', label: <FormattedMessage id="publisher.identifier.headRows.active"/>}
+	];
+
+	const headRowsSelfPublisherIdentifier = [
+		{id: 'empty', label: ''},
+		{id: 'identifier', label: <FormattedMessage id="publisher.identifier.headRows.identifier"/>},
+		{id: 'publicationType', label: <FormattedMessage id="publisher.identifier.headRows.publicationType"/>}
 	];
 
 	function handleDelete(value) {
@@ -442,7 +449,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 								formattedPublisherDetail.publisherIdentifier && subRangeList !== undefined && subRangeList.length > 0 ?
 									<TableComponent
 										rowDeletable
-										data={formattedPublisherDetail.publisherIdentifier.map(item => tableUserData(item))}
+										data={formattedPublisherDetail.publisherIdentifier.map(item => tablePublisherData(item))}
 										headRows={headRowsPublisherIdentifier}
 										handleDelete={handleDelete}
 									/> :
@@ -621,13 +628,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 								<FormattedMessage id="listComponent.publisherIdentifier"/>
 							</Typography>
 							<hr/>
-							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
-								<ListComponent
-									edit={isEdit && isEditable('publisherIdentifier')} fieldName="publisherIdentifier"
-									clearFields={clearFields}
-									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
-								/>
-							</Grid>
+							{formattedPublisherDetail.selfPublisherIdentifier &&
+								<TableComponent
+									pagination
+									page={page}
+									setPage={setPage}
+									data={formattedPublisherDetail.selfPublisherIdentifier.filter(item => item.free).map(item => tableSelfPublisherData(item))}
+									headRows={headRowsSelfPublisherIdentifier}
+									handleDelete={handleDelete}
+								/>}
 						</Grid>
 					</Grid>
 				</>
@@ -669,7 +678,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 		history.push({pathname: `/publishers/sentMessages/${id}`, state: {prevPath: `/publishers/${id}`, email: publisher.email}});
 	}
 
-	function tableUserData(item) {
+	function tablePublisherData(item) {
 		if (subRangeList !== undefined) {
 			const result = subRangeList.length > 0 && subRangeList.find(range => item === range.publisherIdentifier);
 			if (result) {
@@ -695,6 +704,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 				id: item
 			};
 		}
+	}
+
+	function tableSelfPublisherData(item) {
+		return {
+			empty: '',
+			identifier: item.identifier,
+			publicationType: item.publicationType
+		};
 	}
 
 	const component = (

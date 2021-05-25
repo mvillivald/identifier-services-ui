@@ -36,6 +36,7 @@ import {createIntl, createIntlCache} from 'react-intl';
 import enMessages from '../../intl/translations/en.json';
 import fiMessages from '../../intl/translations/fi.json';
 import svMessages from '../../intl/translations/sv.json';
+import {ApiError} from '@natlibfi/identifier-services-commons/dist/error';
 
 const translations = {
 	fi: fiMessages,
@@ -288,7 +289,7 @@ export const createIsbnBatch = (values, token, lang) => async dispatch => {
 	}
 };
 
-export const pickRangeList = (values, token, lang) => async dispatch => {
+export const createUnboundIsbnList = (values, token, lang) => async dispatch => {
 	const messsages = translations[lang];
 	const intl = createIntl({
 		locale: lang,
@@ -296,7 +297,7 @@ export const pickRangeList = (values, token, lang) => async dispatch => {
 		messages: messsages
 	}, cache);
 	try {
-		const response = await fetch(`${API_URL}/ranges/isbn/pickRangeList`, {
+		const response = await fetch(`${API_URL}/ranges/isbn/createUnboundIsbnList`, {
 			method: 'POST',
 			headers: {
 				'Cross-Origin-Opener-Policy': 'same-origin',
@@ -307,11 +308,14 @@ export const pickRangeList = (values, token, lang) => async dispatch => {
 			credentials: 'same-origin',
 			body: JSON.stringify(values)
 		});
-		if (response) {
-			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'RangeList Successfully Created'})}));
+		if (response.status === '200') {
+			dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'createUnboundIsbnList.success.created'})}));
 			return response;
 		}
+
+		throw new ApiError(response.status);
 	} catch (err) {
+		dispatch(setMessage({color: 'error', msg: intl.formatMessage({id: 'createUnboundIsbnList.error.creationFailed'})}));
 		dispatch(fail(ERROR, err));
 	}
 };

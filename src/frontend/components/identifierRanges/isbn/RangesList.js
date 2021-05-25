@@ -47,7 +47,7 @@ import TableComponent from '../../TableComponent';
 import {commonStyles} from '../../../styles/app';
 import CreateRange from './CreateRange';
 import Identifier from './Identifier';
-import PickIsbnListForm from '../../form/PickIsbnListForm';
+import CreateUnboundIsbnListForm from '../../form/CreateUnboundIsbnListForm';
 
 export default connect(mapStateToProps, actions)(props => {
 	const {fetchIsbnIDRList, rangesList, userInfo, listLoading, loading, createIsbnRange} = props;
@@ -139,7 +139,7 @@ export default connect(mapStateToProps, actions)(props => {
 				'createdBy'
 			];
 			if (rangeType === 'range') {
-				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'canceled', 'next', 'active', 'isClosed');
+				array.unshift('prefix', 'langGroup', 'category', 'rangeStart', 'rangeEnd', 'free', 'taken', 'next', 'active', 'isClosed');
 				return array;
 			}
 
@@ -185,6 +185,17 @@ export default connect(mapStateToProps, actions)(props => {
 	}
 
 	function listRender(item) {
+		if (rangeType === 'range') {
+			return Object.entries(item)
+				.filter(([key]) => key === 'canceled' === false)
+				.reduce((acc, [
+					key,
+					value
+				]) => (
+					{...acc, [key]: formatDate(key, value)}),
+				{createdBy: item.created.user});
+		}
+
 		if (rangeType === 'subRange') {
 			return Object.entries(item)
 				.filter(([key]) => key === 'isbnRangeId' === false)
@@ -248,17 +259,20 @@ export default connect(mapStateToProps, actions)(props => {
 				}
 				label={intl.formatMessage({id: 'rangesList.label.checkbox.active'})}
 			/>
-			<FormControlLabel
-				control={
-					<Checkbox
-						checked={activeCheck.canceled}
-						value="checked"
-						color="primary"
-						onChange={handleChange('canceled')}
+			{
+				rangeType === 'subRange' &&
+					<FormControlLabel
+						control={
+							<Checkbox
+								checked={activeCheck.canceled}
+								value="checked"
+								color="primary"
+								onChange={handleChange('canceled')}
+							/>
+						}
+						label={intl.formatMessage({id: 'rangesList.label.checkbox.canceled'})}
 					/>
-				}
-				label={intl.formatMessage({id: 'rangesList.label.checkbox.canceled'})}
-			/>
+			}
 			<Grid>
 				{
 					userInfo.role === 'admin' && rangeType === 'range' &&
@@ -296,12 +310,12 @@ export default connect(mapStateToProps, actions)(props => {
 							modal={modal}
 							setModal={setModal}
 							color="primary"
-							title={intl.formatMessage({id: 'app.modal.title.pickIsbnList'})}
-							label={intl.formatMessage({id: 'app.modal.title.pickIsbnList'})}
-							name="pickIsbnList"
+							title={intl.formatMessage({id: 'app.modal.title.createUnboundIsbnList'})}
+							label={intl.formatMessage({id: 'app.modal.title.createUnboundIsbnList'})}
+							name="createUnboundIsbnList"
 							variant="outlined"
 						>
-							<PickIsbnListForm
+							<CreateUnboundIsbnListForm
 								rangeType={rangeType}
 								subRangeId={subRangeId}
 								loading={loading}
