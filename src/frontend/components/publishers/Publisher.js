@@ -442,6 +442,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
+								<FormattedMessage id="listComponent.assignedPublisherPrefix"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent
+									edit={isEdit && isEditable('publisherIdentifier')} fieldName="publisherIdentifier"
+									clearFields={clearFields}
+									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
+								/>
+							</Grid>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
 								<FormattedMessage id="listComponent.publisherIdentifier"/>
 							</Typography>
 							<hr/>
@@ -622,6 +635,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 								label={intl.formatMessage({id: 'listComponent.aliases'})}
 								value={formattedPublisherDetail.aliases ? formattedPublisherDetail.aliases : ''}
 							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant="h6">
+								<FormattedMessage id="listComponent.assignedPublisherPrefix"/>
+							</Typography>
+							<hr/>
+							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
+								<ListComponent
+									edit={isEdit && isEditable('publisherIdentifier')} fieldName="publisherIdentifier"
+									clearFields={clearFields}
+									value={formattedPublisherDetail.publisherIdentifier ? formattedPublisherDetail.publisherIdentifier : []}
+								/>
+							</Grid>
 						</Grid>
 						<Grid item xs={12}>
 							<Typography variant="h6">
