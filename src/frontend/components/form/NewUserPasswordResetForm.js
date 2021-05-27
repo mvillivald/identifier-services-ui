@@ -104,7 +104,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (result === true) {
 				if (confirmPassword === newPassword) {
 					setError(null);
-					const response = await passwordReset({...values, id: decode.userId}, lang);
+					const response = await passwordReset({...values, id: decode.id}, lang);
 					if (response === HttpStatus.OK) {
 						props.history.push('/');
 					}
