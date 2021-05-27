@@ -88,8 +88,7 @@ app.post('/message', (req, res) => {
 		const emailcontent = `
 			${body.description ? body.description : body.body}
 		`;
-
-		let transporter = nodemailer.createTransport({
+		const transporter = nodemailer.createTransport({
 			host: parseUrl.hostname,
 			port: parseUrl.port,
 			secure: false
@@ -113,7 +112,7 @@ app.post('/message', (req, res) => {
 			body: JSON.stringify({
 				subject: body.subject,
 				email: body.sendTo ? body.sendTo : body.email,
-				cc: body.cc,
+				cc: body.cc ? body.cc : [],
 				body: body.description ? body.description : body.body
 			})
 		});

@@ -72,7 +72,7 @@ export default connect(mapStateToProps, actions)(props => {
 	}, [cookie, fetchMessage, id]);
 
 	let messageDetail;
-	if (messageInfo === null) {
+	if (messageInfo === null || messageInfo === undefined) {
 		messageDetail = <Spinner/>;
 	} else {
 		messageDetail = (
@@ -94,7 +94,15 @@ export default connect(mapStateToProps, actions)(props => {
 										<FormattedMessage id="message.label.email"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={10}>{messageInfo.email}</Grid>
+								<Grid item xs={10}>{messageInfo.email.join(', ')}</Grid>
+							</Grid>
+							<Grid container>
+								<Grid item xs={2}>
+									<strong>
+										<FormattedMessage id="message.label.cc"/>:
+									</strong>
+								</Grid>
+								<Grid item xs={10}>{messageInfo.cc.join(', ')}</Grid>
 							</Grid>
 							<Grid container>
 								<Grid item xs={2}>
