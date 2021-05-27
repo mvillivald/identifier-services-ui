@@ -94,7 +94,7 @@ export default connect(mapStateToProps, actions)(props => {
 										<FormattedMessage id="message.label.email"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={10}>{messageInfo.email.join(', ')}</Grid>
+								<Grid item xs={10}>{messageInfo.email && messageInfo.email.join(', ')}</Grid>
 							</Grid>
 							<Grid container>
 								<Grid item xs={2}>
@@ -102,7 +102,7 @@ export default connect(mapStateToProps, actions)(props => {
 										<FormattedMessage id="message.label.cc"/>:
 									</strong>
 								</Grid>
-								<Grid item xs={10}>{messageInfo.cc.join(', ')}</Grid>
+								<Grid item xs={10}>{messageInfo.cc && messageInfo.cc.join(', ')}</Grid>
 							</Grid>
 							<Grid container>
 								<Grid item xs={2}>
