@@ -43,7 +43,7 @@ import * as actions from '../../store/actions';
 import useStyles from '../../styles/form';
 import ResetCaptchaButton from './ResetCaptchaButton';
 import Captcha from '../Captcha';
-import {element, fieldArrayElement, getMultipleSelectInstruction, formatLanguage} from './commons';
+import {element, fieldArrayElement, getMultipleAndCreatableSelectInstruction, formatLanguage} from './commons';
 import ListComponent from '../ListComponent';
 import renderSelectAutoComplete from './render/renderSelectAutoComplete';
 
@@ -90,7 +90,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			width: 'half',
 			label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.label'}),
 			isMulti: true,
-			instructions: getMultipleSelectInstruction(),
+			instructions: getMultipleAndCreatableSelectInstruction(),
 			isCreatable: false,
 			options: [
 				{label: intl.formatMessage({id: 'publicationRegistration.form.basicInformation.classification.nonFiction'}), value: 1},
@@ -376,9 +376,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			}
 
 			function reFormat(value) {
-				return value.reduce((acc, item) => {
-					acc.push(item.value);
-					return acc;
+				return value.reduce((acc, item) => { // eslint-disable-line array-callback-return
+					if (item.label !== '') {
+						acc.push(item.value);
+						return acc;
+					}
 				}, []);
 			}
 		}
@@ -654,6 +656,20 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										''
 									) : ''}
 							/>
+							{
+								formatPublicationValue.formatDetails && formatPublicationValue.formatDetails.otherFileFormat && formatPublicationValue.formatDetails.otherFileFormat.one &&
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.otherFileFormat'})}
+										value={formatPublicationValue.formatDetails.otherFileFormat.one}
+									/>
+							}
+							{
+								formatPublicationValue.formatDetails && formatPublicationValue.formatDetails.otherFileFormat && formatPublicationValue.formatDetails.otherFileFormat.two &&
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.otherFileFormat'})}
+										value={formatPublicationValue.formatDetails.otherFileFormat.two}
+									/>
+							}
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.printFormat'})}
 								value={formatPublicationValue.formatDetails ?
@@ -662,6 +678,20 @@ export default connect(mapStateToProps, actions)(reduxForm({
 										''
 									) : ''}
 							/>
+							{
+								formatPublicationValue.formatDetails && formatPublicationValue.formatDetails.otherPrintFormat && formatPublicationValue.formatDetails.otherPrintFormat.one &&
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.otherPrintFormat'})}
+										value={formatPublicationValue.formatDetails.otherPrintFormat.one}
+									/>
+							}
+							{
+								formatPublicationValue.formatDetails && formatPublicationValue.formatDetails.otherPrintFormat && formatPublicationValue.formatDetails.otherPrintFormat.two &&
+									<ListComponent
+										label={intl.formatMessage({id: 'listComponent.otherPrintFormat'})}
+										value={formatPublicationValue.formatDetails.otherPrintFormat.two}
+									/>
+							}
 							<ListComponent
 								label={intl.formatMessage({id: 'listComponent.manufacturer'})}
 								value={formatPublicationValue.formatDetails ?
@@ -1199,7 +1229,7 @@ export function getFieldArray(intl) {
 							name: 'role',
 							type: 'multiSelect',
 							isMulti: true,
-							instructions: getMultipleSelectInstruction(),
+							instructions: getMultipleAndCreatableSelectInstruction(),
 							label: intl.formatMessage({id: 'publicationRegistration.form.authors.role'}),
 							width: 'half',
 							options: [

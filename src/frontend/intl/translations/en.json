@@ -999,7 +999,11 @@
     "publisher.identifier.headRows.publicationType": "Publication type",
     "user.label.active": "Active",
     "listComponent.assignedPublisherPrefix": "Assigned publisher prefix",
-    "message.label.cc": "cc"
+    "message.label.cc": "cc",
+    "publicationRegistration.form.isbnismn.formatDetails.otherFormat1" : "Other format 1",
+    "publicationRegistration.form.isbnismn.formatDetails.otherFormat2" : "Other format 2",
+    "publicationRegistration.form.issn.otherFormat1": "Other format 1",
+    "publicationRegistration.form.issn.otherFormat2": "Other format 2"
 
 
 

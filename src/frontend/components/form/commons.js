@@ -246,12 +246,12 @@ function getSubFormatDetailsFieldArray(intl) {
 			electronic: [
 				{
 					isMulti: true,
-					isCreatable: true,
+					isCreatable: false,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
 					instructions: getMultipleSelectInstruction(),
-					width: 'full',
+					width: 'half',
 					options: [
 						{label: '', value: ''},
 						{label: 'Pdf', value: 'pdf'},
@@ -259,6 +259,18 @@ function getSubFormatDetailsFieldArray(intl) {
 						{label: 'CD', value: 'cd'},
 						{label: 'MP3', value: 'mp3'}
 					]
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat1'}),
+					name: 'formatDetails[otherFileFormat][one]',
+					type: 'text',
+					width: 'half'
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat2'}),
+					name: 'formatDetails[otherFileFormat][two]',
+					type: 'text',
+					width: 'half'
 				}
 			]
 		},
@@ -266,18 +278,30 @@ function getSubFormatDetailsFieldArray(intl) {
 			printed: [
 				{
 					isMulti: true,
-					isCreatable: true,
+					isCreatable: false,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'multiSelect',
 					instructions: getMultipleSelectInstruction(),
-					width: 'full',
+					width: 'half',
 					options: [
 						{label: '', value: ''},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 					]
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat1'}),
+					name: 'formatDetails[otherPrintFormat][one]',
+					type: 'text',
+					width: 'half'
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat2'}),
+					name: 'formatDetails[otherPrintFormat][two]',
+					type: 'text',
+					width: 'half'
 				},
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.manufacturer'}),
@@ -311,12 +335,12 @@ function getSubFormatDetailsFieldArray(intl) {
 			both: [
 				{
 					isMulti: true,
-					isCreatable: true,
+					isCreatable: false,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.fileformat'}),
 					name: 'formatDetails[fileFormat]',
 					type: 'multiSelect',
 					instructions: getMultipleSelectInstruction(),
-					width: 'full',
+					width: 'half',
 					options: [
 						{label: '', value: ''},
 						{label: 'Pdf', value: 'pdf'},
@@ -326,19 +350,43 @@ function getSubFormatDetailsFieldArray(intl) {
 					]
 				},
 				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat1'}),
+					name: 'formatDetails[otherFileFormat][one]',
+					type: 'text',
+					width: 'half'
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat2'}),
+					name: 'formatDetails[otherFileFormat][two]',
+					type: 'text',
+					width: 'half'
+				},
+				{
 					isMulti: true,
-					isCreatable: true,
+					isCreatable: false,
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printformat'}),
 					name: 'formatDetails[printFormat]',
 					type: 'multiSelect',
 					instructions: getMultipleSelectInstruction(),
-					width: 'full',
+					width: 'half',
 					options: [
 						{label: '', value: ''},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.paperback'}), value: 'paperback'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.hardback'}), value: 'hardback'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.printformat.spiral-binding'}), value: 'spiral-binding'}
 					]
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.otherFormat1'}),
+					name: 'formatDetails[otherPrintFormat][one]',
+					type: 'text',
+					width: 'half'
+				},
+				{
+					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.otherFormat2'}),
+					name: 'formatDetails[otherPrintFormat][two]',
+					type: 'text',
+					width: 'half'
 				},
 				{
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.printed.manufacturer'}),
@@ -390,6 +438,16 @@ export function formatClassificationDefaultValue(arr) {
 }
 
 export function getMultipleSelectInstruction() {
+	return (
+		<>
+			<Typography>
+				<FormattedMessage id="form.multipleSelectInstruction"/>
+			</Typography>
+		</>
+	);
+}
+
+export function getMultipleAndCreatableSelectInstruction() {
 	return (
 		<>
 			<Typography>

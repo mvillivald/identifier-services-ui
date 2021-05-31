@@ -139,7 +139,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setActiveStep(activeStep - 1);
 		}
 
-		async function handlePublicationRegistration(values) {
+		async function handlePublicationRegistration(val) {
+			const values = manageFormatDetails(val);
 			if (isAuthenticated) {
 				const result = await publicationCreation({values: formatPublicationValues(values), token: cookie[COOKIE_NAME], subType: 'issn', lang: lang});
 				if (result === HttpStatus.CREATED) {
@@ -158,12 +159,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 				name: values.name,
 				contactPerson: values.contactPerson,
 				postalAddress: values.postalAddress,
-				publisherEmail: values.email,
+				email: values.email,
 				phone: values.phone,
 				language: values.publisherLanguage,
 				aliases: values.aliases && values.aliases
 			};
-			const {name, postalAddress, publisherEmail, phone, publisherLanguage, issnFormatDetails, formatDetails, ...formattedPublicationValues} = {
+			const {name, postalAddress, publisherEmail, phone, publisherLanguage, issnFormatDetails, otherFormatOne, otherFormatTwo, formatDetails, ...formattedPublicationValues} = {
 				...values,
 				publisher,
 				firstNumber: values.firstNumber,
@@ -180,12 +181,42 @@ export default connect(mapStateToProps, actions)(reduxForm({
 
 			function reFormat(value) {
 				const {issnFormatDetails, formatDetails} = value;
-				return issnFormatDetails.reduce((acc, item) => {
-					const data = item.value === 'online' ? {format: item.value, url: `https://${formatDetails.url}`} : {format: item.value};
+				const newFormatDetails = issnFormatDetails ? issnFormatDetails : [];
+				return newFormatDetails.reduce((acc, item) => {
+					const data = item.value === 'online' ?
+						{format: item.value, url: `https://${formatDetails.url}`} :
+						(item.label === 'otherFormatOne' || item.label === 'otherFormatTwo') ?
+							{format: item.value, formatName: item.label} :
+							{format: item.value};
 					acc.push(data);
 					return acc;
 				}, []);
 			}
+		}
+
+		function manageFormatDetails(value) {
+			const {otherFormatOne, otherFormatTwo, ...rest} = value;
+			return {
+				...rest,
+				issnFormatDetails: (otherFormatOne && otherFormatTwo) ?
+					[
+						...rest.issnFormatDetails,
+						{label: 'otherFormatOne', value: otherFormatOne},
+						{label: 'otherFormatTwo', value: otherFormatTwo}
+
+					] :
+					otherFormatOne ?
+						[
+							...rest.issnFormatDetails,
+							{label: 'otherFormatOne', value: otherFormatOne}
+
+						] :
+						otherFormatTwo &&
+						[
+							...rest.issnFormatDetails,
+							{label: 'otherFormatTwo', value: otherFormatTwo}
+						]
+			};
 		}
 
 		async function submitPublication(values, result) {
@@ -210,7 +241,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		}
 
 		function renderPreview(publicationValues) {
-			const values = formatPublicationValues(publicationValues);
+			const newValue = manageFormatDetails(publicationValues);
+			const values = formatPublicationValues(newValue);
 			const {seriesDetails, ...formatValues} = {
 				...values,
 				mainSeries: values.seriesDetails && values.seriesDetails.mainSeries,
@@ -642,7 +674,7 @@ function getFieldArray(intl) {
 					type: 'multiSelect',
 					width: 'half',
 					isMulti: true,
-					isCreatable: true,
+					isCreatable: false,
 					instructions: getMultipleSelectInstruction(),
 					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails'}),
 					options: [
@@ -650,6 +682,18 @@ function getFieldArray(intl) {
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.online'}), value: 'online'},
 						{label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.cdRom'}), value: 'cd'}
 					]
+				},
+				{
+					name: 'otherFormatOne',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.issn.otherFormat1'}),
+					width: 'half'
+				},
+				{
+					name: 'otherFormatTwo',
+					type: 'text',
+					label: intl.formatMessage({id: 'publicationRegistration.form.issn.otherFormat2'}),
+					width: 'half'
 				},
 				{
 					label: 'URL',
