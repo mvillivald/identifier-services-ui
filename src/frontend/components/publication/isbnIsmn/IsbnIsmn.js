@@ -107,9 +107,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			if (isbnIsmn.identifier && isbnIsmn.identifier.length > 0) {
 				const formatDetailsArray = manageFormatDetails(isbnIsmn.formatDetails);
 				if (formatDetailsArray.length === isbnIsmn.identifier.length) {
-					setDisableAssign(false);
-				} else {
 					setDisableAssign(true);
+				} else {
+					setDisableAssign(false);
 				}
 			} else {
 				setDisableAssign(false);
