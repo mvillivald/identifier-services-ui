@@ -377,13 +377,13 @@ function getSubFormatDetailsFieldArray(intl) {
 					]
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.otherFormat1'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat1'}),
 					name: 'formatDetails[otherPrintFormat][one]',
 					type: 'text',
 					width: 'half'
 				},
 				{
-					label: intl.formatMessage({id: 'publicationRegistration.form.formatDetails.otherFormat2'}),
+					label: intl.formatMessage({id: 'publicationRegistration.form.isbnismn.formatDetails.otherFormat2'}),
 					name: 'formatDetails[otherPrintFormat][two]',
 					type: 'text',
 					width: 'half'

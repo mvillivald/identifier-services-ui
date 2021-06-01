@@ -999,6 +999,8 @@
     "publisher.identifier.headRows.publicationType": "Publication type",
     "user.label.active": "Active",
     "listComponent.assignedPublisherPrefix": "Assigned publisher prefix",
+    "listComponent.otherFileFormat": "Other file format",
+    "listComponent.otherPrintFormat": "Other print format",
     "message.label.cc": "cc",
     "publicationRegistration.form.isbnismn.formatDetails.otherFormat1" : "Other format 1",
     "publicationRegistration.form.isbnismn.formatDetails.otherFormat2" : "Other format 2",

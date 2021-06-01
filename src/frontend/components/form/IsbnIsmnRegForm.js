@@ -380,7 +380,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					if (values.formatDetails.printFormat && values.formatDetails.fileFormat) {
 						return {
 							...formatDetails,
-							format: 'printed and electronic',
+							format: 'printed-and-electronic',
 							printFormat: {format: reFormat(values.formatDetails.printFormat)},
 							fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
 						};
@@ -389,7 +389,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					if (values.formatDetails.fileFormat) {
 						return {
 							...formatDetails,
-							format: 'printed and electronic',
+							format: 'printed-and-electronic',
 							fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
 						};
 					}
@@ -397,14 +397,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 					if (values.formatDetails.printFormat) {
 						return {
 							...formatDetails,
-							format: 'printed and electronic',
+							format: 'printed-and-electronic',
 							printFormat: {format: reFormat(values.formatDetails.printFormat)}
 						};
 					}
 
 					return {
 						...formatDetails,
-						format: 'printed and electronic'
+						format: 'printed-and-electronic'
 					};
 				}
 
