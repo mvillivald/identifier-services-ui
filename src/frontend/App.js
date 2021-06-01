@@ -76,6 +76,7 @@ import SnackBar from './components/SnackBar';
 import {commonStyles} from './styles/app';
 import * as actions from './store/actions';
 import Template from './components/messages/Template';
+import TemplateCreationForm from './components/form/TemplateCreationForm';
 
 export default connect(mapStateToProps, actions)(withRouter(props => {
 	const {lang, userInfo, isAuthenticated, history, responseMessage} = props;
@@ -112,6 +113,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/publications/issn/:id', role: ['admin', 'publisher', 'system'], component: Issn},
 		{path: '/templates', role: ['admin'], component: TemplatesList},
 		{path: '/template/:id', role: ['admin'], component: Template},
+		{path: '/templates/newTemplate', role: ['admin'], component: TemplateCreationForm},
 		{path: '/messages', role: ['admin'], component: MessagesList},
 		{path: '/messages/:id', role: ['admin'], component: Message},
 		{path: '/requests/publishers', role: ['publisher', 'admin'], component: PublishersRequestsList},

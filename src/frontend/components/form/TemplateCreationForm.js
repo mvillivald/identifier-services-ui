@@ -93,13 +93,13 @@ export default connect(mapStateToProps, actions)(reduxForm({
 })(
 	props => {
 		const {
-			handleClose,
 			handleSubmit,
 			createMessageTemplate,
 			clearFields,
 			pristine,
 			valid,
-			lang
+			lang,
+			history
 		} = props;
 		const classes = useStyles();
 		/* global COOKIE_NAME */
@@ -116,7 +116,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			};
 			delete newValues.templateName;
 			createMessageTemplate(newValues, cookie[COOKIE_NAME], lang);
-			handleClose();
+			history.push('/templates');
 		};
 
 		const component = (

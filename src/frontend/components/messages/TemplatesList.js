@@ -29,21 +29,17 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {useCookies} from 'react-cookie';
-import {Grid, Typography} from '@material-ui/core';
+import {Grid, Button, Typography} from '@material-ui/core';
 import {useIntl, FormattedMessage} from 'react-intl';
 
 import {commonStyles} from '../../styles/app';
-import useModalStyles from '../../styles/formList';
-import ModalLayout from '../ModalLayout';
 import TableComponent from '../TableComponent';
 import * as actions from '../../store/actions';
 import Spinner from '../Spinner';
-import TemplateCreationForm from '../form/TemplateCreationForm';
 
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
 	const intl = useIntl();
-	const modalClasses = useModalStyles();
 	const {loading, fetchTemplatesList, messagesList, totalMessages, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
@@ -58,6 +54,10 @@ export default connect(mapStateToProps, actions)(props => {
 		setRowSelectedId(id);
 		history.push(`/template/${id}`);
 	};
+
+	function handleOnClick() {
+		history.push('/templates/newTemplate');
+	}
 
 	const headRows = [
 		{id: 'name', label: intl.formatMessage({id: 'messageTemplate.label.name'})},
@@ -101,17 +101,9 @@ export default connect(mapStateToProps, actions)(props => {
 			<Typography variant="h5">
 				<FormattedMessage id="messageTemplateList.list.heading"/>
 			</Typography>
-			<ModalLayout
-				form
-				label={intl.formatMessage({id: 'app.modal.title.newTemplate'})}
-				title={intl.formatMessage({id: 'app.modal.title.newTemplate'})}
-				name="template"
-				variant="outlined"
-				classed={modalClasses.button}
-				color="primary"
-			>
-				<TemplateCreationForm {...props}/>
-			</ModalLayout>
+			<Button variant="outlined" color="primary" onClick={handleOnClick}>
+				<FormattedMessage id="app.modal.title.newTemplate"/>
+			</Button>
 			{messageData}
 		</Grid>
 	);
