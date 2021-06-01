@@ -343,36 +343,72 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			return formattedPublicationValue;
 
 			function formatDetail() {
+				const formatDetails = {
+					...values.formatDetails,
+					run: values.formatDetails.run && Number(values.formatDetails.run)
+				};
 				if (values.selectFormat === 'electronic') {
-					const formatDetails = {
-						...values.formatDetails,
-						run: values.formatDetails.run && Number(values.formatDetails.run),
-						format: 'electronic',
-						fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
+					if (values.formatDetails.fileFormat) {
+						return {
+							...formatDetails,
+							format: 'electronic',
+							fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
+						};
+					}
+
+					return {
+						...formatDetails,
+						format: 'electronic'
 					};
-					return formatDetails;
 				}
 
 				if (values.selectFormat === 'printed') {
-					const formatDetails = {
-						...values.formatDetails,
-						run: values.formatDetails.run && Number(values.formatDetails.run),
-						printFormat: {format: reFormat(values.formatDetails.printFormat)},
+					if (values.formatDetails.printFormat) {
+						return {
+							format: 'printed',
+							printFormat: {format: reFormat(values.formatDetails.printFormat)}
+						};
+					}
+
+					return {
+						...formatDetails,
 						format: 'printed'
 					};
-					return formatDetails;
 				}
 
 				if (values.selectFormat === 'both') {
-					const formatDetails = {
-						...values.formatDetails,
-						run: values.formatDetails.run && Number(values.formatDetails.run),
-						format: 'printed-and-electronic',
-						fileFormat: {format: reFormat(values.formatDetails.fileFormat)},
-						printFormat: {format: reFormat(values.formatDetails.printFormat)}
+					if (values.formatDetails.printFormat && values.formatDetails.fileFormat) {
+						return {
+							...formatDetails,
+							format: 'printed and electronic',
+							printFormat: {format: reFormat(values.formatDetails.printFormat)},
+							fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
+						};
+					}
+
+					if (values.formatDetails.fileFormat) {
+						return {
+							...formatDetails,
+							format: 'printed and electronic',
+							fileFormat: {format: reFormat(values.formatDetails.fileFormat)}
+						};
+					}
+
+					if (values.formatDetails.printFormat) {
+						return {
+							...formatDetails,
+							format: 'printed and electronic',
+							printFormat: {format: reFormat(values.formatDetails.printFormat)}
+						};
+					}
+
+					return {
+						...formatDetails,
+						format: 'printed and electronic'
 					};
-					return formatDetails;
 				}
+
+				return formatDetails;
 			}
 
 			function reFormat(value) {
