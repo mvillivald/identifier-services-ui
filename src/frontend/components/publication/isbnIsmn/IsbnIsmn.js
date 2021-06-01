@@ -106,6 +106,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		if (Object.keys(isbnIsmn).length > 0) {
 			if (isbnIsmn.identifier && isbnIsmn.identifier.length > 0) {
 				const formatDetailsArray = manageFormatDetails(isbnIsmn.formatDetails);
+				console.log(formatDetailsArray);
 				if (formatDetailsArray.length === isbnIsmn.identifier.length) {
 					setDisableAssign(false);
 				}
@@ -133,21 +134,33 @@ export default connect(mapStateToProps, actions)(reduxForm({
 	}, [cookie, createIsbnBatch, createIsmnBatch, fetchIsbnIsmn, id, isbnIsmn, publisherId, subRangeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function manageFormatDetails(formatDetails) {
-		const {fileFormat, printFormat} = formatDetails;
-		const fileFormatArr = fileFormat && fileFormat.format;
-		const printFormatArr = printFormat && printFormat.format;
-		if (fileFormat && printFormat) {
+		const {fileFormat, printFormat, otherPrintFormat, otherFileFormat} = formatDetails;
+		const fileFormatArr = fileFormat && otherFileFormat ?
+			[...fileFormat.format, ...Object.values(otherFileFormat)] :
+			otherFileFormat ?
+				Object.values(otherFileFormat) :
+				fileFormat ?
+					fileFormat.format :
+					[];
+		const printFormatArr = printFormat && otherPrintFormat ?
+			[...printFormat.format, Object.values(otherPrintFormat)] :
+			otherPrintFormat ?
+				Object.values(otherPrintFormat) :
+				printFormat ?
+					printFormat.format :
+					[];
+		if ((fileFormat || otherFileFormat) && (printFormat || otherPrintFormat)) {
 			return [
 				...fileFormatArr,
 				...printFormatArr
 			];
 		}
 
-		if (fileFormat) {
+		if (fileFormat || otherFileFormat) {
 			return [...fileFormatArr];
 		}
 
-		if (printFormat) {
+		if (printFormat || otherPrintFormat) {
 			return [...printFormatArr];
 		}
 	}
