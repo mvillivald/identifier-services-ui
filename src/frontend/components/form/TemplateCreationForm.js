@@ -119,6 +119,10 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			history.push('/templates');
 		};
 
+		function handleCancel() {
+			history.push('/templates');
+		}
+
 		const component = (
 			<form className={classes.container} onSubmit={handleSubmit(handleCreateTemplate)}>
 				<div className={classes.subContainer}>
@@ -130,6 +134,9 @@ export default connect(mapStateToProps, actions)(reduxForm({
 						))}
 					</Grid>
 					<div className={classes.btnContainer}>
+						<Button type="button" variant="contained" color="primary" onClick={handleCancel}>
+							<FormattedMessage id="form.button.label.cancel"/>
+						</Button>
 						<Button type="submit" disabled={pristine || !valid} variant="contained" color="primary">
 							<FormattedMessage id="form.button.label.submit"/>
 						</Button>
