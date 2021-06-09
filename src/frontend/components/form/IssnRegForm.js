@@ -211,11 +211,11 @@ export default connect(mapStateToProps, actions)(reduxForm({
 							{label: 'otherFormatOne', value: otherFormatOne}
 
 						] :
-						otherFormatTwo &&
-						[
-							...rest.issnFormatDetails,
-							{label: 'otherFormatTwo', value: otherFormatTwo}
-						]
+						otherFormatTwo ?
+							[
+								...rest.issnFormatDetails,
+								{label: 'otherFormatTwo', value: otherFormatTwo}
+							] : rest.issnFormatDetails
 			};
 		}
 
