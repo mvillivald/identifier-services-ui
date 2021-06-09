@@ -46,7 +46,7 @@ export default connect(mapStateToProps, actions)(props => {
 		identifier: false
 	});
 	useEffect(() => {
-		fetchIsbnIsmnList({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
+		fetchIsbnIsmnList({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'created.timestamp': -1}});
 		setIsCreating(false);
 	}, [fetchIsbnIsmnList, cookie, isCreating, inputVal, activeCheck]);
 

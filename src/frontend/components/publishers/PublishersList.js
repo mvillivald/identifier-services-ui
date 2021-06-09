@@ -55,7 +55,7 @@ export default connect(mapStateToProps, actions)(props => {
 	const [selectedCategory, setSelectedCategory] = useState('0');
 
 	useEffect(() => {
-		searchPublisher({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'lastUpdated.timestamp': -1}});
+		searchPublisher({searchText: inputVal, token: cookie[COOKIE_NAME], activeCheck: activeCheck, sort: {'created.timestamp': -1}});
 	}, [activeCheck, inputVal, searchPublisher, cookie]);
 
 	const handleChange = name => event => {
