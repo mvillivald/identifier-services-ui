@@ -103,7 +103,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			...issnRequest,
 			state: 'rejected',
 			created: {
-				user: userInfo.name.givenName
+				user: userInfo.name.givenName,
+				timestamp: issnRequest.created.timestamp
 			},
 			rejectionReason: rejectReason
 		};
@@ -131,7 +132,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const newIssnRequest = {
 			...issnRequest,
 			created: {
-				user: userInfo.name.givenName
+				user: userInfo.name.givenName,
+				timestamp: issnRequest.created.timestamp
 			},
 			state: 'accepted'
 		};

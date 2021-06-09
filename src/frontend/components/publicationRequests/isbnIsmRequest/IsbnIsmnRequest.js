@@ -104,7 +104,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			...publicationIsbnIsmnRequest,
 			state: 'rejected',
 			created: {
-				user: userInfo.name.givenName
+				user: userInfo.name.givenName,
+				timestamp: publicationIsbnIsmnRequest.created.timestamp
 			},
 			rejectionReason: rejectReason
 		};
@@ -146,7 +147,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const newPublicationIsbnIsmnRequest = {
 			...publicationIsbnIsmnRequest,
 			created: {
-				user: userInfo.name.givenName
+				user: userInfo.name.givenName,
+				timestamp: publicationIsbnIsmnRequest.created.timestamp
 			},
 			state: 'accepted'
 		};

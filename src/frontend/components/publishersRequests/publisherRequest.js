@@ -94,7 +94,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			...publisherRequest,
 			state: 'rejected',
 			created: {
-				user: userInfo.name.givenName
+				user: userInfo.name.givenName,
+				timestamp: publisherRequest.created.timestamp
 			},
 			rejectionReason: rejectReason
 		};
@@ -119,7 +120,8 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		const newPublisherRequest = {
 			...publisherRequest,
 			created: {
-				user: userInfo.name.givenName
+				user: userInfo.name.givenName,
+				timestamp: publisherRequest.created.timestamp
 			},
 			state: 'accepted'
 		};

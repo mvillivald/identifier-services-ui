@@ -524,12 +524,12 @@ export default connect(mapStateToProps, actions)(reduxForm({
 													'')}
 										/>
 										<ListComponent
-											label={intl.formatMessage({id: 'listComponent.phone'})}
-											value={formatPublicationValue.publisher && formatPublicationValue.publisher.phone ? formatPublicationValue.publisher.phone : ''}
-										/>
-										<ListComponent
 											label={intl.formatMessage({id: 'listComponent.contactPerson'})}
 											value={formatPublicationValue.publisher && formatPublicationValue.publisher.contactPerson ? formatPublicationValue.publisher.contactPerson : ''}
+										/>
+										<ListComponent
+											label={intl.formatMessage({id: 'listComponent.phone'})}
+											value={formatPublicationValue.publisher && formatPublicationValue.publisher.phone ? formatPublicationValue.publisher.phone : ''}
 										/>
 										<ListComponent
 											label={intl.formatMessage({id: 'listComponent.email'})}
