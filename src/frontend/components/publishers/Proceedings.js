@@ -65,8 +65,8 @@ export default connect(mapStateToProps, actions)(props => {
 
 	useEffect(() => {
 		if (publisher) {
-			const {publisherIdentifier} = publisher;
-			fetchProceedingsList({searchText: publisherIdentifier, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
+			const {publisherIdentifier, _id} = publisher;
+			fetchProceedingsList({searchText: publisherIdentifier === undefined ? _id : publisherIdentifier, token: cookie[COOKIE_NAME], sort: {'lastUpdated.timestamp': -1}});
 		}
 	}, [cookie, fetchProceedingsList, publisher]);
 

@@ -40,7 +40,7 @@ import Spinner from '../Spinner';
 
 export default connect(mapStateToProps, actions)(props => {
 	const classes = commonStyles();
-	const {loading, searchedPublishers, location, searchPublisher, totalDoc, history} = props;
+	const {loading, userInfo, searchedPublishers, location, searchPublisher, totalDoc, history} = props;
 	/* global COOKIE_NAME */
 	const [cookie] = useCookies(COOKIE_NAME);
 	const intl = useIntl();
@@ -172,17 +172,20 @@ export default connect(mapStateToProps, actions)(props => {
 					}
 					label={<FormattedMessage id="publisher.search.filter.filterByIdentifier"/>}
 				/>
-				<FormControlLabel
-					control={
-						<Checkbox
-							checked={activeCheck.selfPublishers}
-							value="checked"
-							color="primary"
-							onChange={handleChange('selfPublishers')}
+				{
+					userInfo.role === 'admin' &&
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={activeCheck.selfPublishers}
+									value="checked"
+									color="primary"
+									onChange={handleChange('selfPublishers')}
+								/>
+							}
+							label={<FormattedMessage id="publisher.search.filter.selfPublishers"/>}
 						/>
-					}
-					label={<FormattedMessage id="publisher.search.filter.selfPublishers"/>}
-				/>
+				}
 				<Grid item>
 					<Select
 						labelId="select-type-label"

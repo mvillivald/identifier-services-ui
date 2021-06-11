@@ -61,10 +61,10 @@ const cache = createIntlCache();
 export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setListLoader());
 	const query = activeCheck === undefined ?
-		{$or: [{title: searchText}, {'identifier.id': searchText}]} :
+		{$or: [{title: {$regex: searchText, $options: 'i'}}, {'identifier.id': {$regex: searchText, $options: 'i'}}]} :
 		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText, $options: 'i'}}}} :
-			activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
-				{$or: [{title: searchText}, {'identifier.id': searchText}]};
+			activeCheck.checked === true ? {$or: [{title: {$regex: searchText, $options: 'i'}}, {'identifier.id': {$regex: searchText, $options: 'i'}}], activity: {active: true}} :
+				{$or: [{title: {$regex: searchText, $options: 'i'}}, {'identifier.id': {$regex: searchText, $options: 'i'}}]};
 	try {
 		const response = await fetch(`${API_URL}/publications/isbn-ismn/query`, {
 			method: 'POST',
@@ -90,7 +90,7 @@ export const fetchIsbnIsmnList = ({searchText, token, activeCheck, sort}) => asy
 
 export const fetchProceedingsList = ({searchText, token, sort}) => async dispatch => {
 	dispatch(setListLoader());
-	const query = {associatedRange: {$elemMatch: {$or: formatSearchQuery(searchText)}}};
+	const query = typeof searchText === 'string' ? {publisher: searchText} : {associatedRange: {$elemMatch: {$or: formatSearchQuery(searchText)}}};
 	try {
 		const responseIsbnIsmn = await fetch(`${API_URL}/publications/isbn-ismn/query/all`, {
 			method: 'POST',
@@ -130,8 +130,8 @@ export const fetchProceedingsList = ({searchText, token, sort}) => async dispatc
 export const fetchIssnList = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	const query = activeCheck !== undefined &&
 		activeCheck.identifier === true ? {identifier: {$elemMatch: {id: {$regex: searchText, $options: 'i'}}}} :
-		activeCheck.checked === true ? {$or: [{title: searchText}, {'identifier.id': searchText}], activity: {active: true}} :
-			{$or: [{title: searchText}, {'identifier.id': searchText}]};
+		activeCheck.checked === true ? {$or: [{title: {$regex: searchText, $options: 'i'}}, {'identifier.id': {$regex: searchText, $options: 'i'}}], activity: {active: true}} :
+			{$or: [{title: {$regex: searchText, $options: 'i'}}, {'identifier.id': {$regex: searchText, $options: 'i'}}]};
 	dispatch(setListLoader());
 	try {
 		const response = await fetch(`${API_URL}/publications/issn/query`, {

@@ -139,7 +139,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 					key={fields.path}
 					exact
 					path={fields.path}
-					render={props => <fields.component {...props}/>}
+					render={props => <fields.component userInfo={userInfo} {...props}/>}
 				/>
 			))}
 			{

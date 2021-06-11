@@ -117,22 +117,25 @@ export const fetchPublisherOption = token => async dispatch => {
 export const searchPublisher = ({searchText, token, activeCheck, sort}) => async dispatch => {
 	dispatch(setSearchListLoader());
 	const publisherType = activeCheck.selfPublishers ? 'A' : {$ne: 'A'};
+	const searchQuery = token ?
+		[{name: {$regex: searchText, $options: 'i'}}, {aliases: {$regex: searchText, $options: 'i'}}, {email: {$regex: searchText, $options: 'i'}}] :
+		[{name: {$regex: searchText, $options: 'i'}}, {aliases: {$regex: searchText, $options: 'i'}}];
 	const query = activeCheck !== undefined &&
 		activeCheck.filterByIdentifier === true ?
 		searchText === '' ?
 			{publisherType} :
-			{publisherIdentifier: searchText, publisherType} :
+			{publisherIdentifier: {$regex: searchText, $options: 'i'}, publisherType} :
 		activeCheck.checked === true ?
 			searchText === '' ?
 				{'activity.active': true, selfPublisher: false, publisherType} :
-				{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], 'activity.active': true, selfPublisher: false, publisherType} :
+				{$or: searchQuery, 'activity.active': true, selfPublisher: false, publisherType} :
 			activeCheck.selfPublishers === true ?
 				searchText === '' ?
 					{'activity.active': true, publisherType} :
-					{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], 'activity.active': true, publisherType} :
+					{$or: searchQuery, 'activity.active': true, publisherType} :
 				searchText === '' ?
 					{selfPublisher: false, publisherType} :
-					{$or: [{name: searchText}, {aliases: searchText}, {email: searchText}], selfPublisher: false, publisherType};
+					{$or: searchQuery, selfPublisher: false, publisherType};
 	try {
 		const properties = {
 			method: 'POST',

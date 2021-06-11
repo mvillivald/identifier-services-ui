@@ -74,13 +74,6 @@ const fieldArray = [
 		type: 'textarea',
 		label: <FormattedMessage id="templateCreation.form.body"/>,
 		width: 'full'
-	},
-	{
-		name: 'notes',
-		type: 'arrayString',
-		label: <FormattedMessage id="templateCreation.form.notes"/>,
-		width: 'full',
-		subName: 'note'
 	}
 ];
 
