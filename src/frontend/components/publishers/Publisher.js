@@ -580,12 +580,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
 									label={intl.formatMessage({id: 'listComponent.phone'})}
 									value={formattedPublisherDetail.phone ? formattedPublisherDetail.phone : ''}
 								/>
-								{userInfo.role === 'publisher' && <ListComponent
-									edit={isEdit && isEditable('email')}
-									fieldName="email"
-									label={intl.formatMessage({id: 'listComponent.email'})}
-									value={formattedPublisherDetail.email ? formattedPublisherDetail.email : ''}
-								/>}
 								<ListComponent
 									edit={isEdit && isEditable('website')}
 									fieldName="website"
