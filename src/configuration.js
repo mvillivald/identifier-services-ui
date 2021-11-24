@@ -4,7 +4,7 @@
  *
  * UI microservice of Identifier Services
  *
- * Copyright (C) 2019 University Of Helsinki (The National Library Of Finland)
+ * Copyright (C) 2021 University Of Helsinki (The National Library Of Finland)
  *
  * This file is part of identifier-services-ui
  *
@@ -25,46 +25,7 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+export const API_URL = process.env.API_URL ? process.env.API_URL : 'http://localhost:8081';
+export const COOKIE_NAME = process.env.COOKIE_NAME ? process.env.COOKIE_NAME : 'foobarcookie';
+export const NODE_ENV = process.env.NODE_ENV === 'production' ? process.env.NODE_ENV : 'development';
