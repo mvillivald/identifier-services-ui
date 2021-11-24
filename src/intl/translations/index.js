@@ -26,40 +26,12 @@
  *
  */
 
-import {AUTHENTICATION, LOADER, LOG_OUT} from '../actions/types';
+import enMessages from './en.json';
+import fiMessages from './fi.json';
+import svMessages from './sv.json';
 
-const initialState = {
-	authenticationToken: '',
-	isAuthenticated: false,
-	userInfo: {},
-	loading: false,
-	error: {}
+export const translations = {
+	fi: fiMessages,
+	en: enMessages,
+	sv: svMessages
 };
-
-export default function (state = initialState, action) {
-	switch (action.type) {
-		case LOADER:
-			return {
-				...state,
-				loading: true
-			};
-		case AUTHENTICATION:
-			return {
-				...state,
-				authenticationToken: action.payload.authenticationToken,
-				isAuthenticated: true,
-				userInfo: action.payload.user,
-				loading: false
-			};
-		case LOG_OUT:
-			return {
-				...state,
-				authenticationToken: '',
-				isAuthenticated: false,
-				loading: false
-			};
-
-		default:
-			return state;
-	}
-}

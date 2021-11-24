@@ -45,16 +45,9 @@ import {
 import moment from 'moment';
 import HttpStatus from 'http-status';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
-import {setPublicationLoader, setListLoader, success, fail, setMessage} from './commonAction';
+import {translations} from '../../intl/translations';
 
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
+import {setPublicationLoader, setListLoader, success, fail, setMessage} from './commonAction';
 
 const cache = createIntlCache();
 

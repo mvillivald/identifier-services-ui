@@ -26,25 +26,30 @@
  *
  */
 
+/* eslint-disable */
 export {
+	/*
 	fetchPublisher,
 	fetchAllPublishers,
 	fetchPublisherOption,
 	updatePublisher,
+	*/
 	searchPublisher,
+	/*
 	publisherCreationRequest,
 	fetchPublishersRequestsList,
 	fetchPublisherRequest,
 	updatePublisherRequest,
+	*/
 	getUniversityPublisher
 } from './publisherAction';
-
 export {
 	normalLogin,
 	getUserInfo,
 	logOut
 } from './auth';
 
+/* Waiting for refactor
 export {
 	sendMessage,
 	createMessageTemplate,
@@ -56,6 +61,7 @@ export {
 	fetchMessageTemplate,
 	updateMessageTemplate
 } from './messageActions';
+*/
 
 export {
 	setLocale
@@ -66,13 +72,24 @@ export {
 	fail,
 	setLoader,
 	setLoadingDone,
-	loadSvgCaptcha,
-	postCaptchaInput,
 	setFormName,
-	setMessage,
-	getNotification,
-	exportXLS
+	setMessage
 } from './commonAction';
+
+export {
+	getNotification
+} from './notificationAction';
+
+export {
+	exportXLS
+} from './exportAction';
+
+export {
+	loadSvgCaptcha,
+	postCaptchaInput
+} from './captchaAction';
+
+/* COMMENTED OUT FOR DURATION OF REFACTOR
 
 export {
 	createUser,
@@ -136,3 +153,5 @@ export {
 	revokePublisherIsbn,
 	revokePublication
 } from './identifierRangesActions';
+
+*/

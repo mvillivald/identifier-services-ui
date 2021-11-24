@@ -31,15 +31,7 @@ import HttpStatus from 'http-status';
 import {ERROR} from './types';
 import {setMessage} from './commonAction';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
-
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
+import {translations} from '../../intl/translations';
 
 const cache = createIntlCache();
 

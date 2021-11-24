@@ -33,16 +33,8 @@ import {setLoader, setLoadingDone, setRangeListLoader, success, fail, setMessage
 import HttpStatus from 'http-status';
 import moment from 'moment';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
+import {translations} from '../../intl/translations';
 import {ApiError} from '@natlibfi/identifier-services-commons/dist/error';
-
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
 
 const cache = createIntlCache();
 

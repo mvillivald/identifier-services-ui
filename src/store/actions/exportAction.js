@@ -26,40 +26,16 @@
  *
  */
 
-import {AUTHENTICATION, LOADER, LOG_OUT} from '../actions/types';
+import XLSX from 'xlsx';
 
-const initialState = {
-	authenticationToken: '',
-	isAuthenticated: false,
-	userInfo: {},
-	loading: false,
-	error: {}
-};
+import {fail} from './commonAction';
+import {ERROR} from './types';
 
-export default function (state = initialState, action) {
-	switch (action.type) {
-		case LOADER:
-			return {
-				...state,
-				loading: true
-			};
-		case AUTHENTICATION:
-			return {
-				...state,
-				authenticationToken: action.payload.authenticationToken,
-				isAuthenticated: true,
-				userInfo: action.payload.user,
-				loading: false
-			};
-		case LOG_OUT:
-			return {
-				...state,
-				authenticationToken: '',
-				isAuthenticated: false,
-				loading: false
-			};
-
-		default:
-			return state;
+export const exportXLS = (wbout, dataToDownload) => dispatch => {
+	try {
+		XLSX.utils.book_append_sheet(wbout, dataToDownload, 'statistics');
+		XLSX.writeFile(wbout, 'statistics.xml', {bookType: 'xlsx', type: 'file'});
+	} catch (err) {
+		dispatch(fail(ERROR, err));
 	}
-}
+};

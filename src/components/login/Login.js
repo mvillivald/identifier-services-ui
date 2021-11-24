@@ -37,7 +37,7 @@ import LoginForm from './LoginForm';
 import HakaLogin from './HakaLogin';
 import useStyles from '../../styles/login';
 import * as actions from '../../store/actions';
-// Import PasswordResetForm from '../form/PasswordResetForm';
+import PasswordResetForm from '../form/PasswordResetForm';
 
 export default connect(mapStateToProps, actions)(props => {
 	const [value, setValue] = React.useState(0);

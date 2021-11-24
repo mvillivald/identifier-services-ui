@@ -68,7 +68,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 		} = props;
 
 		const intl = useIntl();
-		const fieldArray = getFieldArray(intl);
+		const fieldArray = getFormFields(intl);
 		const classes = useStyles();
 		const [activeStep, setActiveStep] = useState(0);
 		const [captchaInput, setCaptchaInput] = useState('');
@@ -577,7 +577,7 @@ function mapStateToProps(state) {
 	});
 }
 
-function getFieldArray(intl) {
+function getFormFields(intl) {
 	const fields = [
 		{
 			publisherBasicInfo: [

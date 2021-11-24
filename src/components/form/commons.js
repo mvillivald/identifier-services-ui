@@ -44,7 +44,6 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 							min={list.min}
 							pattern={list.pattern}
 							type="month"
-							formName={list.formName}
 						/>
 					</Grid>
 				);
@@ -52,6 +51,7 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				return (
 					<>
 						<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
+							{list.title && <Typography>{list.title}</Typography>}
 							<Field
 								className={classes.selectField}
 								component={renderSelect}

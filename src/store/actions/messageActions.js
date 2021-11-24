@@ -41,15 +41,7 @@ import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {setLoader, setListLoader, setMessage, success, fail} from './commonAction';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
-
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
+import {translations} from '../../intl/translations';
 
 const cache = createIntlCache();
 
@@ -60,7 +52,7 @@ export const sendMessage = (values, token, lang) => async dispatch => {
 		defaultLocale: 'fi',
 		messages: messsages
 	}, cache);
-	const response = await fetch('/message', {
+	const response = await fetch(`${API_URL}/message`, {
 		method: 'POST',
 		headers: {
 			'Cross-Origin-Opener-Policy': 'same-origin',

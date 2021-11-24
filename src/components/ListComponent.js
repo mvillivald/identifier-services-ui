@@ -14,7 +14,6 @@ import renderContactDetail from './form/render/renderContactDetail';
 import useFormStyles from '../styles/form';
 import useStyles from '../styles/listComponent';
 import {fieldArray} from '../components/form/publisherRegistrationForm/formFieldVariable';
-import {getFieldArray} from './form/IsbnIsmnRegForm';
 import {classificationCodes, isbnClassificationCodes, publisherCategory} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
@@ -169,7 +168,7 @@ export default function (props) {
 
 				if (fieldName === 'authors') {
 					if (edit) {
-						const fields = getFieldArray(intl);
+						const fields = getFormFields(intl);
 						return (
 							<Grid item xs={12}>
 								<FieldArray

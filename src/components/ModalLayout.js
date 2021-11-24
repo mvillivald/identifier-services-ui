@@ -92,8 +92,6 @@ export default connect(mapStateToProps)(withRouter(props => {
 				</Button>}
 			<Modal
 				disableRestoreFocus
-				eslint-disable-next-line
-				no-alert
 				open={openModal}
 				className={classes.container}
 				aria-labelledby={`modal-${name}`} aria-describedby="modal-description"

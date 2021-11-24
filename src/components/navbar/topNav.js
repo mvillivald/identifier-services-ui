@@ -112,7 +112,8 @@ export default connect(mapStateToProps, actions)(props => {
 									<Link to="/"><img src={Logo} alt="" className={classes.mainLogo}/></Link>}
 							</Typography>
 							<div className={props.loggedIn ? classes.rightMenu : classes.rightMenuLogIn}>
-								{isAuthenticated ?
+								{/*
+								isAuthenticated ?
 									<LoginLayout name="login" label={`Welcome, ${userInfo.displayName.toUpperCase()}`} color="secondary" classed={classes.loginButton} {...props}/> :
 									<LoginLayout
 										name="login"
@@ -127,7 +128,8 @@ export default connect(mapStateToProps, actions)(props => {
 										{...props}
 										setPwd={setPwd}
 										forgotPwd={forgotPwd}
-									/>}
+									/>
+									*/}
 								<LanguageIcon/>
 								<div className={classes.languageSelect} onClick={handleClick}>
 									<span>{langShort(lang)}</span>

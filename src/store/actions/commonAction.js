@@ -25,9 +25,8 @@
  * for the JavaScript code in this file.
  *
  */
-import fetch from 'node-fetch';
-import XLSX from 'xlsx';
-import {LOADER, LOADER_DONE, LIST_LOADER, GET_CAPTCHA, ERROR, SET_FORM_NAME, SNACKBAR_MESSAGE, GET_NOTIFICATION, RANGE_LIST_LOADER, SEARCH_LIST_LOADER, PUBLICATION_LOADER} from './types';
+
+import {LOADER, LOADER_DONE, LIST_LOADER, SET_FORM_NAME, SNACKBAR_MESSAGE, RANGE_LIST_LOADER, SEARCH_LIST_LOADER, PUBLICATION_LOADER} from './types';
 
 export function success(type, payload) {
 	return ({
@@ -79,42 +78,6 @@ export const setRangeListLoader = () => {
 	};
 };
 
-export const loadSvgCaptcha = () => async dispatch => {
-	dispatch(setLoader());
-	try {
-		const response = await fetch('/captcha', {
-			method: 'GET'
-		});
-		const result = await response.json();
-		dispatch(success(GET_CAPTCHA, result));
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const postCaptchaInput = (inputData, id) => async dispatch => {
-	const body = {
-		captchaInput: inputData,
-		id
-	};
-	dispatch(setLoader());
-	try {
-		const response = await fetch('/captcha', {
-			method: 'POST',
-			headers: {
-				'Cross-Origin-Opener-Policy': 'same-origin',
-				'Cross-Origin-Embedder-Policy': 'require-corp',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(body)
-		});
-		const result = await response.json();
-		return result;
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
 export const setFormName = value => {
 	return {
 		type: SET_FORM_NAME,
@@ -127,28 +90,4 @@ export const setMessage = value => {
 		type: SNACKBAR_MESSAGE,
 		payload: value
 	};
-};
-
-export const getNotification = () => async dispatch => {
-	try {
-		const response = await fetch('/notification', {
-			method: 'GET'
-		});
-		const result = await response.json();
-		return dispatch({
-			type: GET_NOTIFICATION,
-			payload: result
-		});
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
-};
-
-export const exportXLS = (wbout, dataToDownload) => dispatch => {
-	try {
-		XLSX.utils.book_append_sheet(wbout, dataToDownload, 'statistics');
-		XLSX.writeFile(wbout, 'statistics.xml', {bookType: 'xlsx', type: 'file'});
-	} catch (err) {
-		dispatch(fail(ERROR, err));
-	}
 };

@@ -40,6 +40,7 @@ export default withRouter(props => {
 	const {history} = props;
 	const [dynamicTitle, setDynamicTitle] = useState('');
 	const formListsArray = [
+		/*
 		{
 			label: <FormattedMessage id="app.home.formButtons.publisherRegistration"/>,
 			title: <FormattedMessage id="app.modal.title.publisherRegistration"/>,
@@ -47,18 +48,21 @@ export default withRouter(props => {
 			path: '/publisherRegistrationForm',
 			component: <PublisherRegistrationForm {...props}/>
 		},
+		*/
 		{
 			label: <FormattedMessage id="app.home.formButtons.publicationRegistration"/>,
 			title: <FormattedMessage id={dynamicTitle === '' ? 'app.modal.title.publicationRegistration' : `app.modal.title.publicationRegistration${dynamicTitle}`}/>,
 			name: 'publicationRegistration',
 			component: <SwitchPublicationForm title={dynamicTitle} setTitle={setDynamicTitle} {...props}/>
-		},
+		}
+		/* ,
 		{
 			label: <FormattedMessage id="app.home.formButtons.publisherChangeRequest"/>,
 			title: <FormattedMessage id="app.modal.title.publisherChangeRequest"/>,
 			name: 'publisherChangeRequest',
 			path: 'https://elomake.helsinki.fi/lomakkeet/67127/lomake.html'
 		}
+		*/
 	];
 	const classes = useStyles();
 	return (
@@ -71,7 +75,7 @@ export default withRouter(props => {
 					item.name === 'publisherRegistration' ?
 						(
 							<Button
-								key={item.label}
+								key={item.name}
 								variant="outlined"
 								color="primary"
 								onClick={() => history.push(item.path)}
@@ -82,7 +86,7 @@ export default withRouter(props => {
 							item.name === 'publisherChangeRequest' ?
 								(
 									<Button
-										key={item.label}
+										key={item.name}
 										variant="outlined"
 										color="primary"
 										href={item.path}
@@ -91,7 +95,7 @@ export default withRouter(props => {
 										{item.label}
 									</Button>
 								) :	(
-									<ModalLayout key={item.label} form label={item.label} title={item.title} dynamicTitle={dynamicTitle} setDynamicTitle={setDynamicTitle} name={item.name} variant="outlined" classed={classes.button} color="primary">
+									<ModalLayout key={item.name} form label={item.label} title={item.title} dynamicTitle={dynamicTitle} setDynamicTitle={setDynamicTitle} name={item.name} variant="outlined" classed={classes.button} color="primary">
 										{item.component}
 									</ModalLayout>
 								))

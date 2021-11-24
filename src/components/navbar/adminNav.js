@@ -111,7 +111,9 @@ export default function ({userInfo, isAuthenticated}) {
 				<AppBar position="static" color="secondary" className={classes.appBar}>
 					<div>
 						<div className={classes.adminMenu}>
-							{isAuthenticated ? renderMenuTabs() : (
+							{
+							/*
+							isAuthenticated ? renderMenuTabs() : (
 								<div className={classes.publicMenu}>
 									<Link exact to="/" activeClassName={classes.active}>
 										<div className={classes.menuIcon}>
@@ -125,7 +127,8 @@ export default function ({userInfo, isAuthenticated}) {
 										</div>
 									</Link>
 								</div>
-							)}
+							)
+							*/}
 						</div>
 					</div>
 				</AppBar>

@@ -27,7 +27,7 @@
     "lint": "eslint --ext .jsx,.js src",
     "lint:dev": "eslint --fix --ext .jsx,.js src",
     "test": "cross-env NODE_ENV=test mocha --require @babel/register src/**/*.spec.js src/**/*.spec.jsx",
-    "watch:dev": "DEBUG=1 webpack-dev-server --open --config=./webpack/webpack.config.dev.js --hot --inline --progress",
+    "watch:dev": "DEBUG=1 webpack-dev-server --open --config=./webpack/webpack.config.dev.js --hot --inline --progress --history-api-fallback",
     "build": "export NODE_ENV=production & NODE_ENV=production & webpack --config ./webpack/webpack.config.prod.js --progress ",
     "watch:test": "cross-env DEBUG=1 NODE_ENV=test nodemon -w src --exec 'npm test'"
   },

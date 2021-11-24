@@ -30,18 +30,11 @@
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
+
+import {translations} from '../../intl/translations';
 import {PUBLISHER, PUBLISHERS_LIST, UPDATE_PUBLISHER, ERROR, SEARCH_PUBLISHER, PUBLISHER_OPTIONS, PUBLISHERS_REQUESTS_LIST, PUBLISHER_REQUEST, UNIVERSITY_PUBLISHER} from './types';
 import {setLoader, setListLoader, setMessage, success, fail, setSearchListLoader} from './commonAction';
 import HttpStatus from 'http-status';
-
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
 
 const cache = createIntlCache();
 

@@ -43,9 +43,10 @@ import * as actions from '../../store/actions';
 import {commonStyles} from '../../styles/app';
 import {validate} from '../../utils';
 
-export default connect(null, actions)(reduxForm({
+export default connect(mapStateToProps, actions)(reduxForm({
 	form: 'login', validate})(props => {
-	const {pristine, valid, normalLogin, handleSubmit, handleClose, history, setPwd} = props;
+	const {pristine, valid, normalLogin, handleSubmit, handleClose, history, setPwd, lang} = props; // eslint-disable-line
+
 	const classes = useStyles();
 	const commonStyle = commonStyles();
 	const formClasses = useFormStyles();
@@ -53,21 +54,12 @@ export default connect(null, actions)(reduxForm({
 	const [loginError, setLoginError] = useState(null);
 
 	async function handleLogin(values) {
-		/* global API_URL */
 		/* eslint no-undef: "error" */
-		const response = await normalLogin({...values, API_URL: API_URL});
+		const response = await normalLogin({...values}, lang);
 		if (response === 'unauthorize') {
 			setLoginError('Incorrect username or Password');
 		} else if (response) {
-			switch (response.role) {
-				case 'publisher':
-					history.push(`/publishers/profile/${response.publisher}`);
-					handleClose();
-					break;
-				default:
-					history.push('/publishers');
-					handleClose();
-			}
+			handleClose();
 		}
 	}
 
@@ -135,3 +127,9 @@ export default connect(null, actions)(reduxForm({
 	};
 }
 ));
+
+function mapStateToProps(state) {
+	return {
+		lang: state.locale.lang
+	};
+}

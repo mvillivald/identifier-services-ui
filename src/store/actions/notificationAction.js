@@ -1,3 +1,4 @@
+
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -26,40 +27,24 @@
  *
  */
 
-import {AUTHENTICATION, LOADER, LOG_OUT} from '../actions/types';
+import fetch from 'node-fetch';
 
-const initialState = {
-	authenticationToken: '',
-	isAuthenticated: false,
-	userInfo: {},
-	loading: false,
-	error: {}
-};
+import {fail} from './commonAction';
+import {ERROR, GET_NOTIFICATION} from './types';
 
-export default function (state = initialState, action) {
-	switch (action.type) {
-		case LOADER:
-			return {
-				...state,
-				loading: true
-			};
-		case AUTHENTICATION:
-			return {
-				...state,
-				authenticationToken: action.payload.authenticationToken,
-				isAuthenticated: true,
-				userInfo: action.payload.user,
-				loading: false
-			};
-		case LOG_OUT:
-			return {
-				...state,
-				authenticationToken: '',
-				isAuthenticated: false,
-				loading: false
-			};
+/* global API_URL */
 
-		default:
-			return state;
+export const getNotification = () => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/notification`, {
+			method: 'GET'
+		});
+		const result = await response.json();
+		return dispatch({
+			type: GET_NOTIFICATION,
+			payload: result
+		});
+	} catch (err) {
+		dispatch(fail(ERROR, err));
 	}
-}
+};

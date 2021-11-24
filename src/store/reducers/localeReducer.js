@@ -29,7 +29,7 @@ import {LOCALE_SET} from '../actions/types';
 import {getMessages} from '../../intl/getMessages';
 
 const initialState = {
-	lang: 'en',
+	lang: 'fi',
 	messages: {}
 };
 

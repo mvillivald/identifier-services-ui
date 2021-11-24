@@ -27,20 +27,39 @@
  */
 
 import React, {useState, useEffect} from 'react';
+import {IntlProvider} from 'react-intl';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {Switch, Route, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Grid} from '@material-ui/core';
-import {IntlProvider} from 'react-intl';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {useCookies} from 'react-cookie';
 
-import Home from './components/main';
-import IsbnIsmnRegistrationForm from './components/form/IsbnIsmnRegForm';
-import IssnRegistrationForm from './components/form/IssnRegForm';
-import PublisherRegistrationForm from './components/form/publisherRegistrationForm/PublisherRegistrationForm';
+// Reviewing
+import * as actions from './store/actions';
+import PrivateRoute from './components/PrivateRoutes';
+
 import TopNav from './components/navbar/topNav';
 import AdminNav from './components/navbar/adminNav';
+import Footer from './components/footer';
+import SnackBar from './components/SnackBar';
+
+import Home from './components/main';
+import IsbnIsmnRegistrationForm from './components/form/isbnIsmnRegistrationForm';
+
+// Reviewed
+import {translations} from './intl/translations';
+
+// Problems for future
+import theme from './styles/app';
+import {commonStyles} from './styles/app';
+
+/* eslint-disable capitalized-comments */
+
+/*
+import IssnRegistrationForm from './components/form/IssnRegForm';
+import PublisherRegistrationForm from './components/form/publisherRegistrationForm/PublisherRegistrationForm';
+
 import NewUserPasswordResetForm from './components/form/NewUserPasswordResetForm';
 import Publisher from './components/publishers/Publisher';
 import PublishersList from './components/publishers/PublishersList';
@@ -66,17 +85,9 @@ import IDRISMNList from './components/identifierRanges/ismn/RangesList';
 import IDRIssnList from './components/identifierRanges/issn/IssnList';
 import Statistics from './components/statistics';
 import MessageElement from './components/messageElement/MessageElement';
-import Footer from './components/footer';
-import PrivateRoute from './components/PrivateRoutes';
-import theme from './styles/app';
-import enMessages from './intl/translations/en.json';
-import fiMessages from './intl/translations/fi.json';
-import svMessages from './intl/translations/sv.json';
-import SnackBar from './components/SnackBar';
-import {commonStyles} from './styles/app';
-import * as actions from './store/actions';
 import Template from './components/messages/Template';
 import TemplateCreationForm from './components/form/TemplateCreationForm';
+*/
 
 export default connect(mapStateToProps, actions)(withRouter(props => {
 	const {lang, userInfo, isAuthenticated, history, responseMessage} = props;
@@ -90,21 +101,26 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 	}, [isAuthenticated, token]);
 
 	const routeField = [
-		{path: '/', component: Home},
+		{path: '/', component: Home}
+		/*
 		{path: '/publishers', component: PublishersList},
 		{path: '/publishers/:id', component: Publisher},
 		{path: '/publishers/proceedings/:id', component: Proceedings},
 		{path: '/users/passwordReset/:token', component: NewUserPasswordResetForm},
 		{path: '/publishers/profile/:id', component: Publisher}
+		*/
 	];
 
 	const routeForms = [
-		{path: '/isbnIsmnRegistrationForm', component: IsbnIsmnRegistrationForm},
+		{path: '/isbnIsmnRegistrationForm', component: IsbnIsmnRegistrationForm}
+		/*
 		{path: '/issnRegistrationForm', component: IssnRegistrationForm},
 		{path: '/publisherRegistrationForm', component: PublisherRegistrationForm}
+		*/
 	];
 
 	const privateRoutesList = [
+		/*
 		{path: '/users', role: ['admin', 'publisher', 'system'], component: UsersList},
 		{path: '/users/:id', role: ['admin', 'publisher', 'system'], component: User},
 		{path: '/publications/isbn-ismn', role: ['admin', 'publisher', 'system'], component: IsbnIsmnList},
@@ -130,6 +146,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/statistics', role: ['admin'], component: Statistics},
 		{path: '/sendMessage/:id', role: ['admin'], component: MessageElement},
 		{path: '/publishers/sentMessages/:id', role: ['admin'], component: PublisherMessagesList}
+		*/
 	];
 
 	const routes = (
@@ -165,13 +182,6 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		</>
 	);
 
-	const translations = {
-		fi: fiMessages,
-		en: enMessages,
-		sv: svMessages
-
-	};
-
 	const component = (
 		<IntlProvider locale={lang} messages={translations[lang]}>
 			<MuiThemeProvider theme={theme}>
@@ -203,7 +213,7 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 
 function mapStateToProps(state) {
 	return {
-		lang: state.locale.lang,
+		lang: 'fi',
 		responseMessage: state.message.responseMessage,
 		isAuthenticated: state.login.isAuthenticated,
 		userInfo: state.login.userInfo

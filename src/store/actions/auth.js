@@ -30,68 +30,75 @@ import fetch from 'node-fetch';
 import HttpStatus from 'http-status';
 import {setMessage} from './commonAction';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
+import {translations} from '../../intl/translations';
 
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
 const cache = createIntlCache();
 
 export const normalLogin = (values, lang) => async dispatch => {
-	const messsages = translations[lang];
-	const intl = createIntl({
-		locale: lang,
-		defaultLocale: 'fi',
-		messages: messsages
-	}, cache);
-	const response = await fetch('/auth', {
-		method: 'POST',
-		body: JSON.stringify(values),
-		headers: {
-			'Cross-Origin-Opener-Policy': 'same-origin',
-			'Cross-Origin-Embedder-Policy': 'require-corp', 'Content-Type': 'application/json'}
-	});
-	if (response.status === HttpStatus.BAD_REQUEST) {
+	try {
+		const messages = translations[lang];
+
+		const intl = createIntl({
+			locale: lang,
+			defaultLocale: 'fi',
+			messages: messages
+		}, cache);
+		const response = await fetch(`${API_URL}/auth`, {
+			method: 'POST',
+			body: JSON.stringify(values),
+			headers: {
+				Authorization: `Basic ${Buffer.from(`${values.username}:${values.password}`).toString('base64')}`,
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp', 'Content-Type': 'application/json'}
+		});
+
+		if (HttpStatus[`${response.status}_CLASS`] !== HttpStatus.classes.SUCCESSFUL) {
+			throw new Error();
+		}
+
+		const body = await response.json();
+
+		if (!Object.prototype.hasOwnProperty.call(body, 'accessToken')) {
+			throw new Error();
+		}
+
+		dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'login.normal.success'})}));
+
+		return dispatch(getUserInfo(body.accessToken));
+	} catch (err) { // eslint-disable-line
 		return 'unauthorize';
 	}
-
-	const result = await response.json();
-
-	dispatch(setMessage({color: 'success', msg: intl.formatMessage({id: 'Login successful'})}));
-	return dispatch(getUserInfo(result));
 };
 
 export const getUserInfo = token => async dispatch => {
 	/* global API_URL */
 	/* eslint no-undef: "error" */
-	const result = await fetch(`${API_URL}/auth`, {
-		method: 'GET',
-		headers: {
-			'Cross-Origin-Opener-Policy': 'same-origin',
-			'Cross-Origin-Embedder-Policy': 'require-corp',
-			Authorization: `Bearer ${token}`
-		}
-	});
-	const user = await result.json();
-	const updatedUser = {...user};
-	delete updatedUser.groups;
-	dispatch({
-		type: AUTHENTICATION,
-		payload: updatedUser
-	});
-	return updatedUser;
+	try {
+		const result = await fetch(`${API_URL}/auth`, {
+			method: 'GET',
+			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
+				Authorization: `Bearer ${token}`
+			}
+		});
+		const user = await result.json();
+		const updatedUser = {...user};
+		delete updatedUser.groups;
+		dispatch({
+			type: AUTHENTICATION,
+			payload:
+			{user: updatedUser,
+				authenticationToken: token}
+		});
+		return updatedUser;
+	} catch (err) { // eslint-disable-line
+		return 'unauthorize';
+	}
 };
 
 export const logOut = () => async dispatch => {
-	await fetch('/logout', {
-		method: 'GET'
-	});
 	dispatch({
-		type: LOG_OUT,
-		payload: false
+		type: LOG_OUT
 	});
 };

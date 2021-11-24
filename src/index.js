@@ -29,30 +29,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import App from './App';
-import allReducers from './store/reducers';
-import {createStore, applyMiddleware} from 'redux';
 import {BrowserRouter as Router} from 'react-router-dom';
-import {setLocale} from './store/actions/localeAction';
 import {CookiesProvider} from 'react-cookie';
-import {getUserInfo} from './store/actions/auth';
-import {composeWithDevTools} from 'redux-devtools-extension';
 
-import {API_URL, COOKIE_NAME, NODE_ENV} from './configuration';
+import App from './App';
+import store from './store';
+
+import {API_URL, COOKIE_NAME} from './configuration';
 import {readCookie} from './utils';
+import {getUserInfo} from './store/actions';
 
 run();
 async function run() {
-	const store = createStore(allReducers, NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) : applyMiddleware(thunk));
-	if (localStorage.allLang) {
-		store.dispatch(setLocale(localStorage.allLang));
-	}
-
-	// Need refactor usage of globals
+	// Need refactor usage of globals, and setting authenticated user
+	// Refactor considered successful after returns only render
 	window.COOKIE_NAME = COOKIE_NAME;
 	window.API_URL = API_URL;
 
+	// For dev purposes only
 	const cookie = readCookie(COOKIE_NAME);
 	if (cookie) {
 		store.dispatch(getUserInfo(cookie));

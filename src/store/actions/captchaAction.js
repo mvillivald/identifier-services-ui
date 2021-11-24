@@ -26,40 +26,43 @@
  *
  */
 
-import {AUTHENTICATION, LOADER, LOG_OUT} from '../actions/types';
+/* global API_URL */
 
-const initialState = {
-	authenticationToken: '',
-	isAuthenticated: false,
-	userInfo: {},
-	loading: false,
-	error: {}
+import {fail, success, setLoader} from './commonAction';
+import {ERROR, GET_CAPTCHA} from './types';
+
+export const loadSvgCaptcha = () => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/captcha`, {
+			method: 'GET'
+		});
+		const result = await response.json();
+		dispatch(success(GET_CAPTCHA, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };
 
-export default function (state = initialState, action) {
-	switch (action.type) {
-		case LOADER:
-			return {
-				...state,
-				loading: true
-			};
-		case AUTHENTICATION:
-			return {
-				...state,
-				authenticationToken: action.payload.authenticationToken,
-				isAuthenticated: true,
-				userInfo: action.payload.user,
-				loading: false
-			};
-		case LOG_OUT:
-			return {
-				...state,
-				authenticationToken: '',
-				isAuthenticated: false,
-				loading: false
-			};
-
-		default:
-			return state;
+export const postCaptchaInput = (inputData, id) => async dispatch => {
+	const body = {
+		captchaInput: inputData,
+		id
+	};
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/captcha`, {
+			method: 'POST',
+			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(body)
+		});
+		const result = await response.json();
+		return result;
+	} catch (err) {
+		dispatch(fail(ERROR, err));
 	}
-}
+};

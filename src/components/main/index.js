@@ -6,11 +6,12 @@ import IsbnIsmn from './isbn_ismn';
 import Issn from './issn';
 import SearchComponent from './renderSearchComponent';
 
+// Disabled until refactored: <SearchComponent/>
+
 export default function () {
 	return (
 		<>
 			<Banner/>
-			<SearchComponent/>
 			<FormList/>
 			<InstructionForCompleting/>
 			<IsbnIsmn/>

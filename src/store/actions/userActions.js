@@ -29,9 +29,8 @@
 /* eslint no-undef: "error" */
 import fetch from 'node-fetch';
 import {createIntl, createIntlCache} from 'react-intl';
-import enMessages from '../../intl/translations/en.json';
-import fiMessages from '../../intl/translations/fi.json';
-import svMessages from '../../intl/translations/sv.json';
+import {translations} from '../../intl/translations';
+
 import {
 	USERS_LIST,
 	ERROR,
@@ -42,12 +41,6 @@ import {
 import {setLoader,
 	setListLoader, success, setMessage, fail} from './commonAction';
 import HttpStatus from 'http-status';
-
-const translations = {
-	fi: fiMessages,
-	en: enMessages,
-	sv: svMessages
-};
 
 const cache = createIntlCache();
 

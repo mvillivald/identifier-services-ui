@@ -45,6 +45,12 @@ export default function (props) {
 		history.push('/issnRegistrationForm');
 	};
 
+	/* Disabled until refactored
+	<Button variant="contained" color="primary" onClick={handleIssnClick}>
+		<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISSN"/>
+	</Button>
+	*/
+
 	const component = (
 		<>
 			<div className={classes.pubFormSelect}>
@@ -53,10 +59,6 @@ export default function (props) {
 				</Typography>
 				<Button variant="contained" color="primary" onClick={handleIsbnIsmnClick}>
 					<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISBN-ISMN"/>
-				</Button>
-				<Button variant="contained" color="primary" onClick={handleIssnClick}>
-					<FormattedMessage id="app.modal.publicationRegistration.btnLabel.ISSN"/>
-
 				</Button>
 			</div>
 		</>
