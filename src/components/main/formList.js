@@ -26,6 +26,8 @@
  *
  */
 
+/* eslint-disable no-unused-vars */
+
 import React, {useState} from 'react';
 import {Typography, Grid, Button} from '@material-ui/core';
 import {withRouter} from 'react-router-dom';

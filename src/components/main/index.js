@@ -26,6 +26,8 @@
  *
  */
 
+/* eslint-disable no-unused-vars */
+
 import React from 'react';
 import Banner from './banner';
 import FormList from './formList';
