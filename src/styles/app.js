@@ -25,10 +25,9 @@
  * for the JavaScript code in this file.
  *
  */
-import {createMuiTheme} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import {createTheme, makeStyles} from '@material-ui/core/styles';
 
-const theme = createMuiTheme({
+const theme = createTheme({
 	palette: {
 		primary: {
 			main: '#00224f'

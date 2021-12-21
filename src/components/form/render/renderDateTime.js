@@ -25,7 +25,7 @@
  * for the JavaScript code in this file.
  *
  */
-import 'date-fns';
+
 import React from 'react';
 import {TextField} from '@material-ui/core';
 
