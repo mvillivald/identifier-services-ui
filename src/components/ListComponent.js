@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+/* eslint-disable complexity, no-undef */
 import React from 'react';
 import {Grid, ListItem, ListItemText, Chip, Typography, Link} from '@material-ui/core';
 import {Field, FieldArray} from 'redux-form';

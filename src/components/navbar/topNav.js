@@ -25,6 +25,9 @@
  * for the JavaScript code in this file.
  *
  */
+
+/* eslint-disable no-unused-vars */
+
 import React, {useState, useEffect} from 'react';
 import {AppBar, Typography, Grid, Menu, MenuItem} from '@material-ui/core';
 

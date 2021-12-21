@@ -25,6 +25,9 @@
  * for the JavaScript code in this file.
  *
  */
+
+/* eslint-disable no-unused-vars, capitalized-comments */
+
 import React from 'react';
 import {NavLink as Link} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
