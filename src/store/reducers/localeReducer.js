@@ -25,46 +25,23 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import {LOCALE_SET} from '../actions/types';
+import {getMessages} from '../../intl/getMessages';
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
+const initialState = {
+	lang: 'fi',
+	messages: {}
 };
+
+export default function (state = initialState, action) {
+	switch (action.type) {
+		case LOCALE_SET:
+			return {
+				...state,
+				lang: action.payload,
+				messages: getMessages(action.payload)
+			};
+		default:
+			return state;
+	}
+}

@@ -25,46 +25,28 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import 'date-fns';
+import React from 'react';
+import {TextField} from '@material-ui/core';
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+export default function MaterialUIPickers(props) {
+	const {input, className, label, min, name, type, pattern} = props;
+
+	const component = (
+		<div noValidate className={className.dateContainer}>
+			<TextField
+				{...input}
+				id={name}
+				label={label}
+				type={type ? type : 'date'}
+				inputProps={{min: min, pattern: pattern}}
+				InputLabelProps={{
+					shrink: true
+				}}
+			/>
+		</div>
+	);
+	return {
+		...component
+	};
+}

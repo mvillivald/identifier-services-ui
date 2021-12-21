@@ -1,3 +1,4 @@
+
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -25,46 +26,25 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
+import fetch from 'node-fetch';
+
+import {fail} from './commonAction';
+import {ERROR, GET_NOTIFICATION} from './types';
+
+/* global API_URL */
+
+export const getNotification = () => async dispatch => {
+	try {
+		const response = await fetch(`${API_URL}/notification`, {
+			method: 'GET'
+		});
+		const result = await response.json();
+		return dispatch({
+			type: GET_NOTIFICATION,
+			payload: result
+		});
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };

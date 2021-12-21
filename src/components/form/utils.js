@@ -25,46 +25,23 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+export function removeFields(content, fieldsToRemove) {
+	const newContent = content ? {...content} : {};
+	Object.keys(newContent).forEach(k => {
+		newContent[k].fields = newContent[k].fields.filter(f => fieldsToRemove.indexOf(f.name) === -1);
+	});
+
+	return newContent;
+}
+
+export function removePages(content, pageNames) {
+	const newContent = {...content};
+	pageNames.forEach(n => {
+		if (newContent[n] !== undefined) {
+			delete newContent[n];
+		}
+	});
+
+	return newContent;
+}

@@ -25,46 +25,39 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {CookiesProvider} from 'react-cookie';
+
+import App from './App';
+import store from './store';
+
+import {API_URL, COOKIE_NAME} from './configuration';
+import {readCookie} from './utils';
+import {getUserInfo} from './store/actions';
+
+run();
+async function run() {
+	// Need refactor usage of globals, and setting authenticated user
+	// Refactor considered successful after returns only render
+	window.COOKIE_NAME = COOKIE_NAME;
+	window.API_URL = API_URL;
+
+	// For dev purposes only
+	const cookie = readCookie(COOKIE_NAME);
+	if (cookie) {
+		store.dispatch(getUserInfo(cookie));
+	}
+
+	ReactDOM.render(
+		<Provider store={store}>
+			<CookiesProvider>
+				<Router>
+					<App/>
+				</Router>
+			</CookiesProvider>
+		</Provider>, document.getElementById('app'));
+}

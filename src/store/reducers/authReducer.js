@@ -25,46 +25,41 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
+import {AUTHENTICATION, LOADER, LOG_OUT} from '../actions/types';
+
+const initialState = {
+	authenticationToken: '',
+	isAuthenticated: false,
+	userInfo: {},
+	loading: false,
+	error: {}
 };
+
+export default function (state = initialState, action) {
+	switch (action.type) {
+		case LOADER:
+			return {
+				...state,
+				loading: true
+			};
+		case AUTHENTICATION:
+			return {
+				...state,
+				authenticationToken: action.payload.authenticationToken,
+				isAuthenticated: true,
+				userInfo: action.payload.user,
+				loading: false
+			};
+		case LOG_OUT:
+			return {
+				...state,
+				authenticationToken: '',
+				isAuthenticated: false,
+				loading: false
+			};
+
+		default:
+			return state;
+	}
+}

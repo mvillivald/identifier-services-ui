@@ -25,46 +25,16 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
+export const PAGES = {
+	ADDITIONAL_DETAILS: 'additionalDetails',
+	AUTHOR_INFORMATION: 'authorInformation',
+	BASIC_INFORMATION: 'basicInformation',
+	CONTACT_INFORMATION: 'contactInfo',
+	FORMAT: 'formatBasic',
+	PUBLISHER_INFORMATION: 'publisherBasicInfo',
+	PUBLISHING_ACTIVITIES: 'publishingActivities',
+	SERIES_INFORMATION: 'seriesInformation',
+	AVAILABILITY_INFORMATION: 'availabilityInformation',
+	UNIVERSITY_INFORMATION: 'universityInformation'
 };

@@ -25,46 +25,44 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
+/* global API_URL */
+
+import {fail, success, setLoader} from './commonAction';
+import {ERROR, GET_CAPTCHA} from './types';
+
+export const loadSvgCaptcha = () => async dispatch => {
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/captcha`, {
+			method: 'GET'
+		});
+		const result = await response.json();
+		dispatch(success(GET_CAPTCHA, result));
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
+};
+
+export const postCaptchaInput = (inputData, id) => async dispatch => {
+	const body = {
+		captchaInput: inputData,
+		id
+	};
+	dispatch(setLoader());
+	try {
+		const response = await fetch(`${API_URL}/captcha`, {
+			method: 'POST',
+			headers: {
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
+				'Content-Type': 'application/json'
 			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
+			body: JSON.stringify(body)
+		});
+		const result = await response.json();
+		return result;
+	} catch (err) {
+		dispatch(fail(ERROR, err));
+	}
 };

@@ -25,46 +25,69 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
-	output: {
-		path: path.join(__dirname, '../dist'),
-		filename: '[name]-bundle.js'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name]-[hash:8].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
+import {LOADER, LOADER_DONE, LIST_LOADER, SET_FORM_NAME, SNACKBAR_MESSAGE, RANGE_LIST_LOADER, SEARCH_LIST_LOADER, PUBLICATION_LOADER} from './types';
+
+export function success(type, payload) {
+	return ({
+		type: type,
+		payload: payload
+	});
+}
+
+export function fail(type, payload) {
+	return ({
+		type: type,
+		payload: payload
+	});
+}
+
+export const setLoader = () => {
+	return {
+		type: LOADER
+	};
+};
+
+export const setLoadingDone = () => {
+	return {
+		type: LOADER_DONE
+	};
+};
+
+export const setPublicationLoader = () => {
+	return {
+		type: PUBLICATION_LOADER
+	};
+};
+
+export const setListLoader = () => {
+	return {
+		type: LIST_LOADER
+	};
+};
+
+export const setSearchListLoader = () => {
+	return {
+		type: SEARCH_LIST_LOADER
+	};
+};
+
+export const setRangeListLoader = () => {
+	return {
+		type: RANGE_LIST_LOADER
+	};
+};
+
+export const setFormName = value => {
+	return {
+		type: SET_FORM_NAME,
+		payload: value
+	};
+};
+
+export const setMessage = value => {
+	return {
+		type: SNACKBAR_MESSAGE,
+		payload: value
+	};
 };
