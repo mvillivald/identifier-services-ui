@@ -49,13 +49,16 @@ export default function (props) {
 	const {meta: {touched, error}} = props;
 	const intl = useIntl();
 
+	// Error prop has been widely incorrectly used, this is a dirty quick-fix
+	const errAsBool = (touched && Boolean(error));
+
 	const component = (
 		<>
-			<FormControl className={className} error={touched && error} disabled={disabled}>
+			<FormControl className={className} error={errAsBool} disabled={disabled}>
 				<InputLabel htmlFor="language-helper">{label}</InputLabel>
 				<NativeSelect
 					{...input}
-					error={touched && error}
+					error={errAsBool}
 					input={<Input name={name} id="language-helper"/>}
 					value={input.value}
 					onChange={value => {
@@ -72,7 +75,7 @@ export default function (props) {
 					}
 				</NativeSelect>
 			</FormControl>
-			{touched && error &&
+			{errAsBool &&
 				<Box mt={2}>
 					<Typography variant="caption" color="error" className={classes.selectErrors}><ErrorIcons fontSize="inherit"/>{intl.formatMessage({id: `error.${error}`})}</Typography>
 				</Box>}

@@ -69,7 +69,7 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			// getUniversityPublisher,
 			// universityPublisher,
 			setMessage,
-			handleSubmit,
+			// handleSubmit,
 			history,
 			location,
 			lang
@@ -103,13 +103,14 @@ export default connect(mapStateToProps, actions)(reduxForm({
 			setActiveStep(activeStep - 1);
 		}
 
+		function handleSubmit(e) {
+			e.preventDefault();
+			console.log('Submitted');
+		}
+
 		const component = (
 			<>
-				<form className={classes.container} onSubmit={e => {
-					e.preventDefault();
-					console.log('Submitted');
-				}}
-				>
+				<form className={classes.container} onSubmit={e => handleSubmit(e)}>
 					<div className={classes.topSticky}>
 						<Typography variant="h5">
 							<FormattedMessage id="app.modal.title.publicationRegistration"/> ISBN AND ISMN

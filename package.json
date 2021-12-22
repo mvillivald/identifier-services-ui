@@ -19,14 +19,14 @@
   "license": "AGPL-3.0+",
   "version": "1.0.0",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "scripts": {
     "start": "node dist/index.js",
     "lint": "eslint --ext .jsx,.js src",
     "lint:dev": "eslint --fix --ext .jsx,.js src",
-    "watch:dev": "DEBUG=1 webpack-dev-server --open --config=./webpack/webpack.config.dev.js --hot --inline --progress --history-api-fallback",
-    "build": "export NODE_ENV=production & NODE_ENV=production & webpack --config ./webpack/webpack.config.prod.js --progress --mode=production"
+    "watch:dev": "DEBUG=1 webpack-dev-server --open --config=./webpack/webpack.config.dev.js --hot --progress --history-api-fallback",
+    "build": "export NODE_ENV=production & NODE_ENV=production & webpack --config ./webpack/webpack.config.prod.js --progress"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.4",
@@ -68,13 +68,13 @@
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-react": "^7.14.2",
     "eslint-plugin-react-hooks": "^2.2.0",
-    "file-loader": "^4.2.0",
-    "html-webpack-plugin": "^3.2.0",
-    "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2",
-    "webpack-merge": "^4.2.1",
-    "webpack-node-externals": "^1.7.2"
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0",
+    "webpack-merge": "^5.8.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
