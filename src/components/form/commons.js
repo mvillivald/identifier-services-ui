@@ -77,20 +77,18 @@ export function element({array, classes, clearFields, publicationIssnValues, fie
 				);
 			case 'select':
 				return (
-					<>
-						<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
-							{list.title && <Typography>{list.title}</Typography>}
-							<Field
-								className={classes.selectField}
-								component={renderSelect}
-								label={list.label}
-								name={list.name}
-								type={list.type}
-								options={list.options}
-								props={{publicationValues: publicationIssnValues || publicationIsbnValues, clearFields}}
-							/>
-						</Grid>
-					</>
+					<Grid key={list.name} item xs={list.width === 'half' ? 6 : 12}>
+						{list.title && <Typography>{list.title}</Typography>}
+						<Field
+							className={classes.selectField}
+							component={renderSelect}
+							label={list.label}
+							name={list.name}
+							type={list.type}
+							options={list.options}
+							props={{publicationValues: publicationIssnValues || publicationIsbnValues, clearFields}}
+						/>
+					</Grid>
 				);
 			case 'multiSelect':
 				return (

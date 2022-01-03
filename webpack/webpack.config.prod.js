@@ -27,21 +27,15 @@
  */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {DefinePlugin} = require('webpack');
 
 module.exports = {
+	mode: 'production',
 	entry: path.resolve(path.join(__dirname, '..', 'src', 'index.js')),
 	output: {
 		path: path.resolve(__dirname, '../dist/public'),
 		filename: '[name]-bundle.js',
 		publicPath: '/'
-	},
-	node: {
-		dns: 'mock',
-		net: 'mock',
-		fs: 'empty',
-		tls: 'mock',
-		// eslint-disable-next-line camelcase
-		child_process: 'empty'
 	},
 	module: {
 		rules: [
@@ -71,6 +65,10 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new DefinePlugin({
+			'process.env.API_URL': JSON.stringify(process.env.API_URL),
+			'process.env.COOKIE_NAME': JSON.stringify(process.env.COOKIE_NAME)
+		}),
 		new HtmlWebpackPlugin({
 			template: path.resolve(path.join(__dirname, '../public/index.html')),
 			filename: 'index.html'

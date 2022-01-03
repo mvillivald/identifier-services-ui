@@ -193,7 +193,7 @@ export function renderPreview(publicationValues, isAuthenticated, user, intl, cl
 						<FormattedMessage id="listComponent.publicationDetails"/>
 					</Typography>
 					<hr/>
-					{
+					{/*
 						(formatPublicationValue.publicationType !== 'dissertation' && formatPublicationValue.publicationType !== 'map') &&
 							<Grid container style={{display: 'flex', flexDirection: 'column'}}>
 								<ListComponent
@@ -201,6 +201,7 @@ export function renderPreview(publicationValues, isAuthenticated, user, intl, cl
 									value={formatPublicationValue.isbnClassification ? formatPublicationValue.isbnClassification : []}
 								/>
 							</Grid>
+					*/
 					}
 					{
 						user.role !== 'publisher' &&
