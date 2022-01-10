@@ -25,53 +25,12 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {DefinePlugin} = require('webpack');
 
-module.exports = {
-	mode: 'production',
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'frontend', 'index.js')),
-	output: {
-		path: path.resolve(__dirname, '../dist/public'),
-		filename: '[name]-bundle.js',
-		publicPath: '/'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: 'images/[name].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new DefinePlugin({
-			'process.env.API_URL': JSON.stringify(process.env.API_URL),
-			'process.env.COOKIE_NAME': JSON.stringify(process.env.COOKIE_NAME)
-		}),
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+import {Utils} from '@natlibfi/identifier-services-commons';
+
+const {readEnvironmentVariable} = Utils;
+
+export const HTTP_PORT = readEnvironmentVariable('HTTP_PORT', {
+	defaultValue: 8080,
+	format: v => Number(v)
+});

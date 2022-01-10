@@ -25,53 +25,18 @@
  * for the JavaScript code in this file.
  *
  */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {DefinePlugin} = require('webpack');
 
-module.exports = {
-	mode: 'production',
-	entry: path.resolve(path.join(__dirname, '..', 'src', 'frontend', 'index.js')),
-	output: {
-		path: path.resolve(__dirname, '../dist/public'),
-		filename: '[name]-bundle.js',
-		publicPath: '/'
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader'
-				}
-			},
-			{
-				test: /\.css$/i,
-				use: ['style-loader', 'css-loader']
-			},
-			{
-				test: /\.(jpg|gif|png|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: 'images/[name].[ext]',
-							outputPath: 'images/'
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new DefinePlugin({
-			'process.env.API_URL': JSON.stringify(process.env.API_URL),
-			'process.env.COOKIE_NAME': JSON.stringify(process.env.COOKIE_NAME)
-		}),
-		new HtmlWebpackPlugin({
-			template: path.resolve(path.join(__dirname, '../public/index.html')),
-			filename: 'index.html'
-		})
-	]
-};
+import express from 'express';
+import path from 'path';
+
+import {HTTP_PORT} from './config';
+
+process.on('SIGINT', () => {
+	process.exit(-1);
+});
+
+const app = express();
+
+app.use(express.static(path.resolve(__dirname, 'public')));
+
+app.listen(HTTP_PORT, () => console.log('info', `Application Started on PORT ${HTTP_PORT}`));
