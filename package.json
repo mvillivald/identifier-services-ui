@@ -19,14 +19,16 @@
   "license": "AGPL-3.0+",
   "version": "1.0.0",
   "engines": {
-    "node": ">=12"
+    "node": ">=10"
   },
   "scripts": {
     "start": "node dist/index.js",
     "lint": "eslint --ext .jsx,.js src",
     "lint:dev": "eslint --fix --ext .jsx,.js src",
     "watch:dev": "DEBUG=1 webpack-dev-server --open --config=./webpack/webpack.config.dev.js --hot --progress --history-api-fallback",
-    "build": "export NODE_ENV=production & NODE_ENV=production & webpack --config ./webpack/webpack.config.prod.js --progress"
+    "build": "npm run build:server && npm run build:frontend",
+    "build:frontend": "export NODE_ENV=production & NODE_ENV=production & webpack --config ./webpack/webpack.config.prod.js --progress",
+    "build:server": "cd src/server && BABEL_ENV=production babel . --out-dir ../../dist --source-maps"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.4",
@@ -34,6 +36,7 @@
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/styles": "^4.11.4",
     "@natlibfi/identifier-services-commons": "git+https://github.com/natlibfi/identifier-services-commons.git#feature/apiError",
+    "express": "^4.17.2",
     "http-status": "^1.4.2",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.0",
