@@ -35,7 +35,7 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/styles": "^4.11.4",
-    "@natlibfi/identifier-services-commons": "git+https://github.com/natlibfi/identifier-services-commons.git#feature/apiError",
+    "@natlibfi/identifier-services-commons": "git+https://github.com/natlibfi/identifier-services-commons.git#dev",
     "express": "^4.17.2",
     "http-status": "^1.4.2",
     "moment": "^2.29.1",
