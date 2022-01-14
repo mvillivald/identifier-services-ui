@@ -26,6 +26,7 @@
  *
  */
 import React from 'react';
+import {PAGES} from './constants';
 import {FormattedMessage} from 'react-intl';
 import {Typography} from '@material-ui/core';
 
@@ -138,7 +139,7 @@ export const publisherCategory = [
 
 export const fieldArray = [
 	{
-		basicInformation: [
+		[PAGES.BASIC_INFORMATION]: [
 			{
 				name: 'name',
 				type: 'text',
@@ -210,7 +211,7 @@ export const fieldArray = [
 		]
 	},
 	{
-		publishingActivities: [
+		[PAGES.PUBLISHING_ACTIVITIES]: [
 			{
 				name: 'publicationDetails[frequency][currentYear]',
 				type: 'text',
@@ -235,7 +236,7 @@ export const fieldArray = [
 		]
 	},
 	{
-		organizationDetails: [
+		[PAGES.ORGANIZATION_DETAILS]: [
 			{
 				name: 'organizationDetails[affiliate]',
 				type: 'textArea',
@@ -251,7 +252,7 @@ export const fieldArray = [
 		]
 	},
 	{
-		review: 'review'
+		[PAGES.REVIEW]: 'review'
 	}
 ];
 

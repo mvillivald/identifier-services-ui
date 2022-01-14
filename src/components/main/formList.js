@@ -26,8 +26,6 @@
  *
  */
 
-/* eslint-disable no-unused-vars */
-
 import React, {useState} from 'react';
 import {Typography, Grid, Button} from '@material-ui/core';
 import {withRouter} from 'react-router-dom';
@@ -35,14 +33,13 @@ import {FormattedMessage} from 'react-intl';
 
 import useStyles from '../../styles/formList';
 import ModalLayout from '../ModalLayout';
-import PublisherRegistrationForm from '../form/publisherRegistrationForm/PublisherRegistrationForm';
+import PublisherRegistrationForm from '../form/publisherRegistrationForm/';
 import SwitchPublicationForm from '../form/SwitchPublicationForm';
 
 export default withRouter(props => {
 	const {history} = props;
 	const [dynamicTitle, setDynamicTitle] = useState('');
 	const formListsArray = [
-		/*
 		{
 			label: <FormattedMessage id="app.home.formButtons.publisherRegistration"/>,
 			title: <FormattedMessage id="app.modal.title.publisherRegistration"/>,
@@ -50,7 +47,6 @@ export default withRouter(props => {
 			path: '/publisherRegistrationForm',
 			component: <PublisherRegistrationForm {...props}/>
 		},
-		*/
 		{
 			label: <FormattedMessage id="app.home.formButtons.publicationRegistration"/>,
 			title: <FormattedMessage id={dynamicTitle === '' ? 'app.modal.title.publicationRegistration' : `app.modal.title.publicationRegistration${dynamicTitle}`}/>,

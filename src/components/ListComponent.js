@@ -13,8 +13,7 @@ import renderTextArea from './form/render/renderTextArea';
 import renderContactDetail from './form/render/renderContactDetail';
 import useFormStyles from '../styles/form';
 import useStyles from '../styles/listComponent';
-import {fieldArray} from '../components/form/publisherRegistrationForm/formFieldVariable';
-import {classificationCodes, isbnClassificationCodes, publisherCategory} from './form/publisherRegistrationForm/formFieldVariable';
+import {fieldArray, classificationCodes, isbnClassificationCodes, publisherCategory} from './form/publisherRegistrationForm/formFieldVariable';
 
 export default function (props) {
 	const classes = useStyles();
@@ -181,7 +180,10 @@ export default function (props) {
 					}
 
 					return (
-						<>
+						// Quick fix for unique key issue
+						// eslint-disable-next-line no-warning-comments
+						// TODO: Investigate why div container needs key in this situation
+						<div key="authors">
 							{obj.length > 0 ?
 								obj.map(item => {
 									const keys = Object.keys(item);
@@ -218,7 +220,7 @@ export default function (props) {
 										<span> No Authors Added</span>
 									</Grid>
 								)}
-						</>
+						</div>
 					);
 				}
 

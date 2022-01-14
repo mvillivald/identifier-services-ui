@@ -1,3 +1,4 @@
+/* eslint-disable capitalized-comments */
 /**
  *
  * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -46,6 +47,7 @@ import SnackBar from './components/SnackBar';
 
 import Home from './components/main';
 import IsbnIsmnRegistrationForm from './components/form/isbnIsmnRegistrationForm';
+import PublisherRegistrationForm from './components/form/publisherRegistrationForm';
 
 // Reviewed
 import {translations} from './intl/translations';
@@ -54,11 +56,7 @@ import {translations} from './intl/translations';
 import theme from './styles/app';
 import {commonStyles} from './styles/app';
 
-/* eslint-disable capitalized-comments */
-
-/*
-import IssnRegistrationForm from './components/form/IssnRegForm';
-import PublisherRegistrationForm from './components/form/publisherRegistrationForm/PublisherRegistrationForm';
+/* import IssnRegistrationForm from './components/form/IssnRegForm';
 
 import NewUserPasswordResetForm from './components/form/NewUserPasswordResetForm';
 import Publisher from './components/publishers/Publisher';
@@ -87,7 +85,7 @@ import Statistics from './components/statistics';
 import MessageElement from './components/messageElement/MessageElement';
 import Template from './components/messages/Template';
 import TemplateCreationForm from './components/form/TemplateCreationForm';
-*/
+ */
 
 export default connect(mapStateToProps, actions)(withRouter(props => {
 	const {lang, userInfo, isAuthenticated, history, responseMessage} = props;
@@ -108,15 +106,15 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/publishers/proceedings/:id', component: Proceedings},
 		{path: '/users/passwordReset/:token', component: NewUserPasswordResetForm},
 		{path: '/publishers/profile/:id', component: Publisher}
-		*/
+		 */
 	];
 
 	const routeForms = [
-		{path: '/isbnIsmnRegistrationForm', component: IsbnIsmnRegistrationForm}
+		{path: '/isbnIsmnRegistrationForm', component: IsbnIsmnRegistrationForm},
+		{path: '/publisherRegistrationForm', component: PublisherRegistrationForm}
 		/*
 		{path: '/issnRegistrationForm', component: IssnRegistrationForm},
-		{path: '/publisherRegistrationForm', component: PublisherRegistrationForm}
-		*/
+		 */
 	];
 
 	const privateRoutesList = [
@@ -140,13 +138,13 @@ export default connect(mapStateToProps, actions)(withRouter(props => {
 		{path: '/requests/publications/issn/:id', role: ['publisher', 'admin'], component: IssnRequest},
 		{path: '/ranges/isbn', role: ['admin'], component: IDRISNBList},
 		{path: '/ranges/ismn', role: ['admin'], component: IDRISMNList},
-		// {path: '/ranges/ismn/:id', role: ['admin'], component: IDRIsbnList},
+		 // {path: '/ranges/ismn/:id', role: ['admin'], component: IDRIsbnList},
 		{path: '/ranges/issn', role: ['admin'], component: IDRIssnList},
 		{path: '/ranges/issn/:id', role: ['admin'], component: IDRIssnList},
 		{path: '/statistics', role: ['admin'], component: Statistics},
 		{path: '/sendMessage/:id', role: ['admin'], component: MessageElement},
 		{path: '/publishers/sentMessages/:id', role: ['admin'], component: PublisherMessagesList}
-		*/
+		 */
 	];
 
 	const routes = (
